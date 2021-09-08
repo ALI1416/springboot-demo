@@ -1,0 +1,30 @@
+test:
+  boolean-type: true
+  int-type: 12345
+  long-type: 1234567890123456
+  float-type: 1.2345678901234567
+  double-type: 1.2345678901234567
+  string-type: qwertyuiopasdfghjkl
+  user-type:
+    id: 666
+    name: cccc
+    gender: 2
+  #数字数组可能会报错，忽略就好
+  ints-type:
+    - 123
+    - 456
+    - 789
+  string-list-type:
+    - a
+    - b
+  user-list-type:
+    - id: 123
+      name: ck
+      gender: 0
+    - id: 333
+      name: kk
+      gender: 4
+  #持续时间：d天，h时，m分，s秒，ms毫秒，us微秒，ns纳秒。小写，只能有1个单位，只能是正整数。默认单位ms
+  duration-type: 3h
+  #储存容量：TB，GB，MB，KB，B。大写，只能有1个单位，只能是正整数。默认单位B
+  data-size-type: 123MB

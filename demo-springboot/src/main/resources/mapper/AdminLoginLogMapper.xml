@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.AdminLoginLogMapper">
+
+	<sql id="col">id,ref_id,login_success,ip,user_agent,ip_country,ip_province,ip_city,ua_os_name,ua_browser_name,ua_device_type_name
+	</sql>
+
+	<insert id="insert" parameterType="AdminLoginLog">
+		INSERT
+		admin_login_log(
+		<include refid="col"/>
+		)VALUES(
+		#{id},#{refId},#{loginSuccess},#{ip},#{userAgent},#{ipCountry},#{ipProvince},#{ipCity},#{uaOsName},#{uaBrowserName},#{uaDeviceTypeName}
+		)
+	</insert>
+
+</mapper>
