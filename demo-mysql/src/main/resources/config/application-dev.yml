@@ -1,0 +1,7 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+logging:
+  level:
+    root: info

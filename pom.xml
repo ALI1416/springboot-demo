@@ -19,7 +19,8 @@
   </parent>
 
   <modules>
-    <module>demo-springboot</module>
+    <module>demo-base</module>
+    <module>demo-mysql</module>
     <module>demo-util</module>
   </modules>
 
