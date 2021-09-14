@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -25,32 +25,19 @@
   </modules>
 
   <properties>
-    <!--Java版本-->
-    <java.version>11</java.version>
+    <!--基础配置-->
+    <jdk.version>1.8</jdk.version>
+    <maven.compiler.source>${jdk.version}</maven.compiler.source>
+    <maven.compiler.target>${jdk.version}</maven.compiler.target>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!--Maven编译和构建版本-->
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-
+    <!---->
+    <!--继承父pom版本号-->
     <!--SpringBootWeb-->
     <!--org.springframework.boot:spring-boot-starter-web-->
     <spring-boot-starter-web.version/>
-
-    <!--Redis(与服务器版本号不对应，不需一致)-->
-    <!--org.springframework.boot:spring-boot-starter-data-redis-->
-    <jedis-placeholder.version/>
-
-    <!--ElasticSearch(与服务器版本号对应，需要一致)-->
-    <!--org.springframework.boot:spring-boot-starter-data-elasticsearch-->
-    <elasticsearch.version>7.14.0</elasticsearch.version>
-
-    <!--MongoDB(与服务器版本号对应，不需一致)-->
-    <!--org.springframework.boot:spring-boot-starter-data-mongodb-->
-    <mongodb-placeholder.version/>
-
-    <!--RabbitMQ(与服务器版本号不对应，不需一致)-->
-    <!--org.springframework.boot:spring-boot-starter-amqp-->
-    <rabbit-amqp-client-placeholder.version/>
 
     <!--邮件-->
     <!--org.springframework.boot:spring-boot-starter-mail-->
@@ -68,9 +55,28 @@
     <!--org.springframework.boot:spring-boot-starter-test-->
     <spring-boot-starter-test.version/>
 
-    <!--Maven插件-->
+    <!--SpringBoot整合Maven插件-->
     <!--org.springframework.boot:spring-boot-maven-plugin-->
     <spring-boot-maven-plugin.version/>
+
+    <!--Maven打包插件-->
+    <!--org.apache.maven.plugins:maven-compiler-plugin-->
+    <maven-compiler-plugin.version/>
+
+    <!---->
+    <!--客户端-->
+    <!--继承父pom版本号-->
+    <!--Redis(与服务器版本号不对应，不需一致)-->
+    <!--org.springframework.boot:spring-boot-starter-data-redis-->
+    <jedis-placeholder.version/>
+
+    <!--MongoDB(与服务器版本号对应，不需一致)-->
+    <!--org.springframework.boot:spring-boot-starter-data-mongodb-->
+    <mongodb-placeholder.version/>
+
+    <!--RabbitMQ(与服务器版本号不对应，不需一致)-->
+    <!--org.springframework.boot:spring-boot-starter-amqp-->
+    <rabbit-amqp-client-placeholder.version/>
 
     <!--实体层注解(与IDE安装的版本号对应，不需一致)-->
     <!--org.projectlombok:lombok-->
@@ -80,6 +86,18 @@
     <!--mysql:mysql-connector-java-->
     <mysql-placeholder.version/>
 
+    <!--客户端版本号需要对应-->
+    <!--ElasticSearch(与服务器版本号对应，需要一致)-->
+    <!--org.springframework.boot:spring-boot-starter-data-elasticsearch-->
+    <elasticsearch.version>7.14.0</elasticsearch.version>
+
+    <!--父pom不含依赖-->
+    <!--Minio(与服务器版本号不对应，不需一致)-->
+    <!--io.minio:minio-->
+    <minio.version>8.3.0</minio.version>
+
+    <!---->
+    <!--父pom不含依赖-->
     <!--MyBatis-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
     <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
@@ -96,10 +114,6 @@
     <!--cn.404z:id-spring-boot-autoconfigure-->
     <id-spring-boot-autoconfigure.version>2.1.0</id-spring-boot-autoconfigure.version>
 
-    <!--Minio(与服务器版本号不对应，不需一致)-->
-    <!--io.minio:minio-->
-    <minio.version>8.3.0</minio.version>
-
     <!--修复注解异常-->
     <!--com.google.code.findbugs:annotations-->
     <findbugs-annotations.version>3.0.1</findbugs-annotations.version>
@@ -112,18 +126,6 @@
     <!--com.alibaba:easyexcel-->
     <easyexcel.version>2.2.10</easyexcel.version>
 
-    <!--IO操作-->
-    <!--commons-io:commons-io-->
-    <commons-io.version>2.11.0</commons-io.version>
-
-    <!--加密算法-->
-    <!--commons-codec:commons-codec-->
-    <commons-codec.version>1.15</commons-codec.version>
-
-    <!--BCrypt加密算法-->
-    <!--org.mindrot:jbcrypt-->
-    <jbcrypt.version>0.4</jbcrypt.version>
-
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
     <hutool-all.version>5.7.11</hutool-all.version>
@@ -135,10 +137,6 @@
     <!--IP解析-->
     <!--org.lionsoul:ip2region-->
     <ip2region.version>1.7.2</ip2region.version>
-
-    <!--UserAgent解析-->
-    <!--eu.bitwalker:UserAgentUtils-->
-    <UserAgentUtils.version>1.21</UserAgentUtils.version>
 
     <!--手机号码归属地查询-->
     <!--me.ihxq.projects:phone-number-geo-->
@@ -207,24 +205,6 @@
         <artifactId>easyexcel</artifactId>
         <version>${easyexcel.version}</version>
       </dependency>
-      <!--IO操作-->
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>${commons-io.version}</version>
-      </dependency>
-      <!--加密算法-->
-      <dependency>
-        <groupId>commons-codec</groupId>
-        <artifactId>commons-codec</artifactId>
-        <version>${commons-codec.version}</version>
-      </dependency>
-      <!--BCrypt加密算法-->
-      <dependency>
-        <groupId>org.mindrot</groupId>
-        <artifactId>jbcrypt</artifactId>
-        <version>${jbcrypt.version}</version>
-      </dependency>
       <!--HuTool工具包-->
       <dependency>
         <groupId>cn.hutool</groupId>
@@ -242,12 +222,6 @@
         <groupId>org.lionsoul</groupId>
         <artifactId>ip2region</artifactId>
         <version>${ip2region.version}</version>
-      </dependency>
-      <!--UserAgent解析-->
-      <dependency>
-        <groupId>eu.bitwalker</groupId>
-        <artifactId>UserAgentUtils</artifactId>
-        <version>${UserAgentUtils.version}</version>
       </dependency>
       <!--手机号码归属地查询-->
       <dependency>
@@ -276,5 +250,27 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <profiles>
+    <profile>
+      <!-- 打包 -->
+      <id>install</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>${jdk.version}</source>
+              <target>${jdk.version}</target>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

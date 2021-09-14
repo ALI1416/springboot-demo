@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "ip2region.resource-path",
+      "type": "java.lang.String",
+      "description": "ip2region-数据文件在本项目中resources文件夹下的路径.",
+      "sourceType": "com.demo.property.Ip2RegionAppYml",
+      "defaultValue": "/file/ip2region/data.db"
+    },
+    {
+      "name": "ip2region.reference-path",
+      "type": "java.lang.String",
+      "description": "ip2region-数据文件引用路径(本机绝对地址).",
+      "sourceType": "com.demo.property.Ip2RegionAppYml",
+      "defaultValue": "/file/ip2region/data.db"
+    }
+  ]
+}

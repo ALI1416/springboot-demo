@@ -1,6 +1,5 @@
 package com.demo.controller;
 
-import com.demo.DemoBaseApp;
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -127,24 +126,6 @@ public class IndexController {
     @PostMapping("userTest2")
     public Result userTest2(@RequestBody User u) {
         return Result.o(u);
-    }
-
-    /**
-     * 关闭服务
-     */
-    @GetMapping("shutdown")
-    public Result shutdown() {
-        DemoBaseApp.shutdown();
-        return Result.o();
-    }
-
-    /**
-     * 重启服务
-     */
-    @GetMapping("restart")
-    public Result restart() {
-        DemoBaseApp.restart();
-        return Result.o();
     }
 
 }
