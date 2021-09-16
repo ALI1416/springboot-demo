@@ -26,9 +26,9 @@
 
   <properties>
     <!--基础配置-->
-    <jdk.version>1.8</jdk.version>
-    <maven.compiler.source>${jdk.version}</maven.compiler.source>
-    <maven.compiler.target>${jdk.version}</maven.compiler.target>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -37,67 +37,60 @@
     <!--继承父pom版本号-->
     <!--SpringBootWeb-->
     <!--org.springframework.boot:spring-boot-starter-web-->
-    <spring-boot-starter-web.version/>
 
     <!--邮件-->
     <!--org.springframework.boot:spring-boot-starter-mail-->
-    <spring-boot-starter-mail.version/>
 
     <!--热部署-->
     <!--org.springframework.boot:spring-boot-devtools-->
-    <spring-boot-devtools.version/>
 
     <!--配置-->
     <!--org.springframework.boot:spring-boot-configuration-processor-->
-    <spring-boot-configuration-processor.version/>
 
     <!--测试-->
     <!--org.springframework.boot:spring-boot-starter-test-->
-    <spring-boot-starter-test.version/>
 
     <!--SpringBoot整合Maven插件-->
     <!--org.springframework.boot:spring-boot-maven-plugin-->
-    <spring-boot-maven-plugin.version/>
 
     <!--Maven打包插件-->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
-    <maven-compiler-plugin.version/>
-
-    <!---->
-    <!--客户端-->
-    <!--继承父pom版本号-->
-    <!--Redis(与服务器版本号不对应，不需一致)-->
-    <!--org.springframework.boot:spring-boot-starter-data-redis-->
-    <jedis-placeholder.version/>
-
-    <!--MongoDB(与服务器版本号对应，不需一致)-->
-    <!--org.springframework.boot:spring-boot-starter-data-mongodb-->
-    <mongodb-placeholder.version/>
-
-    <!--RabbitMQ(与服务器版本号不对应，不需一致)-->
-    <!--org.springframework.boot:spring-boot-starter-amqp-->
-    <rabbit-amqp-client-placeholder.version/>
-
-    <!--实体层注解(与IDE安装的版本号对应，不需一致)-->
-    <!--org.projectlombok:lombok-->
-    <lombok-placeholder.version/>
 
     <!--MySQL(与服务器版本号对应，不需一致)-->
     <!--mysql:mysql-connector-java-->
-    <mysql-placeholder.version/>
+    <!--<mysql.version></mysql.version>-->
 
-    <!--客户端版本号需要对应-->
+    <!--MongoDB(与服务器版本号对应，不需一致)-->
+    <!--org.springframework.boot:spring-boot-starter-data-mongodb-->
+    <!--<mongodb.version></mongodb.version>-->
+
+    <!--Redis(与服务器版本号不对应，不需一致)-->
+    <!--org.springframework.boot:spring-boot-starter-data-redis-->
+    <!--<jedis.version></jedis.version>-->
+
+    <!--RabbitMQ(与服务器版本号不对应，不需一致)-->
+    <!--org.springframework.boot:spring-boot-starter-amqp-->
+    <!--<rabbit-amqp-client.version></rabbit-amqp-client.version>-->
+
+    <!--实体层注解(与IDE安装的版本号对应，不需一致)-->
+    <!--org.projectlombok:lombok-->
+    <!--<lombok.version></lombok.version>-->
+
+
+    <!---->
+    <!--父pom版本号需要修改-->
     <!--ElasticSearch(与服务器版本号对应，需要一致)-->
     <!--org.springframework.boot:spring-boot-starter-data-elasticsearch-->
+    <!--<elasticsearch.version></elasticsearch.version>-->
     <elasticsearch.version>7.14.0</elasticsearch.version>
 
+
+    <!---->
     <!--父pom不含依赖-->
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
     <minio.version>8.3.0</minio.version>
 
-    <!---->
-    <!--父pom不含依赖-->
     <!--MyBatis-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
     <mybatis-spring-boot-starter.version>2.2.0</mybatis-spring-boot-starter.version>
@@ -264,8 +257,8 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
-              <source>${jdk.version}</source>
-              <target>${jdk.version}</target>
+              <source>${java.version}</source>
+              <target>${java.version}</target>
             </configuration>
           </plugin>
         </plugins>

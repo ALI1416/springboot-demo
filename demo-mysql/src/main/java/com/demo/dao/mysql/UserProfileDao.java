@@ -1,5 +1,6 @@
 package com.demo.dao.mysql;
 
+import com.demo.base.DaoBase;
 import com.demo.entity.vo.UserProfileVo;
 import com.demo.mapper.UserProfileMapper;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * <h1>UserProfileProfileDao</h1>
+ * <h1>UserProfileDao</h1>
  *
  * <p>
  * createDate 2021/09/13 10:46:29
@@ -19,7 +20,7 @@ import java.util.List;
  **/
 @Service
 @AllArgsConstructor
-public class UserProfileDao {
+public class UserProfileDao extends DaoBase {
 
     private final UserProfileMapper userProfileMapper;
 

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @AllArgsConstructor
-public class UserDao extends DaoBase {
+public class UserService extends DaoBase {
 
     private final UserProfileDao userProfileDao;
 
