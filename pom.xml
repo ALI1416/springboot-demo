@@ -105,7 +105,11 @@
 
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
-    <id-spring-boot-autoconfigure.version>2.1.0</id-spring-boot-autoconfigure.version>
+    <id-spring-boot-autoconfigure.version>2.3.0</id-spring-boot-autoconfigure.version>
+
+    <!--IP地址转区域-->
+    <!--cn.404z:ip2region-spring-boot-autoconfigure-->
+    <ip2region-spring-boot-autoconfigure.version>1.0.0</ip2region-spring-boot-autoconfigure.version>
 
     <!--修复注解异常-->
     <!--com.google.code.findbugs:annotations-->
@@ -173,6 +177,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>id-spring-boot-autoconfigure</artifactId>
         <version>${id-spring-boot-autoconfigure.version}</version>
+      </dependency>
+      <!--IP地址转区域-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>ip2region-spring-boot-autoconfigure</artifactId>
+        <version>${ip2region-spring-boot-autoconfigure.version}</version>
       </dependency>
       <!--Minio-->
       <dependency>

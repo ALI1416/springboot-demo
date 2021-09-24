@@ -1,9 +1,9 @@
 package com.demo.base;
 
+import cn.z.ip2region.Ip2Region;
+import cn.z.ip2region.Region;
 import com.demo.util.ClientInfoUtils;
-import com.demo.util.IpUtils;
 import com.demo.util.UserAgentUtils;
-import com.demo.util.pojo.IpInfo;
 import com.demo.util.pojo.UserAgentInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -122,11 +122,11 @@ public class EntityBase extends ToStringBase {
      */
     public void setIpInfo(HttpServletRequest request) {
         String ipString = ClientInfoUtils.getIp(request);
-        IpInfo ipInfo = IpUtils.getIpInfo(ClientInfoUtils.getIp(request));
+        Region region = Ip2Region.parse(ClientInfoUtils.getIp(request));
         setIp(ipString);
-        setIpCountry(ipInfo.getCountry());
-        setIpProvince(ipInfo.getProvince());
-        setIpCity(ipInfo.getCity());
+        setIpCountry(region.getCountry());
+        setIpProvince(region.getProvince());
+        setIpCity(region.getCity());
     }
 
     /**

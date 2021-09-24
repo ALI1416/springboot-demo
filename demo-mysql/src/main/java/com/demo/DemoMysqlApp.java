@@ -1,6 +1,5 @@
 package com.demo;
 
-import com.demo.init.Init;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -38,7 +37,6 @@ public class DemoMysqlApp {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoMysqlApp.class, args);
-        Init.init();
     }
 
 }

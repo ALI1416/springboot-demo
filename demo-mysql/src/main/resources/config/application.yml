@@ -8,7 +8,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-#server:
+server:
+  compression:
+    enabled: true
 #  servlet:
 #    context-path: /api
 #  port: 443
@@ -34,4 +36,3 @@ id:
 
 ip2region:
   resource-path: /file/ip2region/data.db
-  reference-path: /file/ip2region/data.db
