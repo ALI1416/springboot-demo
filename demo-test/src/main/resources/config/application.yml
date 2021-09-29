@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+
+#server:
+#  servlet:
+#    context-path: /api
+#  port: 443
+#  ssl:
+#    key-store: classpath:k3t3.com.pfx
+#    key-store-password: 40I69DfH
+#    key-store-type: PKCS12
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.demo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  file:
+    name: /log/demo-test.log
+
+id:
+  machine-id: 0
+  machine-bits: 8
+  sequence-bits: 12
+
+ip2region:
+  resource-path: /file/ip2region/data.db

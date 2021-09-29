@@ -3,6 +3,7 @@
 ## 目录结构
 
 - **demo-base** : springboot项目模板
+- **demo-test** : springboot测试
 - **demo-mysql** : springboot整合mysql
 - **demo-util** : 工具测试
 - .gitignore : git忽略

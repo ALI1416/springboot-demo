@@ -30,7 +30,7 @@ public class UserAgentInfo extends ToStringBase {
     /**
      * 是手机
      */
-    private Integer isMobile;
+    private Integer isMobile = 0;
 
     /**
      * 构造函数
@@ -50,14 +50,14 @@ public class UserAgentInfo extends ToStringBase {
             return;
         }
         // os
-        if ("Unknown".equals(userAgent.getBrowser().toString())) {
+        if (!"Unknown".equals(userAgent.getBrowser().toString())) {
             os = userAgent.getBrowser().toString();
             if (userAgent.getVersion() != null) {
                 os += " " + userAgent.getVersion();
             }
         }
         // browser
-        if ("Unknown".equals(userAgent.getPlatform().toString())) {
+        if (!"Unknown".equals(userAgent.getPlatform().toString())) {
             browser = userAgent.getPlatform().toString();
             if (userAgent.getOsVersion() != null) {
                 browser += " " + userAgent.getOsVersion();

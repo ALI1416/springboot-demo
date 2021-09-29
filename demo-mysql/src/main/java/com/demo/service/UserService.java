@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.demo.base.DaoBase;
 import com.demo.dao.mysql.UserProfileDao;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @AllArgsConstructor
-public class UserService extends DaoBase {
+public class UserService {
 
     private final UserProfileDao userProfileDao;
 

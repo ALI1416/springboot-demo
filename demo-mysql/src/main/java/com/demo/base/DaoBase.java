@@ -10,7 +10,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import java.util.List;
 
 /**
- * <h1>ServiceBase</h1>
+ * <h1>DaoBase</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -20,7 +20,7 @@ import java.util.List;
  * @since 1.0.0
  **/
 @Slf4j
-public class DaoBase extends ResultBase {
+public class DaoBase {
 
     /**
      * try-if简化，不符合function条件的回滚
