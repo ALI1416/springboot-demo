@@ -3,8 +3,8 @@
 ## 目录结构
 
 - **demo-base** : springboot项目模板
-- **demo-test** : springboot测试
 - **demo-mysql** : springboot整合mysql
+- **demo-mysql2** : springboot整合mysql2
 - **demo-util** : 工具测试
 - .gitignore : git忽略
 - LICENSE : 许可证

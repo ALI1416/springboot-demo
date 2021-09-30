@@ -33,10 +33,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.demo.mapper")
 @SpringBootApplication
 @Slf4j
-public class DemoTestApp {
+public class DemoMysql2App {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoTestApp.class, args);
+        SpringApplication.run(DemoMysql2App.class, args);
     }
 
 }

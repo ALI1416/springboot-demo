@@ -6,7 +6,9 @@ spring:
       max-file-size: 4GB
       max-request-size: 4GB
 
-#server:
+server:
+  compression:
+    enabled: true
 #  servlet:
 #    context-path: /api
 #  port: 443

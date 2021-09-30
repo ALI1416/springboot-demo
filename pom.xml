@@ -21,6 +21,7 @@
   <modules>
     <module>demo-base</module>
     <module>demo-mysql</module>
+    <module>demo-mysql2</module>
     <module>demo-util</module>
   </modules>
 

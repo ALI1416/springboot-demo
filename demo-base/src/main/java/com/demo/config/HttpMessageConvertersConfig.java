@@ -30,6 +30,7 @@ public class HttpMessageConvertersConfig {
      * 替换成FastJson
      */
     @Bean
+    @SuppressWarnings("deprecation")
     public HttpMessageConverters fastJsonMessageConverters() {
         // 消息转换器对象
         List<HttpMessageConverter<?>> converters = new ArrayList<>();
@@ -48,7 +49,7 @@ public class HttpMessageConvertersConfig {
         fastJsonConfig.setCharset(StandardCharsets.UTF_8);
         // MediaType配置
         List<MediaType> fastMediaTypes = new ArrayList<>();
-        fastMediaTypes.add(MediaType.ALL);
+        fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         fastConverter.setSupportedMediaTypes(fastMediaTypes);
         fastConverter.setFastJsonConfig(fastJsonConfig);
         converters.add(0, fastConverter);

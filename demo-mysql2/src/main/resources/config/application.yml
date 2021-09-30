@@ -7,8 +7,12 @@ spring:
       max-request-size: 4GB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 60000
 
-#server:
+server:
+  compression:
+    enabled: true
 #  servlet:
 #    context-path: /api
 #  port: 443
@@ -25,7 +29,7 @@ mybatis:
 
 logging:
   file:
-    name: /log/demo-test.log
+    name: /log/demo-mysql.log
 
 id:
   machine-id: 0
