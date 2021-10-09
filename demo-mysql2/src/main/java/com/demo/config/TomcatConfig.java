@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * <h1>Tomcat配置</h1>
+ * <h1>Tomcat配置类</h1>
  *
  * <p>
  * 功能1(默认关闭)：http(80)协议切换到https(443)协议<br>
