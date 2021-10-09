@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
 /**
- * <h1>ToStringBase</h1>
+ * <h1>ToString格式化基类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

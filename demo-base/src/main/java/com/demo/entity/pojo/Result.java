@@ -5,7 +5,7 @@ import com.demo.constant.ResultCodeEnum;
 import lombok.Getter;
 
 /**
- * <h1>返回结果实体</h1>
+ * <h1>返回结果实体类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

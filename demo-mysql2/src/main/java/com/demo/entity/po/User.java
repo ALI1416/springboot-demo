@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>UserProfile</h1>
+ * <h1>用户实体类</h1>
  *
  * <p>
- * createDate 2021/09/09 15:41:33
+ * createDate 2021/10/09 15:20:48
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
@@ -16,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class UserProfile extends EntityBase {
+public class User extends EntityBase {
 
     /**
      * 账号：唯一

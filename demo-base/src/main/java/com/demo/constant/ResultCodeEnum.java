@@ -3,7 +3,7 @@ package com.demo.constant;
 import lombok.Getter;
 
 /**
- * <h1>返回结果状态枚举</h1>
+ * <h1>返回结果状态枚举类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

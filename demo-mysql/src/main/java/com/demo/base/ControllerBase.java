@@ -1,7 +1,7 @@
 package com.demo.base;
 
 /**
- * <h1>ControllerBase</h1>
+ * <h1>控制层基类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

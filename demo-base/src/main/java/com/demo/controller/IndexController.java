@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 /**
- * <h1>IndexController</h1>
+ * <h1>首页</h1>
  *
  * <p>
  * createDate 2021/09/09 10:35:04

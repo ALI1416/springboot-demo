@@ -4,7 +4,7 @@ import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.pojo.Result;
 
 /**
- * <h1>ResultBase</h1>
+ * <h1>返回结果基类</h1>
  *
  * <p>
  * createDate 2021/09/14 14:42:03

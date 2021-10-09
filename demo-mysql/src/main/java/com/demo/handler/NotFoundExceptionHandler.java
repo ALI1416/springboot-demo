@@ -13,7 +13,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * <h1>404异常处理</h1>
+ * <h1>404异常处理类</h1>
  *
  * <p>
  * createDate 2021/09/10 14:37:57

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>UserAgentInfo实体</h1>
+ * <h1>UserAgentInfo实体类</h1>
  *
  * <p>
  * createDate 2021/01/15 11:42:21

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 /**
- * <h1>DaoBase</h1>
+ * <h1>Dao层基类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

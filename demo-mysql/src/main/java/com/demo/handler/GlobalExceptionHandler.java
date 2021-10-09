@@ -14,7 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.io.IOException;
 
 /**
- * <h1>全局异常处理</h1>
+ * <h1>全局异常处理类(404异常除外)</h1>
  *
  * <p>
  * 捕获处理所有未被捕获的异常(404异常除外)
@@ -109,4 +109,5 @@ public class GlobalExceptionHandler {
         log.error("Exception", e);
         return Result.e(ResultCodeEnum.ERROR, "Exception");
     }
+
 }

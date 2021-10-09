@@ -17,19 +17,19 @@ server:
 #    context-path: /api
 #  port: 443
 #  ssl:
-#    key-store: classpath:k3t3.com.pfx
-#    key-store-password: 40I69DfH
-#    key-store-type: PKCS12
+#    key-store: classpath:404z.cn.jks
+#    key-store-password: ChengKai1998!
+#    key-store-type: JKS
+
+logging:
+  file:
+    name: /log/demo-mysql2.log
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.demo.entity
   configuration:
     map-underscore-to-camel-case: true
-
-logging:
-  file:
-    name: /log/demo-mysql.log
 
 id:
   machine-id: 0

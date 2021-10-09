@@ -1,14 +1,14 @@
 package com.demo.entity.vo;
 
-import com.demo.entity.po.UserProfile;
+import com.demo.entity.po.User;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>UserProfileVo</h1>
+ * <h1>用户vo</h1>
  *
  * <p>
- * createDate 2020/11/11 11:11:11
+ * createDate 2021/10/09 15:20:59
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
@@ -16,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class UserProfileVo extends UserProfile {
+public class UserVo extends User {
 
     /**
      * 新密码
@@ -30,4 +30,5 @@ public class UserProfileVo extends UserProfile {
      * 出生年-结束
      */
     private Integer yearEnd;
+
 }

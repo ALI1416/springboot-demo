@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 /**
- * <h1>EntityBase</h1>
+ * <h1>实体层基类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

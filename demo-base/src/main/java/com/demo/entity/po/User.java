@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * <h1>User</h1>
+ * <h1>用户</h1>
  *
  * <p>
  * createDate 2021/09/09 15:41:33

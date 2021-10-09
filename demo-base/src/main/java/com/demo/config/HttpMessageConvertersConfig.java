@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>消息转换器配置</h1>
+ * <h1>消息转换器配置类</h1>
  *
  * <p>
  * createDate 2021/01/11 19:53:12
@@ -55,4 +55,5 @@ public class HttpMessageConvertersConfig {
         converters.add(0, fastConverter);
         return new HttpMessageConverters(converters);
     }
+
 }
