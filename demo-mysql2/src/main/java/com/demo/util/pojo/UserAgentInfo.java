@@ -1,7 +1,6 @@
 package com.demo.util.pojo;
 
 import cn.hutool.http.useragent.UserAgent;
-import com.demo.base.ToStringBase;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class UserAgentInfo extends ToStringBase {
+public class UserAgentInfo {
 
     /**
      * 操作系统
@@ -67,6 +66,11 @@ public class UserAgentInfo extends ToStringBase {
         if (userAgent.isMobile()) {
             isMobile = 1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "UserAgentInfo{" + "os='" + os + '\'' + ", browser='" + browser + '\'' + ", isMobile=" + isMobile + '}';
     }
 
 }

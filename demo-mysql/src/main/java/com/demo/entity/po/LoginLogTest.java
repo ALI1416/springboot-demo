@@ -62,4 +62,5 @@ public class LoginLogTest extends EntityBase {
         setIpInfo(request);
         setUserAgentInfo(request);
     }
+
 }

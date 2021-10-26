@@ -10,3 +10,4 @@ spring:
 logging:
   level:
     root: info
+    com.demo.mapper: trace

@@ -41,7 +41,10 @@ public class DaoBase {
                 return false;
             }
         } catch (Exception e) {
-            log.error("try-if简化捕获到异常", e);
+            if (rollbackIf) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
+            log.error("try-if捕获到异常", e);
             return false;
         }
         return true;
@@ -71,7 +74,10 @@ public class DaoBase {
                 return false;
             }
         } catch (Exception e) {
-            log.error("try-if2简化捕获到异常", e);
+            if (rollbackIf) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
+            log.error("try-if2捕获到异常", e);
             return false;
         }
         return true;

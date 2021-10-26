@@ -4,6 +4,7 @@ import com.demo.dao.mysql.LoginLogTestDao;
 import com.demo.entity.po.LoginLogTest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <h1>登录日志测试Service</h1>
@@ -24,7 +25,9 @@ public class LoginLogTestService {
     /**
      * 插入
      */
+    @Transactional
     public boolean insert(LoginLogTest loginLogTest) {
         return loginLogTestDao.insert(loginLogTest);
     }
+
 }

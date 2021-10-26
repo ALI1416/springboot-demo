@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
      * @see HttpRequestMethodNotSupportedException
      */
     @Order(1)
-    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result notSupportedHandler(Exception e) {
         log.warn(ResultCodeEnum.NOT_SUPPORTED.getMsg(), e);
         return Result.e(ResultCodeEnum.NOT_SUPPORTED);

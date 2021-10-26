@@ -5,7 +5,6 @@ import com.demo.entity.po.LoginLogTest;
 import com.demo.mapper.LoginLogTestMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <h1>登录日志测试Dao</h1>
@@ -26,7 +25,6 @@ public class LoginLogTestDao extends DaoBase {
     /**
      * 插入
      */
-    @Transactional
     public boolean insert(LoginLogTest loginLogTest) {
         return tryif(() -> loginLogTestMapper.insert(loginLogTest));
     }
