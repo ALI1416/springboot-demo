@@ -39,22 +39,13 @@
       <if test="comment != null">
         comment=#{comment},
       </if>
+      <if test="isDelete != null">
+        is_delete=#{isDelete},
+      </if>
       update_id=#{updateId},
       update_time=CURRENT_TIMESTAMP,
       version=version+1,
     </set>
-    WHERE
-    id=#{id}
-  </update>
-
-  <update id="delete" parameterType="UserVo">
-    UPDATE user
-    SET
-    account=#{id},
-    is_delete=1,
-    update_id=#{updateId},
-    update_time=CURRENT_TIMESTAMP,
-    version=version+1,
     WHERE
     id=#{id}
   </update>
@@ -94,9 +85,6 @@
     FROM
     user
     <where>
-      <if test="id != null">
-        and id=#{id}
-      </if>
       <if test="account != null">
         and account=#{account}
       </if>
@@ -109,9 +97,7 @@
       <if test="year != null">
         and year=#{year}
       </if>
-      <if test="isDelete != null">
-        and is_delete=#{isDelete}
-      </if>
+      <include refid="com.demo.mapper.BaseMapper.findExact"/>
     </where>
   </select>
 

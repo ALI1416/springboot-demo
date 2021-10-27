@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.BaseMapper">
+
+  <sql id="findExact">
+    <if test="id != null">
+      and id=#{id}
+    </if>
+    <if test="isDelete != null">
+      and is_delete=#{isDelete}
+    </if>
+    <if test="createId != null">
+      and create_id=#{createId}
+    </if>
+    <if test="createTime != null">
+      and create_time=#{createTime}
+    </if>
+    <if test="updateId != null">
+      and update_id=#{updateId}
+    </if>
+    <if test="updateTime != null">
+      and update_time=#{updateTime}
+    </if>
+    <if test="version != null">
+      and version=#{version}
+    </if>
+  </sql>
+
+  <sql id="find">
+    <if test="id != null">
+      and id=#{id}
+    </if>
+    <if test="isDelete != null">
+      and is_delete=#{isDelete}
+    </if>
+    <if test="createId != null">
+      and create_id=#{createId}
+    </if>
+    <if test="createTime != null">
+      and create_time=#{createTime}
+    </if>
+    <if test="updateId != null">
+      and update_id=#{updateId}
+    </if>
+    <if test="updateTime != null">
+      and update_time=#{updateTime}
+    </if>
+    <choose>
+      <!-- 忽略 -->
+      <when test="year == null and yearEnd == null"/>
+      <!-- 首尾不会同时为null。首尾相等时，根据Not是否为null决定==和!=。 -->
+      <!-- 等于 -->
+      <when test="year == yearEnd and yearNot == null">
+        and year = #{year}
+      </when>
+      <!-- 不等 -->
+      <when test="year == yearEnd and yearNot != null">
+        and year != #{year}
+      </when>
+      <!-- 首尾不会同时为null，也不会同时相等。根据首尾为null的情况决定<和>。 -->
+      <!-- 小于 -->
+      <when test="year == null">
+        and year &lt;= #{yearEnd}
+      </when>
+      <!-- 大于 -->
+      <when test="yearEnd == null">
+        and year &gt;= #{year}
+      </when>
+      <!-- 首尾都不会为null，也不会相等。根据Not是否为null决定between和not between。 -->
+      <!-- 在...与...之间 -->
+      <when test="yearNot == null">
+        and year between #{year} and #{yearEnd}
+      </when>
+      <!-- 不在...与...之间 -->
+      <when test="yearNot != null">
+        and year not between #{year} and #{yearEnd}
+      </when>
+    </choose>
+  </sql>
+
+</mapper>

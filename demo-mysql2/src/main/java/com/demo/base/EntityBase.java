@@ -97,6 +97,31 @@ public class EntityBase extends ToStringBase {
     private Integer uaIsMobile;
 
     /* ==================== vo ==================== */
+    /* -------------------- 大多数表 -------------------- */
+    /**
+     * 创建时间-否定
+     */
+    private Timestamp createTimeNot;
+    /**
+     * 创建时间-结束
+     */
+    private Timestamp createTimeEnd;
+    /**
+     * 更新时间-否定
+     */
+    private Timestamp updateTimeNot;
+    /**
+     * 更新时间-结束
+     */
+    private Timestamp updateTimeEnd;
+    /**
+     * 版本-否定
+     */
+    private Integer versionNot;
+    /**
+     * 版本-结束
+     */
+    private Integer versionEnd;
     /* -------------------- 分页 -------------------- */
     /**
      * 分页-页码

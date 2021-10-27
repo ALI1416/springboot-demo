@@ -51,7 +51,7 @@ public class DaoBase {
     }
 
     /**
-     * try-if2简化，不符合function条件的回滚
+     * try-if简化2，不符合function条件的回滚
      *
      * @param function 要执行的函数
      */
@@ -60,7 +60,7 @@ public class DaoBase {
     }
 
     /**
-     * try-if2简化
+     * try-if简化2
      *
      * @param rollbackIf 不符合function条件的是否回滚
      * @param function   要执行的函数

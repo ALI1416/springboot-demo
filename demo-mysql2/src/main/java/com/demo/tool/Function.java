@@ -13,6 +13,11 @@ package com.demo.tool;
 @FunctionalInterface
 public interface Function<T> {
 
+    /**
+     * 执行
+     *
+     * @return T
+     */
     T run();
 
 }

@@ -17,37 +17,50 @@ import java.util.List;
 public interface UserMapper {
 
     /**
-     * 插入(需id,account,pwd,createId)
+     * 插入
+     *
+     * @param user id,account,pwd,createId
+     * @return 执行成功数量
      */
     int insert(UserVo user);
 
     /**
-     * 更新(需id,updateId;至少一个account,pwd,name,gender,year,profile,comment)
+     * 更新
+     *
+     * @param user id,updateId;至少一个account,pwd,name,gender,year,profile,comment,isDelete
+     * @return 执行成功数量
      */
     int update(UserVo user);
 
     /**
-     * 删除(需id,updateId)
-     */
-    int delete(UserVo user);
-
-    /**
-     * 存在一个唯一键(仅一个id,account)
+     * 存在一个唯一键
+     *
+     * @param user 仅一个id,account
+     * @return 是否存在
      */
     boolean existUniqueKey(UserVo user);
 
     /**
-     * 查询一个唯一键(仅一个id,account)
+     * 查询一个唯一键
+     *
+     * @param user 仅一个id,account
+     * @return UserVo
      */
     UserVo findByUniqueKey(UserVo user);
 
     /**
      * 精确查询
+     *
+     * @param user UserVo
+     * @return List<UserVo>
      */
     List<UserVo> findExact(UserVo user);
 
     /**
      * 查询
+     *
+     * @param user UserVo
+     * @return List<UserVo>
      */
     List<UserVo> find(UserVo user);
 

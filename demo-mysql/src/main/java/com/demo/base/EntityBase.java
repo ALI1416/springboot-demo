@@ -96,21 +96,6 @@ public class EntityBase extends ToStringBase {
      */
     private Integer uaIsMobile;
 
-    /* ==================== vo ==================== */
-    /* -------------------- 分页 -------------------- */
-    /**
-     * 分页-页码
-     */
-    private Integer pages;
-    /**
-     * 分页-每页条数
-     */
-    private Integer rows;
-    /**
-     * 分页-排序
-     */
-    private String orderBy;
-
     /* ++++++++++++++++++++ 方法 ++++++++++++++++++++ */
     /* ==================== 日志类 ==================== */
 
