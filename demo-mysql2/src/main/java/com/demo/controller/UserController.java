@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import com.demo.base.ControllerBase;
+import com.demo.entity.po.UserBak;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.UserService;
@@ -126,5 +127,26 @@ public class UserController extends ControllerBase {
         return Result.o(userService.findExact(user));
     }
 
+    /**
+     * 查询
+     *
+     * @param user UserVo
+     * @return PageInfo<UserVo>
+     */
+    @PostMapping("/find")
+    public Result find(@RequestBody UserVo user) {
+        return Result.o(userService.find(user));
+    }
+
+    /**
+     * 查询备份
+     *
+     * @param user id
+     * @return PageInfo<UserBak>
+     */
+    @PostMapping("/findBak")
+    public Result find(@RequestBody UserBak user) {
+        return Result.o(userService.findBak(user));
+    }
 
 }

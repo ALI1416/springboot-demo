@@ -2,6 +2,7 @@ package com.demo.dao.mysql;
 
 import cn.z.id.Id;
 import com.demo.base.DaoBase;
+import com.demo.entity.po.UserBak;
 import com.demo.entity.vo.UserVo;
 import com.demo.mapper.UserMapper;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,12 @@ public class UserDao extends DaoBase {
      */
     public long insert(UserVo user) {
         user.setId(Id.next());
-        return tryif(() -> userMapper.insert(user)) ? user.getId() : 0L;
+        if (tryif(() -> userMapper.insert(user))) {
+            userMapper.bak(new UserBak(user.getId()));
+            return user.getId();
+        } else {
+            return 0L;
+        }
     }
 
     /**
@@ -44,7 +50,12 @@ public class UserDao extends DaoBase {
      */
     public boolean update(UserVo user) {
         user.setIsDelete(null);
-        return tryif(() -> userMapper.update(user));
+        if (tryif(() -> userMapper.update(user))) {
+            userMapper.bak(new UserBak(user.getId()));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -59,7 +70,12 @@ public class UserDao extends DaoBase {
         userVo.setAccount(user.getId().toString());
         userVo.setIsDelete(1);
         userVo.setUpdateId(user.getUpdateId());
-        return tryif(() -> userMapper.update(userVo));
+        if (tryif(() -> userMapper.update(userVo))) {
+            userMapper.bak(new UserBak(user.getId()));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -73,7 +89,12 @@ public class UserDao extends DaoBase {
         userVo.setId(user.getId());
         userVo.setIsDelete(0);
         userVo.setUpdateId(user.getUpdateId());
-        return tryif(() -> userMapper.update(userVo));
+        if (tryif(() -> userMapper.update(userVo))) {
+            userMapper.bak(new UserBak(user.getId()));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -144,5 +165,14 @@ public class UserDao extends DaoBase {
         return userMapper.find(user);
     }
 
+    /**
+     * 查询备份
+     *
+     * @param id id
+     * @return List<UserBak>
+     */
+    public List<UserBak> findBak(Long id) {
+        return userMapper.findBak(id);
+    }
 
 }

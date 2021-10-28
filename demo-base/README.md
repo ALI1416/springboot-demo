@@ -13,7 +13,6 @@
 - `build` : 构建插件
 
 ### src.main.java.com.demo
-- `DemoBaseApp` : 启动类
 - **`base`** : 基类文件夹
   - `ToStringBase` : ToString格式化基类
 - **`config`** : 配置文件夹
@@ -31,10 +30,9 @@
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
   - `NotFoundExceptionHandler` : 404异常处理类
+- `DemoBaseApp` : 启动类
 
 ### src.main.resources
-- `404z.cn.jks` : ssl证书
-- `banner.txt` : 横幅
 - **`config`** : 配置文件
   - `application.yml` : 总配置
   - `application-dev.yml` : 开发环境配置
@@ -42,6 +40,8 @@
   - `application-qas.yml` : 测试环境配置
 - **`static`** : 静态文件
   - `favicon.ico` : 图标
+- `404z.cn.jks` : ssl证书
+- `banner.txt` : 横幅
 
 #### application.yml
 - `spring.profiles.active` : 使用的配置文件后缀

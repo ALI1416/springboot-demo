@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
+import com.demo.entity.po.UserBak;
 import com.demo.entity.vo.UserVo;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
@@ -126,6 +127,16 @@ public class UserService extends ServiceBase {
      */
     public PageInfo<UserVo> find(UserVo user) {
         return pagination(user, () -> userDao.find(user));
+    }
+
+    /**
+     * 查询备份
+     *
+     * @param user id
+     * @return PageInfo<UserBak>
+     */
+    public PageInfo<UserBak> findBak(UserBak user) {
+        return pagination(user, () -> userDao.findBak(user.getId()));
     }
 
 }

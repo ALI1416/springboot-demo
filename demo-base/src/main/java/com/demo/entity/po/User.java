@@ -20,14 +20,29 @@ import java.util.Date;
 @Setter
 public class User extends ToStringBase {
 
+    /**
+     * 账号
+     */
     public String account;
 
+    /**
+     * 用户名
+     */
     public String name;
 
+    /**
+     * 出生年
+     */
     public int year;
 
+    /**
+     * 性别
+     */
     public Boolean gender;
 
+    /**
+     * 日期
+     */
     public Date date;
 
 }

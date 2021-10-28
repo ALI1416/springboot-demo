@@ -24,6 +24,9 @@ public class LoginLogTestDao extends DaoBase {
 
     /**
      * 插入
+     *
+     * @param loginLogTest LoginLogTest
+     * @return 是否成功
      */
     public boolean insert(LoginLogTest loginLogTest) {
         return tryif(() -> loginLogTestMapper.insert(loginLogTest));

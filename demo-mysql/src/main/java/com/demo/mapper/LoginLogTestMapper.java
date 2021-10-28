@@ -16,6 +16,9 @@ public interface LoginLogTestMapper {
 
     /**
      * 插入
+     *
+     * @param loginLogTest LoginLogTest
+     * @return 执行成功数量
      */
     int insert(LoginLogTest loginLogTest);
 

@@ -1,5 +1,6 @@
 package com.demo.mapper;
 
+import com.demo.entity.po.UserBak;
 import com.demo.entity.vo.UserVo;
 
 import java.util.List;
@@ -23,6 +24,14 @@ public interface UserMapper {
      * @return 执行成功数量
      */
     int insert(UserVo user);
+
+    /**
+     * 备份
+     *
+     * @param user id,refId
+     * @return 执行成功数量
+     */
+    int bak(UserBak user);
 
     /**
      * 更新
@@ -63,5 +72,13 @@ public interface UserMapper {
      * @return List<UserVo>
      */
     List<UserVo> find(UserVo user);
+
+    /**
+     * 查询备份
+     *
+     * @param id id
+     * @return List<UserBak>
+     */
+    List<UserBak> findBak(Long id);
 
 }

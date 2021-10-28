@@ -6,6 +6,10 @@
     id,account,pwd,name,gender,year,profile,comment,is_delete,create_id,create_time,update_id,update_time,version
   </sql>
 
+  <sql id="bak">
+    id,ref_id,account,pwd,name,gender,year,profile,comment,is_delete,create_id,create_time,update_id,update_time,version
+  </sql>
+
   <insert id="insert" parameterType="UserVo">
     INSERT
     user(
@@ -13,6 +17,20 @@
     )VALUES(
     #{id},#{account},#{pwd},#{id},#{createId},#{createId}
     )
+  </insert>
+
+  <insert id="bak" parameterType="UserBak">
+    INSERT
+    user_bak(
+    <include refid="bak"/>
+    )
+    SELECT
+    #{id},
+    <include refid="col"/>
+    FROM
+    user
+    WHERE
+    id=#{refId}
   </insert>
 
   <update id="update" parameterType="UserVo">
@@ -107,9 +125,6 @@
     FROM
     user
     <where>
-      <if test="id != null">
-        and id=#{id}
-      </if>
       <if test="account != null and account != ''">
         <bind name="account1" value="'%'+ account +'%'"/>
         and account like #{account1}
@@ -121,41 +136,21 @@
       <if test="gender != null">
         and gender=#{gender}
       </if>
-      <choose>
-        <!-- 忽略 -->
-        <when test="year == null and yearEnd == null"/>
-        <!-- 首尾不会同时为null。首尾相等时，根据Not是否为null决定==和!=。 -->
-        <!-- 等于 -->
-        <when test="year == yearEnd and yearNot == null">
-          and year = #{year}
-        </when>
-        <!-- 不等 -->
-        <when test="year == yearEnd and yearNot != null">
-          and year != #{year}
-        </when>
-        <!-- 首尾不会同时为null，也不会同时相等。根据首尾为null的情况决定<和>。 -->
-        <!-- 小于 -->
-        <when test="year == null">
-          and year &lt;= #{yearEnd}
-        </when>
-        <!-- 大于 -->
-        <when test="yearEnd == null">
-          and year &gt;= #{year}
-        </when>
-        <!-- 首尾都不会为null，也不会相等。根据Not是否为null决定between和not between。 -->
-        <!-- 在...与...之间 -->
-        <when test="yearNot == null">
-          and year between #{year} and #{yearEnd}
-        </when>
-        <!-- 不在...与...之间 -->
-        <when test="yearNot != null">
-          and year not between #{year} and #{yearEnd}
-        </when>
-      </choose>
-      <if test="isDelete != null">
-        and is_delete=#{isDelete}
-      </if>
+      <include refid="com.demo.mapper.BaseMapper.chooseField">
+        <property name="field" value="year"/>
+        <property name="alias" value="year"/>
+      </include>
+      <include refid="com.demo.mapper.BaseMapper.find"/>
     </where>
+  </select>
+
+  <select id="findBak" parameterType="Long" resultType="UserBak">
+    SELECT
+    <include refid="bak"/>
+    FROM
+    user_bak
+    WHERE
+    ref_id=#{id}
   </select>
 
 </mapper>

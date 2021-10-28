@@ -13,12 +13,12 @@
 - `build` : 构建插件
 
 ### src.main.java.com.demo
-- `DemoMysql2App` : 启动类
 - **`base`** : 基类文件夹
   - `ControllerBase` : 控制层基类
-  - `DaoBase` : Dao层基类
+  - `DaoBase` : 数据访问层基类
   - `EntityBase` : 实体层基类
   - `ResultBase` : 返回结果基类
+  - `ServiceBase` : 服务层基类
   - `ToStringBase` : ToString格式化基类
 - **`config`** : 配置文件夹
   - `HttpMessageConvertersConfig` : 消息转换器配置类
@@ -27,7 +27,7 @@
   - `ResultCodeEnum` : 返回结果状态枚举类
 - **`controller`** : 控制层文件夹
   - `IndexController` : 首页
-- **`dao`** : Dao层文件夹
+- **`dao`** : 数据访问层文件夹
   - **`mysql`** : mysql的Dao层文件夹
     - `LoginLogTestDao` : 登录日志测试Dao
 - **`entity`** : 实体层文件夹
@@ -45,14 +45,13 @@
 - **`tool`** : 工具类(无后缀Utils)
   - `Function` : 自定义函数
 - **`util`** : 工具类(有后缀Utils)
-  - `ClientInfoUtils` : 客户端信息工具类
-  - `UserAgentUtils` : UserAgent工具类
   - **`pojo`** : 普通实体层
     - `UserAgentInfo` : UserAgentInfo实体类
+  - `ClientInfoUtils` : 客户端信息工具类
+  - `UserAgentUtils` : UserAgent工具类
+- `DemoMysql2App` : 启动类
 
 ### src.main.resources
-- `404z.cn.jks` : ssl证书
-- `banner.txt` : 横幅
 - **`config`** : 配置文件
   - `application.yml` : 总配置
   - `application-dev.yml` : 开发环境配置
@@ -66,6 +65,8 @@
   - `demo.sql` : 初始化数据库文件
 - **`static`** : 静态文件
   - `favicon.ico` : 图标
+- `404z.cn.jks` : ssl证书
+- `banner.txt` : 横幅
 
 #### application.yml
 - `spring.profiles.active` : 使用的配置文件后缀

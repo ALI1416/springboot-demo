@@ -1,6 +1,5 @@
 package com.demo.controller;
 
-import com.demo.base.ControllerBase;
 import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.po.LoginLogTest;
 import com.demo.entity.pojo.Result;
@@ -23,19 +22,20 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @AllArgsConstructor
-public class IndexController extends ControllerBase {
+public class IndexController {
 
     private final HttpServletRequest request;
     private final LoginLogTestService loginLogTestService;
 
     /**
      * 首页
+     *
+     * @return LoginLogTest
      */
     @GetMapping(value = {"", "/", "index"})
     public Result index() {
         LoginLogTest loginLogTest = new LoginLogTest(request);
-        boolean ok = loginLogTestService.insert(loginLogTest);
-        if (ok) {
+        if (loginLogTestService.insert(loginLogTest)) {
             return Result.o(loginLogTest);
         } else {
             return Result.e(ResultCodeEnum.ERROR, loginLogTest);

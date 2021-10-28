@@ -24,6 +24,9 @@ public class LoginLogTestService {
 
     /**
      * 插入
+     *
+     * @param loginLogTest LoginLogTest
+     * @return 是否成功
      */
     @Transactional
     public boolean insert(LoginLogTest loginLogTest) {
