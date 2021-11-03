@@ -26,6 +26,14 @@ public interface UserMapper {
     int insert(UserVo user);
 
     /**
+     * 批量插入
+     *
+     * @param users List UserVo id,account,pwd,createId
+     * @return 执行成功数量
+     */
+    int batchInsert(List<UserVo> users);
+
+    /**
      * 备份
      *
      * @param user id,refId
@@ -61,7 +69,7 @@ public interface UserMapper {
      * 精确查询
      *
      * @param user UserVo
-     * @return List<UserVo>
+     * @return List UserVo
      */
     List<UserVo> findExact(UserVo user);
 
@@ -69,7 +77,7 @@ public interface UserMapper {
      * 查询
      *
      * @param user UserVo
-     * @return List<UserVo>
+     * @return List UserVo
      */
     List<UserVo> find(UserVo user);
 
@@ -77,7 +85,7 @@ public interface UserMapper {
      * 查询备份
      *
      * @param id id
-     * @return List<UserBak>
+     * @return List UserBak
      */
     List<UserBak> findBak(Long id);
 

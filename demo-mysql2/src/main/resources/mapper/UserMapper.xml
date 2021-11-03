@@ -19,6 +19,18 @@
     )
   </insert>
 
+  <insert id="batchInsert" parameterType="UserVo">
+    INSERT
+    user(
+    id,account,pwd,name,create_id,update_id
+    )VALUES
+    <foreach collection="list" separator="," item="uv">
+    (
+    #{uv.id},#{uv.account},#{uv.pwd},#{uv.id},#{uv.createId},#{uv.createId}
+    )
+    </foreach>
+  </insert>
+
   <insert id="bak" parameterType="UserBak">
     INSERT
     user_bak(

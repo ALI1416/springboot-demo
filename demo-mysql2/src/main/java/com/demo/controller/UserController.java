@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * <h1>用户</h1>
  *
@@ -37,6 +39,28 @@ public class UserController extends ControllerBase {
     @PostMapping("/insert")
     public Result insert(@RequestBody UserVo user) {
         return Result.o(userService.insert(user));
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param users List account,pwd,createId
+     * @return 是否成功
+     */
+    @PostMapping("/batchInsert")
+    public Result batchInsert(@RequestBody List<UserVo> users) {
+        return Result.o(userService.batchInsert(users));
+    }
+
+    /**
+     * 批量插入含详情
+     *
+     * @param users List account,pwd,createId
+     * @return ResultBatch UserVo
+     */
+    @PostMapping("/batchInsertDetail")
+    public Result batchInsertDetail(@RequestBody List<UserVo> users) {
+        return Result.o(userService.batchInsertDetail(users));
     }
 
     /**

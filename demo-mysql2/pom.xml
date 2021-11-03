@@ -37,20 +37,10 @@
       <groupId>com.github.pagehelper</groupId>
       <artifactId>pagehelper-spring-boot-starter</artifactId>
     </dependency>
-    <!--IP解析-->
-    <dependency>
-      <groupId>org.lionsoul</groupId>
-      <artifactId>ip2region</artifactId>
-    </dependency>
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <!--IP地址转区域-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>ip2region-spring-boot-autoconfigure</artifactId>
     </dependency>
     <!--HuTool工具包-->
     <dependency>

@@ -35,6 +35,3 @@ id:
   machine-id: 0
   machine-bits: 8
   sequence-bits: 12
-
-ip2region:
-  resource-path: /file/ip2region/data.db

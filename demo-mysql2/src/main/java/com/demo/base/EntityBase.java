@@ -1,14 +1,8 @@
 package com.demo.base;
 
-import cn.z.ip2region.Ip2Region;
-import cn.z.ip2region.Region;
-import com.demo.util.ClientInfoUtils;
-import com.demo.util.UserAgentUtils;
-import com.demo.util.pojo.UserAgentInfo;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 
 /**
@@ -62,39 +56,6 @@ public class EntityBase extends ToStringBase {
      * 被备份的id/被登录的id
      */
     private Long refId;
-    /* -------------------- 日志表 -------------------- */
-    /**
-     * IP地址
-     */
-    private String ip;
-    /**
-     * 浏览器标识
-     */
-    private String userAgent;
-    /**
-     * IP地址-国家
-     */
-    private String ipCountry;
-    /**
-     * IP地址-省份
-     */
-    private String ipProvince;
-    /**
-     * IP地址-城市
-     */
-    private String ipCity;
-    /**
-     * 浏览器标识-操作系统
-     */
-    private String uaOs;
-    /**
-     * 浏览器标识-浏览器
-     */
-    private String uaBrowser;
-    /**
-     * 浏览器标识-是手机
-     */
-    private Integer uaIsMobile;
 
     /* ==================== vo ==================== */
     /* -------------------- 大多数表 -------------------- */
@@ -135,38 +96,5 @@ public class EntityBase extends ToStringBase {
      * 分页-排序
      */
     private String orderBy;
-
-    /* ++++++++++++++++++++ 方法 ++++++++++++++++++++ */
-    /* ==================== 日志类 ==================== */
-
-    /**
-     * 设置ip信息<br>
-     * 包括ip,ipCountry,ipProvince,ipCity
-     *
-     * @param request HttpServletRequest
-     */
-    public void setIpInfo(HttpServletRequest request) {
-        String ipString = ClientInfoUtils.getIp(request);
-        Region region = Ip2Region.parse(ClientInfoUtils.getIp(request));
-        setIp(ipString);
-        setIpCountry(region.getCountry());
-        setIpProvince(region.getProvince());
-        setIpCity(region.getCity());
-    }
-
-    /**
-     * 设置userAgent信息<br>
-     * 包括userAgent,uaOs,uaBrowser,uaIsMobile
-     *
-     * @param request HttpServletRequest
-     */
-    public void setUserAgentInfo(HttpServletRequest request) {
-        String userAgentString = ClientInfoUtils.getUserAgent(request);
-        UserAgentInfo userAgentInfo = UserAgentUtils.getUserAgentInfo(userAgentString);
-        setUserAgent(userAgentString);
-        setUaOs(userAgentInfo.getOs());
-        setUaBrowser(userAgentInfo.getBrowser());
-        setUaIsMobile(userAgentInfo.getIsMobile());
-    }
 
 }

@@ -2,8 +2,17 @@
 
 ## 目录结构
 - **`demo-base`** : springboot项目模板
+  - SpringBoot Web
+  - FastJson
 - **`demo-mysql`** : springboot整合mysql
+  - MySQL
+  - MyBatis
+  - IP解析
+  - 雪花ID生成器
+  - IP地址转区域
+  - HuTool工具包
 - **`demo-mysql2`** : springboot整合mysql2
+  - PageHelper分页排序查询
 - `.gitignore` : git忽略
 - `LICENSE` : 许可证
 - `pom.xml` : 父pom

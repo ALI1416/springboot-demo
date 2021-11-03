@@ -27,6 +27,16 @@ public class UserDao extends DaoBase {
     private final UserMapper userMapper;
 
     /**
+     * 备份
+     *
+     * @param refId id
+     * @return 是否成功
+     */
+    public boolean bak(Long refId) {
+        return tryif(() -> userMapper.bak(new UserBak(refId)));
+    }
+
+    /**
      * 插入
      *
      * @param user account,pwd,createId
@@ -35,10 +45,44 @@ public class UserDao extends DaoBase {
     public long insert(UserVo user) {
         user.setId(Id.next());
         if (tryif(() -> userMapper.insert(user))) {
-            userMapper.bak(new UserBak(user.getId()));
-            return user.getId();
+            return bak(user.getId()) ? user.getId() : 0L;
         } else {
             return 0L;
+        }
+    }
+
+    /**
+     * 插入，失败不回滚
+     *
+     * @param user account,pwd,createId
+     * @return ok:id,e:0
+     */
+    public long insertNotRollback(UserVo user) {
+        user.setId(Id.next());
+        if (tryif(false, () -> userMapper.insert(user))) {
+            return bak(user.getId()) ? user.getId() : 0L;
+        } else {
+            return 0L;
+        }
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param users List UserVo account,pwd,createId
+     * @return 是否成功
+     */
+    public boolean batchInsert(List<UserVo> users) {
+        for (UserVo user : users) {
+            user.setId(Id.next());
+        }
+        if (tryif2(() -> userMapper.batchInsert(users) == users.size())) {
+            for (UserVo user : users) {
+                bak(user.getId());
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -51,8 +95,7 @@ public class UserDao extends DaoBase {
     public boolean update(UserVo user) {
         user.setIsDelete(null);
         if (tryif(() -> userMapper.update(user))) {
-            userMapper.bak(new UserBak(user.getId()));
-            return true;
+            return bak(user.getId());
         } else {
             return false;
         }
@@ -71,8 +114,7 @@ public class UserDao extends DaoBase {
         userVo.setIsDelete(1);
         userVo.setUpdateId(user.getUpdateId());
         if (tryif(() -> userMapper.update(userVo))) {
-            userMapper.bak(new UserBak(user.getId()));
-            return true;
+            return bak(user.getId());
         } else {
             return false;
         }
@@ -90,8 +132,7 @@ public class UserDao extends DaoBase {
         userVo.setIsDelete(0);
         userVo.setUpdateId(user.getUpdateId());
         if (tryif(() -> userMapper.update(userVo))) {
-            userMapper.bak(new UserBak(user.getId()));
-            return true;
+            return bak(user.getId());
         } else {
             return false;
         }
@@ -149,7 +190,7 @@ public class UserDao extends DaoBase {
      * 精确查询
      *
      * @param user UserVo
-     * @return List<UserVo>
+     * @return List UserVo
      */
     public List<UserVo> findExact(UserVo user) {
         return userMapper.findExact(user);
@@ -159,7 +200,7 @@ public class UserDao extends DaoBase {
      * 查询
      *
      * @param user UserVo
-     * @return List<UserVo>
+     * @return List UserVo
      */
     public List<UserVo> find(UserVo user) {
         return userMapper.find(user);
@@ -169,7 +210,7 @@ public class UserDao extends DaoBase {
      * 查询备份
      *
      * @param id id
-     * @return List<UserBak>
+     * @return List UserBak
      */
     public List<UserBak> findBak(Long id) {
         return userMapper.findBak(id);

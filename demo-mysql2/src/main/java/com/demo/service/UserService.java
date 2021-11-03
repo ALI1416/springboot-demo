@@ -3,11 +3,14 @@ package com.demo.service;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
 import com.demo.entity.po.UserBak;
+import com.demo.entity.pojo.ResultBatch;
 import com.demo.entity.vo.UserVo;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <h1>用户Service</h1>
@@ -34,6 +37,36 @@ public class UserService extends ServiceBase {
     @Transactional
     public long insert(UserVo user) {
         return userDao.insert(user);
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param users List UserVo account,pwd,createId
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean batchInsert(List<UserVo> users) {
+        return userDao.batchInsert(users);
+    }
+
+    /**
+     * 批量插入含详情
+     *
+     * @param users List UserVo account,pwd,createId
+     * @return ResultBatch UserVo
+     */
+    @Transactional
+    public ResultBatch<UserVo> batchInsertDetail(List<UserVo> users) {
+        ResultBatch<UserVo> result = new ResultBatch<>();
+        for (UserVo user : users) {
+            if (userDao.insertNotRollback(user) == 0) {
+                result.add(false, user, "失败");
+            }else{
+                result.add(true, user, "成功");
+            }
+        }
+        return result;
     }
 
     /**
