@@ -10,9 +10,9 @@ spring:
     hikari:
       max-lifetime: 60000
 
-server:
-  compression:
-    enabled: true
+#server:
+#  compression:
+#    enabled: true
 #  servlet:
 #    context-path: /api
 #  port: 443

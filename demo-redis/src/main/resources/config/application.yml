@@ -19,4 +19,4 @@ spring:
 
 logging:
   file:
-    name: /log/demo-base.log
+    name: /log/demo-redis.log

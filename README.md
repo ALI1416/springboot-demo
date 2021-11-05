@@ -13,6 +13,7 @@
   - HuTool工具包
 - **`demo-mysql2`** : springboot整合mysql2
   - PageHelper分页排序查询
+- **`demo-redis`** : springboot整合redis
 - `.gitignore` : git忽略
 - `LICENSE` : 许可证
 - `pom.xml` : 父pom

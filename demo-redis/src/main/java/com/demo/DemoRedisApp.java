@@ -1,6 +1,5 @@
 package com.demo;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -29,12 +28,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@MapperScan("com.demo.mapper")
 @SpringBootApplication
-public class DemoMysqlApp {
+public class DemoRedisApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoMysqlApp.class, args);
+        SpringApplication.run(DemoRedisApp.class, args);
     }
 
 }
