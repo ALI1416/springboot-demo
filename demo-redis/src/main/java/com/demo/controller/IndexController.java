@@ -1,12 +1,14 @@
 package com.demo.controller;
 
-import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import com.demo.util.RedisUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,171 +25,245 @@ import java.util.List;
 public class IndexController {
 
     /**
-     * <h3>获取指定key的value</h3>
+     * <h3>获取失效时间</h3>
+     * POST /getExpire?key=a<br>
+     * 不过期 -1<br>
+     * 不存在 -2<br>
+     * 还有23秒过期 23
      */
-    @PostMapping("get")
-    public Result stringGet(String key) {
-        return Result.o(RedisUtils.get(key));
+    @PostMapping("getExpire")
+    public Result getExpire(String key) {
+        return Result.o(RedisUtils.getExpire(key));
     }
 
     /**
-     * <h3>放入int</h3>
-     * GET http://localhost:8080/intSet?key=int&value=12<br>
-     * Redis中的值 12
+     * <h3>指定为持久数据(移除失效时间)</h3>
+     * POST /persist?key=a<br>
+     * 还有10秒过期 true<br>
+     * 不过期/不存在 false
      */
-    @PostMapping("intSet")
-    public Result intSet(String key, int value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("persist")
+    public Result persist(String key) {
+        return Result.o(RedisUtils.persist(key));
     }
 
     /**
-     * <h3>放入short</h3>
-     * GET http://localhost:8080/shortSet?key=short&value=123<br>
-     * Redis中的值 123S (尾部带大写字母S)
+     * <h3>指定失效时间</h3>
+     * POST /expire?key=a&timeout=100<br>
+     * 还有10秒过期/不过期 true<br>
+     * 不存在 false<br>
+     * POST /expire?key=a&timeout=0<br>
+     * POST /expire?key=a&timeout=-2<br>
+     * 被删除
      */
-    @PostMapping("shortSet")
-    public Result shortSet(String key, short value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("expire")
+    public Result expire(String key, long timeout) {
+        return Result.o(RedisUtils.expire(key, timeout));
     }
 
     /**
-     * <h3>放入long</h3>
-     * GET http://localhost:8080/longSet?key=long&value=1234567890123456789<br>
-     * Redis中的值1234567890123456789
+     * <h3>指定失效时间</h3>
+     * POST /expireDuration?key=a&timeout=PT100H<br>
+     * 倒计时100小时
      */
-    @PostMapping("longSet")
-    public Result longSet(String key, long value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("expireDuration")
+    public Result expire(String key, String timeout) {
+        return Result.o(RedisUtils.expire(key, Duration.parse(timeout)));
     }
 
     /**
-     * <h3>放入boolean</h3>
-     * GET http://localhost:8080/booleanSet?key=boolean&value=true<br>
-     * Redis中的值 true
+     * <h3>指定失效日期</h3>
+     * POST /expireAt?key=a&timeout=2022/01/01 00:00:00<br>
+     * 在2022/01/01 00:00:00时到期
      */
-    @PostMapping("booleanSet")
-    public Result booleanSet(String key, boolean value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("expireAt")
+    public Result expireAt(String key, Date timeout) {
+        return Result.o(RedisUtils.expireAt(key, timeout));
     }
 
     /**
-     * <h3>放入byte</h3>
-     * GET http://localhost:8080/byteSet?key=byte&value=123<br>
-     * Redis中的值 123B (尾部带大写字母B)
+     * <h3>指定失效日期</h3>
+     * POST /expireAtInstant?key=a&timeout=2022-01-01T00:00:00Z<br>
+     * 在2022-01-01T00:00:00Z时到期
      */
-    @PostMapping("byteSet")
-    public Result byteSet(String key, byte value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("expireAtInstant")
+    public Result expireAt(String key, String timeout) {
+        return Result.o(RedisUtils.expireAt(key, Instant.parse(timeout)));
     }
 
     /**
-     * <h3>放入char</h3>
-     * GET http://localhost:8080/charSet?key=char&value=c<br>
-     * Redis中的值 "c"
+     * <h3>key是否存在</h3>
+     * POST /hasKey?key=a<br>
+     * 存在 true<br>
+     * 不存在 false
      */
-    @PostMapping("charSet")
-    public Result charSet(String key, char value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("hasKey")
+    public Result hasKey(String key) {
+        return Result.o(RedisUtils.hasKey(key));
     }
 
     /**
-     * <h3>放入float</h3>
-     * GET http://localhost:8080/floatSet?key=float&value=123.45<br>
-     * Redis中的值 123.45F (尾部带大写字母F)
+     * <h3>集合中存在的key的数量</h3>
+     * 实际存在key有a/b/c<br>
+     * POST /hasKey<br>
+     * body JSON ["a","b","c"] 3<br>
+     * body JSON ["a","b","d"] 2<br>
+     * body JSON ["a","b","c","c"] 4
      */
-    @PostMapping("floatSet")
-    public Result floatSet(String key, float value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("countExistingKeys")
+    public Result countExistingKeys(@RequestBody List<String> keys) {
+        return Result.o(RedisUtils.countExistingKeys(keys));
     }
 
     /**
-     * <h3>放入double</h3>
-     * GET http://localhost:8080/doubleSet?key=double&value=123.456789012<br>
-     * Redis中的值 123.456789012D (尾部带大写字母D)
+     * <h3>删除key</h3>
+     * POST /delete?key=a<br>
+     * 存在 true<br>
+     * 不存在 false
      */
-    @PostMapping("doubleSet")
-    public Result doubleSet(String key, double value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("delete")
+    public Result delete(String key) {
+        return Result.o(RedisUtils.delete(key));
     }
 
     /**
-     * <h3>放入String</h3>
-     * GET http://localhost:8080/stringSet?key=string&value=string<br>
-     * Redis中的值 "string"
+     * <h3>删除多个key</h3>
+     * 实际存在key有a/b/c<br>
+     * POST /deleteList<br>
+     * body JSON ["a","b"] 2<br>
+     * body JSON ["a","d"] 1<br>
+     * body JSON ["c","c"] 1<br>
+     * body JSON ["d","e"] 0
      */
-    @PostMapping("stringSet")
-    public Result stringSet(String key, String value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("deleteList")
+    public Result delete(@RequestBody List<String> keys) {
+        return Result.o(RedisUtils.delete(keys));
     }
 
     /**
-     * <h3>放入Integer</h3>
-     * GET http://localhost:8080/integerSet?key=integer&value=123<br>
-     * Redis中的值 123
+     * <h3>删除多个key</h3>
+     * 实际存在key有a/b/c<br>
+     * POST /deleteArray?keys=a&keys=b 2<br>
+     * POST /deleteArray?keys=a&keys=d 1<br>
+     * POST /deleteArray?keys=c&keys=c 1<br>
+     * POST /deleteArray?keys=d&keys=e 0
      */
-    @PostMapping("integerSet")
-    public Result integerSet(String key, Integer value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("deleteArray")
+    public Result delete(String[] keys) {
+        return Result.o(RedisUtils.delete(keys));
     }
 
     /**
-     * <h3>放入对象User</h3>
-     * GET http://localhost:8080/userSet?key=user<br>
-     * body JSON {"account":"aaa","year":1998,"gender":true,"date":"2021-01-02 12:34:56"}<br>
-     * Redis中的值 {"@type":"com.demo.entity.po.User","account":"aaa","date":"2021-01-02 12:34:56","gender":"true",
-     * "year":"1998"}
+     * <h3>非阻塞异步删除key</h3>
+     * POST /unlink?key=a<br>
+     * 存在 true<br>
+     * 不存在 false
      */
-    @PostMapping("userSet")
-    public Result userSet(String key, @RequestBody User user) {
-        RedisUtils.set(key, user);
-        return Result.o();
+    @PostMapping("unlink")
+    public Result unlink(String key) {
+        return Result.o(RedisUtils.unlink(key));
     }
 
     /**
-     * <h3>放入Array Integer</h3>
-     * GET http://localhost:8080/arrayIntegerSet?key=arrayIntegerSet&value=123&value=456&value=789<br>
-     * Redis中的值 [123,456,789]
+     * <h3>非阻塞异步删除多个key</h3>
+     * 实际存在key有a/b/c<br>
+     * POST /unlinkList<br>
+     * body JSON ["a","b"] 2<br>
+     * body JSON ["a","d"] 1<br>
+     * body JSON ["c","c"] 1<br>
+     * body JSON ["d","e"] 0
      */
-    @PostMapping("arrayIntegerSet")
-    public Result arrayIntegerSet(String key, Integer[] value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("unlinkList")
+    public Result unlink(List<String> keys) {
+        return Result.o(RedisUtils.unlink(keys));
     }
 
     /**
-     * <h3>放入List Integer</h3>
-     * GET http://localhost:8080/listIntegerSet?key=string&value=string<br>
-     * body JSON [111,222,333]
-     * Redis中的值 [111,222,333]
+     * <h3>非阻塞异步删除多个key</h3>
+     * 实际存在key有a/b/c<br>
+     * POST /unlinkArray?keys=a&keys=b 2<br>
+     * POST /unlinkArray?keys=a&keys=d 1<br>
+     * POST /unlinkArray?keys=c&keys=c 1<br>
+     * POST /unlinkArray?keys=d&keys=e 0
      */
-    @PostMapping("listIntegerSet")
-    public Result listIntegerSet(String key, @RequestBody List<Integer> value) {
-        RedisUtils.set(key, value);
-        return Result.o();
+    @PostMapping("unlinkArray")
+    public Result unlink(String[] keys) {
+        return Result.o(RedisUtils.unlink(keys));
     }
 
     /**
-     * 设置失效时间
+     * <h3>返回存储的数据类型</h3>
+     * POST /type?key=a<br>
+     * 是String类型 STRING</h3>
+     * 是List类型 LIST</h3>
+     * 是Set类型 SET</h3>
+     * 是ZSet类型 ZSET</h3>
+     * 是Hash类型 HASH</h3>
+     * 不存在 NONE
      */
-    @PostMapping("stringSetExpire")
-    public Result stringSetExpire(String key, String value, long time) {
-        RedisUtils.set(key, value, time);
-        return Result.o();
+    @PostMapping("type")
+    public Result type(String key) {
+        return Result.o(RedisUtils.type(key));
     }
 
-    @PostMapping("stringIncrement")
-    public Result stringIncrement(String key, long delta) {
-        return Result.o(RedisUtils.increment(key, delta));
+    /**
+     * <h3>模糊查询</h3>
+     * 实际存在key有a/aabbcc/abc/abd/b/bc/bd/c<br>
+     * POST /keys?pattern=a 不匹配字符[a]<br>
+     * POST /keys?pattern=b? 右侧匹配1个字符[bc,bd]<br>
+     * POST /keys?pattern=*c 左侧匹配0+个字符[aabbcc,abc,bc,c]<br>
+     * POST /keys?pattern=*b* 两侧匹配0+个字符[aabbcc,abc,abd,b,bc,bd]<br>
+     * POST /keys?pattern=[abd] 匹配1个指定字符[a,b]
+     */
+    @PostMapping("keys")
+    public Result keys(String pattern) {
+        return Result.o(RedisUtils.keys(pattern));
+    }
+
+    /**
+     * <h3>返回一个随机的key</h3>
+     * POST /randomKey<br>
+     * 实际存在key有a/b/c c<br>
+     * 不存在任何键 null
+     */
+    @PostMapping("randomKey")
+    public Result randomKey() {
+        return Result.o(RedisUtils.randomKey());
+    }
+
+    /**
+     * <h3>重命名key</h3>
+     * POST /rename?oldKey=a&newKey=b
+     * 存在a，不存在b true<br>
+     * 存在ab true b被覆盖<br>
+     * 不存在a false
+     */
+    @PostMapping("rename")
+    public Result rename(String oldKey, String newKey) {
+        return Result.o(RedisUtils.rename(oldKey, newKey));
+    }
+
+    /**
+     * <h3>重命名key，仅当newKey不存在时</h3>
+     * POST /renameIfAbsent?oldKey=a&newKey=b<br>
+     * 存在a，不存在b true<br>
+     * 存在ab false<br>
+     * 不存在a false
+     */
+    @PostMapping("renameIfAbsent")
+    public Result renameIfAbsent(String oldKey, String newKey) {
+        return Result.o(RedisUtils.renameIfAbsent(oldKey, newKey));
+    }
+
+    /**
+     * <h3>将key移动到指定索引的数据库</h3>
+     * POST /move?key=a&dbIndex=1<br>
+     * 存在a和db1 true<br>
+     * 不存在a或db1 false
+     */
+    @PostMapping("move")
+    public Result move(String key, int dbIndex) {
+        return Result.o(RedisUtils.move(key, dbIndex));
     }
 
 }
