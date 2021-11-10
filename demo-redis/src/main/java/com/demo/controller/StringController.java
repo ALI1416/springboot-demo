@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <h1>首页</h1>
+ * <h1>字符串操作</h1>
  *
  * <p>
  * createDate 2021/09/09 10:35:04
@@ -31,7 +31,7 @@ public class StringController {
 
     /**
      * <h3>放入int</h3>
-     * POST /intSet?key=int&value=12<br>
+     * POST /string/intSet?key=int&value=12<br>
      * Redis中的值 12<br>
      * API中的值 12
      */
@@ -43,7 +43,7 @@ public class StringController {
 
     /**
      * <h3>放入short</h3>
-     * POST /shortSet?key=short&value=123<br>
+     * POST /string/shortSet?key=short&value=123<br>
      * Redis中的值 123S (尾部带大写字母S)<br>
      * API中的值 123
      */
@@ -55,7 +55,7 @@ public class StringController {
 
     /**
      * <h3>放入long</h3>
-     * POST /longSet?key=long&value=1234567890123456789<br>
+     * POST /string/longSet?key=long&value=1234567890123456789<br>
      * Redis中的值1234567890123456789<br>
      * API中的值 1234567890123456789
      */
@@ -67,7 +67,7 @@ public class StringController {
 
     /**
      * <h3>放入boolean</h3>
-     * POST /booleanSet?key=boolean&value=true<br>
+     * POST /string/booleanSet?key=boolean&value=true<br>
      * Redis中的值 true<br>
      * API中的值 true
      */
@@ -79,7 +79,7 @@ public class StringController {
 
     /**
      * <h3>放入byte</h3>
-     * POST /byteSet?key=byte&value=123<br>
+     * POST /string/byteSet?key=byte&value=123<br>
      * Redis中的值 123B (尾部带大写字母B)<br>
      * API中的值 123
      */
@@ -91,7 +91,7 @@ public class StringController {
 
     /**
      * <h3>放入char</h3>
-     * POST /charSet?key=char&value=c<br>
+     * POST /string/charSet?key=char&value=c<br>
      * Redis中的值 "c"<br>
      * API中的值 "c"
      */
@@ -103,7 +103,7 @@ public class StringController {
 
     /**
      * <h3>放入float</h3>
-     * POST /floatSet?key=float&value=123.45<br>
+     * POST /string/floatSet?key=float&value=123.45<br>
      * Redis中的值 123.45F (尾部带大写字母F)<br>
      * API中的值 123.45
      */
@@ -115,7 +115,7 @@ public class StringController {
 
     /**
      * <h3>放入double</h3>
-     * POST /doubleSet?key=double&value=123.456789012<br>
+     * POST /string/doubleSet?key=double&value=123.456789012<br>
      * Redis中的值 123.456789012D (尾部带大写字母D)<br>
      * API中的值 123.456789012
      */
@@ -127,7 +127,7 @@ public class StringController {
 
     /**
      * <h3>放入String</h3>
-     * POST /stringSet?key=string&value=string<br>
+     * POST /string/stringSet?key=string&value=string<br>
      * Redis中的值 "string"<br>
      * API中的值 "string"
      */
@@ -139,7 +139,7 @@ public class StringController {
 
     /**
      * <h3>放入Integer</h3>
-     * POST /integerSet?key=integer&value=123<br>
+     * POST /string/integerSet?key=integer&value=123<br>
      * Redis中的值 123<br>
      * API中的值 123
      */
@@ -151,7 +151,7 @@ public class StringController {
 
     /**
      * <h3>放入对象User</h3>
-     * POST /userSet?key=user<br>
+     * POST /string/userSet?key=user<br>
      * body JSON {"account":"aaa","year":1998,"gender":true,"date":"2021-01-02 12:34:56"}<br>
      * Redis中的值 {"@type":"com.demo.entity.po.User","account":"aaa","date":"2021-01-02 12:34:56","gender":"true",
      * "year":"1998"}<br>
@@ -165,7 +165,7 @@ public class StringController {
 
     /**
      * <h3>放入Map String Object</h3>
-     * POST /listIntegerSet?key=mapStringObjectSet<br>
+     * POST /string/listIntegerSet?key=mapStringObjectSet<br>
      * body JSON {"account":"aaa","year":1998,"gender":true,"date":"2021-01-02 12:34:56"}<br>
      * Redis中的值 {"@type":"java.util.HashMap","date":"2021-01-02 12:34:56","gender":"true","year":"1998",
      * "account":"aaa"}<br>
@@ -179,7 +179,7 @@ public class StringController {
 
     /**
      * <h3>放入Array Integer</h3>
-     * POST /arrayIntegerSet?key=arrayIntegerSet&value=123&value=456&value=789<br>
+     * POST /string/arrayIntegerSet?key=arrayIntegerSet&value=123&value=456&value=789<br>
      * Redis中的值 [123,456,789]<br>
      * API中的值 [123,456,789]
      */
@@ -191,7 +191,7 @@ public class StringController {
 
     /**
      * <h3>放入List Integer</h3>
-     * POST /listIntegerSet?key=string<br>
+     * POST /string/listIntegerSet?key=string<br>
      * body JSON [111,222,333]<br>
      * Redis中的值 [111,222,333]<br>
      * API中的值 [123,456,789]
@@ -329,7 +329,7 @@ public class StringController {
 
     /**
      * <h3>获取并放入</h3>
-     * POST /string/getAndSet?key=a<br>
+     * POST /string/getAndSet?key=a&value=abc<br>
      * 存在a a的值<br>
      * 不存在a null
      */
@@ -340,6 +340,9 @@ public class StringController {
 
     /**
      * <h3>获取多个</h3>
+     * POST /string/multiGetLis<br>
+     * body JSON ["a","b","c"]<br>
+     * 存在a/b ["aaa","bbb",null]
      */
     @PostMapping("multiGetList")
     public Result multiGet(@RequestBody List<String> keys) {
@@ -348,6 +351,8 @@ public class StringController {
 
     /**
      * <h3>获取多个</h3>
+     * POST /string/multiGetLis?keys=a&keys=b&keys=c<br>
+     * 存在a/b ["aaa","bbb",null]
      */
     @PostMapping("multiGetArray")
     public Result multiGet(String[] keys) {
@@ -355,92 +360,43 @@ public class StringController {
     }
 
     /**
-     * Long型递增1
+     * <h3>整数型递增1</h3>
+     * POST /string/increment1?key=a<br>
+     * 值为123 返回124，值改变为124
      */
-    @PostMapping("incrementLong1")
+    @PostMapping("increment1")
     public Result increment(String key) {
         return Result.o(RedisUtils.increment(key));
     }
 
     /**
-     * Long型递增
+     * <h3>整数型递增</h3>
+     * POST /string/increment?key=a&delta=2<br>
+     * 值为123 返回125，值改变为125
      */
-    @PostMapping("incrementLong")
+    @PostMapping("increment")
     public Result increment(String key, long delta) {
         return Result.o(RedisUtils.increment(key, delta));
     }
 
     /**
-     * Double型递增
+     * <h3>整数型递减1</h3>
+     * POST /string/decrement1?key=a<br>
+     * 值为123 返回122，值改变为122
      */
-    @PostMapping("incrementDouble")
-    public Result increment(String key, double delta) {
-        return Result.o(RedisUtils.increment(key, delta));
-    }
-
-    /**
-     * Long型递减1
-     */
-    @PostMapping("decrementLong1")
+    @PostMapping("decrement1")
     public Result decrement(String key) {
         return Result.o(RedisUtils.decrement(key));
     }
 
     /**
-     * Long型递减
+     * <h3>整数型递减</h3>
+     * POST /string/decrement?key=a&delta=2<br>
+     * 值为123 返回121，值改变为121
      */
-    @PostMapping("decrementLong")
+    @PostMapping("decrement")
     public Result decrement(String key, long delta) {
         return Result.o(RedisUtils.decrement(key, delta));
-    }
-
-    /**
-     * 追加字符串
-     */
-    @PostMapping("append")
-    public Result append(String key, String value) {
-        return Result.o(RedisUtils.append(key, value));
-    }
-
-    /**
-     * 截取字符串
-     */
-    @PostMapping("substring")
-    public Result substring(String key, long start, long end) {
-        return Result.o(RedisUtils.substring(key, start, end));
-    }
-
-    /**
-     * 插入
-     */
-    @PostMapping("insert")
-    public Result insert(String key, Object value, long offset) {
-        RedisUtils.insert(key, value, offset);
-        return Result.o();
-    }
-
-    /**
-     * 获取长度
-     */
-    @PostMapping("size")
-    public Result size(String key) {
-        return Result.o(RedisUtils.size(key));
-    }
-
-    /**
-     * 指定位置设置1个bit
-     */
-    @PostMapping("setBit")
-    public Result setBit(String key, long offset, boolean value) {
-        return Result.o(RedisUtils.setBit(key, offset, value));
-    }
-
-    /**
-     * 指定位置获取1个bit
-     */
-    @PostMapping("getBit")
-    public Result getBit(String key, long offset) {
-        return Result.o(RedisUtils.getBit(key, offset));
     }
 
 }
