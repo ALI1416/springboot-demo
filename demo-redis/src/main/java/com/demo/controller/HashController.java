@@ -27,7 +27,8 @@ public class HashController {
     /**
      * <h3>删除map中指定多个项</h3>
      * POST /hash/hDeleteArray?key=a&items=a1&items=a2&items=a4<br>
-     * 存在项a1/a2/a3 2
+     * 存在项a1/a2/a3 返回2<br>
+     * 存在项a/b/c 返回0
      */
     @PostMapping("hDeleteArray")
     public Result hDelete(String key, String[] items) {
@@ -38,7 +39,8 @@ public class HashController {
      * <h3>删除map中指定多个项</h3>
      * POST /hash/hDeleteList?key=a<br>
      * body JSON ["a1","a2","a4"]<br>
-     * 存在项a1/a2/a3 2
+     * 存在项a1/a2/a3 返回2<br>
+     * 存在项a/b/c 返回0
      */
     @PostMapping("hDeleteList")
     public Result hDelete(String key, @RequestBody List<String> items) {
@@ -48,8 +50,8 @@ public class HashController {
     /**
      * <h3>判断map中是否有指定项</h3>
      * POST /hash/hHasKey?key=a&item=a1<br>
-     * 存在key a和item a1 true<br>
-     * 不存在key a或item a1 false
+     * 存在key a和item a1 返回true<br>
+     * 不存在key a或item a1 返回false
      */
     @PostMapping("hHasKey")
     public Result hHasKey(String key, String item) {
@@ -59,8 +61,8 @@ public class HashController {
     /**
      * <h3>获取map中指定项的值</h3>
      * POST /hash/hGet?key=a&item=a1<br>
-     * 存在key a和item a1和value "abc" "abc"<br>
-     * 不存在key a或item a1 null
+     * 存在key a和item a1和value "abc" 返回"abc"<br>
+     * 不存在key a或item a1 返回null
      */
     @PostMapping("hGet")
     public Result hGet(String key, String item) {
@@ -70,7 +72,7 @@ public class HashController {
     /**
      * <h3>获取map中指定多个项的值</h3>
      * POST /hash/hMultiGetArray?key=a&items=a1&items=a2&items=a4<br>
-     * 存在项a1/a2/a3值为111/222/333 [111,222,null]
+     * 存在项a1/a2/a3值为111/222/333 返回[111,222,null]
      */
     @PostMapping("hMultiGetArray")
     public Result hMultiGet(String key, String[] items) {
@@ -81,7 +83,7 @@ public class HashController {
      * <h3>获取map中指定多个项的值</h3>
      * POST /hash/hMultiGetList?key=a<br>
      * body JSON ["a1","a2","a4"]<br>
-     * 存在项a1/a2/a3值为111/222/333 [111,222,null]
+     * 存在项a1/a2/a3值为111/222/333 返回[111,222,null]
      */
     @PostMapping("hMultiGetList")
     public Result hMultiGet(String key, @RequestBody List<String> items) {
@@ -91,7 +93,8 @@ public class HashController {
     /**
      * <h3>map指定项的值递增1</h3>
      * POST /hash/hIncrement1?key=a&item=a1<br>
-     * 值为123 返回124，值改变为124
+     * 值为123 返回124，值改变为124<br>
+     * 不存在键或项 返回1，值改变为1
      */
     @PostMapping("hIncrement1")
     public Result hIncrement(String key, String item) {
@@ -101,7 +104,8 @@ public class HashController {
     /**
      * <h3>map指定项的值递增1</h3>
      * POST /hash/hIncrement?key=a&item=a1&delta=2<br>
-     * 值为123 返回125，值改变为125
+     * 值为123 返回125，值改变为125<br>
+     * 不存在键或项 返回2，值改变为2
      */
     @PostMapping("hIncrement")
     public Result hIncrement(String key, String item, long delta) {
@@ -111,7 +115,8 @@ public class HashController {
     /**
      * <h3>map指定项的值递减1</h3>
      * POST /hash/hDecrement1?key=a&item=a1<br>
-     * 值为123 返回122，值改变为122
+     * 值为123 返回122，值改变为122<br>
+     * 不存在键或项 返回-1，值改变为-1
      */
     @PostMapping("hDecrement1")
     public Result hDecrement(String key, String item) {
@@ -121,7 +126,8 @@ public class HashController {
     /**
      * <h3>map指定项的值递减1</h3>
      * POST /hash/hDecrement?key=a&item=a1&delta=2<br>
-     * 值为123 返回121，值改变为121
+     * 值为123 返回121，值改变为121<br>
+     * 不存在键或项 返回-2，值改变为-2
      */
     @PostMapping("hDecrement")
     public Result hDecrement(String key, String item, long delta) {
@@ -131,7 +137,8 @@ public class HashController {
     /**
      * <h3>获取项的个数</h3>
      * POST /hash/hSize?key=a<br>
-     * 存在项a1/a2/a3 3
+     * 存在项a1/a2/a3 返回3<br>
+     * 不存在键 返回0
      */
     @PostMapping("hSize")
     public Result hSize(String key) {
@@ -139,7 +146,7 @@ public class HashController {
     }
 
     /**
-     * <h3>设置map的多个键值</h3>
+     * <h3>设置map的多个键值(项已存在会被覆盖)</h3>
      * POST /hash/hPutAll?key=a<br>
      * body JSON {"a":"111","b":"222","c":"333"}
      * Redis中"a":"111","b":"222","c":"333"
@@ -151,7 +158,7 @@ public class HashController {
     }
 
     /**
-     * <h3>设置map的1个键值</h3>
+     * <h3>设置map的1个键值(项已存在会被覆盖)</h3>
      * POST /hash/hPut?key=a&item=a1&value=abc<br>
      * Redis中"a1":"abc"
      */
@@ -164,8 +171,8 @@ public class HashController {
     /**
      * <h3>项不存在时，设置map的1个键值</h3>
      * POST /hash/hPutIfAbsent?key=a&item=a1&value=abc<br>
-     * 存在key a和item a1 false<br>
-     * 不存在key a或item a1 true
+     * 存在key a和item a1 返回false<br>
+     * 不存在key a或item a1 返回true
      */
     @PostMapping("hPutIfAbsent")
     public Result hPutIfAbsent(String key, String item, String value) {
@@ -175,7 +182,7 @@ public class HashController {
     /**
      * <h3>获取map中所有的项</h3>
      * POST /hash/hGetAllItem?key=a&item=a1&value=abc<br>
-     * 存在项a1/a2/a3值为111/222/333 ["a1","a2","a3"]
+     * 存在项a1/a2/a3值为111/222/333 返回["a1","a2","a3"]
      */
     @PostMapping("hGetAllItem")
     public Result hGetAllItem(String key) {
@@ -185,7 +192,7 @@ public class HashController {
     /**
      * <h3>获取map中所有的值</h3>
      * POST /hash/hGetAllValue?key=a&item=a1&value=abc<br>
-     * 存在项a1/a2/a3值为111/222/333 [111,222,333]
+     * 存在项a1/a2/a3值为111/222/333 返回[111,222,333]
      */
     @PostMapping("hGetAllValue")
     public Result hGetAllValue(String key) {
@@ -195,7 +202,7 @@ public class HashController {
     /**
      * <h3>获取map中所有的项和值</h3>
      * POST /hash/hGetAllItemAndValue?key=a&item=a1&value=abc<br>
-     * 存在项a1/a2/a3值为111/222/333 {"a":"111","b":"222","c":"333"}
+     * 存在项a1/a2/a3值为111/222/333 返回{"a":"111","b":"222","c":"333"}
      */
     @PostMapping("hGetAllItemAndValue")
     public Result hGetAllItemAndValue(String key) {

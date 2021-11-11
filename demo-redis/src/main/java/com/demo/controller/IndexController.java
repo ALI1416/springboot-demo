@@ -25,7 +25,7 @@ import java.util.List;
 public class IndexController {
 
     /**
-     * <h3>获取失效时间</h3>
+     * <h3>获取失效时间(秒，-1不过期，-2不存在)</h3>
      * POST /getExpire?key=a<br>
      * 不过期 -1<br>
      * 不存在 -2<br>
@@ -48,7 +48,7 @@ public class IndexController {
     }
 
     /**
-     * <h3>指定失效时间</h3>
+     * <h3>指定失效时间(秒，<=0删除)</h3>
      * POST /expire?key=a&timeout=100<br>
      * 还有10秒过期/不过期 true<br>
      * 不存在 false<br>
@@ -64,7 +64,7 @@ public class IndexController {
     /**
      * <h3>指定失效时间</h3>
      * POST /expireDuration?key=a&timeout=PT100H<br>
-     * 倒计时100小时
+     * 失效时间100小时
      */
     @PostMapping("expireDuration")
     public Result expire(String key, String timeout) {
@@ -74,7 +74,7 @@ public class IndexController {
     /**
      * <h3>指定失效日期</h3>
      * POST /expireAt?key=a&timeout=2022/01/01 00:00:00<br>
-     * 在2022/01/01 00:00:00时到期
+     * 在2022/01/01 00:00:00时失效
      */
     @PostMapping("expireAt")
     public Result expireAt(String key, Date timeout) {
@@ -105,10 +105,11 @@ public class IndexController {
     /**
      * <h3>集合中存在的key的数量</h3>
      * 实际存在key有a/b/c<br>
-     * POST /hasKey<br>
+     * POST /countExistingKeys<br>
      * body JSON ["a","b","c"] 3<br>
      * body JSON ["a","b","d"] 2<br>
-     * body JSON ["a","b","c","c"] 4
+     * body JSON ["a","b","c","c"] 4<br>
+     * body JSON ["d"] 0
      */
     @PostMapping("countExistingKeys")
     public Result countExistingKeys(@RequestBody List<String> keys) {

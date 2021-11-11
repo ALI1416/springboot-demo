@@ -33,7 +33,7 @@ public class StringController {
      * <h3>放入int</h3>
      * POST /string/intSet?key=int&value=12<br>
      * Redis中的值 12<br>
-     * API中的值 12
+     * get返回值 12
      */
     @PostMapping("intSet")
     public Result intSet(String key, int value) {
@@ -45,7 +45,7 @@ public class StringController {
      * <h3>放入short</h3>
      * POST /string/shortSet?key=short&value=123<br>
      * Redis中的值 123S (尾部带大写字母S)<br>
-     * API中的值 123
+     * get返回值 123
      */
     @PostMapping("shortSet")
     public Result shortSet(String key, short value) {
@@ -57,7 +57,7 @@ public class StringController {
      * <h3>放入long</h3>
      * POST /string/longSet?key=long&value=1234567890123456789<br>
      * Redis中的值1234567890123456789<br>
-     * API中的值 1234567890123456789
+     * get返回值 1234567890123456789
      */
     @PostMapping("longSet")
     public Result longSet(String key, long value) {
@@ -69,7 +69,7 @@ public class StringController {
      * <h3>放入boolean</h3>
      * POST /string/booleanSet?key=boolean&value=true<br>
      * Redis中的值 true<br>
-     * API中的值 true
+     * get返回值 true
      */
     @PostMapping("booleanSet")
     public Result booleanSet(String key, boolean value) {
@@ -81,7 +81,7 @@ public class StringController {
      * <h3>放入byte</h3>
      * POST /string/byteSet?key=byte&value=123<br>
      * Redis中的值 123B (尾部带大写字母B)<br>
-     * API中的值 123
+     * get返回值 123
      */
     @PostMapping("byteSet")
     public Result byteSet(String key, byte value) {
@@ -93,7 +93,7 @@ public class StringController {
      * <h3>放入char</h3>
      * POST /string/charSet?key=char&value=c<br>
      * Redis中的值 "c"<br>
-     * API中的值 "c"
+     * get返回值 "c"
      */
     @PostMapping("charSet")
     public Result charSet(String key, char value) {
@@ -105,7 +105,7 @@ public class StringController {
      * <h3>放入float</h3>
      * POST /string/floatSet?key=float&value=123.45<br>
      * Redis中的值 123.45F (尾部带大写字母F)<br>
-     * API中的值 123.45
+     * get返回值 123.45
      */
     @PostMapping("floatSet")
     public Result floatSet(String key, float value) {
@@ -117,7 +117,7 @@ public class StringController {
      * <h3>放入double</h3>
      * POST /string/doubleSet?key=double&value=123.456789012<br>
      * Redis中的值 123.456789012D (尾部带大写字母D)<br>
-     * API中的值 123.456789012
+     * get返回值 123.456789012
      */
     @PostMapping("doubleSet")
     public Result doubleSet(String key, double value) {
@@ -129,7 +129,7 @@ public class StringController {
      * <h3>放入String</h3>
      * POST /string/stringSet?key=string&value=string<br>
      * Redis中的值 "string"<br>
-     * API中的值 "string"
+     * get返回值 "string"
      */
     @PostMapping("stringSet")
     public Result stringSet(String key, String value) {
@@ -141,7 +141,7 @@ public class StringController {
      * <h3>放入Integer</h3>
      * POST /string/integerSet?key=integer&value=123<br>
      * Redis中的值 123<br>
-     * API中的值 123
+     * get返回值 123
      */
     @PostMapping("integerSet")
     public Result integerSet(String key, Integer value) {
@@ -153,9 +153,9 @@ public class StringController {
      * <h3>放入对象User</h3>
      * POST /string/userSet?key=user<br>
      * body JSON {"account":"aaa","year":1998,"gender":true,"date":"2021-01-02 12:34:56"}<br>
-     * Redis中的值 {"@type":"com.demo.entity.po.User","account":"aaa","date":"2021-01-02 12:34:56","gender":"true",
-     * "year":"1998"}<br>
-     * API中的值 {"account":"aaa","date":"2021-01-02 12:34:56","gender":true,"year":1998}
+     * Redis中的值 {"@type":"com.demo.entity.po.User","account":"aaa","date":"2021-01-02 12:34:56","gender":true,
+     * "year":1998}<br>
+     * get返回值 {"account":"aaa","date":"2021-01-02 12:34:56","gender":"true","year":"1998"}
      */
     @PostMapping("userSet")
     public Result userSet(String key, @RequestBody User user) {
@@ -165,11 +165,10 @@ public class StringController {
 
     /**
      * <h3>放入Map String Object</h3>
-     * POST /string/listIntegerSet?key=mapStringObjectSet<br>
+     * POST /string/mapStringObjectSet?key=mapStringObjectSet<br>
      * body JSON {"account":"aaa","year":1998,"gender":true,"date":"2021-01-02 12:34:56"}<br>
-     * Redis中的值 {"@type":"java.util.HashMap","date":"2021-01-02 12:34:56","gender":"true","year":"1998",
-     * "account":"aaa"}<br>
-     * API中的值 {"account":"aaa","date":"2021-01-02 12:34:56","gender":true,"year":1998}
+     * Redis中的值 {"@type":"java.util.HashMap","date":"2021-01-02 12:34:56","gender":true,"year":1998,"account":"aaa"}<br>
+     * get返回值 {"account":"aaa","date":"2021-01-02 12:34:56","gender":"true","year":"1998"}
      */
     @PostMapping("mapStringObjectSet")
     public Result mapStringObjectSet(String key, @RequestBody Map<String, Object> value) {
@@ -181,7 +180,7 @@ public class StringController {
      * <h3>放入Array Integer</h3>
      * POST /string/arrayIntegerSet?key=arrayIntegerSet&value=123&value=456&value=789<br>
      * Redis中的值 [123,456,789]<br>
-     * API中的值 [123,456,789]
+     * get返回值 [123,456,789]
      */
     @PostMapping("arrayIntegerSet")
     public Result arrayIntegerSet(String key, Integer[] value) {
@@ -191,10 +190,10 @@ public class StringController {
 
     /**
      * <h3>放入List Integer</h3>
-     * POST /string/listIntegerSet?key=string<br>
+     * POST /string/listIntegerSet?key=listIntegerSet<br>
      * body JSON [111,222,333]<br>
      * Redis中的值 [111,222,333]<br>
-     * API中的值 [123,456,789]
+     * get返回值 [123,456,789]
      */
     @PostMapping("listIntegerSet")
     public Result listIntegerSet(String key, @RequestBody List<Integer> value) {
@@ -360,9 +359,10 @@ public class StringController {
     }
 
     /**
-     * <h3>整数型递增1</h3>
+     * <h3>整数型递增1(键不存在自动创建并赋值为0后再递增)</h3>
      * POST /string/increment1?key=a<br>
-     * 值为123 返回124，值改变为124
+     * 值为123 返回124，值改变为124<br>
+     * 不存在键 返回1，值改变为1
      */
     @PostMapping("increment1")
     public Result increment(String key) {
@@ -370,9 +370,10 @@ public class StringController {
     }
 
     /**
-     * <h3>整数型递增</h3>
+     * <h3>整数型递增(键不存在自动创建并赋值为0后再递增)</h3>
      * POST /string/increment?key=a&delta=2<br>
-     * 值为123 返回125，值改变为125
+     * 值为123 返回125，值改变为125<br>
+     * 不存在键 返回2，值改变为2
      */
     @PostMapping("increment")
     public Result increment(String key, long delta) {
@@ -380,9 +381,10 @@ public class StringController {
     }
 
     /**
-     * <h3>整数型递减1</h3>
+     * <h3>整数型递减1(键不存在自动创建并赋值为0后再递减)</h3>
      * POST /string/decrement1?key=a<br>
-     * 值为123 返回122，值改变为122
+     * 值为123 返回122，值改变为122<br>
+     * 不存在键 返回-1，值改变为-1
      */
     @PostMapping("decrement1")
     public Result decrement(String key) {
@@ -390,9 +392,10 @@ public class StringController {
     }
 
     /**
-     * <h3>整数型递减</h3>
+     * <h3>整数型递减(键不存在自动创建并赋值为0后再递减)</h3>
      * POST /string/decrement?key=a&delta=2<br>
-     * 值为123 返回121，值改变为121
+     * 值为123 返回121，值改变为121<br>
+     * 不存在键 返回-2，值改变为-2
      */
     @PostMapping("decrement")
     public Result decrement(String key, long delta) {
