@@ -79,23 +79,83 @@ public class RedisUtils {
     //region
 
     /**
-     * 获取失效时间(秒，-1不过期，-2不存在)
-     *
-     * @param key 键
-     * @return 失效时间(管道或事务中使用为null)
-     */
-    public static Long getExpire(@NonNull String key) {
-        return redisTemplate.getExpire(key, SECONDS);
-    }
-
-    /**
-     * 指定为持久数据(移除失效时间)
+     * 删除key
      *
      * @param key 键
      * @return 是否成功(管道或事务中使用为null)
      */
-    public static Boolean persist(@NonNull String key) {
-        return redisTemplate.persist(key);
+    public static Boolean del(@NonNull String key) {
+        return redisTemplate.delete(key);
+    }
+
+    /**
+     * 删除多个key
+     *
+     * @param keys 键
+     * @return 成功个数(管道或事务中使用为null)
+     */
+    public static Long del(@NonNull Collection<String> keys) {
+        return redisTemplate.delete(keys);
+    }
+
+    /**
+     * 删除多个key
+     *
+     * @param keys 键
+     * @return 成功个数(管道或事务中使用为null)
+     */
+    public static Long del(@NonNull String... keys) {
+        return redisTemplate.delete(Arrays.asList(keys));
+    }
+
+    /**
+     * 非阻塞异步删除key
+     *
+     * @param key 键
+     * @return 是否成功(管道或事务中使用为null)
+     */
+    public static Boolean unlink(@NonNull String key) {
+        return redisTemplate.unlink(key);
+    }
+
+    /**
+     * 非阻塞异步删除多个key
+     *
+     * @param keys 键
+     * @return 成功个数(管道或事务中使用为null)
+     */
+    public static Long unlink(@NonNull Collection<String> keys) {
+        return redisTemplate.unlink(keys);
+    }
+
+    /**
+     * 非阻塞异步删除多个key
+     *
+     * @param keys 键
+     * @return 成功个数(管道或事务中使用为null)
+     */
+    public static Long unlink(@NonNull String... keys) {
+        return redisTemplate.unlink(Arrays.asList(keys));
+    }
+
+    /**
+     * key是否存在
+     *
+     * @param key 键
+     * @return 是否存在
+     */
+    public static Boolean exists(@NonNull String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 集合中存在的key的数量(exists)
+     *
+     * @param keys 键
+     * @return 存在的数量(key重复会计算多次)
+     */
+    public static Long countExistingKeys(Collection<String> keys) {
+        return redisTemplate.countExistingKeys(keys);
     }
 
     /**
@@ -143,115 +203,41 @@ public class RedisUtils {
     }
 
     /**
-     * key是否存在
+     * 获取失效时间(秒，-1不过期，-2不存在)
      *
      * @param key 键
-     * @return 是否存在
+     * @return 失效时间(管道或事务中使用为null)
      */
-    public static Boolean hasKey(@NonNull String key) {
-        return redisTemplate.hasKey(key);
+    public static Long ttl(@NonNull String key) {
+        return redisTemplate.getExpire(key, SECONDS);
     }
 
     /**
-     * 集合中存在的key的数量
-     *
-     * @param keys 键
-     * @return 存在的数量(key重复会计算多次)
-     */
-    public static Long countExistingKeys(Collection<String> keys) {
-        return redisTemplate.countExistingKeys(keys);
-    }
-
-    /**
-     * 删除key
+     * 指定为持久数据(移除失效时间)
      *
      * @param key 键
      * @return 是否成功(管道或事务中使用为null)
      */
-    public static Boolean delete(@NonNull String key) {
-        return redisTemplate.delete(key);
+    public static Boolean persist(@NonNull String key) {
+        return redisTemplate.persist(key);
     }
 
     /**
-     * 删除多个key
-     *
-     * @param keys 键
-     * @return 成功个数(管道或事务中使用为null)
-     */
-    public static Long delete(@NonNull Collection<String> keys) {
-        return redisTemplate.delete(keys);
-    }
-
-    /**
-     * 删除多个key
-     *
-     * @param keys 键
-     * @return 成功个数(管道或事务中使用为null)
-     */
-    public static Long delete(@NonNull String... keys) {
-        return redisTemplate.delete(Arrays.asList(keys));
-    }
-
-    /**
-     * 非阻塞异步删除key
-     *
-     * @param key 键
-     * @return 是否成功(管道或事务中使用为null)
-     */
-    public static Boolean unlink(@NonNull String key) {
-        return redisTemplate.unlink(key);
-    }
-
-    /**
-     * 非阻塞异步删除多个key
-     *
-     * @param keys 键
-     * @return 成功个数(管道或事务中使用为null)
-     */
-    public static Long unlink(@NonNull Collection<String> keys) {
-        return redisTemplate.unlink(keys);
-    }
-
-    /**
-     * 非阻塞异步删除多个key
-     *
-     * @param keys 键
-     * @return 成功个数(管道或事务中使用为null)
-     */
-    public static Long unlink(@NonNull String... keys) {
-        return redisTemplate.unlink(Arrays.asList(keys));
-    }
-
-    /**
-     * 返回存储的数据类型
-     *
-     * @param key 键
-     * @return none/string/list/set/zset/hash/stream(管道或事务中使用为null)
-     */
-    public static DataType type(@NonNull String key) {
-        return redisTemplate.type(key);
-    }
-
-    /**
-     * 模糊查询
+     * 模糊查询<br>
+     * 在正式环境中不推荐使用，他会查询所有的键，会造成阻塞<br>
+     * 推荐使用scan命令
      *
      * @param pattern 匹配模式<br>
      *                * : 匹配0+个任意字符<br>
      *                ? : 匹配1个任意字符<br>
-     *                [] : 匹配1个指定字符
+     *                [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *                [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *                [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *                \ : 转义(字符*?[]^-\等)
      * @return 键(管道或事务中使用为null)
      */
     public static Set<String> keys(@NonNull String pattern) {
         return redisTemplate.keys(pattern);
-    }
-
-    /**
-     * 返回一个随机的key
-     *
-     * @return 键(管道或事务中使用或不存在任何键为null)
-     */
-    public static String randomKey() {
-        return redisTemplate.randomKey();
     }
 
     /**
@@ -271,7 +257,7 @@ public class RedisUtils {
     }
 
     /**
-     * 重命名key，仅当newKey不存在时
+     * 重命名key，仅当newKey不存在时(renamenx)
      *
      * @param oldKey 旧键
      * @param newKey 新键
@@ -283,6 +269,25 @@ public class RedisUtils {
         } catch (RedisSystemException ignore) {
             return false;
         }
+    }
+
+    /**
+     * 返回存储的数据类型
+     *
+     * @param key 键
+     * @return none/string/list/set/zset/hash/stream(管道或事务中使用为null)
+     */
+    public static DataType type(@NonNull String key) {
+        return redisTemplate.type(key);
+    }
+
+    /**
+     * 返回一个随机的key
+     *
+     * @return 键(管道或事务中使用或不存在任何键为null)
+     */
+    public static String randomKey() {
+        return redisTemplate.randomKey();
     }
 
     /**
@@ -302,134 +307,45 @@ public class RedisUtils {
     //region
 
     /**
-     * 放入
+     * 递减1，值必须是整数类型(键不存在自动创建并赋值为0后再递减)
      *
-     * @param <T>   指定数据类型
+     * @param key 键
+     * @return 递减后的值(管道或事务中使用为null)
+     */
+    public static Long decr(@NonNull String key) {
+        return redisTemplate.opsForValue().decrement(key);
+    }
+
+    /**
+     * 递减，值必须是整数类型(键不存在自动创建并赋值为0后再递减)
+     *
      * @param key   键
-     * @param value 值
+     * @param delta 减量
+     * @return 递减后的值(管道或事务中使用为null)
      */
-    public static <T> void set(@NonNull String key, @NonNull T value) {
-        redisTemplate.opsForValue().set(key, value);
+    public static Long decrby(@NonNull String key, long delta) {
+        return redisTemplate.opsForValue().decrement(key, delta);
     }
 
     /**
-     * 放入，并设置失效时间(秒，必须>0)
+     * 递增1，值必须是整数类型(键不存在自动创建并赋值为0后再递增)
      *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 失效时间
+     * @param key 键
+     * @return 递增后的值(管道或事务中使用为null)
      */
-    public static <T> void set(@NonNull String key, @NonNull T value, long timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout, SECONDS);
+    public static Long incr(@NonNull String key) {
+        return redisTemplate.opsForValue().increment(key);
     }
 
     /**
-     * 放入，并设置持续时间
+     * 递增，值必须是整数类型(键不存在自动创建并赋值为0后再递增)
      *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 持续时间
-     */
-    public static <T> void set(@NonNull String key, @NonNull T value, @NonNull Duration timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout);
-    }
-
-    /**
-     * 如果key不存在，则放入
-     *
-     * @param <T>   指定数据类型
      * @param key   键
-     * @param value 值
-     * @return 是否成功(管道或事务中使用为null)
+     * @param delta 增量
+     * @return 递增后的值(管道或事务中使用为null)
      */
-    public static <T> Boolean setIfAbsent(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value);
-    }
-
-    /**
-     * 如果key不存在，则放入，并设置失效时间(秒，必须>0)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 失效时间
-     * @return 是否成功(管道或事务中使用为null)
-     */
-    public static <T> Boolean setIfAbsent(@NonNull String key, @NonNull T value, long timeout) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, SECONDS);
-    }
-
-    /**
-     * 如果key不存在，则放入，并设置持续时间
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 持续时间
-     * @return 是否成功(管道或事务中使用为null)
-     */
-    public static <T> Boolean setIfAbsent(@NonNull String key, @NonNull T value, @NonNull Duration timeout) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout);
-    }
-
-    /**
-     * 如果key存在，则放入
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 是否成功(管道或事务中使用为null)
-     */
-    public static <T> Boolean setIfPresent(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForValue().setIfPresent(key, value);
-    }
-
-    /**
-     * 如果key存在，则放入，并设置失效时间(秒，必须>0)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 失效时间
-     * @return 是否成功(管道或事务中使用为null)
-     */
-    public static <T> Boolean setIfPresent(@NonNull String key, @NonNull T value, long timeout) {
-        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, SECONDS);
-    }
-
-    /**
-     * 如果key存在，则放入，并设置持续时间
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 持续时间
-     * @return 是否成功(管道或事务中使用为null)
-     */
-    public static <T> Boolean setIfPresent(@NonNull String key, @NonNull T value, @NonNull Duration timeout) {
-        return redisTemplate.opsForValue().setIfPresent(key, value, timeout);
-    }
-
-    /**
-     * map中的key和value依次放入(键存在则不会放入)
-     *
-     * @param <T> 指定数据类型
-     * @param map map
-     */
-    public static <T> void multiSet(@NonNull Map<String, T> map) {
-        redisTemplate.opsForValue().multiSet(map);
-    }
-
-    /**
-     * 如果map中的key全部不存在，则map中的key和value依次放入
-     *
-     * @param <T> 指定数据类型
-     * @param map map
-     */
-    public static <T> Boolean multiSetIfAbsent(@NonNull Map<String, T> map) {
-        return redisTemplate.opsForValue().multiSetIfAbsent(map);
+    public static Long incrby(@NonNull String key, long delta) {
+        return redisTemplate.opsForValue().increment(key, delta);
     }
 
     /**
@@ -443,7 +359,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取并放入
+     * 获取并放入(getset)
      *
      * @param <T>   指定数据类型
      * @param key   键
@@ -455,7 +371,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取多个
+     * 获取多个(mget)
      *
      * @param keys 多个键
      * @return 多个值(管道或事务中使用为null)
@@ -465,7 +381,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取多个
+     * 获取多个(mget)
      *
      * @param keys 多个键
      * @return 多个值(管道或事务中使用为null)
@@ -475,45 +391,134 @@ public class RedisUtils {
     }
 
     /**
-     * 递增1，值必须是整数类型(键不存在自动创建并赋值为0后再递增)
+     * 放入
      *
-     * @param key 键
-     * @return 递增后的值(管道或事务中使用为null)
-     */
-    public static Long increment(@NonNull String key) {
-        return redisTemplate.opsForValue().increment(key);
-    }
-
-    /**
-     * 递增，值必须是整数类型(键不存在自动创建并赋值为0后再递增)
-     *
+     * @param <T>   指定数据类型
      * @param key   键
-     * @param delta 增量
-     * @return 递增后的值(管道或事务中使用为null)
+     * @param value 值
      */
-    public static Long increment(@NonNull String key, long delta) {
-        return redisTemplate.opsForValue().increment(key, delta);
+    public static <T> void set(@NonNull String key, @NonNull T value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
     /**
-     * 递减1，值必须是整数类型(键不存在自动创建并赋值为0后再递减)
+     * 如果key不存在，则放入(setnx)
      *
-     * @param key 键
-     * @return 递减后的值(管道或事务中使用为null)
-     */
-    public static Long decrement(@NonNull String key) {
-        return redisTemplate.opsForValue().decrement(key);
-    }
-
-    /**
-     * 递减，值必须是整数类型(键不存在自动创建并赋值为0后再递减)
-     *
+     * @param <T>   指定数据类型
      * @param key   键
-     * @param delta 减量
-     * @return 递减后的值(管道或事务中使用为null)
+     * @param value 值
+     * @return 是否成功(管道或事务中使用为null)
      */
-    public static Long decrement(@NonNull String key, long delta) {
-        return redisTemplate.opsForValue().decrement(key, delta);
+    public static <T> Boolean setIfAbsent(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value);
+    }
+
+    /**
+     * 如果key存在，则放入(!setnx)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 是否成功(管道或事务中使用为null)
+     */
+    public static <T> Boolean setIfPresent(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForValue().setIfPresent(key, value);
+    }
+
+    /**
+     * 放入，并设置失效时间(秒，必须>0)(setex)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 失效时间
+     */
+    public static <T> void set(@NonNull String key, @NonNull T value, long timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout, SECONDS);
+    }
+
+    /**
+     * 放入，并设置持续时间(setex)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 持续时间
+     */
+    public static <T> void set(@NonNull String key, @NonNull T value, @NonNull Duration timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout);
+    }
+
+    /**
+     * 如果key不存在，则放入，并设置失效时间(秒，必须>0)(setnx,setex)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 失效时间
+     * @return 是否成功(管道或事务中使用为null)
+     */
+    public static <T> Boolean setIfAbsent(@NonNull String key, @NonNull T value, long timeout) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, SECONDS);
+    }
+
+    /**
+     * 如果key不存在，则放入，并设置持续时间(setnx,setex)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 持续时间
+     * @return 是否成功(管道或事务中使用为null)
+     */
+    public static <T> Boolean setIfAbsent(@NonNull String key, @NonNull T value, @NonNull Duration timeout) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout);
+    }
+
+    /**
+     * 如果key存在，则放入，并设置失效时间(秒，必须>0)(!setnx,setex)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 失效时间
+     * @return 是否成功(管道或事务中使用为null)
+     */
+    public static <T> Boolean setIfPresent(@NonNull String key, @NonNull T value, long timeout) {
+        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, SECONDS);
+    }
+
+    /**
+     * 如果key存在，则放入，并设置持续时间(!setnx,setex)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 持续时间
+     * @return 是否成功(管道或事务中使用为null)
+     */
+    public static <T> Boolean setIfPresent(@NonNull String key, @NonNull T value, @NonNull Duration timeout) {
+        return redisTemplate.opsForValue().setIfPresent(key, value, timeout);
+    }
+
+    /**
+     * map中的key和value依次放入(键存在则不会放入)(mset)
+     *
+     * @param <T> 指定数据类型
+     * @param map map
+     */
+    public static <T> void multiSet(@NonNull Map<String, T> map) {
+        redisTemplate.opsForValue().multiSet(map);
+    }
+
+    /**
+     * 如果map中的key全部不存在，则map中的key和value依次放入(msetnx)
+     *
+     * @param <T> 指定数据类型
+     * @param map map
+     */
+    public static <T> Boolean multiSetIfAbsent(@NonNull Map<String, T> map) {
+        return redisTemplate.opsForValue().multiSetIfAbsent(map);
     }
 
     //endregion
@@ -528,7 +533,7 @@ public class RedisUtils {
      * @param items 多个项
      * @return 删除成功个数(管道或事务中使用为null)。注意：当key中不存在item时，key将被删除。
      */
-    public static Long hDelete(@NonNull String key, @NonNull String... items) {
+    public static Long hDel(@NonNull String key, @NonNull String... items) {
         return redisTemplate.opsForHash().delete(key, Arrays.copyOf(items, items.length, Object[].class));
     }
 
@@ -539,7 +544,7 @@ public class RedisUtils {
      * @param items 多个项
      * @return 删除成功个数(管道或事务中使用为null)。注意：当key中不存在item时，key将被删除。
      */
-    public static Long hDelete(@NonNull String key, @NonNull Collection<String> items) {
+    public static Long hDel(@NonNull String key, @NonNull Collection<String> items) {
         return redisTemplate.opsForHash().delete(key, items.toArray());
     }
 
@@ -550,7 +555,7 @@ public class RedisUtils {
      * @param item 项
      * @return 是否存在(管道或事务中使用为null)
      */
-    public static Boolean hHasKey(@NonNull String key, @NonNull String item) {
+    public static Boolean hExists(@NonNull String key, @NonNull String item) {
         return redisTemplate.opsForHash().hasKey(key, item);
     }
 
@@ -566,7 +571,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取map中指定多个项的值
+     * 获取map中指定多个项的值(hmget)
      *
      * @param key   键
      * @param items 多个项
@@ -577,7 +582,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取map中指定多个项的值
+     * 获取map中指定多个项的值(hmget)
      *
      * @param key   键
      * @param items 多个项
@@ -594,7 +599,7 @@ public class RedisUtils {
      * @param item 项
      * @return 递增后的值(管道或事务中使用为null)
      */
-    public static Long hIncrement(@NonNull String key, @NonNull String item) {
+    public static Long hIncrby(@NonNull String key, @NonNull String item) {
         return redisTemplate.opsForHash().increment(key, item, 1);
     }
 
@@ -606,69 +611,58 @@ public class RedisUtils {
      * @param delta 增量
      * @return 递增后的值(管道或事务中使用为null)
      */
-    public static Long hIncrement(@NonNull String key, @NonNull String item, long delta) {
+    public static Long hIncrby(@NonNull String key, @NonNull String item, long delta) {
         return redisTemplate.opsForHash().increment(key, item, delta);
     }
 
-
     /**
-     * map指定项的值递减1，值必须是整数类型(键或项不存在自动创建并赋值为0后再递减)
+     * map指定项的值递减1，值必须是整数类型(键或项不存在自动创建并赋值为0后再递减)(-hincrby)
      *
      * @param key  键
      * @param item 项
      * @return 递减后的值(管道或事务中使用为null)
      */
-    public static Long hDecrement(@NonNull String key, @NonNull String item) {
+    public static Long hDecrby(@NonNull String key, @NonNull String item) {
         return redisTemplate.opsForHash().increment(key, item, -1);
     }
 
     /**
-     * map指定项的值递减，值必须是整数类型(键或项不存在自动创建并赋值为0后再递减)
+     * map指定项的值递减，值必须是整数类型(键或项不存在自动创建并赋值为0后再递减)(-hincrby)
      *
      * @param key   键
      * @param item  项
      * @param delta 减量
      * @return 递减后的值(管道或事务中使用为null)
      */
-    public static Long hDecrement(@NonNull String key, @NonNull String item, long delta) {
+    public static Long hDecrby(@NonNull String key, @NonNull String item, long delta) {
         return redisTemplate.opsForHash().increment(key, item, -delta);
     }
 
     /**
-     * 获取项的个数(键不存在返回0)
-     *
-     * @param key 键
-     * @return 项的个数
-     */
-    public static Long hSize(@NonNull String key) {
-        return redisTemplate.opsForHash().size(key);
-    }
-
-    /**
-     * 设置map的多个键值(项已存在会被覆盖)
-     *
-     * @param <T> 指定数据类型
-     * @param key 键
-     * @param map 多个键值
-     */
-    public static <T> void hPutAll(@NonNull String key, @NonNull Map<String, T> map) {
-        redisTemplate.opsForHash().putAll(key, map);
-    }
-
-    /**
-     * 设置map的1个键值(项已存在会被覆盖)
+     * 设置map的1个键值(项已存在会被覆盖)(hmset)
      *
      * @param <T>   指定数据类型
      * @param key   键
      * @param item  项
      * @param value 值
      */
-    public static <T> void hPut(@NonNull String key, @NonNull String item, T value) {
+    public static <T> void hSet(@NonNull String key, @NonNull String item, T value) {
         redisTemplate.opsForHash().put(key, item, value);
     }
 
     /**
-     * 项不存在时，设置map的1个键值
+     * 设置map的多个键值(项已存在会被覆盖)(hmset)
+     *
+     * @param <T> 指定数据类型
+     * @param key 键
+     * @param map 多个键值
+     */
+    public static <T> void hMultiSet(@NonNull String key, @NonNull Map<String, T> map) {
+        redisTemplate.opsForHash().putAll(key, map);
+    }
+
+    /**
+     * 项不存在时，设置map的1个键值(hsetnx)
      *
      * @param <T>   指定数据类型
      * @param key   键
@@ -681,7 +675,17 @@ public class RedisUtils {
     }
 
     /**
-     * 获取map中所有的项
+     * 获取项的个数(键不存在返回0)
+     *
+     * @param key 键
+     * @return 项的个数
+     */
+    public static Long hLen(@NonNull String key) {
+        return redisTemplate.opsForHash().size(key);
+    }
+
+    /**
+     * 获取map中所有的项(hkeys)
      *
      * @param key 键
      * @return 项(管道或事务中使用为null)
@@ -691,7 +695,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取map中所有的值
+     * 获取map中所有的值(hvals)
      *
      * @param key 键
      * @return 值(管道或事务中使用为null)
@@ -701,7 +705,7 @@ public class RedisUtils {
     }
 
     /**
-     * 获取map中所有的项和值
+     * 获取map中所有的项和值(hgetall)
      *
      * @param key 键
      * @return 项和值(管道或事务中使用为null)
@@ -722,28 +726,250 @@ public class RedisUtils {
      * @param index 下标
      * @return 值(管道或事务中使用或键不存在或下标不存在为null)
      */
-    public static Object lGet(@NonNull String key, long index) {
+    public static Object lIndex(@NonNull String key, long index) {
         return redisTemplate.opsForList().index(key, index);
     }
 
     /**
-     * 获取第一个
+     * 获取第一个(lindex)
      *
      * @param key 键
      * @return 值(管道或事务中使用或键不存在或下标不存在为null)
      */
-    public static Object lGetFirst(@NonNull String key) {
+    public static Object lIndexFirst(@NonNull String key) {
         return redisTemplate.opsForList().index(key, 0);
     }
 
     /**
-     * 获取最后一个
+     * 获取最后一个(lindex)
      *
      * @param key 键
      * @return 值(管道或事务中使用或键不存在或下标不存在为null)
      */
-    public static Object lGetLast(@NonNull String key) {
+    public static Object lIndexLast(@NonNull String key) {
         return redisTemplate.opsForList().index(key, -1);
+    }
+
+    /**
+     * 添加到指定值的左侧(linsert before)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param pivot 指定值
+     * @param value 值
+     * @return 列表长度(管道或事务中使用为null ， 不存在返回 - 1)
+     */
+    public static <T> Long lInsertLeft(@NonNull String key, @NonNull T pivot, @NonNull T value) {
+        return redisTemplate.opsForList().leftPush(key, pivot, value);
+    }
+
+    /**
+     * 添加到指定值的右侧(linsert after)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param pivot 指定值
+     * @param value 值
+     * @return 列表长度(管道或事务中使用为null ， 不存在返回 - 1)
+     */
+    public static <T> Long lInsertRight(@NonNull String key, @NonNull T pivot, @NonNull T value) {
+        return redisTemplate.opsForList().rightPush(key, pivot, value);
+    }
+
+    /**
+     * 添加到左侧(lpush)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static <T> Long lLeftPush(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    /**
+     * 添加到左侧(多个值依次添加a/b/c变成c/b/a)(lpush)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 多个值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static <T> Long lLeftPushAll(@NonNull String key, @NonNull T[] value) {
+        return redisTemplate.opsForList().leftPushAll(key, value);
+    }
+
+    /**
+     * 添加到左侧(多个值依次添加a/b/c变成c/b/a)(lpush)
+     *
+     * @param key   键
+     * @param value 多个值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static Long lLeftPushAll(@NonNull String key, @NonNull Collection<Object> value) {
+        return redisTemplate.opsForList().leftPushAll(key, value);
+    }
+
+    /**
+     * 当列表存在时，添加到左侧(lpushx)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 列表长度(管道或事务中使用为null ， 不存在返回0)
+     */
+    public static <T> Long lLeftPushIfPresent(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForList().leftPushIfPresent(key, value);
+    }
+
+    /**
+     * 添加到右侧(rpush)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static <T> Long lRightPush(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    /**
+     * 添加到右侧(多个值依次添加a/b/c还是a/b/c)(rpush)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 多个值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static <T> Long lRightPushAll(@NonNull String key, @NonNull T[] value) {
+        return redisTemplate.opsForList().rightPushAll(key, value);
+    }
+
+    /**
+     * 添加到右侧(多个值依次添加a/b/c还是a/b/c)(rpush)
+     *
+     * @param key   键
+     * @param value 多个值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static Long lRightPushAll(@NonNull String key, @NonNull Collection<Object> value) {
+        return redisTemplate.opsForList().rightPushAll(key, value);
+    }
+
+    /**
+     * 当列表存在时，添加到右侧(rpushx)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static <T> Long lRightPushIfPresent(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForList().rightPushIfPresent(key, value);
+    }
+
+    /**
+     * 删除并返回左侧的值(lpop)
+     *
+     * @param key 键
+     * @return 值(不存在键时为null)
+     */
+    public static Object lLeftPop(@NonNull String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    /**
+     * 删除并返回左侧的值，并阻塞指定时间(秒)(blpop)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param key     键
+     * @param timeout 阻塞时间
+     * @return 值(超过指定时间该键还是为空时为null)
+     */
+    public static Object lLeftPop(@NonNull String key, long timeout) {
+        return redisTemplate.opsForList().leftPop(key, timeout, SECONDS);
+    }
+
+    /**
+     * 删除并返回左侧的值，并阻塞指定时间(blpop)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param key     键
+     * @param timeout 阻塞时间
+     * @return 值(超过指定时间该键还是为空时为null)
+     */
+    public static Object lLeftPop(@NonNull String key, @NonNull Duration timeout) {
+        return redisTemplate.opsForList().leftPop(key, timeout);
+    }
+
+    /**
+     * 删除并返回右侧的值(rpop)
+     *
+     * @param key 键
+     * @return 值(不存在键时为null)
+     */
+    public static Object lRightPop(@NonNull String key) {
+        return redisTemplate.opsForList().rightPop(key);
+    }
+
+    /**
+     * 删除并返回右侧的值，并阻塞指定时间(秒)(brpop)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param key     键
+     * @param timeout 阻塞时间
+     * @return 值(超过指定时间该键还是为空时为null)
+     */
+    public static Object lRightPop(@NonNull String key, long timeout) {
+        return redisTemplate.opsForList().rightPop(key, timeout, SECONDS);
+    }
+
+    /**
+     * 删除并返回右侧的值，并阻塞指定时间(brpop)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param key     键
+     * @param timeout 阻塞时间
+     * @return 值(超过指定时间该键还是为空时为null)
+     */
+    public static Object lRightPop(@NonNull String key, @NonNull Duration timeout) {
+        return redisTemplate.opsForList().rightPop(key, timeout);
+    }
+
+    /**
+     * 获取列表的长度
+     *
+     * @param key 键
+     * @return 列表长度(管道或事务中使用为null)
+     */
+    public static Long lLen(@NonNull String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    /**
+     * 指定值第一次出现的下标(Redis版本需要6.0.6及以上)(lpos)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 下标(管道或事务中使用或没有指定值为null)
+     */
+    public static <T> Long lIndexOf(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForList().indexOf(key, value);
+    }
+
+    /**
+     * 指定值最后一次出现的下标(Redis版本需要6.0.6及以上)(-lpos)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 下标(管道或事务中使用或没有指定值为null)
+     */
+    public static <T> Long lLastIndexOf(@NonNull String key, @NonNull T value) {
+        return redisTemplate.opsForList().lastIndexOf(key, value);
     }
 
     /**
@@ -754,12 +980,12 @@ public class RedisUtils {
      * @param end   结束(末尾-1)
      * @return 值(管道或事务中使用为null ， 键或项不存在为[])
      */
-    public static List<Object> lGetList(@NonNull String key, long start, long end) {
+    public static List<Object> lRange(@NonNull String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
     /**
-     * 获取全部
+     * 获取全部(lrange)
      *
      * @param key 键
      * @return 值(管道或事务中使用为null ， 键或项不存在为[])
@@ -777,136 +1003,6 @@ public class RedisUtils {
      */
     public static void lTrim(@NonNull String key, long start, long end) {
         redisTemplate.opsForList().trim(key, start, end);
-    }
-
-    /**
-     * 获取列表的长度
-     *
-     * @param key 键
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static Long lSize(@NonNull String key) {
-        return redisTemplate.opsForList().size(key);
-    }
-
-    /**
-     * 添加到左侧
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static <T> Long lLeftPush(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForList().leftPush(key, value);
-    }
-
-    /**
-     * 添加到左侧(多个值依次添加a/b/c变成c/b/a)
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 多个值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static <T> Long lLeftPushAll(@NonNull String key, @NonNull T[] value) {
-        return redisTemplate.opsForList().leftPushAll(key, value);
-    }
-
-    /**
-     * 添加到左侧(多个值依次添加a/b/c变成c/b/a)
-     *
-     * @param key   键
-     * @param value 多个值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static Long lLeftPushAll(@NonNull String key, @NonNull Collection<Object> value) {
-        return redisTemplate.opsForList().leftPushAll(key, value);
-    }
-
-    /**
-     * 当列表存在时，添加到左侧
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 列表长度(管道或事务中使用为null ， 不存在返回0)
-     */
-    public static <T> Long lLeftPushIfPresent(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForList().leftPushIfPresent(key, value);
-    }
-
-    /**
-     * 添加到指定值的左侧(左侧第一个值的左侧)
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param pivot 指定值
-     * @param value 值
-     * @return 列表长度(管道或事务中使用为null ， 不存在返回 - 1)
-     */
-    public static <T> Long lLeftPush(@NonNull String key, @NonNull T pivot, @NonNull T value) {
-        return redisTemplate.opsForList().leftPush(key, pivot, value);
-    }
-
-    /**
-     * 添加到右侧
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static <T> Long lRightPush(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForList().rightPush(key, value);
-    }
-
-    /**
-     * 添加到右侧(多个值依次添加a/b/c还是a/b/c)
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 多个值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static <T> Long lRightPushAll(@NonNull String key, @NonNull T[] value) {
-        return redisTemplate.opsForList().rightPushAll(key, value);
-    }
-
-    /**
-     * 添加到右侧(多个值依次添加a/b/c还是a/b/c)
-     *
-     * @param key   键
-     * @param value 多个值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static Long lRightPushAll(@NonNull String key, @NonNull Collection<Object> value) {
-        return redisTemplate.opsForList().rightPushAll(key, value);
-    }
-
-    /**
-     * 当列表存在时，添加到右侧
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 列表长度(管道或事务中使用为null)
-     */
-    public static <T> Long lRightPushIfPresent(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForList().rightPushIfPresent(key, value);
-    }
-
-    /**
-     * 添加到指定值的右侧
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param pivot 指定值
-     * @param value 值
-     * @return 列表长度(管道或事务中使用为null ， 不存在返回 - 1)
-     */
-    public static <T> Long lRightPush(@NonNull String key, @NonNull T pivot, @NonNull T value) {
-        return redisTemplate.opsForList().rightPush(key, pivot, value);
     }
 
     /**
@@ -928,7 +1024,7 @@ public class RedisUtils {
     }
 
     /**
-     * 删除第count次出现的值(正数从左边删，负数从右边删，0全部删除)
+     * 删除第count次出现的值(正数从左边删，负数从右边删，0全部删除)(lrem)
      *
      * @param <T>   指定数据类型
      * @param key   键
@@ -936,140 +1032,48 @@ public class RedisUtils {
      * @param value 值
      * @return 删除成功的个数(管道或事务中使用为null ， 未删除返回0)
      */
-    public static <T> Long lRemove(@NonNull String key, long count, @NonNull T value) {
+    public static <T> Long lRem(@NonNull String key, long count, @NonNull T value) {
         return redisTemplate.opsForList().remove(key, count, value);
     }
 
     /**
-     * 删除左侧第一次出现的值
+     * 删除左侧第一次出现的值(lrem)
      *
      * @param <T>   指定数据类型
      * @param key   键
      * @param value 值
      * @return 删除成功的个数(管道或事务中使用为null ， 未删除返回0)
      */
-    public static <T> Long lRemoveLeft(@NonNull String key, @NonNull T value) {
+    public static <T> Long lRemLeft(@NonNull String key, @NonNull T value) {
         return redisTemplate.opsForList().remove(key, 1, value);
     }
 
     /**
-     * 删除右侧第一次出现的值
+     * 删除右侧第一次出现的值(lrem)
      *
      * @param <T>   指定数据类型
      * @param key   键
      * @param value 值
      * @return 删除成功的个数(管道或事务中使用为null ， 未删除返回0)
      */
-    public static <T> Long lRemoveRight(@NonNull String key, @NonNull T value) {
+    public static <T> Long lRemRight(@NonNull String key, @NonNull T value) {
         return redisTemplate.opsForList().remove(key, -1, value);
     }
 
     /**
-     * 删除全部出现的值
+     * 删除全部出现的值(lrem)
      *
      * @param <T>   指定数据类型
      * @param key   键
      * @param value 值
      * @return 删除成功的个数(管道或事务中使用为null ， 未删除返回0)
      */
-    public static <T> Long lRemoveAll(@NonNull String key, @NonNull T value) {
+    public static <T> Long lRemAll(@NonNull String key, @NonNull T value) {
         return redisTemplate.opsForList().remove(key, 0, value);
     }
 
     /**
-     * 指定值第一次出现的下标(Redis版本需要6.0.6及以上)
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 下标(管道或事务中使用或没有指定值为null)
-     */
-    public static <T> Long lIndexOf(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForList().indexOf(key, value);
-    }
-
-    /**
-     * 指定值最后一次出现的下标(Redis版本需要6.0.6及以上)
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 下标(管道或事务中使用或没有指定值为null)
-     */
-    public static <T> Long lLastIndexOf(@NonNull String key, @NonNull T value) {
-        return redisTemplate.opsForList().lastIndexOf(key, value);
-    }
-
-    /**
-     * 删除并返回左侧的值
-     *
-     * @param key 键
-     * @return 值(不存在键时为null)
-     */
-    public static Object lLeftPop(@NonNull String key) {
-        return redisTemplate.opsForList().leftPop(key);
-    }
-
-    /**
-     * 删除并返回左侧的值，并阻塞指定时间(秒)<br>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     *
-     * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
-     */
-    public static Object lLeftPop(@NonNull String key, long timeout) {
-        return redisTemplate.opsForList().leftPop(key, timeout, SECONDS);
-    }
-
-    /**
-     * 删除并返回左侧的值，并阻塞指定时间<br>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     *
-     * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
-     */
-    public static Object lLeftPop(@NonNull String key, @NonNull Duration timeout) {
-        return redisTemplate.opsForList().leftPop(key, timeout);
-    }
-
-    /**
-     * 删除并返回右侧的值
-     *
-     * @param key 键
-     * @return 值(不存在键时为null)
-     */
-    public static Object lRightPop(@NonNull String key) {
-        return redisTemplate.opsForList().rightPop(key);
-    }
-
-    /**
-     * 删除并返回右侧的值，并阻塞指定时间(秒)<br>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     *
-     * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
-     */
-    public static Object lRightPop(@NonNull String key, long timeout) {
-        return redisTemplate.opsForList().rightPop(key, timeout, SECONDS);
-    }
-
-    /**
-     * 删除并返回右侧的值，并阻塞指定时间<br>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     *
-     * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
-     */
-    public static Object lRightPop(@NonNull String key, @NonNull Duration timeout) {
-        return redisTemplate.opsForList().rightPop(key, timeout);
-    }
-
-    /**
-     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值
+     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值(rpoplpush)
      *
      * @param sourceKey      源键
      * @param destinationKey 目的键
@@ -1080,7 +1084,7 @@ public class RedisUtils {
     }
 
     /**
-     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(秒)
+     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(秒)(brpoplpush)
      *
      * @param sourceKey      源键
      * @param destinationKey 目的键
@@ -1092,7 +1096,7 @@ public class RedisUtils {
     }
 
     /**
-     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间
+     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(brpoplpush)
      *
      * @param sourceKey      源键
      * @param destinationKey 目的键

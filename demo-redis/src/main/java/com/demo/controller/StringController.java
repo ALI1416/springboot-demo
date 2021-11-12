@@ -366,7 +366,7 @@ public class StringController {
      */
     @PostMapping("increment1")
     public Result increment(String key) {
-        return Result.o(RedisUtils.increment(key));
+        return Result.o(RedisUtils.incr(key));
     }
 
     /**
@@ -377,7 +377,7 @@ public class StringController {
      */
     @PostMapping("increment")
     public Result increment(String key, long delta) {
-        return Result.o(RedisUtils.increment(key, delta));
+        return Result.o(RedisUtils.incrby(key, delta));
     }
 
     /**
@@ -388,7 +388,7 @@ public class StringController {
      */
     @PostMapping("decrement1")
     public Result decrement(String key) {
-        return Result.o(RedisUtils.decrement(key));
+        return Result.o(RedisUtils.decr(key));
     }
 
     /**
@@ -399,7 +399,7 @@ public class StringController {
      */
     @PostMapping("decrement")
     public Result decrement(String key, long delta) {
-        return Result.o(RedisUtils.decrement(key, delta));
+        return Result.o(RedisUtils.decrby(key, delta));
     }
 
 }

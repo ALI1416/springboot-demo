@@ -33,7 +33,7 @@ public class IndexController {
      */
     @PostMapping("getExpire")
     public Result getExpire(String key) {
-        return Result.o(RedisUtils.getExpire(key));
+        return Result.o(RedisUtils.ttl(key));
     }
 
     /**
@@ -99,7 +99,7 @@ public class IndexController {
      */
     @PostMapping("hasKey")
     public Result hasKey(String key) {
-        return Result.o(RedisUtils.hasKey(key));
+        return Result.o(RedisUtils.exists(key));
     }
 
     /**
@@ -124,7 +124,7 @@ public class IndexController {
      */
     @PostMapping("delete")
     public Result delete(String key) {
-        return Result.o(RedisUtils.delete(key));
+        return Result.o(RedisUtils.del(key));
     }
 
     /**
@@ -138,7 +138,7 @@ public class IndexController {
      */
     @PostMapping("deleteList")
     public Result delete(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.delete(keys));
+        return Result.o(RedisUtils.del(keys));
     }
 
     /**
@@ -151,7 +151,7 @@ public class IndexController {
      */
     @PostMapping("deleteArray")
     public Result delete(String[] keys) {
-        return Result.o(RedisUtils.delete(keys));
+        return Result.o(RedisUtils.del(keys));
     }
 
     /**
@@ -209,12 +209,15 @@ public class IndexController {
 
     /**
      * <h3>模糊查询</h3>
-     * 实际存在key有a/aabbcc/abc/abd/b/bc/bd/c<br>
+     * 实际存在key有a/aabbcc/abc/abd/b/bc/bd/c/[]<br>
      * POST /keys?pattern=a 不匹配字符[a]<br>
      * POST /keys?pattern=b? 右侧匹配1个字符[bc,bd]<br>
      * POST /keys?pattern=*c 左侧匹配0+个字符[aabbcc,abc,bc,c]<br>
      * POST /keys?pattern=*b* 两侧匹配0+个字符[aabbcc,abc,abd,b,bc,bd]<br>
-     * POST /keys?pattern=[abd] 匹配1个指定字符[a,b]
+     * POST /keys?pattern=[abd] 匹配1个指定字符[a,b]<br>
+     * POST /keys?pattern=[^abd] 不匹配1个指定字符[c]<br>
+     * POST /keys?pattern=[A-z] 匹配1个指定字符[a,b,c]<br>
+     * POST /keys?pattern=\[* 转义匹配匹配1个指定字符[[]]
      */
     @PostMapping("keys")
     public Result keys(String pattern) {
