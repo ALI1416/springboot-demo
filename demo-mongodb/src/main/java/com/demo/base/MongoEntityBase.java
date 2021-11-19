@@ -1,0 +1,92 @@
+package com.demo.base;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Transient;
+
+import java.sql.Timestamp;
+
+/**
+ * <h1>Mongo实体层基类</h1>
+ *
+ * <p>
+ * createDate 2021/11/18 13:32:47
+ * </p>
+ *
+ * @author ALI[ali-k@foxmail.com]
+ * @since 1.0.0
+ **/
+@Getter
+@Setter
+public class MongoEntityBase extends ToStringBase {
+
+    /* ==================== po ==================== */
+    /**
+     * id<br>
+     * 当字段名为id时，不需要加@Id注解指明它是主键
+     */
+    private Long id;
+    /**
+     * 创建时间
+     */
+    private Timestamp createTime;
+    /**
+     * 更新时间
+     */
+    private Timestamp updateTime;
+    /**
+     * 版本
+     */
+    private Integer version;
+
+    /* ==================== vo ==================== */
+    /**
+     * 创建时间-否定<br>
+     * 不保存到数据库中需要加@Transient注解
+     */
+    @Transient
+    private Timestamp createTimeNot;
+    /**
+     * 创建时间-结束
+     */
+    @Transient
+    private Timestamp createTimeEnd;
+    /**
+     * 更新时间-否定
+     */
+    @Transient
+    private Timestamp updateTimeNot;
+    /**
+     * 更新时间-结束
+     */
+    @Transient
+    private Timestamp updateTimeEnd;
+    /**
+     * 版本-否定
+     */
+    @Transient
+    private Integer versionNot;
+    /**
+     * 版本-结束
+     */
+    @Transient
+    private Integer versionEnd;
+
+    /* -------------------- 分页 -------------------- */
+    /**
+     * 分页-页码
+     */
+    @Transient
+    private Integer pages;
+    /**
+     * 分页-每页条数
+     */
+    @Transient
+    private Integer rows;
+    /**
+     * 分页-排序
+     */
+    @Transient
+    private String orderBy;
+
+}

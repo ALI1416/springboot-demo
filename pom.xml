@@ -24,6 +24,7 @@
     <module>demo-mysql</module>
     <module>demo-mysql2</module>
     <module>demo-redis</module>
+    <module>demo-mongodb</module>
   </modules>
 
   <properties>
