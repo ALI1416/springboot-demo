@@ -1,12 +1,17 @@
 package com.demo.service;
 
-import com.demo.repo.UserMongoRepo;
+import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.mongo.UserMongo;
-import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * <h1>用户Mongo服务</h1>
@@ -18,52 +23,104 @@ import java.util.List;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Service
+// @Service
 @AllArgsConstructor
 public class UserMongoService {
+    //
+    // private final com.demo.dao.mongo.UserMongoDao userMongoDao;
+    //
+    // public UserMongo insert(UserMongo userMongo) {
+    //     return userMongoDao.insert(userMongo);
+    // }
+    //
+    // public List<UserMongo> insertList(List<UserMongo> userMongoList) {
+    //     return userMongoDao.insertList(userMongoList);
+    // }
+    //
+    // public UserMongo save(UserMongo userMongo) {
+    //     return userMongoDao.save(userMongo);
+    // }
+    //
+    // public List<UserMongo> saveList(List<UserMongo> userMongoList) {
+    //     return userMongoDao.saveList(userMongoList);
+    // }
+    //
+    // public boolean existsById(Long id) {
+    //     return userMongoDao.existsById(id);
+    // }
+    //
+    // public boolean exists(Example<UserMongo> example) {
+    //     return userMongoDao.exists(example);
+    // }
+    //
+    // public long countAll() {
+    //     return userMongoDao.countAll();
+    // }
+    //
+    // public long count(Example<UserMongo> example) {
+    //     return userMongoDao.count(example);
+    // }
+    //
+    // public void deleteById(Long id) {
+    //     userMongoDao.deleteById(id);
+    // }
+    //
+    // public void delete(UserMongo userMongo) {
+    //     userMongoDao.delete(userMongo);
+    // }
+    //
+    // public void deleteListById(List<Long> ids) {
+    //     userMongoDao.deleteListById(ids);
+    // }
+    //
+    // public void deleteList(List<UserMongo> userMongoList) {
+    //     userMongoDao.deleteList(userMongoList);
+    // }
+    //
+    // public void deleteAll() {
+    //     userMongoDao.deleteAll();
+    // }
+    //
+    // public UserMongo findById(Long id) {
+    //     return userMongoDao.findById(id);
+    // }
+    //
+    // public UserMongo findOne(Example<UserMongo> example) {
+    //     return userMongoDao.findOne(example);
+    // }
+    //
+    // public Long findBy(Example<UserMongo> example,
+    //                    Function<FluentQuery.FetchableFluentQuery<UserMongo>, Long> queryFunction) {
+    //     return userMongoDao.findBy(example, queryFunction);
+    // }
+    //
+    // public Iterable<UserMongo> findListById(List<Long> ids) {
+    //     return userMongoDao.findListById(ids);
+    // }
+    //
+    // public List<UserMongo> findAll() {
+    //     return userMongoDao.findAll();
+    // }
+    //
+    // public List<UserMongo> findList(Sort sort) {
+    //     return userMongoDao.findList(sort);
+    // }
+    //
+    // public List<UserMongo> findList(Example<UserMongo> example) {
+    //     return userMongoDao.findList(example);
+    // }
+    //
+    // public List<UserMongo> findList(Example<UserMongo> example, Sort sort) {
+    //     return userMongoDao.findList(example, sort);
+    // }
+    //
+    // public Page<UserMongo> findList(Pageable pageable) {
+    //     return userMongoDao.findList(pageable);
+    // }
+    //
+    // public Page<UserMongo> findList(Example<UserMongo> example, Pageable pageable) {
+    //     return userMongoDao.findList(example, pageable);
+    // }
 
-    private final UserMongoRepo userMongoDao;
-
-    /**
-     * 插入
-     */
-    public long insert(UserMongo userMongo) {
-        return userMongoDao.insert(userMongo);
-    }
-
-    /**
-     * 更新
-     */
-    public boolean update(UserMongo userMongo) {
-        return userMongoDao.update(userMongo);
-    }
-
-    /**
-     * 删除，通过id
-     */
-    public boolean deleteById(Long id) {
-        return userMongoDao.deleteById(id);
-    }
-
-    /**
-     * 查询，通过id
-     */
-    public UserMongo findById(Long id) {
-        return userMongoDao.findById(id);
-    }
-
-    /**
-     * 查询，通过name
-     */
-    public List<UserMongo> findByName(String name) {
-        return userMongoDao.find("name", name);
-    }
-
-    /**
-     * 关注+1
-     */
-    public UpdateResult addFollowers(Long id) {
-        return userMongoDao.incrementInt1ById(id, "follower");
-    }
 
 }

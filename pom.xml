@@ -16,7 +16,7 @@
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.5</version>
+    <version>2.6.0</version>
   </parent>
 
   <modules>
@@ -106,7 +106,7 @@
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
     <!-- https://mvnrepository.com/artifact/io.minio/minio -->
-    <minio.version>8.3.0</minio.version>
+    <minio.version>8.3.3</minio.version>
 
     <!--MyBatis-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
@@ -121,7 +121,7 @@
     <!--SaToken权限认证-->
     <!--cn.dev33:sa-token-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-spring-boot-starter -->
-    <sa-token-spring-boot-starter.version>1.26.0</sa-token-spring-boot-starter.version>
+    <sa-token-spring-boot-starter.version>1.28.0</sa-token-spring-boot-starter.version>
 
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
@@ -151,17 +151,17 @@
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
     <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
-    <easyexcel.version>2.2.11</easyexcel.version>
+    <easyexcel.version>3.0.5</easyexcel.version>
 
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
     <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
-    <hutool-all.version>5.7.13</hutool-all.version>
+    <hutool-all.version>5.7.16</hutool-all.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
     <!-- https://mvnrepository.com/artifact/me.zhyd.oauth/JustAuth -->
-    <JustAuth.version>1.16.4</JustAuth.version>
+    <JustAuth.version>1.16.5</JustAuth.version>
 
     <!--手机号码归属地查询-->
     <!--me.ihxq.projects:phone-number-geo-->

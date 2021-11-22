@@ -1,7 +1,8 @@
 package com.demo.dao.mongo;
 
+import com.demo.base.MongoDaoBase;
+import com.demo.entity.mongo.UserMongo;
 import com.demo.repo.UserMongoRepo;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,9 +16,14 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  **/
 @Service
-@AllArgsConstructor
-public class UserMongoDao {
+// @AllArgsConstructor
+public class UserMongoDao extends MongoDaoBase<UserMongo> {
 
     private final UserMongoRepo userMongoRepo;
+
+    public UserMongoDao(UserMongoRepo userMongoRepo) {
+        super(userMongoRepo);
+        this.userMongoRepo = userMongoRepo;
+    }
 
 }
