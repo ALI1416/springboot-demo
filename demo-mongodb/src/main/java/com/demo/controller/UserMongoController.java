@@ -1,8 +1,8 @@
 package com.demo.controller;
 
-import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.mongo.UserMongo;
 import com.demo.entity.pojo.Result;
+import com.demo.service.UserMongoService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * <h1>用户Mongo</h1>
+ * <h1>UserMongo</h1>
  *
  * <p>
  * createDate 2021/03/27 19:51:39
@@ -27,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserMongoController {
 
-    private final UserMongoDao userMongoDao;
+    private final UserMongoService userMongoService;
 
     /**
      * <h3>插入一个，id已存在会失败</h3>
@@ -38,7 +38,7 @@ public class UserMongoController {
      */
     @PostMapping("/insert")
     public Result insert(@RequestBody UserMongo userMongo) {
-        return Result.o(userMongoDao.insert(userMongo));
+        return Result.o(userMongoService.insert(userMongo));
     }
 
     /**
@@ -53,7 +53,7 @@ public class UserMongoController {
      */
     @PostMapping("/insertList")
     public Result insertList(@RequestBody List<UserMongo> userMongoList) {
-        return Result.o(userMongoDao.insertList(userMongoList));
+        return Result.o(userMongoService.insertList(userMongoList));
     }
 
     /**
@@ -64,7 +64,7 @@ public class UserMongoController {
      */
     @PostMapping("/save")
     public Result save(@RequestBody UserMongo userMongo) {
-        userMongoDao.save(userMongo);
+        userMongoService.save(userMongo);
         return Result.o();
     }
 
@@ -77,7 +77,7 @@ public class UserMongoController {
      */
     @PostMapping("/saveList")
     public Result saveList(@RequestBody List<UserMongo> userMongoList) {
-        userMongoDao.saveList(userMongoList);
+        userMongoService.saveList(userMongoList);
         return Result.o();
     }
 
@@ -88,7 +88,7 @@ public class UserMongoController {
      */
     @PostMapping("/existsById")
     public Result existsById(Long id) {
-        return Result.o(userMongoDao.existsById(id));
+        return Result.o(userMongoService.existsById(id));
     }
 
     /**
@@ -100,7 +100,7 @@ public class UserMongoController {
     @PostMapping("/exists")
     public Result exists(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoDao.exists(example));
+        return Result.o(userMongoService.exists(example));
     }
 
     /**
@@ -110,7 +110,7 @@ public class UserMongoController {
      */
     @PostMapping("/countAll")
     public Result countAll() {
-        return Result.o(userMongoDao.countAll());
+        return Result.o(userMongoService.countAll());
     }
 
     /**
@@ -122,7 +122,7 @@ public class UserMongoController {
     @PostMapping("/count")
     public Result count(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoDao.count(example));
+        return Result.o(userMongoService.count(example));
     }
 
     /**
@@ -131,7 +131,7 @@ public class UserMongoController {
      */
     @PostMapping("/deleteById")
     public Result deleteById(Long id) {
-        userMongoDao.deleteById(id);
+        userMongoService.deleteById(id);
         return Result.o();
     }
 
@@ -142,7 +142,7 @@ public class UserMongoController {
      */
     @PostMapping("/delete")
     public Result delete(@RequestBody UserMongo userMongo) {
-        userMongoDao.delete(userMongo);
+        userMongoService.delete(userMongo);
         return Result.o();
     }
 
@@ -153,7 +153,7 @@ public class UserMongoController {
      */
     @PostMapping("/deleteListById")
     public Result deleteListById(@RequestBody List<Long> ids) {
-        userMongoDao.deleteListById(ids);
+        userMongoService.deleteListById(ids);
         return Result.o();
     }
 
@@ -164,7 +164,7 @@ public class UserMongoController {
      */
     @PostMapping("/deleteList")
     public Result deleteList(@RequestBody List<UserMongo> userMongoList) {
-        userMongoDao.deleteList(userMongoList);
+        userMongoService.deleteList(userMongoList);
         return Result.o();
     }
 
@@ -173,7 +173,7 @@ public class UserMongoController {
      */
     @PostMapping("/deleteAll")
     public Result deleteAll() {
-        userMongoDao.deleteAll();
+        userMongoService.deleteAll();
         return Result.o();
     }
 
@@ -184,7 +184,7 @@ public class UserMongoController {
      */
     @PostMapping("/findById")
     public Result findById(Long id) {
-        return Result.o(userMongoDao.findById(id));
+        return Result.o(userMongoService.findById(id));
     }
 
     /**
@@ -196,7 +196,7 @@ public class UserMongoController {
     @PostMapping("/findOne")
     public Result findOne(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoDao.findOne(example));
+        return Result.o(userMongoService.findOne(example));
     }
 
     /**
@@ -207,7 +207,7 @@ public class UserMongoController {
      */
     @PostMapping("/findListById")
     public Result findListById(@RequestBody List<Long> ids) {
-        return Result.o(userMongoDao.findListById(ids));
+        return Result.o(userMongoService.findListById(ids));
     }
 
     /**
@@ -217,7 +217,7 @@ public class UserMongoController {
      */
     @PostMapping("/findAll")
     public Result findAll() {
-        return Result.o(userMongoDao.findAll());
+        return Result.o(userMongoService.findAll());
     }
 
     /**
@@ -228,7 +228,7 @@ public class UserMongoController {
     @PostMapping("/findListSort")
     public Result findList(String field) {
         Sort sort = Sort.by(Sort.Order.desc(field));
-        return Result.o(userMongoDao.findList(sort));
+        return Result.o(userMongoService.findList(sort));
     }
 
     /**
@@ -240,7 +240,7 @@ public class UserMongoController {
     @PostMapping("/findListExample")
     public Result findList(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoDao.findList(example));
+        return Result.o(userMongoService.findList(example));
     }
 
     /**
@@ -253,7 +253,7 @@ public class UserMongoController {
     public Result findList(@RequestBody UserMongo userMongo, String field) {
         Example<UserMongo> example = Example.of(userMongo);
         Sort sort = Sort.by(Sort.Order.desc(field));
-        return Result.o(userMongoDao.findList(example, sort));
+        return Result.o(userMongoService.findList(example, sort));
     }
 
     /**
@@ -264,7 +264,7 @@ public class UserMongoController {
     @PostMapping("/findListPage")
     public Result findList(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return Result.o(userMongoDao.findList(pageRequest));
+        return Result.o(userMongoService.findList(pageRequest));
     }
 
     /**
@@ -277,7 +277,28 @@ public class UserMongoController {
     public Result findList(@RequestBody UserMongo userMongo, int page, int size) {
         Example<UserMongo> example = Example.of(userMongo);
         PageRequest pageRequest = PageRequest.of(page, size);
-        return Result.o(userMongoDao.findList(example, pageRequest));
+        return Result.o(userMongoService.findList(example, pageRequest));
+    }
+
+    /**
+     * <h3>根据名字查询并分页</h3>
+     * POST /findByName?name=a&page=0&size=1<br>
+     * Page
+     */
+    @PostMapping("/findByName")
+    public Result findByName(String name, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return Result.o(userMongoService.findByName(name, pageRequest));
+    }
+
+    /**
+     * 关注+1
+     * POST /addFollowers?id=1<br>
+     * UpdateResult
+     */
+    @PostMapping("/addFollowers")
+    public Result addFollowers(Long id) {
+        return Result.o(userMongoService.addFollowers(id));
     }
 
 }

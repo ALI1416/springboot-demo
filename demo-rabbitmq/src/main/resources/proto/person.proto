@@ -1,0 +1,64 @@
+// 生成java文件，需要安装protobuf，到 https://github.com/protocolbuffers/protobuf/releases/
+// 下载 protoc-版本号-win64.zip 文件
+// 例如地址 https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip
+// IDEA安装Protocol Buffers和GenProtobuf插件，前者美化代码，后者生成java文件
+// 生成java文件：在.proto文件右键，选择quick gen protobuf rules
+// 注意：第一次使用需要配置：Tool->Configure GenProtobuf
+// 1. protoc path选择protoc.exe目录
+// 2. Quick Gen选择Java
+// 3. Protoc Flags选择Java，填写../../java
+
+
+// proto语法，不写默认proto2
+syntax = "proto3";
+
+// 对应java包
+option java_package = "com.demo.entity.proto";
+// 对应java类名
+option java_outer_classname = "PersonProto";
+
+// 内部类Person
+message Person {
+  // 内部类属性
+  // 格式：[标注]+类型+属性名+属性序号+[默认值]+;
+  // [标注]：可以不写，3前是必写的，有required、optional、repeated。其中required、optional在3中已过时，repeated是List接口的实现类
+  // 属性名：对应java类中的字段名，小写字母+下划线命名，在java类中会转换为驼峰命名
+  // 属性序号：在同一个message内部是全局唯一的，不能够重复
+  // [默认值]：3中已过时
+  // 类型：
+  // .proto类型 java类型    默认值 备注
+  // bool       boolean     false -
+  // float      float       0     -
+  // double     double      0     -
+  // bytes      ByteString  ""    -
+  // string     String      ""    必须是UTF-8或7-bit ASCII编码。
+  // int32      int         0     32位有符号整形，可变长度编码。
+  // sint32     int         0     32位有符号整形，可变长度编码。负数效率比int32高。
+  // uint32     int         0     32位无符号整形，可变长度编码。
+  // sfixed32   int         0     32位有符号整形，固定长度编码。
+  // fixed32    int         0     32位无符号整形，固定长度编码。值大于228效率比uint32高
+  // int64      long        0     64位有符号整形，可变长度编码。
+  // sint64     long        0     64位有符号整形，可变长度编码。负数效率比int64高。
+  // uint64     long        0     64位无符号整形，可变长度编码。
+  // fixed64    long        0     64位有符号整形，固定长度编码。
+  // sfixed64   long        0     64位无符号整形，固定长度编码。值大于256效率比uint64高
+  // enum       enum        0     -
+  // message    Object      null  -
+
+  string name = 1;
+  int32 year = 2;
+  bool gender = 3;
+  int64 date = 4;
+  string address = 5;
+  // 数组
+  repeated Car cars = 6;
+  // Map
+  map<string, string> other = 7;
+}
+
+// 内部类Car
+message Car {
+  string name = 1;
+  string color = 2;
+}
+

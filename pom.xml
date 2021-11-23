@@ -25,6 +25,7 @@
     <module>demo-mysql2</module>
     <module>demo-redis</module>
     <module>demo-mongodb</module>
+    <module>demo-rabbitmq</module>
   </modules>
 
   <properties>
@@ -153,6 +154,11 @@
     <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
     <easyexcel.version>3.0.5</easyexcel.version>
 
+    <!--ProtocolBuffers-->
+    <!--com.google.protobuf:protobuf-->
+    <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+    <protobuf.version>3.19.1</protobuf.version>
+
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
     <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
@@ -239,6 +245,18 @@
         <groupId>com.alibaba</groupId>
         <artifactId>easyexcel</artifactId>
         <version>${easyexcel.version}</version>
+      </dependency>
+      <!--Protocol Buffers-->
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>${protobuf.version}</version>
+      </dependency>
+      <!--Protocol Buffers Util-->
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java-util</artifactId>
+        <version>${protobuf.version}</version>
       </dependency>
       <!--HuTool工具包-->
       <dependency>
