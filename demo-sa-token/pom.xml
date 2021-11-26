@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>demo-rabbitmq</artifactId>
+  <artifactId>demo-sa-token</artifactId>
   <version>1.0.0</version>
 
-  <name>demo-rabbitmq</name>
-  <description>demo-rabbitmq</description>
+  <name>demo-sa-token</name>
+  <description>demo-sa-token</description>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -27,25 +27,40 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
     </dependency>
-    <!--Protocol Buffers-->
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java</artifactId>
-    </dependency>
-    <!--Protocol Buffers Util-->
-    <dependency>
-      <groupId>com.google.protobuf</groupId>
-      <artifactId>protobuf-java-util</artifactId>
-    </dependency>
-    <!--RabbitMQ-->
+    <!--Redis-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-amqp</artifactId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
+    <!--SaToken权限认证-->
+    <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-spring-boot-starter</artifactId>
+    </dependency>
+    <!--SaToken整合Redis(使用jackson序列化)-->
+    <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-dao-redis-jackson</artifactId>
+    </dependency>
+    <!--MyBatis-->
+    <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+    </dependency>
+    <!--PageHelper分页排序查询-->
+<!--    <dependency>-->
+<!--      <groupId>com.github.pagehelper</groupId>-->
+<!--      <artifactId>pagehelper-spring-boot-starter</artifactId>-->
+<!--    </dependency>-->
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <!--HuTool工具包-->
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
     </dependency>
 
     <!--特殊依赖-->
@@ -61,6 +76,12 @@
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
+    </dependency>
+    <!--MySQL-->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>runtime</scope>
     </dependency>
 
     <!--测试依赖-->

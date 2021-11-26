@@ -26,6 +26,7 @@
     <module>demo-redis</module>
     <module>demo-mongodb</module>
     <module>demo-rabbitmq</module>
+    <module>demo-sa-token</module>
   </modules>
 
   <properties>
@@ -122,7 +123,9 @@
     <!--SaToken权限认证-->
     <!--cn.dev33:sa-token-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-spring-boot-starter -->
-    <sa-token-spring-boot-starter.version>1.28.0</sa-token-spring-boot-starter.version>
+    <!--SaToken整合Redis(使用jackson序列化)-->
+    <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-dao-redis-jackson -->
+    <sa-token.version>1.28.0</sa-token.version>
 
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
@@ -154,9 +157,12 @@
     <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
     <easyexcel.version>3.0.5</easyexcel.version>
 
-    <!--ProtocolBuffers-->
-    <!--com.google.protobuf:protobuf-->
+    <!--Protocol Buffers-->
+    <!--com.google.protobuf:protobuf-java-->
     <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
+    <!--Protocol Buffers Util-->
+    <!--com.google.protobuf:protobuf-java-util-->
+    <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java-util -->
     <protobuf.version>3.19.1</protobuf.version>
 
     <!--HuTool工具包-->
@@ -208,7 +214,13 @@
       <dependency>
         <groupId>cn.dev33</groupId>
         <artifactId>sa-token-spring-boot-starter</artifactId>
-        <version>${sa-token-spring-boot-starter.version}</version>
+        <version>${sa-token.version}</version>
+      </dependency>
+      <!--SaToken整合Redis(使用jackson序列化)-->
+      <dependency>
+        <groupId>cn.dev33</groupId>
+        <artifactId>sa-token-dao-redis-jackson</artifactId>
+        <version>${sa-token.version}</version>
       </dependency>
       <!--雪花ID生成器-->
       <dependency>

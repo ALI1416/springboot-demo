@@ -4,12 +4,10 @@ import com.demo.base.ToStringBase;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
+import java.util.Date;
 
 /**
- * <h1>Person</h1>
+ * <h1>用户</h1>
  *
  * <p>
  * createDate 2021/09/09 15:41:33
@@ -20,7 +18,12 @@ import java.util.Map;
  **/
 @Getter
 @Setter
-public class Person extends ToStringBase {
+public class User extends ToStringBase {
+
+    /**
+     * 账号
+     */
+    public String account;
 
     /**
      * 用户名
@@ -40,21 +43,6 @@ public class Person extends ToStringBase {
     /**
      * 日期
      */
-    public Timestamp date;
-
-    /**
-     * 地址
-     */
-    public String address;
-
-    /**
-     * 车
-     */
-    public List<Car> cars;
-
-    /**
-     * 其他信息
-     */
-    public Map<String, String> other;
+    public Date date;
 
 }

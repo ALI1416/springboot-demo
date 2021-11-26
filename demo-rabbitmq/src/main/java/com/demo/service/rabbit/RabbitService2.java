@@ -1,5 +1,7 @@
 package com.demo.service.rabbit;
 
+import com.alibaba.fastjson.JSONObject;
+import com.demo.entity.po.Person;
 import com.demo.entity.proto.PersonProto;
 import com.google.protobuf.util.JsonFormat;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -107,22 +109,34 @@ public class RabbitService2 {
     }
 
     /**
-     * 工作模型，至少2个消费者(队列需要相同名字)，默认平均分配<br>
-     * RabbitListener可以直接写到方法上<br>
-     * 消费者1
+     * proto<br>
      */
     @RabbitListener(queuesToDeclare = @Queue("proto"))
     public void receiver9(byte[] bytes) {
-        PersonProto.Person parseFrom = null;
-        //反序列化(通过protobuf生成的java类的内部方法进行反序列化)
+        // 解码并转换成JSON字符串
+        String jsonString = "";
         try {
-            parseFrom = PersonProto.Person.parseFrom(bytes);
+            jsonString = JsonFormat.printer().print(PersonProto.Person.parseFrom(bytes));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        JsonFormat.Parser parser = JsonFormat.parser();
-        System.out.println("RabbitService2.receiver9收到消息：" + parseFrom.toString());
+        System.out.println("RabbitService2.receiver9收到消息：" + jsonString);
     }
 
+    /**
+     * proto2<br>
+     */
+    @RabbitListener(queuesToDeclare = @Queue("proto2"))
+    public void receiver10(byte[] bytes) {
+        // 先解码并转换成JSON字符串，再转换成Person对象
+        Person person = new Person();
+        try {
+            person = JSONObject.parseObject(JsonFormat.printer().print(PersonProto.Person.parseFrom(bytes)),
+                    Person.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("RabbitService2.receiver10收到消息：" + person);
+    }
 
 }
