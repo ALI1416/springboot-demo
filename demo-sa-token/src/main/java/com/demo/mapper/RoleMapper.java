@@ -1,12 +1,14 @@
 package com.demo.mapper;
 
-import com.demo.entity.po.Role;
+import com.demo.entity.vo.RoleVo;
+
+import java.util.List;
 
 /**
- * <h1>登录日志测试Mapper</h1>
+ * <h1>RoleMapper</h1>
  *
  * <p>
- * createDate 2021/09/13 10:48:57
+ * createDate 2021/11/29 15:00:09
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
@@ -15,11 +17,18 @@ import com.demo.entity.po.Role;
 public interface RoleMapper {
 
     /**
-     * 插入
+     * 查询所有
      *
-     * @param role Role
-     * @return 执行成功数量
+     * @return List<RoleVo>
      */
-    int insert(Role role);
+    List<RoleVo> findAll();
+
+    /**
+     * 查询所有通过UserId
+     *
+     * @param id UserId
+     * @return List<RoleVo>
+     */
+    List<RoleVo> findByUserId(Long id);
 
 }

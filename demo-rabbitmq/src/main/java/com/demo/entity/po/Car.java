@@ -21,11 +21,11 @@ public class Car extends ToStringBase {
     /**
      * 名字
      */
-    public String name;
+    private String name;
 
     /**
      * 颜色
      */
-    public String color;
+    private String color;
 
 }

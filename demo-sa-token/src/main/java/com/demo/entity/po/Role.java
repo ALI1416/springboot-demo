@@ -22,10 +22,13 @@ public class Role extends EntityBase {
      * 名称
      */
     private String name;
-
     /**
      * 顺序
      */
     private Integer seq;
+    /**
+     * 创建者id
+     */
+    private Long createId;
 
 }

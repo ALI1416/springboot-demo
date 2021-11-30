@@ -299,7 +299,7 @@ public class StringController {
      */
     @PostMapping("multiSet")
     public Result multiSet(@RequestBody Map<String, Object> map) {
-        RedisUtils.multiSet(map);
+        RedisUtils.setMulti(map);
         return Result.o();
     }
 
@@ -312,7 +312,7 @@ public class StringController {
      */
     @PostMapping("multiSetIfAbsent")
     public Result multiSetIfAbsent(@RequestBody Map<String, Object> map) {
-        return Result.o(RedisUtils.multiSetIfAbsent(map));
+        return Result.o(RedisUtils.setMultiIfAbsent(map));
     }
 
     /**
@@ -345,7 +345,7 @@ public class StringController {
      */
     @PostMapping("multiGetList")
     public Result multiGet(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.multiGet(keys));
+        return Result.o(RedisUtils.getMulti(keys));
     }
 
     /**
@@ -355,7 +355,7 @@ public class StringController {
      */
     @PostMapping("multiGetArray")
     public Result multiGet(String[] keys) {
-        return Result.o(RedisUtils.multiGet(keys));
+        return Result.o(RedisUtils.getMultiArray(keys));
     }
 
     /**
@@ -366,7 +366,7 @@ public class StringController {
      */
     @PostMapping("increment1")
     public Result increment(String key) {
-        return Result.o(RedisUtils.incr(key));
+        return Result.o(RedisUtils.increment(key));
     }
 
     /**
@@ -377,7 +377,7 @@ public class StringController {
      */
     @PostMapping("increment")
     public Result increment(String key, long delta) {
-        return Result.o(RedisUtils.incrby(key, delta));
+        return Result.o(RedisUtils.increment(key, delta));
     }
 
     /**
@@ -388,7 +388,7 @@ public class StringController {
      */
     @PostMapping("decrement1")
     public Result decrement(String key) {
-        return Result.o(RedisUtils.decr(key));
+        return Result.o(RedisUtils.decrement(key));
     }
 
     /**
@@ -399,7 +399,7 @@ public class StringController {
      */
     @PostMapping("decrement")
     public Result decrement(String key, long delta) {
-        return Result.o(RedisUtils.decrby(key, delta));
+        return Result.o(RedisUtils.decrement(key, delta));
     }
 
 }

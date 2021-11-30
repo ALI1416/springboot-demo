@@ -24,35 +24,35 @@ public class LoginLogTest extends EntityBase {
     /**
      * IP地址
      */
-    public String ip;
+    private String ip;
     /**
      * 浏览器标识
      */
-    public String userAgent;
+    private String userAgent;
     /**
      * IP地址-国家
      */
-    public String ipCountry;
+    private String ipCountry;
     /**
      * IP地址-省份
      */
-    public String ipProvince;
+    private String ipProvince;
     /**
      * IP地址-城市
      */
-    public String ipCity;
+    private String ipCity;
     /**
      * 浏览器标识-操作系统
      */
-    public String uaOs;
+    private String uaOs;
     /**
      * 浏览器标识-浏览器
      */
-    public String uaBrowser;
+    private String uaBrowser;
     /**
      * 浏览器标识-是手机
      */
-    public Integer uaIsMobile;
+    private Integer uaIsMobile;
 
     /**
      * 构造函数

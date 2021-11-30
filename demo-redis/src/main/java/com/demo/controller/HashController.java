@@ -32,7 +32,7 @@ public class HashController {
      */
     @PostMapping("hDeleteArray")
     public Result hDelete(String key, String[] items) {
-        return Result.o(RedisUtils.hDel(key, items));
+        return Result.o(RedisUtils.hDeleteMultiArray(key, items));
     }
 
     /**
@@ -44,7 +44,7 @@ public class HashController {
      */
     @PostMapping("hDeleteList")
     public Result hDelete(String key, @RequestBody List<String> items) {
-        return Result.o(RedisUtils.hDel(key, items));
+        return Result.o(RedisUtils.hDeleteMulti(key, items));
     }
 
     /**
@@ -76,7 +76,7 @@ public class HashController {
      */
     @PostMapping("hMultiGetArray")
     public Result hMultiGet(String key, String[] items) {
-        return Result.o(RedisUtils.hMultiGet(key, items));
+        return Result.o(RedisUtils.hGetMultiArray(key, items));
     }
 
     /**
@@ -87,7 +87,7 @@ public class HashController {
      */
     @PostMapping("hMultiGetList")
     public Result hMultiGet(String key, @RequestBody List<String> items) {
-        return Result.o(RedisUtils.hMultiGet(key, items));
+        return Result.o(RedisUtils.hGetMulti(key, items));
     }
 
     /**
@@ -98,7 +98,7 @@ public class HashController {
      */
     @PostMapping("hIncrement1")
     public Result hIncrement(String key, String item) {
-        return Result.o(RedisUtils.hIncrby(key, item));
+        return Result.o(RedisUtils.hIncrement(key, item));
     }
 
     /**
@@ -109,7 +109,7 @@ public class HashController {
      */
     @PostMapping("hIncrement")
     public Result hIncrement(String key, String item, long delta) {
-        return Result.o(RedisUtils.hIncrby(key, item, delta));
+        return Result.o(RedisUtils.hIncrement(key, item, delta));
     }
 
     /**
@@ -120,7 +120,7 @@ public class HashController {
      */
     @PostMapping("hDecrement1")
     public Result hDecrement(String key, String item) {
-        return Result.o(RedisUtils.hDecrby(key, item));
+        return Result.o(RedisUtils.hDecrement(key, item));
     }
 
     /**
@@ -131,7 +131,7 @@ public class HashController {
      */
     @PostMapping("hDecrement")
     public Result hDecrement(String key, String item, long delta) {
-        return Result.o(RedisUtils.hDecrby(key, item, delta));
+        return Result.o(RedisUtils.hDecrement(key, item, delta));
     }
 
     /**
@@ -142,7 +142,7 @@ public class HashController {
      */
     @PostMapping("hSize")
     public Result hSize(String key) {
-        return Result.o(RedisUtils.hLen(key));
+        return Result.o(RedisUtils.hSize(key));
     }
 
     /**
@@ -153,7 +153,7 @@ public class HashController {
      */
     @PostMapping("hPutAll")
     public Result hPutAll(String key, @RequestBody Map<String, Object> map) {
-        RedisUtils.hMultiSet(key, map);
+        RedisUtils.hSetMulti(key, map);
         return Result.o();
     }
 

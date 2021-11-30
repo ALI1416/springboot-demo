@@ -4,8 +4,6 @@ import com.demo.base.ToStringBase;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 /**
  * <h1>用户</h1>
  *
@@ -23,26 +21,10 @@ public class User extends ToStringBase {
     /**
      * 账号
      */
-    public String account;
-
+    private String account;
     /**
-     * 用户名
+     * 密码
      */
-    public String name;
-
-    /**
-     * 出生年
-     */
-    public int year;
-
-    /**
-     * 性别
-     */
-    public Boolean gender;
-
-    /**
-     * 日期
-     */
-    public Date date;
+    private String pwd;
 
 }

@@ -3,16 +3,27 @@
 <mapper namespace="com.demo.mapper.RoleMapper">
 
   <sql id="col">
-    id,ip,user_agent,ip_country,ip_province,ip_city,ua_os,ua_browser,ua_is_mobile,create_time
+    id,name,seq,create_id
   </sql>
 
-  <insert id="insert" parameterType="Role">
-    INSERT
-    login_log_test(
-    id,ip,user_agent,ip_country,ip_province,ip_city,ua_os,ua_browser,ua_is_mobile
-    )VALUES(
-    #{id},#{ip},#{userAgent},#{ipCountry},#{ipProvince},#{ipCity},#{uaOs},#{uaBrowser},#{uaIsMobile}
-    )
-  </insert>
+  <select id="findAll" resultType="RoleVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    role
+  </select>
+
+  <select id="findByUserId" parameterType="Long" resultType="RoleVo">
+    SELECT
+    r.id,
+    r.NAME,
+    r.seq,
+    r.create_id
+    FROM
+    role r
+    INNER JOIN USER u ON r.create_id = u.id
+    WHERE
+    u.id =#{id}
+  </select>
 
 </mapper>

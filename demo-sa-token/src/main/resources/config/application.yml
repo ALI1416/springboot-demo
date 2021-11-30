@@ -21,6 +21,12 @@ spring:
 #    key-store-password: ChengKai1998!
 #    key-store-type: JKS
 
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.demo.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
 sa-token:
   is-print: false
   is-share: false

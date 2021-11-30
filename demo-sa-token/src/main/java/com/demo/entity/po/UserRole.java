@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>角色-路由</h1>
+ * <h1>用户-角色</h1>
  *
  * <p>
- * createDate 2021/11/26 09:37:54
+ * createDate 2021/11/29 14:56:24
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
@@ -16,15 +16,15 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class RoleRoute extends EntityBase {
+public class UserRole extends EntityBase {
 
+    /**
+     * 用户id
+     */
+    private Long userId;
     /**
      * 角色id
      */
     private Long roleId;
-    /**
-     * 路由id
-     */
-    private Long routeId;
 
 }

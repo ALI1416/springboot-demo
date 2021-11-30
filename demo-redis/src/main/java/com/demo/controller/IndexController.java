@@ -33,7 +33,7 @@ public class IndexController {
      */
     @PostMapping("getExpire")
     public Result getExpire(String key) {
-        return Result.o(RedisUtils.ttl(key));
+        return Result.o(RedisUtils.getExpire(key));
     }
 
     /**
@@ -117,6 +117,19 @@ public class IndexController {
     }
 
     /**
+     * <h3>集合中存在的key的数量</h3>
+     * 实际存在key有a/b/c<br>
+     * POST /countExistingKeysArray?keys=a&keys=b&keys=c 3<br>
+     * POST /countExistingKeysArray?keys=a&keys=b&keys=d 2<br>
+     * POST /countExistingKeysArray?keys=a&keys=b&keys=c&keys=c 4<br>
+     * POST /countExistingKeysArray?keys=d 0
+     */
+    @PostMapping("countExistingKeysArray")
+    public Result countExistingKeys(String[] keys) {
+        return Result.o(RedisUtils.countExistingKeysArray(keys));
+    }
+
+    /**
      * <h3>删除key</h3>
      * POST /delete?key=a<br>
      * 存在 true<br>
@@ -124,7 +137,7 @@ public class IndexController {
      */
     @PostMapping("delete")
     public Result delete(String key) {
-        return Result.o(RedisUtils.del(key));
+        return Result.o(RedisUtils.delete(key));
     }
 
     /**
@@ -138,7 +151,7 @@ public class IndexController {
      */
     @PostMapping("deleteList")
     public Result delete(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.del(keys));
+        return Result.o(RedisUtils.deleteMulti(keys));
     }
 
     /**
@@ -151,7 +164,7 @@ public class IndexController {
      */
     @PostMapping("deleteArray")
     public Result delete(String[] keys) {
-        return Result.o(RedisUtils.del(keys));
+        return Result.o(RedisUtils.deleteMultiArray(keys));
     }
 
     /**
@@ -176,7 +189,7 @@ public class IndexController {
      */
     @PostMapping("unlinkList")
     public Result unlink(List<String> keys) {
-        return Result.o(RedisUtils.unlink(keys));
+        return Result.o(RedisUtils.unlinkMulti(keys));
     }
 
     /**
@@ -189,7 +202,7 @@ public class IndexController {
      */
     @PostMapping("unlinkArray")
     public Result unlink(String[] keys) {
-        return Result.o(RedisUtils.unlink(keys));
+        return Result.o(RedisUtils.unlinkMultiArray(keys));
     }
 
     /**

@@ -2,25 +2,30 @@ package com.demo.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.demo.entity.pojo.Result;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <h1>首页</h1>
+ * <h1>UserController</h1>
  *
  * <p>
- * createDate 2021/09/09 10:35:04
+ * createDate 2021/11/29 16:45:45
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
 @RestController
-public class IndexController {
+@RequestMapping("user")
+@AllArgsConstructor
+public class UserController {
 
-    @GetMapping(value = {"", "/", "index"})
-    public Result index() {
-        StpUtil.login(10001L);
+
+    @GetMapping("login")
+    public Result login(Long id) {
+        StpUtil.login(id);
         return Result.o();
     }
 
@@ -33,16 +38,6 @@ public class IndexController {
     @GetMapping("getLoginIdAsLong")
     public Result getLoginIdAsLong() {
         return Result.o(StpUtil.getLoginIdAsLong());
-    }
-
-    @GetMapping("getPermissionList")
-    public Result getPermissionList() {
-        return Result.o(StpUtil.getPermissionList());
-    }
-
-    @GetMapping("getRoleList")
-    public Result getRoleList() {
-        return Result.o(StpUtil.getRoleList());
     }
 
 }

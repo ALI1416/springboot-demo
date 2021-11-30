@@ -22,20 +22,17 @@ public class Route extends EntityBase {
      * 路径
      */
     private String path;
-
     /**
      * 名称
      */
     private String name;
-
-    /**
-     * 顺序
-     */
-    private Integer seq;
-
     /**
      * 父id
      */
     private Long parentId;
+    /**
+     * 顺序
+     */
+    private Integer seq;
 
 }

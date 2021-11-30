@@ -1,7 +1,12 @@
 package com.demo.util;
 
+import com.demo.entity.po.Route;
 import com.demo.entity.vo.RouteVo;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,11 +47,11 @@ public class RouteUtils {
         // /a/ad
         routeList.add(new RouteVo(14L, "ad", 4, 1L));
         // /a/ad
-        routeList.add(new RouteVo(21L, "ba", 1, 2L));
+        routeList.add(new RouteVo(21L, "ba", 0, 2L));
         // /b/bb
-        routeList.add(new RouteVo(22L, "bb", 2, 2L));
+        routeList.add(new RouteVo(22L, "bb", 1, 2L));
         // /c/ca
-        routeList.add(new RouteVo(23L, "ca", 3, 3L));
+        routeList.add(new RouteVo(23L, "ca", 0, 3L));
         // /a/aa
         routeList.add(new RouteVo(110L, "", 0, 11L));
         // /a/aa/aaa
@@ -58,17 +63,15 @@ public class RouteUtils {
         // 11221 /a/aa/aab/aabb/*
         routeList.add(new RouteVo(1122L, "aabb", 2, 112L));
         // /a/aa/aab/aabb/aabba
-        routeList.add(new RouteVo(11221L, "aabba", 1, 1122L));
+        routeList.add(new RouteVo(11221L, "aabba", 0, 1122L));
 
         System.out.println(routeList);
 
         RouteVo tree = list2Tree(routeList);
         System.out.println(tree);
-        System.out.println(routeList);
 
         RouteVo expandedList = tree2ExpandedList(tree);
         System.out.println(expandedList);
-        System.out.println(tree);
 
     }
 
@@ -79,29 +82,23 @@ public class RouteUtils {
      * @return 树；如果不存在id=0的根节点，返回new RouteVo()
      */
     public static RouteVo list2Tree(List<RouteVo> routeList) {
-        Long parentId;
-        String path;
+        // 拷贝原始数据
+        List<RouteVo> list = deepCopy(routeList);
         // 找到并重置根节点
-        RouteVo tree;
-        Optional<RouteVo> first = routeList.stream().filter(s -> s.getId() == 0).findFirst();
+        RouteVo root;
+        Optional<RouteVo> first = list.stream().filter(s -> s.getId() == 0).findFirst();
         if (first.isPresent()) {
-            tree = first.get();
-            parentId = tree.getParentId();
-            path = tree.getPath();
-            tree.setParentId(-1L);
-            tree.setPath("/");
+            root = first.get();
+            root.setParentId(-1L);
+            root.setPath("/");
         } else {
             return new RouteVo();
         }
         // 按parentId分组
-        Map<Long, List<RouteVo>> map = routeList.stream().collect(Collectors.groupingBy(RouteVo::getParentId));
+        Map<Long, List<RouteVo>> map = list.stream().collect(Collectors.groupingBy(RouteVo::getParentId));
         // 生成树
-        makeTree(tree, map);
-        // 还原routeList
-        RouteVo route = first.get();
-        route.setParentId(parentId);
-        route.setPath(path);
-        return tree;
+        makeTree(root, map);
+        return root;
     }
 
     /**
@@ -116,10 +113,7 @@ public class RouteUtils {
         // 如果有子节点
         if (children != null) {
             // 对子节点进行排序
-            List<RouteVo> childrenOrder =
-                    children.stream().sorted(Comparator.comparing(RouteVo::getSeq)).collect(Collectors.toList());
-            children.clear();
-            children.addAll(childrenOrder);
+            children = children.stream().sorted(Comparator.comparing(RouteVo::getSeq)).collect(Collectors.toList());
             // 子节点生成树
             for (RouteVo child : children) {
                 makeTree(child, map);
@@ -132,33 +126,32 @@ public class RouteUtils {
     /**
      * 树转展开列表
      *
-     * @param tree 树
+     * @param root 树
+     * @return 列表
      */
-    public static RouteVo tree2ExpandedList(RouteVo tree) {
+    public static RouteVo tree2ExpandedList(RouteVo root) {
+        // 创建新的路由表
         RouteVo route = new RouteVo();
-        List<String> matcherPath = new ArrayList<>();
-        List<String> directPath = new ArrayList<>();
-        route.setMatcherPath(matcherPath);
-        route.setDirectPath(directPath);
-        // 根节点加入路径
-        matcherPath.add("/");
+        List<RouteVo> matcher = new ArrayList<>();
+        List<RouteVo> direct = new ArrayList<>();
+        route.setMatcher(matcher);
+        route.setDirect(direct);
+        // 拷贝原始数据
+        RouteVo tree = deepCopy(root);
         // 找到子节点
         List<RouteVo> children = tree.getChildren();
+        tree.setChildren(null);
+        // 根节点加入路径
+        matcher.add(tree);
         if (children != null) {
             for (RouteVo child : children) {
-                // 子节点加入路径
-                if (child.getChildren() != null) {
-                    route.getMatcherPath().add("/" + child.getPath());
-                } else {
-                    route.getDirectPath().add("/" + child.getPath());
-                }
                 // 子节点去展开
                 makeExpandedList(route, child, "");
             }
         }
         // 排序
-        sort(route.getMatcherPath());
-        sort(route.getDirectPath());
+        route.setMatcher(route.getMatcher().stream().sorted(Comparator.comparing(Route::getSeq)).sorted(Comparator.comparing(Route::getParentId)).collect(Collectors.toList()));
+        route.setDirect(route.getDirect().stream().sorted(Comparator.comparing(Route::getSeq)).sorted(Comparator.comparing(Route::getParentId)).collect(Collectors.toList()));
         return route;
     }
 
@@ -170,24 +163,25 @@ public class RouteUtils {
      * @param prefix 前缀
      */
     private static void makeExpandedList(RouteVo route, RouteVo tree, String prefix) {
-        // 新的前缀
-        if (!tree.getPath().isEmpty()) {
-            prefix = prefix + "/" + tree.getPath();
-        }
         // 找到子节点
         List<RouteVo> children = tree.getChildren();
+        tree.setChildren(null);
+        // 节点加入路径
+        if (children != null) {
+            // 存在子节点
+            prefix = prefix + "/" + tree.getPath();
+            tree.setPath(prefix);
+            route.getMatcher().add(tree);
+        } else {
+            // 不存在子节点，且路径不为空
+            if (!tree.getPath().isEmpty()) {
+                prefix = prefix + "/" + tree.getPath();
+            }
+            tree.setPath(prefix);
+            route.getDirect().add(tree);
+        }
         if (children != null) {
             for (RouteVo child : children) {
-                // 子节点加入路径
-                if (child.getChildren() != null) {
-                    route.getMatcherPath().add(prefix + "/" + child.getPath());
-                } else {
-                    if (!child.getPath().isEmpty()) {
-                        route.getDirectPath().add(prefix + "/" + child.getPath());
-                    } else {
-                        route.getDirectPath().add(prefix);
-                    }
-                }
                 // 子节点去展开
                 makeExpandedList(route, child, prefix);
             }
@@ -195,40 +189,25 @@ public class RouteUtils {
     }
 
     /**
-     * 列表排序
+     * 深度拷贝
      *
-     * @param list 列表
+     * @param src T
+     * @return T
      */
-    private static void sort(List<String> list) {
-        Map<Integer, List<String>> map = new TreeMap<>();
-        for (String s : list) {
-            int count = charCount(s);
-            if (!map.containsKey(count)) {
-                map.put(count, new ArrayList<>());
-            }
-            map.get(count).add(s);
+    @SuppressWarnings("unchecked")
+    private static <T> T deepCopy(T src) {
+        T dest = null;
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(byteOut);
+            out.writeObject(src);
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+            ObjectInputStream in = new ObjectInputStream(byteIn);
+            dest = (T) in.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        list.clear();
-        for (List<String> value : map.values()) {
-            list.addAll(value);
-        }
-    }
-
-    /**
-     * 计算字符串中出现/字符的次数
-     *
-     * @param str 字符串
-     * @return 出现次数
-     */
-    private static int charCount(String str) {
-        int count = 0;
-        char[] chars = str.toCharArray();
-        for (char a : chars) {
-            if (a == '/') {
-                count++;
-            }
-        }
-        return count;
+        return dest;
     }
 
 }

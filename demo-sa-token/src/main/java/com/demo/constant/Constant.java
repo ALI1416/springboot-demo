@@ -15,14 +15,14 @@ public class Constant {
     /**
      * 分页-默认页码{@value}
      */
-    public final static int PAGE_DEFAULT_PAGES = 1;
+    public static final int PAGE_DEFAULT_PAGES = 1;
     /**
      * 分页-默认每页条数{@value}
      */
-    public final static int PAGE_DEFAULT_ROWS = 5;
+    public static final int PAGE_DEFAULT_ROWS = 5;
     /**
      * 分页-默认排序{@value}
      */
-    public final static String PAGE_DEFAULT_ORDER_BY = "id desc";
+    public static final String PAGE_DEFAULT_ORDER_BY = "id desc";
 
 }

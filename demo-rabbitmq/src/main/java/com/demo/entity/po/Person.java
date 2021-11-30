@@ -25,36 +25,36 @@ public class Person extends ToStringBase {
     /**
      * 用户名
      */
-    public String name;
+    private String name;
 
     /**
      * 出生年
      */
-    public int year;
+    private int year;
 
     /**
      * 性别
      */
-    public Boolean gender;
+    private Boolean gender;
 
     /**
      * 日期
      */
-    public Timestamp date;
+    private Timestamp date;
 
     /**
      * 地址
      */
-    public String address;
+    private String address;
 
     /**
      * 车
      */
-    public List<Car> cars;
+    private List<Car> cars;
 
     /**
      * 其他信息
      */
-    public Map<String, String> other;
+    private Map<String, String> other;
 
 }
