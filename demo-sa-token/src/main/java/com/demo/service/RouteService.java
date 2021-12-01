@@ -3,6 +3,7 @@ package com.demo.service;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RouteDao;
 import com.demo.entity.vo.RoleVo;
+import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.util.RouteUtils;
 import lombok.AllArgsConstructor;
@@ -76,6 +77,15 @@ public class RouteService extends ServiceBase {
             role.setRoutes(findByRoleId(role.getId()));
         }
         return roles;
+    }
+
+    /**
+     * 查询所有路由不拦截
+     *
+     * @return List<RouteNotInterceptVo>
+     */
+    public List<RouteNotInterceptVo> findAllRouteNotIntercept() {
+        return routeDao.findAllRouteNotIntercept();
     }
 
 }

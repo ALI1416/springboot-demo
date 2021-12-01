@@ -1,6 +1,7 @@
 package com.demo.dao.mysql;
 
 import com.demo.base.DaoBase;
+import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.mapper.RouteMapper;
 import lombok.AllArgsConstructor;
@@ -41,5 +42,15 @@ public class RouteDao extends DaoBase {
     public List<RouteVo> findByRoleId(Long id) {
         return routeMapper.findByRoleId(id);
     }
+
+    /**
+     * 查询所有路由不拦截
+     *
+     * @return List<RouteNotInterceptVo>
+     */
+    public List<RouteNotInterceptVo> findAllRouteNotIntercept() {
+        return routeMapper.findAllRouteNotIntercept();
+    }
+
 
 }

@@ -21,9 +21,9 @@
     r.create_id
     FROM
     role r
-    INNER JOIN USER u ON r.create_id = u.id
+    INNER JOIN user_role ur ON ur.role_id = r.id
     WHERE
-    u.id =#{id}
+    ur.user_id =#{id}
   </select>
 
 </mapper>

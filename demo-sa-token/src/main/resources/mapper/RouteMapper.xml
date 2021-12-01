@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.RouteMapper">
+
+  <sql id="col">
+    id,path,name,parent_id,seq
+  </sql>
+
+  <insert id="insert" parameterType="RouteVo">
+    INSERT
+    route(
+    <include refid="col"/>
+    )VALUES(
+    #{id},#{path},#{name},#{parent_id},#{seq}
+    )
+  </insert>
+
+  <select id="findAll" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+  </select>
+
+  <select id="findByRoleId" parameterType="Long" resultType="RouteVo">
+    SELECT
+    r.id,
+    r.path,
+    r.NAME,
+    r.seq,
+    r.path
+    FROM
+    route r
+    INNER JOIN role_route rr ON r.id = rr.route_id
+    WHERE
+    rr.role_id =#{id}
+  </select>
+
+  <select id="findAllRouteNotIntercept" resultType="RouteNotInterceptVo">
+    SELECT
+    id,
+    path,
+    NAME,
+    seq
+    FROM
+    route_not_intercept
+    ORDER BY
+    seq
+  </select>
+
+</mapper>

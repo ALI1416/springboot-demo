@@ -2,8 +2,7 @@ package com.demo.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.demo.entity.pojo.Result;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,23 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("user")
-@AllArgsConstructor
 public class UserController {
 
-
-    @GetMapping("login")
+    @PostMapping("login")
     public Result login(Long id) {
         StpUtil.login(id);
         return Result.o();
     }
 
-    @GetMapping("logout")
+    @PostMapping("logout")
     public Result logout() {
         StpUtil.logout();
         return Result.o();
     }
 
-    @GetMapping("getLoginIdAsLong")
+    @PostMapping("getLoginIdAsLong")
     public Result getLoginIdAsLong() {
         return Result.o(StpUtil.getLoginIdAsLong());
     }
