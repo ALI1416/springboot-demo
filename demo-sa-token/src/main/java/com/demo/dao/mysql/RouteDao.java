@@ -52,5 +52,4 @@ public class RouteDao extends DaoBase {
         return routeMapper.findAllRouteNotIntercept();
     }
 
-
 }

@@ -32,6 +32,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RouteInterceptor implements HandlerInterceptor {
 
+    /**
+     * 路由占位符：当路由为空时，使用{@value}占位<br>
+     * 由于URL都是由'/'开头，所以该占位符不能以'/'开头
+     */
+    private static final String PLACEHOLDER = "placeholder";
     private final RouteService routeService;
 
     /**
@@ -47,7 +52,8 @@ public class RouteInterceptor implements HandlerInterceptor {
     @Override
     @SuppressWarnings("all")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String url = request.getRequestURI();
+        // 去除项目路径context-path的干扰
+        String url = request.getServletPath();
         // 是不拦截的路径
         if (isNotIntercept(url)) {
             return true;
@@ -84,9 +90,9 @@ public class RouteInterceptor implements HandlerInterceptor {
             // 数据库查询
             List<RouteNotInterceptVo> notIntercept = routeService.findAllRouteNotIntercept();
             List<String> notInterceptPath = new ArrayList<>();
-            // 不存在，给一个空的
+            // 不存在，给一个占位符
             if (notIntercept.size() == 0) {
-                notInterceptPath.add("");
+                notInterceptPath.add(PLACEHOLDER);
             } else {
                 notInterceptPath = notIntercept.stream().map(RouteNotIntercept::getPath).collect(Collectors.toList());
             }
@@ -101,7 +107,7 @@ public class RouteInterceptor implements HandlerInterceptor {
     /**
      * 是"匹配路径"
      *
-     * @param id  id
+     * @param id  用户id
      * @param url url
      * @return 是否匹配
      */
@@ -120,7 +126,7 @@ public class RouteInterceptor implements HandlerInterceptor {
     /**
      * 在"不可匹配路径"中存在
      *
-     * @param id  id
+     * @param id  用户id
      * @param url url
      * @return 是否存在
      */
@@ -134,7 +140,7 @@ public class RouteInterceptor implements HandlerInterceptor {
      * 设置并获取用户"匹配路径"列表<br>
      * 也设置用户"不可匹配路径"列表
      *
-     * @param id id
+     * @param id 用户id
      * @return "匹配路径"列表
      */
     @SuppressWarnings("unchecked")
@@ -142,21 +148,29 @@ public class RouteInterceptor implements HandlerInterceptor {
         String key = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
         // 获取用户"匹配路径"列表
         List<String> matcherList = (List<String>) RedisUtils.get(key);
+        Set<Object> directList;
         // 没有数据
         if (matcherList == null) {
             // 获取用户的拼接后的角色id
             List<Long> roles =
                     routeService.findByUserId(id).stream().map(EntityBase::getId).collect(Collectors.toList());
-            // 设置并获取所有角色路由路径可匹配列表
-            matcherList = setAndGetMatcherListByRoles(roles) // 必须去除空字符串
-                    .stream().filter(s -> !s.isEmpty()).collect(Collectors.toList());
+            // 用户没有角色，给一个占位符
+            if (roles.size() == 0) {
+                matcherList = new ArrayList<>();
+                matcherList.add(PLACEHOLDER);
+                directList = new HashSet<>();
+                directList.add(PLACEHOLDER);
+            } else {
+                // 设置并获取所有角色路由路径可匹配列表
+                matcherList = setAndGetMatcherListByRoles(roles);
+                // 读取并设置用户"不可匹配路径"列表(setRouteByRoleId已创建)
+                directList = RedisUtils.sUnionAll(roles.stream()//
+                        .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_DIRECT_SUFFIX)//
+                        .collect(Collectors.toList()));
+            }
             // 设置用户"匹配路径"列表
             RedisUtils.set(key, matcherList, RedisConstant.ROUTE_EXPIRE);
             RedisUtils.expire(key, RedisConstant.ROUTE_EXPIRE);
-            // 读取并设置用户"不可匹配路径"列表(setRouteByRoleId已创建)
-            Set<Object> directList = RedisUtils.sUnionAll(roles.stream()//
-                    .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_DIRECT_SUFFIX)//
-                    .collect(Collectors.toList()));
             String key2 = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
             RedisUtils.sAddMulti(key2, directList);
             RedisUtils.expire(key2, RedisConstant.ROUTE_EXPIRE);
@@ -201,13 +215,13 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 不存在去创建
         if (routeMatcher.size() == 0) {
             setRouteMatcher();
+            // 再次获取"匹配路径"列表
+            routeMatcher = RedisUtils.hGetMulti(RedisConstant.ROUTE_MATCHER, routes) // 必须去除null
+                    .stream().filter(Objects::nonNull).collect(Collectors.toList());
         }
-        // 再次获取"匹配路径"列表
-        routeMatcher = RedisUtils.hGetMulti(RedisConstant.ROUTE_MATCHER, routes) // 必须去除null
-                .stream().filter(Objects::nonNull).collect(Collectors.toList());
-        // 还是不存在，给一个空的
+        // 还是不存在，给一个占位符
         if (routeMatcher.size() == 0) {
-            routeMatcher.add("");
+            routeMatcher.add(PLACEHOLDER);
         }
         // 设置该角色的"匹配路径"列表
         String key = RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
@@ -216,9 +230,9 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 获取"不可匹配路径"列表(setAndGetRouteMatcher已创建)
         Collection<Object> routeDirect = RedisUtils.hGetMulti(RedisConstant.ROUTE_DIRECT, routes) // 必须去除null
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
-        // 不存在，给一个空的
+        // 不存在，给一个占位符
         if (routeDirect.size() == 0) {
-            routeDirect.add("");
+            routeDirect.add(PLACEHOLDER);
         }
         // 设置该角色的"不可匹配路径"列表
         String key2 = RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
