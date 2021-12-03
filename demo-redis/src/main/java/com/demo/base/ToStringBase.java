@@ -3,6 +3,8 @@ package com.demo.base;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+import java.io.Serializable;
+
 /**
  * <h1>ToString格式化基类</h1>
  *
@@ -13,7 +15,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class ToStringBase {
+public class ToStringBase implements Serializable {
 
     /**
      * 重写toString成JSON格式

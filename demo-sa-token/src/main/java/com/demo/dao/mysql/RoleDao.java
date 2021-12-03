@@ -27,7 +27,7 @@ public class RoleDao extends DaoBase {
     /**
      * 查询所有
      *
-     * @return List<RoleVo>
+     * @return List&lt;RoleVo>
      */
     public List<RoleVo> findAll() {
         return roleMapper.findAll();
@@ -36,11 +36,11 @@ public class RoleDao extends DaoBase {
     /**
      * 查询所有通过UserId
      *
-     * @param id UserId
-     * @return List<RoleVo>
+     * @param userId userId
+     * @return List&lt;RoleVo>
      */
-    public List<RoleVo> findByUserId(Long id) {
-        return roleMapper.findByUserId(id);
+    public List<RoleVo> findByUserId(Long userId) {
+        return roleMapper.findByUserId(userId);
     }
 
 }

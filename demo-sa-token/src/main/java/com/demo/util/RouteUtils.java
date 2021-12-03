@@ -22,59 +22,6 @@ import java.util.stream.Collectors;
  **/
 public class RouteUtils {
 
-    public static void main(String[] args) {
-        List<RouteVo> routeList = new ArrayList<>();
-        // 0,1,2,3 /*
-        routeList.add(new RouteVo(0L, "/", 0, 0L));
-        // 10,11,12,13,14 /a/*
-        routeList.add(new RouteVo(1L, "a", 1, 0L));
-        // 21,22 /b/*
-        routeList.add(new RouteVo(2L, "b", 2, 0L));
-        // 31 /c/*
-        routeList.add(new RouteVo(3L, "c", 3, 0L));
-        // /d
-        routeList.add(new RouteVo(4L, "d", 4, 0L));
-        // /e
-        routeList.add(new RouteVo(5L, "e", 5, 0L));
-        // /a
-        routeList.add(new RouteVo(10L, "", 0, 1L));
-        // 110,111,112 /a/aa/*
-        routeList.add(new RouteVo(11L, "aa", 1, 1L));
-        // /a/ab
-        routeList.add(new RouteVo(12L, "ab", 2, 1L));
-        // /a/ac
-        routeList.add(new RouteVo(13L, "ac", 3, 1L));
-        // /a/ad
-        routeList.add(new RouteVo(14L, "ad", 4, 1L));
-        // /a/ad
-        routeList.add(new RouteVo(21L, "ba", 0, 2L));
-        // /b/bb
-        routeList.add(new RouteVo(22L, "bb", 1, 2L));
-        // /c/ca
-        routeList.add(new RouteVo(23L, "ca", 0, 3L));
-        // /a/aa
-        routeList.add(new RouteVo(110L, "", 0, 11L));
-        // /a/aa/aaa
-        routeList.add(new RouteVo(111L, "aaa", 1, 11L));
-        // 1121,1122 /a/aa/aab/*
-        routeList.add(new RouteVo(112L, "aab", 2, 11L));
-        // /a/aa/aab/aaba
-        routeList.add(new RouteVo(1121L, "aaba", 1, 112L));
-        // 11221 /a/aa/aab/aabb/*
-        routeList.add(new RouteVo(1122L, "aabb", 2, 112L));
-        // /a/aa/aab/aabb/aabba
-        routeList.add(new RouteVo(11221L, "aabba", 0, 1122L));
-
-        System.out.println(routeList);
-
-        RouteVo tree = list2Tree(routeList);
-        System.out.println(tree);
-
-        RouteVo expandedList = tree2ExpandedList(tree);
-        System.out.println(expandedList);
-
-    }
-
     /**
      * 列表转树
      *

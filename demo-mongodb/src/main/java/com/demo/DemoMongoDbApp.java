@@ -29,10 +29,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.0
  **/
 @SpringBootApplication
-public class DemoMongoDbBaseApp {
+public class DemoMongoDbApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoMongoDbBaseApp.class, args);
+        SpringApplication.run(DemoMongoDbApp.class, args);
     }
 
 }

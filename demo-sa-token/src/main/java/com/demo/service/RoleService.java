@@ -27,7 +27,7 @@ public class RoleService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @return List<RoleVo>
+     * @return List&lt;RoleVo>
      */
     public List<RoleVo> findAll() {
         return roleDao.findAll();
@@ -36,11 +36,11 @@ public class RoleService extends ServiceBase {
     /**
      * 查询所有通过UserId
      *
-     * @param id UserId
-     * @return List<RoleVo>
+     * @param userId userId
+     * @return List&lt;RoleVo>
      */
-    public List<RoleVo> findByUserId(Long id) {
-        return roleDao.findByUserId(id);
+    public List<RoleVo> findByUserId(Long userId) {
+        return roleDao.findByUserId(userId);
     }
 
 }

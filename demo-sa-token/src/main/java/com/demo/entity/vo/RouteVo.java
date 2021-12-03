@@ -4,7 +4,6 @@ import com.demo.entity.po.Route;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public class RouteVo extends Route {
     private List<RouteVo> direct;
 
     /**
-     * 删除该节点时，是否删除子节点，不删除将移动到该节点的父节点
+     * 删除该节点时。true：删除子节点；false：不删除，移动子节点到该节点的父节点
      */
     private Boolean deleteChildren;
 
@@ -45,16 +44,5 @@ public class RouteVo extends Route {
      * 移动到哪个id下方
      */
     private Long moveId;
-
-    public RouteVo() {
-
-    }
-
-    public RouteVo(Long id, String path, Integer seq, Long parentId) {
-        setId(id);
-        setPath(path);
-        setSeq(seq);
-        setParentId(parentId);
-    }
 
 }

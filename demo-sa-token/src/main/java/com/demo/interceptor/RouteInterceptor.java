@@ -7,6 +7,7 @@ import com.demo.constant.RedisConstant;
 import com.demo.entity.po.RouteNotIntercept;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
+import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.util.RedisUtils;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class RouteInterceptor implements HandlerInterceptor {
      */
     private static final String PLACEHOLDER = "placeholder";
     private final RouteService routeService;
+    private final RoleService roleService;
 
     /**
      * preHandle
@@ -153,7 +155,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         if (matcherList == null) {
             // 获取用户的拼接后的角色id
             List<Long> roles =
-                    routeService.findByUserId(id).stream().map(EntityBase::getId).collect(Collectors.toList());
+                    roleService.findByUserId(id).stream().map(EntityBase::getId).collect(Collectors.toList());
             // 用户没有角色，给一个占位符
             if (roles.size() == 0) {
                 matcherList = new ArrayList<>();
@@ -163,7 +165,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             } else {
                 // 设置并获取所有角色路由路径可匹配列表
                 matcherList = setAndGetMatcherListByRoles(roles);
-                // 读取并设置用户"不可匹配路径"列表(setRouteByRoleId已创建)
+                // 读取用户"不可匹配路径"列表(setRouteByRoleId已创建)
                 directList = RedisUtils.sUnionAll(roles.stream()//
                         .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_DIRECT_SUFFIX)//
                         .collect(Collectors.toList()));
@@ -171,6 +173,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             // 设置用户"匹配路径"列表
             RedisUtils.set(key, matcherList, RedisConstant.ROUTE_EXPIRE);
             RedisUtils.expire(key, RedisConstant.ROUTE_EXPIRE);
+            // 设置用户"不可匹配路径"列表
             String key2 = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
             RedisUtils.sAddMulti(key2, directList);
             RedisUtils.expire(key2, RedisConstant.ROUTE_EXPIRE);

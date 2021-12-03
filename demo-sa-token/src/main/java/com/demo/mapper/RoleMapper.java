@@ -19,16 +19,16 @@ public interface RoleMapper {
     /**
      * 查询所有
      *
-     * @return List<RoleVo>
+     * @return List&lt;RoleVo>
      */
     List<RoleVo> findAll();
 
     /**
      * 查询所有通过UserId
      *
-     * @param id UserId
-     * @return List<RoleVo>
+     * @param userId userId
+     * @return List&lt;RoleVo>
      */
-    List<RoleVo> findByUserId(Long id);
+    List<RoleVo> findByUserId(Long userId);
 
 }

@@ -11,9 +11,52 @@
     route(
     <include refid="col"/>
     )VALUES(
-    #{id},#{path},#{name},#{parent_id},#{seq}
+    #{id},#{path},#{name},#{parentId},#{seq}
     )
   </insert>
+
+  <delete id="deleteByIdList" parameterType="Long">
+    DELETE
+    FROM
+    route
+    WHERE
+    id IN
+    <foreach collection="list" open="(" close=")" separator="," item="id">
+      #{id}
+    </foreach>
+  </delete>
+
+  <delete id="deleteRoleRouteByRouteIdList" parameterType="Long">
+    DELETE
+    FROM
+    role_route
+    WHERE
+    route_id IN
+    <foreach collection="list" open="(" close=")" separator="," item="id">
+      #{id}
+    </foreach>
+
+  </delete>
+
+  <select id="findById" parameterType="Long" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+    WHERE
+    id =#{id}
+  </select>
+
+  <select id="findByParentId" parameterType="Long" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+    WHERE
+    parent_id =#{parentId}
+    ORDER BY
+    seq
+  </select>
 
   <select id="findAll" resultType="RouteVo">
     SELECT
@@ -33,7 +76,7 @@
     route r
     INNER JOIN role_route rr ON r.id = rr.route_id
     WHERE
-    rr.role_id =#{id}
+    rr.role_id =#{roleId}
   </select>
 
   <select id="findAllRouteNotIntercept" resultType="RouteNotInterceptVo">

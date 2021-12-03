@@ -27,6 +27,17 @@ public class RouteController {
     private final RouteService routeService;
 
     /**
+     * 插入
+     *
+     * @param route path,name,seq,parentId
+     * @return ok:id,e:0
+     */
+    @PostMapping("insert")
+    public Result insert(RouteVo route) {
+        return Result.o(routeService.insert(route));
+    }
+
+    /**
      * 查询列表
      */
     @PostMapping("findList")
@@ -51,19 +62,17 @@ public class RouteController {
     }
 
     /**
-     * 插入节点
-     */
-    @PostMapping("insert")
-    public Result insert(@RequestBody RouteVo route) {
-        return Result.o();
-    }
-
-    /**
-     * 删除(deleteChildren可选择删除子节点和移动子节点到父节点)
+     * 删除
+     *
+     * @param route id,deleteChildren
      */
     @PostMapping("delete")
     public Result delete(@RequestBody RouteVo route) {
-        return Result.o();
+        if (route.getDeleteChildren()) {
+            return Result.o(routeService.deleteWithChildren(route.getId()));
+        } else {
+            return Result.o(routeService.deleteAndMoveChildren(route.getId()));
+        }
     }
 
     /**
@@ -88,14 +97,6 @@ public class RouteController {
     @PostMapping("refresh")
     public Result refresh() {
         return Result.o();
-    }
-
-    /**
-     * 查询全部通过UserId
-     */
-    @PostMapping("findByUserId")
-    public Result findByUserId(Long id) {
-        return Result.o(routeService.findByUserId(id));
     }
 
 }
