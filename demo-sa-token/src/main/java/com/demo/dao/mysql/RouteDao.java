@@ -8,6 +8,7 @@ import com.demo.mapper.RouteMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,28 @@ public class RouteDao extends DaoBase {
     }
 
     /**
+     * 更新
+     *
+     * @param route 必须id，至少一个path,name,seq,parentId
+     * @return 是否成功
+     */
+    public boolean update(RouteVo route) {
+        return tryif(() -> routeMapper.update(route));
+    }
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    public boolean deleteById(Long id) {
+        List<Long> ids = new ArrayList<>();
+        ids.add(id);
+        return deleteByIdList(ids);
+    }
+
+    /**
      * 删除
      *
      * @param ids ids
@@ -48,6 +71,18 @@ public class RouteDao extends DaoBase {
      */
     public boolean deleteByIdList(List<Long> ids) {
         return tryif2(() -> routeMapper.deleteByIdList(ids) == ids.size());
+    }
+
+    /**
+     * 删除RoleRoute表，通过RouteId
+     *
+     * @param id RouteId
+     * @return 是否成功
+     */
+    public boolean deleteRoleRouteByRouteId(Long id) {
+        List<Long> ids = new ArrayList<>();
+        ids.add(id);
+        return deleteRoleRouteByRouteIdList(ids);
     }
 
     /**

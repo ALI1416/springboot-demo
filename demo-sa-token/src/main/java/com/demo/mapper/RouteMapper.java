@@ -42,6 +42,14 @@ public interface RouteMapper {
     int deleteRoleRouteByRouteIdList(List<Long> ids);
 
     /**
+     * 更新
+     *
+     * @param route RouteVo
+     * @return 执行成功数量
+     */
+    int update(RouteVo route);
+
+    /**
      * 查询通过id
      *
      * @param id id

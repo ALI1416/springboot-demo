@@ -15,6 +15,26 @@
     )
   </insert>
 
+  <update id="update" parameterType="RouteVo">
+    UPDATE route
+    <set>
+      <if test="path != null">
+        path=#{path},
+      </if>
+      <if test="name != null">
+        name=#{name},
+      </if>
+      <if test="seq != null">
+        seq=#{seq},
+      </if>
+      <if test="parentId != null">
+        parent_id=#{parentId},
+      </if>
+    </set>
+    WHERE
+    id=#{id}
+  </update>
+
   <delete id="deleteByIdList" parameterType="Long">
     DELETE
     FROM
@@ -35,7 +55,6 @@
     <foreach collection="list" open="(" close=")" separator="," item="id">
       #{id}
     </foreach>
-
   </delete>
 
   <select id="findById" parameterType="Long" resultType="RouteVo">

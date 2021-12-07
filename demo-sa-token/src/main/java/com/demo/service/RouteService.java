@@ -49,31 +49,27 @@ public class RouteService extends ServiceBase {
      */
     @Transactional
     public boolean deleteWithChildren(Long id) {
-        List<RouteVo> routeList = new ArrayList<>();
-        // 递归删除RoleRoute表
+        // 递归删除RoleRoute/Route的子节点
         try {
-            deleteChildren(id, routeList);
+            deleteChildren(id);
         } catch (Exception ignore) {
             return false;
         }
-        // 删除Route表
-        List<Long> ids = routeList.stream().map(RouteVo::getId).collect(Collectors.toList());
-        return routeDao.deleteByIdList(ids);
+        // 删除自己
+        return (routeDao.deleteRoleRouteByRouteId(id) && routeDao.deleteById(id));
     }
 
     /**
-     * 递归删除RoleRoute表
+     * 递归删除RoleRoute/Route的子节点
      *
-     * @param parentId  parentId
-     * @param routeList 接收接收列表
+     * @param parentId parentId
      */
-    private void deleteChildren(Long parentId, List<RouteVo> routeList) {
+    private void deleteChildren(Long parentId) {
         // 获取子节点
         List<RouteVo> children = routeDao.findByParentId(parentId);
-        routeList.addAll(children);
         // 递归
         for (RouteVo child : children) {
-            deleteChildren(child.getId(), routeList);
+            deleteChildren(child.getId());
         }
         // 查询子节点
         List<Long> ids = children.stream().map(RouteVo::getId).collect(Collectors.toList());
@@ -82,7 +78,7 @@ public class RouteService extends ServiceBase {
             return;
         }
         // 删除子节点
-        if (!routeDao.deleteRoleRouteByRouteIdList(ids)) {
+        if (!(routeDao.deleteRoleRouteByRouteIdList(ids) && routeDao.deleteByIdList(ids))) {
             throw new RuntimeException("删除失败！");
         }
     }
@@ -94,7 +90,32 @@ public class RouteService extends ServiceBase {
      */
     @Transactional
     public boolean deleteAndMoveChildren(Long id) {
-        return true;
+        // 获取自己
+        RouteVo route = routeDao.findById(id);
+        // 获取子节点
+        List<RouteVo> children = routeDao.findByParentId(id);
+        // 更改子节点的父节点
+        for (RouteVo child : children) {
+            RouteVo routeChild = new RouteVo();
+            routeChild.setId(child.getId());
+            routeChild.setParentId(route.getParentId());
+            if (!routeDao.update(routeChild)) {
+                return false;
+            }
+        }
+        // 删除自己
+        return (routeDao.deleteRoleRouteByRouteId(id) && routeDao.deleteById(id));
+    }
+
+    /**
+     * 更新(Id、parentId除外)
+     *
+     * @param route RouteVo
+     */
+    @Transactional
+    public boolean update(RouteVo route) {
+        route.setParentId(null);
+        return routeDao.update(route);
     }
 
     /**

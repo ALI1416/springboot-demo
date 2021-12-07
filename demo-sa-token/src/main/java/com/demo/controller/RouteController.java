@@ -80,7 +80,7 @@ public class RouteController {
      */
     @PostMapping("update")
     public Result update(@RequestBody RouteVo route) {
-        return Result.o();
+        return Result.o(routeService.update(route));
     }
 
     /**
@@ -88,6 +88,14 @@ public class RouteController {
      */
     @PostMapping("move")
     public Result move(@RequestBody RouteVo route) {
+        return Result.o();
+    }
+
+    /**
+     * 复制该节点
+     */
+    @PostMapping("copy")
+    public Result copy(@RequestBody RouteVo route) {
         return Result.o();
     }
 
