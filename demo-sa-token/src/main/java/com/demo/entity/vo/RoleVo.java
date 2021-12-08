@@ -4,7 +4,6 @@ import com.demo.entity.po.Role;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,5 +24,10 @@ public class RoleVo extends Role {
      * 路由
      */
     private List<RouteVo> routes;
+
+    /**
+     * 路由id
+     */
+    private List<Long> routeIds;
 
 }

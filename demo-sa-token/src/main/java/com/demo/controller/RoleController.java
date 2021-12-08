@@ -1,13 +1,18 @@
 package com.demo.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
+import cn.z.id.Id;
 import com.demo.entity.pojo.Result;
+import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import com.demo.service.RoleService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +33,48 @@ public class RoleController {
     private final RoleService roleService;
 
     /**
-     * 查询列表
+     * 插入
+     */
+    @PostMapping("insert")
+    public Result insert(@RequestBody RoleVo role) {
+        role.setCreateId(StpUtil.getLoginIdAsLong());
+        return Result.o(roleService.insert(role));
+    }
+
+    /**
+     * 更新
+     */
+    @PostMapping("update")
+    public Result update(@RequestBody RoleVo role) {
+        return Result.o(roleService.update(role));
+    }
+
+    /**
+     * 删除
+     */
+    @PostMapping("delete")
+    public Result delete(@RequestBody RoleVo role) {
+        return Result.o(roleService.delete(role.getId()));
+    }
+
+    /**
+     * 添加路由
+     */
+    @PostMapping("addRouteIdList")
+    public Result addRouteIdList(@RequestBody RoleVo role) {
+        List<RoleRouteVo> roleRoutes = new ArrayList<>();
+        for (Long id : role.getRouteIds()) {
+            RoleRouteVo roleRoute = new RoleRouteVo();
+            roleRoute.setId(Id.next());
+            roleRoute.setRoleId(role.getId());
+            roleRoute.setRouteId(id);
+            roleRoutes.add(roleRoute);
+        }
+        return Result.o(roleService.addRouteIdList(roleRoutes));
+    }
+
+    /**
+     * 查询所有
      */
     @PostMapping("findAll")
     public Result findAll() {
@@ -36,11 +82,43 @@ public class RoleController {
     }
 
     /**
-     * 查询所有通过UserId
+     * 查询UserId拥有的角色
      */
-    @PostMapping("findByUserId")
-    public Result findByUserId(Long id) {
-        return Result.o(roleService.findByUserId(id));
+    @PostMapping("findOwnByUserId")
+    public Result findOwnByUserId(@RequestBody RoleVo route) {
+        return Result.o(roleService.findOwnByUserId(route.getId()));
+    }
+
+    /**
+     * 查询所有通过CreateId
+     */
+    @PostMapping("findByCreateId")
+    public Result findByCreateId(@RequestBody RoleVo route) {
+        return Result.o(roleService.findByCreateId(route.getId()));
+    }
+
+    /**
+     * 复制
+     */
+    @PostMapping("copy")
+    public Result copy(@RequestBody RoleVo route) {
+        return Result.o();
+    }
+
+    /**
+     * 仅刷新修改的角色
+     */
+    @PostMapping("refreshRole")
+    public Result refreshRole(@RequestBody RoleVo route) {
+        return Result.o();
+    }
+
+    /**
+     * 刷新
+     */
+    @PostMapping("refresh")
+    public Result refresh() {
+        return Result.o();
     }
 
 }

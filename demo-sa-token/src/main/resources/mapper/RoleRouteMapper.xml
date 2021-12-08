@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.RoleRouteMapper">
+
+  <sql id="col">
+    id,role_id,route_id
+  </sql>
+
+  <insert id="insertList" parameterType="RoleRouteVo">
+    INSERT role_route (
+    <include refid="col"/>
+    )
+    VALUES
+    <foreach collection="roleRoutes" separator="," item="item">
+      (#{item.id},#{item.roleId},#{item.routeId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteByRouteIdList" parameterType="Long">
+    DELETE
+    FROM
+    role_route
+    WHERE
+    route_id IN
+    <foreach collection="list" open="(" close=")" separator="," item="id">
+      #{id}
+    </foreach>
+  </delete>
+
+</mapper>

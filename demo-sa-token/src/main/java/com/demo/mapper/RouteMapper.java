@@ -1,6 +1,5 @@
 package com.demo.mapper;
 
-import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 
 import java.util.List;
@@ -32,14 +31,6 @@ public interface RouteMapper {
      * @return 执行成功数量
      */
     int deleteByIdList(List<Long> ids);
-
-    /**
-     * 删除RoleRoute表，通过RouteId
-     *
-     * @param ids RouteId
-     * @return 执行成功数量
-     */
-    int deleteRoleRouteByRouteIdList(List<Long> ids);
 
     /**
      * 更新
@@ -79,12 +70,5 @@ public interface RouteMapper {
      * @return List&lt;RouteVo>
      */
     List<RouteVo> findByRoleId(Long roleId);
-
-    /**
-     * 查询所有路由不拦截
-     *
-     * @return List&lt;RouteNotInterceptVo>
-     */
-    List<RouteNotInterceptVo> findAllRouteNotIntercept();
 
 }

@@ -46,17 +46,6 @@
     </foreach>
   </delete>
 
-  <delete id="deleteRoleRouteByRouteIdList" parameterType="Long">
-    DELETE
-    FROM
-    role_route
-    WHERE
-    route_id IN
-    <foreach collection="list" open="(" close=")" separator="," item="id">
-      #{id}
-    </foreach>
-  </delete>
-
   <select id="findById" parameterType="Long" resultType="RouteVo">
     SELECT
     <include refid="col"/>
@@ -96,18 +85,6 @@
     INNER JOIN role_route rr ON r.id = rr.route_id
     WHERE
     rr.role_id =#{roleId}
-  </select>
-
-  <select id="findAllRouteNotIntercept" resultType="RouteNotInterceptVo">
-    SELECT
-    id,
-    path,
-    NAME,
-    seq
-    FROM
-    route_not_intercept
-    ORDER BY
-    seq
   </select>
 
 </mapper>

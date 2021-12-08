@@ -1,9 +1,9 @@
 package com.demo.service;
 
 import com.demo.base.ServiceBase;
+import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
 import com.demo.entity.vo.RoleVo;
-import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.util.RouteUtils;
 import lombok.AllArgsConstructor;
@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class RouteService extends ServiceBase {
 
     private final RouteDao routeDao;
+    private final RoleRouteDao roleRouteDao;
     private final RoleService roleService;
 
     /**
@@ -56,7 +57,7 @@ public class RouteService extends ServiceBase {
             return false;
         }
         // 删除自己
-        return (routeDao.deleteRoleRouteByRouteId(id) && routeDao.deleteById(id));
+        return (roleRouteDao.deleteByRouteId(id) && routeDao.deleteById(id));
     }
 
     /**
@@ -78,7 +79,7 @@ public class RouteService extends ServiceBase {
             return;
         }
         // 删除子节点
-        if (!(routeDao.deleteRoleRouteByRouteIdList(ids) && routeDao.deleteByIdList(ids))) {
+        if (!(roleRouteDao.deleteByRouteIdList(ids) && routeDao.deleteByIdList(ids))) {
             throw new RuntimeException("删除失败！");
         }
     }
@@ -104,7 +105,7 @@ public class RouteService extends ServiceBase {
             }
         }
         // 删除自己
-        return (routeDao.deleteRoleRouteByRouteId(id) && routeDao.deleteById(id));
+        return (roleRouteDao.deleteByRouteId(id) && routeDao.deleteById(id));
     }
 
     /**
@@ -116,16 +117,6 @@ public class RouteService extends ServiceBase {
     public boolean update(RouteVo route) {
         route.setParentId(null);
         return routeDao.update(route);
-    }
-
-    /**
-     * 移动节点成为parentId的子节点
-     *
-     * @param id       id
-     * @param parentId parentId
-     */
-    public void move(Long id, Long parentId) {
-
     }
 
     /**
@@ -212,26 +203,17 @@ public class RouteService extends ServiceBase {
     }
 
     /**
-     * 查询全部，通过UserId
+     * 查询UserId拥有的路由
      *
      * @param userId userId
      * @return List&lt;RoleVo>->List&lt;RouteVo>
      */
-    public List<RoleVo> findByUserId(Long userId) {
-        List<RoleVo> roles = roleService.findByUserId(userId);
+    public List<RoleVo> findOwnByUserId(Long userId) {
+        List<RoleVo> roles = roleService.findOwnByUserId(userId);
         for (RoleVo role : roles) {
             role.setRoutes(findByRoleId(role.getId()));
         }
         return roles;
-    }
-
-    /**
-     * 查询所有路由不拦截
-     *
-     * @return List&lt;RouteNotInterceptVo>
-     */
-    public List<RouteNotInterceptVo> findAllRouteNotIntercept() {
-        return routeDao.findAllRouteNotIntercept();
     }
 
 }

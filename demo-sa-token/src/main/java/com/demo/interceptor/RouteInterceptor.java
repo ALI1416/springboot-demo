@@ -2,12 +2,13 @@ package com.demo.interceptor;
 
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.stp.StpUtil;
-import com.demo.base.EntityBase;
 import com.demo.constant.RedisConstant;
 import com.demo.entity.po.RouteNotIntercept;
+import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.service.RoleService;
+import com.demo.service.RouteNotInterceptService;
 import com.demo.service.RouteService;
 import com.demo.util.RedisUtils;
 import lombok.AllArgsConstructor;
@@ -40,6 +41,7 @@ public class RouteInterceptor implements HandlerInterceptor {
     private static final String PLACEHOLDER = "placeholder";
     private final RouteService routeService;
     private final RoleService roleService;
+    private final RouteNotInterceptService routeNotInterceptService;
 
     /**
      * preHandle
@@ -54,6 +56,10 @@ public class RouteInterceptor implements HandlerInterceptor {
     @Override
     @SuppressWarnings("all")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // 前端预检查不拦截
+        if ("OPTIONS".equals(request.getMethod())) {
+            return true;
+        }
         // 去除项目路径context-path的干扰
         String url = request.getServletPath();
         // 是不拦截的路径
@@ -90,7 +96,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 不存在去添加
         if (!RedisUtils.exists(key)) {
             // 数据库查询
-            List<RouteNotInterceptVo> notIntercept = routeService.findAllRouteNotIntercept();
+            List<RouteNotInterceptVo> notIntercept = routeNotInterceptService.findAll();
             List<String> notInterceptPath = new ArrayList<>();
             // 不存在，给一个占位符
             if (notIntercept.size() == 0) {
@@ -153,9 +159,8 @@ public class RouteInterceptor implements HandlerInterceptor {
         Set<Object> directList;
         // 没有数据
         if (matcherList == null) {
-            // 获取用户的拼接后的角色id
-            List<Long> roles =
-                    roleService.findByUserId(id).stream().map(EntityBase::getId).collect(Collectors.toList());
+            // 获取用户拥有的角色id
+            List<Long> roles = roleService.findOwnByUserId(id).stream().map(RoleVo::getId).collect(Collectors.toList());
             // 用户没有角色，给一个占位符
             if (roles.size() == 0) {
                 matcherList = new ArrayList<>();

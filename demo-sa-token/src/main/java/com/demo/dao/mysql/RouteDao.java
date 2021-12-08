@@ -5,6 +5,7 @@ import com.demo.base.DaoBase;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.mapper.RouteMapper;
+import com.demo.mapper.RouteNotInterceptMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,27 +74,6 @@ public class RouteDao extends DaoBase {
         return tryif2(() -> routeMapper.deleteByIdList(ids) == ids.size());
     }
 
-    /**
-     * 删除RoleRoute表，通过RouteId
-     *
-     * @param id RouteId
-     * @return 是否成功
-     */
-    public boolean deleteRoleRouteByRouteId(Long id) {
-        List<Long> ids = new ArrayList<>();
-        ids.add(id);
-        return deleteRoleRouteByRouteIdList(ids);
-    }
-
-    /**
-     * 删除RoleRoute表，通过RouteId
-     *
-     * @param ids RouteId
-     * @return 是否成功
-     */
-    public boolean deleteRoleRouteByRouteIdList(List<Long> ids) {
-        return tryif3(() -> routeMapper.deleteRoleRouteByRouteIdList(ids));
-    }
 
     /**
      * 查询通过id
@@ -132,15 +112,6 @@ public class RouteDao extends DaoBase {
      */
     public List<RouteVo> findByRoleId(Long roleId) {
         return routeMapper.findByRoleId(roleId);
-    }
-
-    /**
-     * 查询所有路由不拦截
-     *
-     * @return List&lt;RouteNotInterceptVo>
-     */
-    public List<RouteNotInterceptVo> findAllRouteNotIntercept() {
-        return routeMapper.findAllRouteNotIntercept();
     }
 
 }

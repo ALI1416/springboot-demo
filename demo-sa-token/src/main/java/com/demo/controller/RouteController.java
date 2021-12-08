@@ -28,12 +28,9 @@ public class RouteController {
 
     /**
      * 插入
-     *
-     * @param route path,name,seq,parentId
-     * @return ok:id,e:0
      */
     @PostMapping("insert")
-    public Result insert(RouteVo route) {
+    public Result insert(@RequestBody RouteVo route) {
         return Result.o(routeService.insert(route));
     }
 
@@ -62,9 +59,7 @@ public class RouteController {
     }
 
     /**
-     * 删除
-     *
-     * @param route id,deleteChildren
+     * 删除(deleteChildren是否删除子节点)
      */
     @PostMapping("delete")
     public Result delete(@RequestBody RouteVo route) {

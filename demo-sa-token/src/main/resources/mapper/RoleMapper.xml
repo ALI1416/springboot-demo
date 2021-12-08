@@ -6,6 +6,45 @@
     id,name,seq,create_id
   </sql>
 
+  <insert id="insert" parameterType="RoleVo">
+    INSERT
+    role(
+    <include refid="col"/>
+    )VALUES(
+    #{id},#{name},#{seq},#{createId}
+    )
+  </insert>
+
+  <update id="update" parameterType="RoleVo">
+    UPDATE role
+    <set>
+      <if test="name != null">
+        name=#{name},
+      </if>
+      <if test="seq != null">
+        seq=#{seq},
+      </if>
+    </set>
+    WHERE
+    id=#{id}
+  </update>
+
+  <delete id="delete" parameterType="Long">
+    DELETE
+    FROM
+    role
+    WHERE
+    id =#{id}
+  </delete>
+
+  <delete id="deleteRoleRouteByRoleId" parameterType="Long">
+    DELETE
+    FROM
+    role_route
+    WHERE
+    role_id =#{id}
+  </delete>
+
   <select id="findAll" resultType="RoleVo">
     SELECT
     <include refid="col"/>
@@ -13,7 +52,16 @@
     role
   </select>
 
-  <select id="findByUserId" parameterType="Long" resultType="RoleVo">
+  <select id="findByCreateId" parameterType="Long" resultType="RoleVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    role
+    WHERE
+    create_id =#{id}
+  </select>
+
+  <select id="findOwnByUserId" parameterType="Long" resultType="RoleVo">
     SELECT
     r.id,
     r.NAME,

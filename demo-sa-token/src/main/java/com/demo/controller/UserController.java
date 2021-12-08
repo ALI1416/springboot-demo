@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping("login")
     public Result login(Long id) {
         StpUtil.login(id);
-        return Result.o();
+        return Result.o(StpUtil.getTokenInfo());
     }
 
     @PostMapping("logout")

@@ -1,11 +1,11 @@
 package com.demo.entity.po;
 
-import com.demo.base.ToStringBase;
+import com.demo.base.EntityBase;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>用户</h1>
+ * <h1>User</h1>
  *
  * <p>
  * createDate 2021/09/09 15:41:33
@@ -16,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class User extends ToStringBase {
+public class User extends EntityBase {
 
     /**
      * 账号
@@ -26,5 +26,9 @@ public class User extends ToStringBase {
      * 密码
      */
     private String pwd;
+    /**
+     * 昵称
+     */
+    private String name;
 
 }
