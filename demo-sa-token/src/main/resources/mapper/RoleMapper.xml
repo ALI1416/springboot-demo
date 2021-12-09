@@ -64,7 +64,7 @@
   <select id="findOwnByUserId" parameterType="Long" resultType="RoleVo">
     SELECT
     r.id,
-    r.NAME,
+    r.name,
     r.seq,
     r.create_id
     FROM

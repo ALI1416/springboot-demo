@@ -34,5 +34,17 @@ public class Route extends EntityBase {
      * 顺序
      */
     private Integer seq;
+    /**
+     * 前端-组件名称或路径
+     */
+    private String component;
+    /**
+     * 前端-重定向
+     */
+    private String redirect;
+    /**
+     * 前端-自定义内容
+     */
+    private String meta;
 
 }

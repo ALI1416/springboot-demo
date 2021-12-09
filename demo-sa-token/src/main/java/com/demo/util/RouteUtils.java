@@ -1,6 +1,5 @@
 package com.demo.util;
 
-import com.demo.entity.po.Route;
 import com.demo.entity.vo.RouteVo;
 
 import java.io.ByteArrayInputStream;
@@ -97,8 +96,8 @@ public class RouteUtils {
             }
         }
         // 排序
-        route.setMatcher(route.getMatcher().stream().sorted(Comparator.comparing(Route::getSeq)).sorted(Comparator.comparing(Route::getParentId)).collect(Collectors.toList()));
-        route.setDirect(route.getDirect().stream().sorted(Comparator.comparing(Route::getSeq)).sorted(Comparator.comparing(Route::getParentId)).collect(Collectors.toList()));
+        route.setMatcher(route.getMatcher().stream().sorted(Comparator.comparing(RouteVo::getSeq)).sorted(Comparator.comparing(RouteVo::getParentId)).collect(Collectors.toList()));
+        route.setDirect(route.getDirect().stream().sorted(Comparator.comparing(RouteVo::getSeq)).sorted(Comparator.comparing(RouteVo::getParentId)).collect(Collectors.toList()));
         return route;
     }
 

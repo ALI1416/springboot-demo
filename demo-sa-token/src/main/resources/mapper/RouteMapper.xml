@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.mapper.RouteMapper">
 
   <sql id="col">
-    id,path,name,parent_id,seq
+    id,path,name,parent_id,seq,component,redirect,meta
   </sql>
 
   <insert id="insert" parameterType="RouteVo">
@@ -11,7 +11,7 @@
     route(
     <include refid="col"/>
     )VALUES(
-    #{id},#{path},#{name},#{parentId},#{seq}
+    #{id},#{path},#{name},#{parentId},#{seq},#{component},#{redirect},#{meta}
     )
   </insert>
 
@@ -29,6 +29,15 @@
       </if>
       <if test="parentId != null">
         parent_id=#{parentId},
+      </if>
+      <if test="component != null">
+        component=#{component},
+      </if>
+      <if test="redirect != null">
+        redirect=#{redirect},
+      </if>
+      <if test="meta != null">
+        meta=#{meta},
       </if>
     </set>
     WHERE
@@ -77,9 +86,12 @@
     SELECT
     r.id,
     r.path,
-    r.NAME,
+    r.name,
     r.seq,
-    r.path
+    r.parent_id,
+    r.component,
+    r.redirect,
+    r.meta
     FROM
     route r
     INNER JOIN role_route rr ON r.id = rr.route_id
