@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.service.RouteNotInterceptService;
@@ -22,12 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("routeNotIntercept")
 @AllArgsConstructor
-public class RouteNotInterceptController {
+public class RouteNotInterceptController extends ControllerBase {
 
     private final RouteNotInterceptService routeNotInterceptService;
 
     /**
-     * 查询所有路由不拦截
+     * 查询所有
      */
     @PostMapping("findAll")
     public Result findAll() {
@@ -39,6 +40,9 @@ public class RouteNotInterceptController {
      */
     @PostMapping("insert")
     public Result insert(@RequestBody RouteNotInterceptVo routeNotIntercept) {
+        if (existNull(routeNotIntercept.getPages(), routeNotIntercept.getName(), routeNotIntercept.getSeq())) {
+            return paramIsError();
+        }
         return Result.o(routeNotInterceptService.insert(routeNotIntercept));
     }
 
@@ -47,6 +51,9 @@ public class RouteNotInterceptController {
      */
     @PostMapping("delete")
     public Result delete(@RequestBody RouteNotInterceptVo routeNotIntercept) {
+        if (isNull(routeNotIntercept.getId())) {
+            return paramIsError();
+        }
         return Result.o(routeNotInterceptService.delete(routeNotIntercept.getId()));
     }
 
@@ -55,6 +62,9 @@ public class RouteNotInterceptController {
      */
     @PostMapping("update")
     public Result update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
+        if (isNull(routeNotIntercept.getId())) {
+            return paramIsError();
+        }
         return Result.o(routeNotInterceptService.update(routeNotIntercept));
     }
 

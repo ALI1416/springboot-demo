@@ -24,7 +24,6 @@ public class RoleVo extends Role {
      * 路由
      */
     private List<RouteVo> routes;
-
     /**
      * 路由id
      */

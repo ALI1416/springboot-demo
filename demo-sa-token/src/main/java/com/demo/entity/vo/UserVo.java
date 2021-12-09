@@ -21,6 +21,10 @@ import java.util.List;
 public class UserVo extends User {
 
     /**
+     * 新密码
+     */
+    private String newPwd;
+    /**
      * 角色
      */
     private List<RoleVo> roles;

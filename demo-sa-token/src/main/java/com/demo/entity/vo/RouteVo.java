@@ -24,22 +24,26 @@ public class RouteVo extends Route {
      * 所有子节点
      */
     private List<RouteVo> children;
-
     /**
      * 是可以匹配的路径
      */
     private List<RouteVo> matcher;
-
+    /**
+     * 是不可匹配的路径(仅路径)
+     */
+    private List<String> directPath;
+    /**
+     * 是可以匹配的路径(仅路径)
+     */
+    private List<String> matcherPath;
     /**
      * 是不可匹配的路径
      */
     private List<RouteVo> direct;
-
     /**
      * 删除该节点时。true：删除子节点；false：不删除，移动子节点到该节点的父节点
      */
     private Boolean deleteChildren;
-
     /**
      * 移动到哪个id下方
      */

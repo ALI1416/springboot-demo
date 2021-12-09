@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.z.id.Id;
+import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
@@ -28,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("role")
 @AllArgsConstructor
-public class RoleController {
+public class RoleController extends ControllerBase {
 
     private final RoleService roleService;
 
@@ -37,6 +38,9 @@ public class RoleController {
      */
     @PostMapping("insert")
     public Result insert(@RequestBody RoleVo role) {
+        if (existNull(role.getName(), role.getSeq())) {
+            return paramIsError();
+        }
         role.setCreateId(StpUtil.getLoginIdAsLong());
         return Result.o(roleService.insert(role));
     }
@@ -46,6 +50,9 @@ public class RoleController {
      */
     @PostMapping("update")
     public Result update(@RequestBody RoleVo role) {
+        if (isNull(role.getId())) {
+            return paramIsError();
+        }
         return Result.o(roleService.update(role));
     }
 
@@ -54,6 +61,9 @@ public class RoleController {
      */
     @PostMapping("delete")
     public Result delete(@RequestBody RoleVo role) {
+        if (isNull(role.getId())) {
+            return paramIsError();
+        }
         return Result.o(roleService.delete(role.getId()));
     }
 
@@ -62,6 +72,9 @@ public class RoleController {
      */
     @PostMapping("addRouteIdList")
     public Result addRouteIdList(@RequestBody RoleVo role) {
+        if (isNull(role.getId())) {
+            return paramIsError();
+        }
         List<RoleRouteVo> roleRoutes = new ArrayList<>();
         for (Long id : role.getRouteIds()) {
             RoleRouteVo roleRoute = new RoleRouteVo();

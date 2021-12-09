@@ -1,5 +1,7 @@
 package com.demo.handler;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
 import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +73,30 @@ public class GlobalExceptionHandler {
     public Result paramErrorHandler(Exception e) {
         log.warn(ResultCodeEnum.PARAM_IS_ERROR.getMsg(), e);
         return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
+    }
+
+    /**
+     * 账号未登录或登录已过期
+     *
+     * @see NotLoginException
+     */
+    @Order(1)
+    @ExceptionHandler(NotLoginException.class)
+    public Result notLoginHandler(Exception e) {
+        log.warn(ResultCodeEnum.NOT_LOGIN.getMsg(), e);
+        return Result.e(ResultCodeEnum.NOT_LOGIN);
+    }
+
+    /**
+     * 账号没有权限访问
+     *
+     * @see NotPermissionException
+     */
+    @Order(1)
+    @ExceptionHandler(NotPermissionException.class)
+    public Result notPermissionHandler(Exception e) {
+        log.warn(ResultCodeEnum.NOT_PERMISSION.getMsg(), e);
+        return Result.e(ResultCodeEnum.NOT_PERMISSION);
     }
 
     /**

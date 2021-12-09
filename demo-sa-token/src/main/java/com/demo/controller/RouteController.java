@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
 import com.demo.service.RouteService;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("route")
 @AllArgsConstructor
-public class RouteController {
+public class RouteController extends ControllerBase {
 
     private final RouteService routeService;
 
@@ -31,6 +32,10 @@ public class RouteController {
      */
     @PostMapping("insert")
     public Result insert(@RequestBody RouteVo route) {
+        if (existNull(route.getPath(), route.getName(), route.getSeq(), route.getComponent(), route.getRedirect(),
+                route.getMeta())) {
+            return paramIsError();
+        }
         return Result.o(routeService.insert(route));
     }
 
@@ -63,6 +68,9 @@ public class RouteController {
      */
     @PostMapping("delete")
     public Result delete(@RequestBody RouteVo route) {
+        if (existNull(route.getId(), route.getDeleteChildren())) {
+            return paramIsError();
+        }
         if (route.getDeleteChildren()) {
             return Result.o(routeService.deleteWithChildren(route.getId()));
         } else {
@@ -71,11 +79,22 @@ public class RouteController {
     }
 
     /**
-     * 更新(Id、parentId除外)
+     * 更新
      */
     @PostMapping("update")
     public Result update(@RequestBody RouteVo route) {
+        if (isNull(route.getId())) {
+            return paramIsError();
+        }
         return Result.o(routeService.update(route));
+    }
+
+    /**
+     * 查询UserId拥有的路由
+     */
+    @PostMapping("findOwnByUserId")
+    public Result findOwnByUserId(@RequestBody RouteVo route) {
+        return Result.o(routeService.findOwnByUserId(route.getId()));
     }
 
     /**

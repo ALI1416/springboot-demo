@@ -3,16 +3,46 @@
 <mapper namespace="com.demo.mapper.UserMapper">
 
   <sql id="col">
-    id,account,pwd,name,create_id
+    id,account,pwd,name,gender,year,profile,comment,is_delete,create_id,create_time,update_id,update_time,version
+  </sql>
+
+  <sql id="bak">
+    id,ref_id,account,pwd,name,gender,year,profile,comment,is_delete,create_id,create_time,update_id,update_time,version
   </sql>
 
   <insert id="insert" parameterType="UserVo">
     INSERT
     user(
-    id,account,pwd,name,create_id
+    id,account,pwd,name,create_id,update_id
     )VALUES(
-    #{id},#{account},#{pwd},#{id},#{createId}
+    #{id},#{account},#{pwd},#{id},#{createId},#{createId}
     )
+  </insert>
+
+  <insert id="batchInsert" parameterType="UserVo">
+    INSERT
+    user(
+    id,account,pwd,name,create_id,update_id
+    )VALUES
+    <foreach collection="list" separator="," item="uv">
+      (
+      #{uv.id},#{uv.account},#{uv.pwd},#{uv.id},#{uv.createId},#{uv.createId}
+      )
+    </foreach>
+  </insert>
+
+  <insert id="bak" parameterType="UserBak">
+    INSERT
+    user_bak(
+    <include refid="bak"/>
+    )
+    SELECT
+    #{id},
+    <include refid="col"/>
+    FROM
+    user
+    WHERE
+    id=#{refId}
   </insert>
 
   <update id="update" parameterType="UserVo">
@@ -27,12 +57,31 @@
       <if test="name != null">
         name=#{name},
       </if>
+      <if test="gender != null">
+        gender=#{gender},
+      </if>
+      <if test="year != null">
+        year=#{year},
+      </if>
+      <if test="profile != null">
+        profile=#{profile},
+      </if>
+      <if test="comment != null">
+        comment=#{comment},
+      </if>
+      <if test="isDelete != null">
+        is_delete=#{isDelete},
+      </if>
+      update_id=#{updateId},
+      update_time=CURRENT_TIMESTAMP,
+      version=version+1,
     </set>
     WHERE
     id=#{id}
   </update>
 
-  <select id="existUniqueKey" parameterType="UserVo" resultType="Boolean">
+  <select id="existUniqueKey" parameterType="UserVo"
+          resultType="Boolean">
     SELECT
     IFNULL((SELECT true FROM user WHERE
     <if test="id != null">
@@ -44,7 +93,8 @@
     ),false)
   </select>
 
-  <select id="findByUniqueKey" parameterType="UserVo" resultType="UserVo">
+  <select id="findByUniqueKey" parameterType="UserVo"
+          resultType="UserVo">
     SELECT
     <include refid="col"/>
     FROM
@@ -56,6 +106,63 @@
     <if test="account != null">
       account=#{account}
     </if>
+  </select>
+
+  <select id="findExact" parameterType="UserVo"
+          resultType="UserVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user
+    <where>
+      <if test="account != null">
+        and account=#{account}
+      </if>
+      <if test="name != null">
+        and name=#{name}
+      </if>
+      <if test="gender != null">
+        and gender=#{gender}
+      </if>
+      <if test="year != null">
+        and year=#{year}
+      </if>
+      <include refid="com.demo.mapper.BaseMapper.findExact"/>
+    </where>
+  </select>
+
+  <select id="find" parameterType="UserVo" resultType="UserVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user
+    <where>
+      <if test="account != null and account != ''">
+        <bind name="account1" value="'%'+ account +'%'"/>
+        and account like #{account1}
+      </if>
+      <if test="name != null and name != ''">
+        <bind name="name1" value="'%'+ name +'%'"/>
+        and name like #{name1}
+      </if>
+      <if test="gender != null">
+        and gender=#{gender}
+      </if>
+      <include refid="com.demo.mapper.BaseMapper.chooseField">
+        <property name="field" value="year"/>
+        <property name="alias" value="year"/>
+      </include>
+      <include refid="com.demo.mapper.BaseMapper.find"/>
+    </where>
+  </select>
+
+  <select id="findBak" parameterType="Long" resultType="UserBak">
+    SELECT
+    <include refid="bak"/>
+    FROM
+    user_bak
+    WHERE
+    ref_id=#{id}
   </select>
 
 </mapper>

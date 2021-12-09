@@ -1,10 +1,12 @@
 package com.demo.service;
 
 import com.demo.base.ServiceBase;
+import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.RouteVo;
+import com.demo.util.RedisUtils;
 import com.demo.util.RouteUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -118,6 +120,24 @@ public class RouteService extends ServiceBase {
         route.setParentId(null);
         return routeDao.update(route);
     }
+
+    /**
+     * 查询UserId拥有的路由
+     */
+    @SuppressWarnings("unchecked")
+    public RouteVo findOwnByUserId(long id) {
+        RouteVo route = new RouteVo();
+        if (id == 0) {
+            List<String> matcherPath = new ArrayList<>();
+            matcherPath.add("/");
+            route.setMatcherPath(matcherPath);
+            return route;
+        }
+        route.setMatcherPath((List<String>) RedisUtils.get(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX));
+        route.setDirectPath(RedisUtils.sMembers(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(obj -> (String) obj).collect(Collectors.toList()));
+        return route;
+    }
+
 
     /**
      * 查询通过id
