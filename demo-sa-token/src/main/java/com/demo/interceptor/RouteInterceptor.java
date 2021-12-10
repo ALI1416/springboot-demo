@@ -95,21 +95,29 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 查询是否存在key
         // 不存在去添加
         if (!RedisUtils.exists(key)) {
-            // 数据库查询
-            List<RouteNotInterceptVo> notIntercept = routeNotInterceptService.findAll();
-            List<String> notInterceptPath = new ArrayList<>();
-            // 不存在，给一个占位符
-            if (notIntercept.size() == 0) {
-                notInterceptPath.add(PLACEHOLDER);
-            } else {
-                notInterceptPath = notIntercept.stream().map(RouteNotIntercept::getPath).collect(Collectors.toList());
-            }
-            // 添加key，并设置过期时间
-            RedisUtils.sAddMulti(key, notInterceptPath);
-            RedisUtils.expire(key, RedisConstant.ROUTE_EXPIRE);
+            setNotIntercept();
         }
         // 存在，直接判断值是否存在
         return RedisUtils.sIsMember(key, url);
+    }
+
+    /**
+     * 设置不拦截路径
+     */
+    private void setNotIntercept() {
+        String key = RedisConstant.ROUTE_NOT_INTERCEPT;
+        // 数据库查询
+        List<RouteNotInterceptVo> notIntercept = routeNotInterceptService.findAll();
+        List<String> notInterceptPath = new ArrayList<>();
+        // 不存在，给一个占位符
+        if (notIntercept.size() == 0) {
+            notInterceptPath.add(PLACEHOLDER);
+        } else {
+            notInterceptPath = notIntercept.stream().map(RouteNotIntercept::getPath).collect(Collectors.toList());
+        }
+        // 添加key，并设置过期时间
+        RedisUtils.sAddMulti(key, notInterceptPath);
+        RedisUtils.expire(key, RedisConstant.ROUTE_EXPIRE);
     }
 
     /**
@@ -124,7 +132,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 比对每一个路径
         for (String s : list) {
             // 路径与url前部分相同
-            if (s.equals(url.substring(0, s.length()))) {
+            if ((url.length() > s.length()) && s.equals(url.substring(0, s.length()))) {
                 return true;
             }
         }
@@ -252,7 +260,7 @@ public class RouteInterceptor implements HandlerInterceptor {
      * 设置"匹配路径"列表<br>
      * "不可匹配路径"列表也被设置
      */
-    public void setRouteMatcher() {
+    private void setRouteMatcher() {
         // 获取"匹配路径"列表和"不可匹配路径"列表
         RouteVo route = routeService.findExpandedList();
         // 创建"匹配路径"列表和"不可匹配路径"列表
@@ -281,6 +289,63 @@ public class RouteInterceptor implements HandlerInterceptor {
             }
         }
         return count;
+    }
+
+    /**
+     * 删除ROUTE_NOT_INTERCEPT
+     */
+    public void deleteRouteNotIntercept() {
+        RedisUtils.delete(RedisConstant.ROUTE_NOT_INTERCEPT);
+    }
+
+    /**
+     * 删除ROUTE_MATCHER、ROUTE_DIRECT
+     */
+    public void deleteRoute() {
+        RedisUtils.delete(RedisConstant.ROUTE_MATCHER);
+        RedisUtils.delete(RedisConstant.ROUTE_DIRECT);
+    }
+
+    /**
+     * 删除全部ROUTE_ROLE
+     */
+    public void deleteRouteRole() {
+        Set<String> keys = RedisUtils.scan(RedisConstant.ROUTE_ROLE_PREFIX + "*");
+        RedisUtils.deleteMulti(keys);
+    }
+
+    /**
+     * 删除指定id的ROUTE_ROLE
+     *
+     * @param id 角色id
+     */
+    public void deleteRouteRole(long id) {
+        Set<String> keys = new HashSet<>();
+        keys.add(RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
+        keys.add(RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+        RedisUtils.deleteMulti(keys);
+    }
+
+    /**
+     * 删除全部ROUTE_USER
+     */
+    public void deleteRouteUser() {
+        Set<String> keys = RedisUtils.scan(RedisConstant.ROUTE_USER_PREFIX + "*");
+        RedisUtils.deleteMulti(keys);
+    }
+
+    /**
+     * 删除指定id的ROUTE_USER
+     *
+     * @param ids 用户id列表
+     */
+    public void deleteRouteUser(List<Long> ids) {
+        Set<String> keys = new HashSet<>();
+        for (Long id : ids) {
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+        }
+        RedisUtils.deleteMulti(keys);
     }
 
 }

@@ -7,6 +7,8 @@ import com.demo.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <h1>UserDao</h1>
  *
@@ -81,6 +83,16 @@ public class UserDao extends DaoBase {
         UserVo user = new UserVo();
         user.setAccount(account);
         return userMapper.findByUniqueKey(user);
+    }
+
+    /**
+     * 查询拥有指定角色id的用户
+     *
+     * @param roleId 角色id
+     * @return List&lt;UserVo>
+     */
+    public List<UserVo> findByRoleId(Long roleId) {
+        return userMapper.findByRoleId(roleId);
     }
 
 }

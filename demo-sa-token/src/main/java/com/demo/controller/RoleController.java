@@ -6,7 +6,10 @@ import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
+import com.demo.entity.vo.UserVo;
+import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RoleService;
+import com.demo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <h1>RoleController</h1>
@@ -32,6 +36,8 @@ import java.util.List;
 public class RoleController extends ControllerBase {
 
     private final RoleService roleService;
+    private final UserService userService;
+    private final RouteInterceptor routeInterceptor;
 
     /**
      * 插入
@@ -122,15 +128,21 @@ public class RoleController extends ControllerBase {
      * 仅刷新修改的角色
      */
     @PostMapping("refreshRole")
-    public Result refreshRole(@RequestBody RoleVo route) {
+    public Result refreshRole(@RequestBody RoleVo role) {
+        routeInterceptor.deleteRouteRole(role.getId());
+        List<Long> ids =
+                userService.findByRoleId(role.getId()).stream().map(UserVo::getId).collect(Collectors.toList());
+        routeInterceptor.deleteRouteUser(ids);
         return Result.o();
     }
 
     /**
-     * 刷新
+     * 刷新全部
      */
     @PostMapping("refresh")
     public Result refresh() {
+        routeInterceptor.deleteRouteRole();
+        routeInterceptor.deleteRouteUser();
         return Result.o();
     }
 

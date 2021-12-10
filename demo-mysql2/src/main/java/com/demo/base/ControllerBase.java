@@ -1,5 +1,8 @@
 package com.demo.base;
 
+import com.demo.constant.ResultCodeEnum;
+import com.demo.entity.pojo.Result;
+
 /**
  * <h1>控制层基类</h1>
  *
@@ -10,7 +13,14 @@ package com.demo.base;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class ControllerBase extends ResultBase {
+public class ControllerBase {
+
+    /**
+     * 请求参数错误
+     */
+    public static Result paramIsError() {
+        return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
+    }
 
     /**
      * 是null对象

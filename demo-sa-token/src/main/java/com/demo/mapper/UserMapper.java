@@ -2,6 +2,8 @@ package com.demo.mapper;
 
 import com.demo.entity.vo.UserVo;
 
+import java.util.List;
+
 /**
  * <h1>UserMapper</h1>
  *
@@ -45,5 +47,13 @@ public interface UserMapper {
      * @return UserVo
      */
     UserVo findByUniqueKey(UserVo user);
+
+    /**
+     * 查询拥有指定角色id的用户
+     *
+     * @param roleId 角色id
+     * @return List&lt;UserVo>
+     */
+    List<UserVo> findByRoleId(Long roleId);
 
 }

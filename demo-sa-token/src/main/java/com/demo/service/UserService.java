@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * <h1>UserService</h1>
  *
@@ -81,6 +83,16 @@ public class UserService extends ServiceBase {
      */
     public UserVo info(Long id) {
         return userDao.findById(id);
+    }
+
+    /**
+     * 查询拥有指定角色id的用户
+     *
+     * @param roleId 角色id
+     * @return List&lt;UserVo>
+     */
+    public List<UserVo> findByRoleId(Long roleId) {
+        return userDao.findByRoleId(roleId);
     }
 
 }

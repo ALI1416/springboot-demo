@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteNotInterceptVo;
+import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RouteNotInterceptService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteNotInterceptController extends ControllerBase {
 
     private final RouteNotInterceptService routeNotInterceptService;
+    private final RouteInterceptor routeInterceptor;
 
     /**
      * 查询所有
@@ -68,5 +70,13 @@ public class RouteNotInterceptController extends ControllerBase {
         return Result.o(routeNotInterceptService.update(routeNotIntercept));
     }
 
+    /**
+     * 刷新
+     */
+    @PostMapping("refresh")
+    public Result refresh() {
+        routeInterceptor.deleteRouteNotIntercept();
+        return Result.o();
+    }
 
 }

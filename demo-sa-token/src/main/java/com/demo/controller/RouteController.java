@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
+import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouteController extends ControllerBase {
 
     private final RouteService routeService;
+    private final RouteInterceptor routeInterceptor;
 
     /**
      * 插入
@@ -118,6 +120,8 @@ public class RouteController extends ControllerBase {
      */
     @PostMapping("refresh")
     public Result refresh() {
+        routeInterceptor.deleteRoute();
+        routeInterceptor.deleteRouteUser();
         return Result.o();
     }
 

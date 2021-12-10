@@ -58,4 +58,18 @@
     </if>
   </select>
 
+  <select id="findByRoleId" parameterType="Long" resultType="UserVo">
+    SELECT
+    u.id,
+    u.account,
+    u.pwd,
+    u.name,
+    u.create_id
+    FROM
+    USER u
+    INNER JOIN user_role ur ON ur.user_id = u.id
+    WHERE
+    ur.role_id =#{id}
+  </select>
+
 </mapper>
