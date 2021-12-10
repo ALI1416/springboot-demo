@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.demo.base.ControllerBase;
@@ -44,7 +45,11 @@ public class UserController extends ControllerBase {
             return paramIsError();
         }
         if (userService.login(user)) {
-            return Result.o(StpUtil.getTokenInfo());
+            SaTokenInfo saTokenInfo = StpUtil.getTokenInfo();
+            UserVo u = userService.info(StpUtil.getLoginIdAsLong());
+            u.setPwd(null);
+            u.setToken(saTokenInfo.tokenValue);
+            return Result.o(u);
         } else {
             return Result.e(ResultCodeEnum.LOGIN_FAIL);
         }

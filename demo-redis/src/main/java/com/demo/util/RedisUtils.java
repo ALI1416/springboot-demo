@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.ConvertingCursor;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -309,6 +312,51 @@ public class RedisUtils {
      */
     public static Boolean move(@NonNull String key, int dbIndex) {
         return redisTemplate.move(key, dbIndex);
+    }
+
+    /**
+     * 模糊查询，一次扫描1000条(scan)
+     *
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @return 键(管道或事务中使用为null)
+     */
+    public static Set<String> scan(@NonNull String match) {
+        return scan(match, 1000);
+    }
+
+    /**
+     * 模糊查询(scan)
+     *
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @param count 一次扫描条数
+     * @return 键(管道或事务中使用为null)
+     */
+    @SuppressWarnings("unchecked")
+    public static Set<String> scan(@NonNull String match, long count) {
+        Set<String> keys = new HashSet<>();
+        ScanOptions options = ScanOptions.scanOptions().match(match).count(count).build();
+        Cursor<String> cursor = (Cursor<String>) redisTemplate.executeWithStickyConnection(//
+                connection -> new ConvertingCursor<>(connection.scan(options), //
+                        redisTemplate.getKeySerializer()::deserialize));
+        if (cursor == null) {
+            return keys;
+        }
+        while (cursor.hasNext()) {
+            keys.add(cursor.next());
+        }
+        return keys;
     }
 
     //endregion
@@ -722,6 +770,48 @@ public class RedisUtils {
      */
     public static Map<Object, Object> hGetAllItemAndValue(@NonNull String key) {
         return redisTemplate.opsForHash().entries(key);
+    }
+
+    /**
+     * 模糊查询，一次扫描100条(hScan)
+     *
+     * @param key   键
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @return 项和值(管道或事务中使用为null)
+     */
+    public static Map<String, Object> hScan(@NonNull String key, @NonNull String match) {
+        return hScan(key, match, 100);
+    }
+
+    /**
+     * 模糊查询(hScan)
+     *
+     * @param key   键
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @param count 一次扫描条数
+     * @return 项和值(管道或事务中使用为null)
+     */
+    public static Map<String, Object> hScan(@NonNull String key, @NonNull String match, long count) {
+        Map<String, Object> map = new HashMap<>();
+        ScanOptions options = ScanOptions.scanOptions().match(match).count(count).build();
+        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(key, options);
+        while (cursor.hasNext()) {
+            Map.Entry<Object, Object> next = cursor.next();
+            map.put((String) next.getKey(), next.getValue());
+        }
+        return map;
     }
 
     //endregion
@@ -1511,6 +1601,47 @@ public class RedisUtils {
         return redisTemplate.opsForSet().differenceAndStore(keys, destKey);
     }
 
+    /**
+     * 模糊查询，一次扫描100条(sScan)
+     *
+     * @param key   键
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @return 值(管道或事务中使用为null)
+     */
+    public static Set<Object> sScan(@NonNull String key, @NonNull String match) {
+        return sScan(key, match, 100);
+    }
+
+    /**
+     * 模糊查询(sScan)
+     *
+     * @param key   键
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @param count 一次扫描条数
+     * @return 值(管道或事务中使用为null)
+     */
+    public static Set<Object> sScan(@NonNull String key, @NonNull String match, long count) {
+        Set<Object> values = new HashSet<>();
+        ScanOptions options = ScanOptions.scanOptions().match(match).count(count).build();
+        Cursor<Object> cursor = redisTemplate.opsForSet().scan(key, options);
+        while (cursor.hasNext()) {
+            Object next = cursor.next();
+            values.add(next);
+        }
+        return values;
+    }
 
     //endregion
 

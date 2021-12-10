@@ -283,4 +283,21 @@ public class IndexController {
         return Result.o(RedisUtils.move(key, dbIndex));
     }
 
+    /**
+     * <h3>模糊查询</h3>
+     * 实际存在key有a/aabbcc/abc/abd/b/bc/bd/c/[]<br>
+     * POST /scan?match=a 不匹配字符[a]<br>
+     * POST /scan?match=b? 右侧匹配1个字符[bc,bd]<br>
+     * POST /scan?match=*c 左侧匹配0+个字符[aabbcc,abc,bc,c]<br>
+     * POST /scan?match=*b* 两侧匹配0+个字符[aabbcc,abc,abd,b,bc,bd]<br>
+     * POST /scan?match=[abd] 匹配1个指定字符[a,b]<br>
+     * POST /scan?match=[^abd] 不匹配1个指定字符[c]<br>
+     * POST /scan?match=[A-z] 匹配1个指定字符[a,b,c]<br>
+     * POST /scan?match=\[* 转义匹配匹配1个指定字符[[]]
+     */
+    @PostMapping("scan")
+    public Result scan(String match) {
+        return Result.o(RedisUtils.scan(match));
+    }
+
 }

@@ -209,4 +209,21 @@ public class HashController {
         return Result.o(RedisUtils.hGetAllItemAndValue(key));
     }
 
+    /**
+     * <h3>模糊查询</h3>
+     * 实际存在键a项和值有a 1 /aabbcc 2 /abc 3 /abd 4 /b 5 /bc 6 /bd 7 /c 8 /[] 9<br>
+     * POST /hScan?key=a&match=a 不匹配字符[a 1]<br>
+     * POST /hScan?key=a&match=b? 右侧匹配1个字符[bc 6,bd 7]<br>
+     * POST /hScan?key=a&match=*c 左侧匹配0+个字符[aabbcc 2,abc 3,bc 6,c 8]<br>
+     * POST /hScan?key=a&match=*b* 两侧匹配0+个字符[aabbcc 2,abc 3,abd 4,b 5,bc 6,bd 7]<br>
+     * POST /hScan?key=a&match=[abd] 匹配1个指定字符[a 1,b 5]<br>
+     * POST /hScan?key=a&match=[^abd] 不匹配1个指定字符[c 8]<br>
+     * POST /hScan?key=a&match=[A-z] 匹配1个指定字符[a 1,b 5,c 8]<br>
+     * POST /hScan?key=a&match=\[* 转义匹配匹配1个指定字符[[] 9]
+     */
+    @PostMapping("hScan")
+    public Result hScan(String key, String match) {
+        return Result.o(RedisUtils.hScan(key, match));
+    }
+
 }

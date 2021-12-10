@@ -447,4 +447,21 @@ public class SetController {
         return Result.o(RedisUtils.sDifferenceAllAndStore(keys, destKey));
     }
 
+    /**
+     * <h3>模糊查询</h3>
+     * 实际存在键a值有a/aabbcc/abc/abd/b/bc/bd/c/[]<br>
+     * POST /sScan?key=a&match=a 不匹配字符[a]<br>
+     * POST /sScan?key=a&match=b? 右侧匹配1个字符[bc,bd]<br>
+     * POST /sScan?key=a&match=*c 左侧匹配0+个字符[aabbcc,abc,bc,c]<br>
+     * POST /sScan?key=a&match=*b* 两侧匹配0+个字符[aabbcc,abc,abd,b,bc,bd]<br>
+     * POST /sScan?key=a&match=[abd] 匹配1个指定字符[a,b]<br>
+     * POST /sScan?key=a&match=[^abd] 不匹配1个指定字符[c]<br>
+     * POST /sScan?key=a&match=[A-z] 匹配1个指定字符[a,b,c]<br>
+     * POST /sScan?key=a&match=\[* 转义匹配匹配1个指定字符[[]]
+     */
+    @PostMapping("sScan")
+    public Result sScan(String key, String match) {
+        return Result.o(RedisUtils.sScan(key, match));
+    }
+
 }
