@@ -60,6 +60,10 @@ public enum ResultCodeEnum {
      * 1004 密码错误
      */
     PASSWORD_ERROR(1004, "密码错误"),
+    /**
+     * 1005 权限不足
+     */
+    INSUFFICIENT_PERMISSION(1005, "权限不足"),
     /* ==================== 未知错误-1 ==================== */
     /**
      * -1 未知错误

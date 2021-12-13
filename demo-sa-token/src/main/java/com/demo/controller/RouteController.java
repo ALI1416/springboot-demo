@@ -93,9 +93,9 @@ public class RouteController extends ControllerBase {
     /**
      * 查询UserId拥有的路由
      */
-    @PostMapping("findOwnByUserId")
-    public Result findOwnByUserId(@RequestBody RouteVo route) {
-        return Result.o(routeService.findOwnByUserId(route.getId()));
+    @PostMapping("findByUserId")
+    public Result findByUserId(@RequestBody RouteVo route) {
+        return Result.o(routeService.findByUserId(route.getId()));
     }
 
     /**

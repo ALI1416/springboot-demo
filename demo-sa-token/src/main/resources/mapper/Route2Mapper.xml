@@ -99,7 +99,7 @@
     rr.role_id =#{roleId}
   </select>
 
-  <select id="findIdByRoleId" parameterType="Long" resultType="Route2Vo">
+  <select id="findIdByRoleId" parameterType="Long" resultType="Long">
     SELECT
     r.id
     FROM

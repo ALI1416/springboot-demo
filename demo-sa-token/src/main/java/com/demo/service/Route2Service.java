@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -124,7 +126,7 @@ public class Route2Service extends ServiceBase {
      *
      * @param id 用户id
      */
-    public Route2Vo findOwnByUserId(long id) {
+    public Route2Vo findByUserId(long id) {
         Route2Vo route2 = new Route2Vo();
         if (id == 0) {
             List<String> matcherPath = new ArrayList<>();
@@ -133,7 +135,7 @@ public class Route2Service extends ServiceBase {
             return route2;
         }
         // 获取用户拥有的角色id
-        List<Long> roles = roleService.findOwnByUserId(id).stream().map(RoleVo::getId).collect(Collectors.toList());
+        List<Long> roles = roleService.findByUserId(id).stream().map(RoleVo::getId).collect(Collectors.toList());
         if (roles.size() == 0) {
             return route2;
         }
@@ -150,6 +152,21 @@ public class Route2Service extends ServiceBase {
         return route2;
     }
 
+    /**
+     * 查询UserId拥有的路由id
+     *
+     * @param id 用户id
+     */
+    public Set<Long> findIdByUserId(long id) {
+        Set<Long> ids = new HashSet<>();
+        // 获取用户拥有的角色id
+        List<Long> roles = roleService.findIdByUserId(id);
+        // 获取该角色id的所有路由id
+        for (Long role : roles) {
+            ids.addAll(findIdByRoleId(role));
+        }
+        return ids;
+    }
 
     /**
      * 查询通过id
@@ -232,6 +249,16 @@ public class Route2Service extends ServiceBase {
      */
     public List<Route2Vo> findByRoleId(Long roleId) {
         return route2Dao.findByRoleId(roleId);
+    }
+
+    /**
+     * 查询全部id，通过RoleId
+     *
+     * @param userId userId
+     * @return List&lt;Long>
+     */
+    public List<Long> findIdByRoleId(Long userId) {
+        return route2Dao.findIdByRoleId(userId);
     }
 
 }

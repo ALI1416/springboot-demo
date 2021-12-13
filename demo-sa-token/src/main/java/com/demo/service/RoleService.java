@@ -101,8 +101,28 @@ public class RoleService extends ServiceBase {
      * @param userId userId
      * @return List&lt;RoleVo>
      */
-    public List<RoleVo> findOwnByUserId(Long userId) {
-        List<RoleVo> roles = roleDao.findOwnByUserId(userId);
+    public List<RoleVo> findByUserId(Long userId) {
+        return roleDao.findByUserId(userId);
+    }
+
+    /**
+     * 查询UserId拥有的角色id
+     *
+     * @param userId userId
+     * @return List&lt;Long>
+     */
+    public List<Long> findIdByUserId(Long userId) {
+        return roleDao.findIdByUserId(userId);
+    }
+
+    /**
+     * 查询UserId拥有的角色和路由
+     *
+     * @param userId userId
+     * @return List&lt;RoleVo>
+     */
+    public List<RoleVo> findAndRouteByUserId(Long userId) {
+        List<RoleVo> roles = roleDao.findByUserId(userId);
         for (RoleVo role : roles) {
             role.setRouteIds(routeDao.findIdByRoleId(role.getId()));
             role.setRoute2Ids(route2Dao.findIdByRoleId(role.getId()));

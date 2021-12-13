@@ -1,6 +1,7 @@
 package com.demo.mapper;
 
 import com.demo.entity.vo.RoleRouteVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -31,5 +32,14 @@ public interface RoleRouteMapper {
      * @return 执行成功数量
      */
     int deleteByRouteIdList(List<Long> ids);
+
+    /**
+     * 删除，通过RoleId和RouteList
+     *
+     * @param roleId   roleId
+     * @param routeIds routeIds
+     * @return 执行成功数量
+     */
+    int deleteByRoleIdAndRouteList(@Param("roleId") Long roleId, @Param("routeIds") List<Long> routeIds);
 
 }

@@ -3,14 +3,13 @@ package com.demo.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.z.id.Id;
 import com.demo.base.ControllerBase;
+import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.pojo.Result;
-import com.demo.entity.vo.RoleRoute2Vo;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.UserVo;
 import com.demo.interceptor.RouteInterceptor;
-import com.demo.service.RoleService;
-import com.demo.service.UserService;
+import com.demo.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +36,10 @@ import java.util.stream.Collectors;
 public class RoleController extends ControllerBase {
 
     private final RoleService roleService;
+    private final RoleRouteService roleRouteService;
     private final UserService userService;
+    private final RouteService routeService;
+    private final Route2Service route2Service;
     private final RouteInterceptor routeInterceptor;
 
     /**
@@ -79,14 +81,18 @@ public class RoleController extends ControllerBase {
      */
     @PostMapping("addRouteIdList")
     public Result addRouteIdList(@RequestBody RoleVo role) {
-        if (isNull(role.getId())) {
+        Long roleId = role.getId();
+        if (isNull(roleId)) {
             return paramIsError();
+        }
+        if (insufficientPermission(role)) {
+            return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
         }
         List<RoleRouteVo> roleRoutes = new ArrayList<>();
         for (Long id : role.getRouteIds()) {
             RoleRouteVo roleRoute = new RoleRouteVo();
             roleRoute.setId(Id.next());
-            roleRoute.setRoleId(role.getId());
+            roleRoute.setRoleId(roleId);
             roleRoute.setRouteId(id);
             roleRoutes.add(roleRoute);
         }
@@ -94,22 +100,38 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 添加前端路由
+     * 是否权限不足
+     *
+     * @param role RoleVo
+     * @return 是否权限不足
      */
-    @PostMapping("addRoute2IdList")
-    public Result addRoute2IdList(@RequestBody RoleVo role) {
-        if (isNull(role.getId())) {
+    private boolean insufficientPermission(RoleVo role) {
+        long userId = StpUtil.getLoginIdAsLong();
+        // 非root用户
+        if (userId != 0) {
+            // 只能管理自己创建的角色
+            if (!roleService.findByCreateId(userId).stream().map(RoleVo::getId).collect(Collectors.toList()).contains(userId)) {
+                return true;
+            }
+            // 只能管理自己有权限的路由
+            return !routeService.findChildrenIdByUserId(userId).containsAll(role.getRouteIds());
+        }
+        return false;
+    }
+
+    /**
+     * 删除路由
+     */
+    @PostMapping("deleteRouteIdList")
+    public Result deleteRouteIdList(@RequestBody RoleVo role) {
+        Long roleId = role.getId();
+        if (isNull(roleId)) {
             return paramIsError();
         }
-        List<RoleRoute2Vo> roleRoute2s = new ArrayList<>();
-        for (Long id : role.getRoute2Ids()) {
-            RoleRoute2Vo roleRoute = new RoleRoute2Vo();
-            roleRoute.setId(Id.next());
-            roleRoute.setRoleId(role.getId());
-            roleRoute.setRouteId(id);
-            roleRoute2s.add(roleRoute);
+        if (insufficientPermission(role)) {
+            return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(roleService.addRoute2IdList(roleRoute2s));
+        return Result.o(roleRouteService.deleteByRoleIdAndRouteList(roleId, role.getRouteIds()));
     }
 
     /**
@@ -123,9 +145,9 @@ public class RoleController extends ControllerBase {
     /**
      * 查询UserId拥有的角色
      */
-    @PostMapping("findOwnByUserId")
-    public Result findOwnByUserId(@RequestBody RoleVo route) {
-        return Result.o(roleService.findOwnByUserId(route.getId()));
+    @PostMapping("findByUserId")
+    public Result findByUserId(@RequestBody RoleVo route) {
+        return Result.o(roleService.findByUserId(route.getId()));
     }
 
     /**

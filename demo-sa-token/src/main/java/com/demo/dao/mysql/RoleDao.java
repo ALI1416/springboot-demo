@@ -94,8 +94,18 @@ public class RoleDao extends DaoBase {
      * @param userId userId
      * @return List&lt;RoleVo>
      */
-    public List<RoleVo> findOwnByUserId(Long userId) {
-        return roleMapper.findOwnByUserId(userId);
+    public List<RoleVo> findByUserId(Long userId) {
+        return roleMapper.findByUserId(userId);
+    }
+
+    /**
+     * 查询UserId拥有的角色id
+     *
+     * @param userId userId
+     * @return List&lt;Long>
+     */
+    public List<Long> findIdByUserId(Long userId) {
+        return roleMapper.findIdByUserId(userId);
     }
 
 }

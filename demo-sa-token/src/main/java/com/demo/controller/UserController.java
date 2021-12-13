@@ -98,11 +98,11 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 查询当前用户拥有的角色
+     * 查询当前用户拥有的角色和路由
      */
     @PostMapping("findRole")
     public Result findRole() {
-        return Result.o(roleService.findOwnByUserId(StpUtil.getLoginIdAsLong()));
+        return Result.o(roleService.findAndRouteByUserId(StpUtil.getLoginIdAsLong()));
     }
 
     /**
@@ -110,7 +110,7 @@ public class UserController extends ControllerBase {
      */
     @PostMapping("findRoute")
     public Result findRoute() {
-        return Result.o(routeService.findOwnByUserId(StpUtil.getLoginIdAsLong()));
+        return Result.o(routeService.findByUserId(StpUtil.getLoginIdAsLong()));
     }
 
     /**
@@ -118,7 +118,7 @@ public class UserController extends ControllerBase {
      */
     @PostMapping("findRoute2")
     public Result findRoute2() {
-        return Result.o(route2Service.findOwnByUserId(StpUtil.getLoginIdAsLong()));
+        return Result.o(route2Service.findByUserId(StpUtil.getLoginIdAsLong()));
     }
 
 }

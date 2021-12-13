@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -124,7 +126,7 @@ public class RouteService extends ServiceBase {
      * 查询UserId拥有的路由
      */
     @SuppressWarnings("unchecked")
-    public RouteVo findOwnByUserId(long id) {
+    public RouteVo findByUserId(long id) {
         RouteVo route = new RouteVo();
         if (id == 0) {
             List<String> matcherPath = new ArrayList<>();
@@ -135,6 +137,41 @@ public class RouteService extends ServiceBase {
         route.setMatcherPath((List<String>) RedisUtils.get(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX));
         route.setDirectPath(RedisUtils.sMembers(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(obj -> (String) obj).collect(Collectors.toList()));
         return route;
+    }
+
+    /**
+     * 查询UserId拥有的路由id
+     *
+     * @param id 用户id
+     */
+    public Set<Long> findIdByUserId(long id) {
+        Set<Long> ids = new HashSet<>();
+        // 获取用户拥有的角色id
+        List<Long> roles = roleService.findIdByUserId(id);
+        // 获取该角色id的所有路由id
+        for (Long role : roles) {
+            ids.addAll(findIdByRoleId(role));
+        }
+        return ids;
+    }
+
+    /**
+     * 查询UserId拥有的路由和子节点id
+     *
+     * @param id 用户id
+     */
+    public Set<Long> findChildrenIdByUserId(long id) {
+        Set<Long> ids = new HashSet<>();
+        // 获取用户拥有的角色id
+        List<Long> roles = roleService.findIdByUserId(id);
+        // 获取该角色id的所有路由以及子节点id
+        for (Long role : roles) {
+            for (Long routeId : findIdByRoleId(role)) {
+                ids.add(routeId);
+                ids.addAll(findChildrenById(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
+            }
+        }
+        return ids;
     }
 
     /**
@@ -218,6 +255,16 @@ public class RouteService extends ServiceBase {
      */
     public List<RouteVo> findByRoleId(Long roleId) {
         return routeDao.findByRoleId(roleId);
+    }
+
+    /**
+     * 查询全部id，通过RoleId
+     *
+     * @param userId userId
+     * @return List&lt;Long>
+     */
+    public List<Long> findIdByRoleId(Long userId) {
+        return routeDao.findIdByRoleId(userId);
     }
 
 }

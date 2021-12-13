@@ -46,6 +46,17 @@ public class RoleRouteDao extends DaoBase {
     }
 
     /**
+     * 删除，通过RoleId和RouteList
+     *
+     * @param roleId   roleId
+     * @param routeIds routeIds
+     * @return 是否成功
+     */
+    public boolean deleteByRoleIdAndRouteList(Long roleId, List<Long> routeIds) {
+        return tryif3(() -> roleRouteMapper.deleteByRoleIdAndRouteList(roleId, routeIds));
+    }
+
+    /**
      * 删除，通过RouteId
      *
      * @param id RouteId

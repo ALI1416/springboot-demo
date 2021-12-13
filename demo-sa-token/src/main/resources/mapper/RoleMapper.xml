@@ -61,12 +61,22 @@
     create_id =#{id}
   </select>
 
-  <select id="findOwnByUserId" parameterType="Long" resultType="RoleVo">
+  <select id="findByUserId" parameterType="Long" resultType="RoleVo">
     SELECT
     r.id,
     r.name,
     r.seq,
     r.create_id
+    FROM
+    role r
+    INNER JOIN user_role ur ON ur.role_id = r.id
+    WHERE
+    ur.user_id =#{userId}
+  </select>
+
+  <select id="findIdByUserId" parameterType="Long" resultType="Long">
+    SELECT
+    r.id
     FROM
     role r
     INNER JOIN user_role ur ON ur.role_id = r.id

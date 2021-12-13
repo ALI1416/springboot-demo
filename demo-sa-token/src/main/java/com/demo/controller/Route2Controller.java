@@ -92,9 +92,9 @@ public class Route2Controller extends ControllerBase {
     /**
      * 查询UserId拥有的路由
      */
-    @PostMapping("findOwnByUserId")
-    public Result findOwnByUserId(@RequestBody Route2Vo route2) {
-        return Result.o(route2Service.findOwnByUserId(route2.getId()));
+    @PostMapping("findByUserId")
+    public Result findByUserId(@RequestBody Route2Vo route2) {
+        return Result.o(route2Service.findByUserId(route2.getId()));
     }
 
     /**

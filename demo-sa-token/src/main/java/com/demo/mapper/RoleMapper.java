@@ -69,6 +69,14 @@ public interface RoleMapper {
      * @param userId userId
      * @return List&lt;RoleVo>
      */
-    List<RoleVo> findOwnByUserId(Long userId);
+    List<RoleVo> findByUserId(Long userId);
+
+    /**
+     * 查询UserId拥有的角色id
+     *
+     * @param userId userId
+     * @return List&lt;RoleVo>
+     */
+    List<Long> findIdByUserId(Long userId);
 
 }

@@ -4,7 +4,6 @@ import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.stp.StpUtil;
 import com.demo.constant.RedisConstant;
 import com.demo.entity.po.RouteNotIntercept;
-import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.service.RoleService;
@@ -60,7 +59,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         if ("OPTIONS".equals(request.getMethod())) {
             return true;
         }
-        // 去除项目路径context-path的干扰
+        // url不含context-path
         String url = request.getServletPath();
         // 是不拦截的路径
         if (isNotIntercept(url)) {
@@ -168,7 +167,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 没有数据
         if (matcherList == null) {
             // 获取用户拥有的角色id
-            List<Long> roles = roleService.findOwnByUserId(id).stream().map(RoleVo::getId).collect(Collectors.toList());
+            List<Long> roles = roleService.findIdByUserId(id);
             // 用户没有角色，给一个占位符
             if (roles.size() == 0) {
                 matcherList = new ArrayList<>();
