@@ -9,6 +9,7 @@ import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.RoleService;
+import com.demo.service.Route2Service;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,7 @@ public class UserController extends ControllerBase {
     private final UserService userService;
     private final RoleService roleService;
     private final RouteService routeService;
+    private final Route2Service route2Service;
 
     /**
      * 登录
@@ -109,6 +111,14 @@ public class UserController extends ControllerBase {
     @PostMapping("findRoute")
     public Result findRoute() {
         return Result.o(routeService.findOwnByUserId(StpUtil.getLoginIdAsLong()));
+    }
+
+    /**
+     * 查询当前用户拥有的前端路由
+     */
+    @PostMapping("findRoute2")
+    public Result findRoute2() {
+        return Result.o(route2Service.findOwnByUserId(StpUtil.getLoginIdAsLong()));
     }
 
 }

@@ -4,7 +4,6 @@ import com.demo.base.ServiceBase;
 import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
-import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.util.RedisUtils;
 import com.demo.util.RouteUtils;
@@ -138,7 +137,6 @@ public class RouteService extends ServiceBase {
         return route;
     }
 
-
     /**
      * 查询通过id
      *
@@ -220,20 +218,6 @@ public class RouteService extends ServiceBase {
      */
     public List<RouteVo> findByRoleId(Long roleId) {
         return routeDao.findByRoleId(roleId);
-    }
-
-    /**
-     * 查询UserId拥有的路由
-     *
-     * @param userId userId
-     * @return List&lt;RoleVo>->List&lt;RouteVo>
-     */
-    public List<RoleVo> findOwnByUserId(Long userId) {
-        List<RoleVo> roles = roleService.findOwnByUserId(userId);
-        for (RoleVo role : roles) {
-            role.setRoutes(findByRoleId(role.getId()));
-        }
-        return roles;
     }
 
 }

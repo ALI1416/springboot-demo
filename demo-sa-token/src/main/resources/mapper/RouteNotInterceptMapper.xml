@@ -45,7 +45,7 @@
     SELECT
     id,
     path,
-    NAME,
+    name,
     seq
     FROM
     route_not_intercept

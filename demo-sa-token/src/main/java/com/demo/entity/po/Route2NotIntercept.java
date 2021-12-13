@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>路由</h1>
+ * <h1>前端路由-不拦截</h1>
  *
  * <p>
  * createDate 2021/11/26 09:36:03
@@ -16,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class Route extends EntityBase {
+public class Route2NotIntercept extends EntityBase {
 
     /**
      * 路径
@@ -27,12 +27,20 @@ public class Route extends EntityBase {
      */
     private String name;
     /**
-     * 父id
-     */
-    private Long parentId;
-    /**
      * 顺序
      */
     private Integer seq;
+    /**
+     * 组件名称或路径
+     */
+    private String component;
+    /**
+     * 重定向
+     */
+    private String redirect;
+    /**
+     * 自定义内容
+     */
+    private String meta;
 
 }

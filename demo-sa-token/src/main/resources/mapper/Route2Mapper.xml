@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.Route2Mapper">
+
+  <sql id="col">
+    id,path,name,parent_id,seq,component,redirect,meta
+  </sql>
+
+  <insert id="insert" parameterType="Route2Vo">
+    INSERT
+    route2(
+    <include refid="col"/>
+    )VALUES(
+    #{id},#{path},#{name},#{parentId},#{seq},#{component},#{redirect},#{meta}
+    )
+  </insert>
+
+  <update id="update" parameterType="Route2Vo">
+    UPDATE route2
+    <set>
+      <if test="path != null">
+        path=#{path},
+      </if>
+      <if test="name != null">
+        name=#{name},
+      </if>
+      <if test="seq != null">
+        seq=#{seq},
+      </if>
+      <if test="parentId != null">
+        parent_id=#{parentId},
+      </if>
+      <if test="component != null">
+        component=#{component},
+      </if>
+      <if test="redirect != null">
+        redirect=#{redirect},
+      </if>
+      <if test="meta != null">
+        meta=#{meta},
+      </if>
+    </set>
+    WHERE
+    id=#{id}
+  </update>
+
+  <delete id="deleteByIdList" parameterType="Long">
+    DELETE
+    FROM
+    route2
+    WHERE
+    id IN
+    <foreach collection="list" open="(" close=")" separator="," item="id">
+      #{id}
+    </foreach>
+  </delete>
+
+  <select id="findById" parameterType="Long" resultType="Route2Vo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route2
+    WHERE
+    id =#{id}
+  </select>
+
+  <select id="findByParentId" parameterType="Long" resultType="Route2Vo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route2
+    WHERE
+    parent_id =#{parentId}
+    ORDER BY
+    seq
+  </select>
+
+  <select id="findAll" resultType="Route2Vo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route2
+  </select>
+
+  <select id="findByRoleId" parameterType="Long" resultType="Route2Vo">
+    SELECT
+    r.id,
+    r.path,
+    r.name,
+    r.seq,
+    r.parent_id,
+    r.component,
+    r.redirect,
+    r.meta
+    FROM
+    route2 r
+    INNER JOIN role_route2 rr ON r.id = rr.route2_id
+    WHERE
+    rr.role_id =#{roleId}
+  </select>
+
+</mapper>

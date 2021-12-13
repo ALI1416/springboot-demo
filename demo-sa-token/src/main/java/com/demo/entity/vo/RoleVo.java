@@ -1,6 +1,7 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.po.Role;
+import com.demo.entity.po.Route2;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,5 +29,13 @@ public class RoleVo extends Role {
      * 路由id
      */
     private List<Long> routeIds;
+    /**
+     * 前端路由
+     */
+    private List<Route2Vo> route2s;
+    /**
+     * 前端路由id
+     */
+    private List<Long> route2Ids;
 
 }
