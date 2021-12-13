@@ -101,7 +101,7 @@ public class Route2Controller extends ControllerBase {
      * 移动该节点到其他节点(moveId)下
      */
     @PostMapping("move")
-    public Result move(@RequestBody Route2Vo route2) {
+    public Result move() {
         return Result.o();
     }
 
@@ -109,7 +109,7 @@ public class Route2Controller extends ControllerBase {
      * 复制该节点
      */
     @PostMapping("copy")
-    public Result copy(@RequestBody Route2Vo route2) {
+    public Result copy() {
         return Result.o();
     }
 
