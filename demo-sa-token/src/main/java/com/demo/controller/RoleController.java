@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.z.id.Id;
 import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
+import com.demo.entity.vo.RoleRoute2Vo;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.UserVo;
@@ -93,6 +94,25 @@ public class RoleController extends ControllerBase {
     }
 
     /**
+     * 添加前端路由
+     */
+    @PostMapping("addRoute2IdList")
+    public Result addRoute2IdList(@RequestBody RoleVo role) {
+        if (isNull(role.getId())) {
+            return paramIsError();
+        }
+        List<RoleRoute2Vo> roleRoute2s = new ArrayList<>();
+        for (Long id : role.getRoute2Ids()) {
+            RoleRoute2Vo roleRoute = new RoleRoute2Vo();
+            roleRoute.setId(Id.next());
+            roleRoute.setRoleId(role.getId());
+            roleRoute.setRouteId(id);
+            roleRoute2s.add(roleRoute);
+        }
+        return Result.o(roleService.addRoute2IdList(roleRoute2s));
+    }
+
+    /**
      * 查询所有
      */
     @PostMapping("findAll")
@@ -120,7 +140,7 @@ public class RoleController extends ControllerBase {
      * 复制
      */
     @PostMapping("copy")
-    public Result copy(@RequestBody RoleVo route) {
+    public Result copy() {
         return Result.o();
     }
 

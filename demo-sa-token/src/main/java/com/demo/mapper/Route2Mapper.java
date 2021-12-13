@@ -71,4 +71,12 @@ public interface Route2Mapper {
      */
     List<Route2Vo> findByRoleId(Long roleId);
 
+    /**
+     * 查询所有id通过roleId
+     *
+     * @param roleId roleId
+     * @return List&lt;Long>
+     */
+    List<Long> findIdByRoleId(Long roleId);
+
 }

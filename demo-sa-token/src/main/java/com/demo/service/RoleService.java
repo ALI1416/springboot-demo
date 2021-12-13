@@ -1,8 +1,8 @@
 package com.demo.service;
 
 import com.demo.base.ServiceBase;
-import com.demo.dao.mysql.RoleDao;
-import com.demo.dao.mysql.RoleRouteDao;
+import com.demo.dao.mysql.*;
+import com.demo.entity.vo.RoleRoute2Vo;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,10 @@ import java.util.List;
 public class RoleService extends ServiceBase {
 
     private final RoleDao roleDao;
+    private final RouteDao routeDao;
+    private final Route2Dao route2Dao;
     private final RoleRouteDao roleRouteDao;
+    private final RoleRoute2Dao roleRoute2Dao;
 
     /**
      * 插入
@@ -62,7 +65,7 @@ public class RoleService extends ServiceBase {
     }
 
     /**
-     * 插入多个
+     * 添加路由
      *
      * @param roleRoutes RoleRouteVo
      * @return 是否成功
@@ -70,6 +73,17 @@ public class RoleService extends ServiceBase {
     @Transactional
     public boolean addRouteIdList(List<RoleRouteVo> roleRoutes) {
         return roleRouteDao.insertList(roleRoutes);
+    }
+
+    /**
+     * 添加前端路由
+     *
+     * @param roleRoute2s RoleRoute2Vo
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean addRoute2IdList(List<RoleRoute2Vo> roleRoute2s) {
+        return roleRoute2Dao.insertList(roleRoute2s);
     }
 
     /**
@@ -88,7 +102,12 @@ public class RoleService extends ServiceBase {
      * @return List&lt;RoleVo>
      */
     public List<RoleVo> findOwnByUserId(Long userId) {
-        return roleDao.findOwnByUserId(userId);
+        List<RoleVo> roles = roleDao.findOwnByUserId(userId);
+        for (RoleVo role : roles) {
+            role.setRouteIds(routeDao.findIdByRoleId(role.getId()));
+            role.setRoute2Ids(route2Dao.findIdByRoleId(role.getId()));
+        }
+        return roles;
     }
 
     /**

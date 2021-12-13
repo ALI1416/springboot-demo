@@ -112,4 +112,14 @@ public class Route2Dao extends DaoBase {
         return route2Mapper.findByRoleId(roleId);
     }
 
+    /**
+     * 查询全部id，通过RoleId
+     *
+     * @param roleId roleId
+     * @return List&lt;Long>
+     */
+    public List<Long> findIdByRoleId(Long roleId) {
+        return route2Mapper.findIdByRoleId(roleId);
+    }
+
 }

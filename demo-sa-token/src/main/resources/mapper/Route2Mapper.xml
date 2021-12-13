@@ -99,4 +99,14 @@
     rr.role_id =#{roleId}
   </select>
 
+  <select id="findIdByRoleId" parameterType="Long" resultType="Route2Vo">
+    SELECT
+    r.id
+    FROM
+    route2 r
+    INNER JOIN role_route2 rr ON r.id = rr.route2_id
+    WHERE
+    rr.role_id =#{roleId}
+  </select>
+
 </mapper>
