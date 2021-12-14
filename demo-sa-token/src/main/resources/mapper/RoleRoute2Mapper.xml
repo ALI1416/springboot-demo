@@ -27,4 +27,13 @@
     </foreach>
   </delete>
 
+  <delete id="deleteByRoleId">
+    DELETE
+    FROM
+    role_route2
+    WHERE
+    role_id =#{roleId}
+  </delete>
+
+
 </mapper>

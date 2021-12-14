@@ -1,13 +1,13 @@
 package com.demo.service;
 
 import com.demo.base.ServiceBase;
-import com.demo.dao.mysql.RoleRouteDao;
+import com.demo.dao.mysql.RoleRoute2Dao;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * <h1>RoleRouteService</h1>
+ * <h1>RoleRoute2Service</h1>
  *
  * <p>
  * createDate 2021/12/13 17:39:59
@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
  **/
 @Service
 @AllArgsConstructor
-public class RoleRouteService extends ServiceBase {
+public class RoleRoute2Service extends ServiceBase {
 
-    private final RoleRouteDao roleRouteDao;
+    private final RoleRoute2Dao roleRoute2Dao;
 
     /**
      * 删除，通过RoleId
@@ -30,7 +30,7 @@ public class RoleRouteService extends ServiceBase {
      */
     @Transactional
     public boolean deleteByRoleId(Long roleId) {
-        return roleRouteDao.deleteByRoleId(roleId);
+        return roleRoute2Dao.deleteByRoleId(roleId);
     }
 
 }

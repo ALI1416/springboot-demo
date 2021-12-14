@@ -216,7 +216,9 @@ public class RouteService extends ServiceBase {
         List<RouteVo> children = routeDao.findByParentId(parentId);
         routeList.addAll(children);
         for (RouteVo child : children) {
-            findChildren(child.getId(), routeList);
+            if (child.getId() != 0) {
+                findChildren(child.getId(), routeList);
+            }
         }
     }
 

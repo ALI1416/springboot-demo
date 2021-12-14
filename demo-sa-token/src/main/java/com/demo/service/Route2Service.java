@@ -153,6 +153,25 @@ public class Route2Service extends ServiceBase {
     }
 
     /**
+     * 查询UserId拥有的路由和子节点id
+     *
+     * @param id 用户id
+     */
+    public Set<Long> findChildrenIdByUserId(long id) {
+        Set<Long> ids = new HashSet<>();
+        // 获取用户拥有的角色id
+        List<Long> roles = roleService.findIdByUserId(id);
+        // 获取该角色id的所有路由以及子节点id
+        for (Long role : roles) {
+            for (Long routeId : findIdByRoleId(role)) {
+                ids.add(routeId);
+                ids.addAll(findChildrenById(routeId).stream().map(Route2Vo::getId).collect(Collectors.toList()));
+            }
+        }
+        return ids;
+    }
+
+    /**
      * 查询UserId拥有的路由id
      *
      * @param id 用户id
@@ -210,7 +229,9 @@ public class Route2Service extends ServiceBase {
         List<Route2Vo> children = route2Dao.findByParentId(parentId);
         route2List.addAll(children);
         for (Route2Vo child : children) {
-            findChildren(child.getId(), route2List);
+            if (child.getId() != 0) {
+                findChildren(child.getId(), route2List);
+            }
         }
     }
 

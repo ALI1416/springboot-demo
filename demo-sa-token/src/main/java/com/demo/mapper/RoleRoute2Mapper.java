@@ -34,4 +34,12 @@ public interface RoleRoute2Mapper {
      */
     int deleteByRoute2IdList(List<Long> ids);
 
+    /**
+     * 删除，通过RoleId
+     *
+     * @param roleId roleId
+     * @return 执行成功数量
+     */
+    int deleteByRoleId(Long roleId);
+
 }

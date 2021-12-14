@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.Route2Vo;
+import com.demo.entity.vo.RouteVo;
 import com.demo.service.Route2Service;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -95,6 +96,14 @@ public class Route2Controller extends ControllerBase {
     @PostMapping("findByUserId")
     public Result findByUserId(@RequestBody Route2Vo route2) {
         return Result.o(route2Service.findByUserId(route2.getId()));
+    }
+
+    /**
+     * 查询全部id，通过RoleId
+     */
+    @PostMapping("findIdByRoleId")
+    public Result findIdByRoleId(@RequestBody RouteVo route) {
+        return Result.o(route2Service.findIdByRoleId(route.getId()));
     }
 
     /**

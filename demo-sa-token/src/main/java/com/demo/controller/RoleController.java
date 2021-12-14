@@ -5,6 +5,7 @@ import cn.z.id.Id;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.pojo.Result;
+import com.demo.entity.vo.RoleRoute2Vo;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.UserVo;
@@ -37,6 +38,7 @@ public class RoleController extends ControllerBase {
 
     private final RoleService roleService;
     private final RoleRouteService roleRouteService;
+    private final RoleRoute2Service roleRoute2Service;
     private final UserService userService;
     private final RouteService routeService;
     private final Route2Service route2Service;
@@ -77,16 +79,25 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 添加路由
+     * 修改路由
      */
-    @PostMapping("addRouteIdList")
+    @PostMapping("updateRouteIdList")
     public Result addRouteIdList(@RequestBody RoleVo role) {
         Long roleId = role.getId();
         if (isNull(roleId)) {
             return paramIsError();
         }
-        if (insufficientPermission(role)) {
-            return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
+        long userId = StpUtil.getLoginIdAsLong();
+        // 非root用户
+        if (userId != 0) {
+            // 只能管理自己创建的角色
+            if (!roleService.findByCreateId(userId).stream().map(RoleVo::getId).collect(Collectors.toList()).contains(userId)) {
+                return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
+            }
+            // 只能管理自己有权限的路由
+            if (!routeService.findChildrenIdByUserId(userId).containsAll(role.getRouteIds())) {
+                return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
+            }
         }
         List<RoleRouteVo> roleRoutes = new ArrayList<>();
         for (Long id : role.getRouteIds()) {
@@ -96,42 +107,39 @@ public class RoleController extends ControllerBase {
             roleRoute.setRouteId(id);
             roleRoutes.add(roleRoute);
         }
-        return Result.o(roleService.addRouteIdList(roleRoutes));
+        return Result.o(roleRouteService.deleteByRoleId(roleId) && roleService.addRouteIdList(roleRoutes));
     }
 
     /**
-     * 是否权限不足
-     *
-     * @param role RoleVo
-     * @return 是否权限不足
+     * 修改前端路由
      */
-    private boolean insufficientPermission(RoleVo role) {
+    @PostMapping("updateRoute2IdList")
+    public Result addRoute2IdList(@RequestBody RoleVo role) {
+        Long roleId = role.getId();
+        if (isNull(roleId)) {
+            return paramIsError();
+        }
         long userId = StpUtil.getLoginIdAsLong();
         // 非root用户
         if (userId != 0) {
             // 只能管理自己创建的角色
             if (!roleService.findByCreateId(userId).stream().map(RoleVo::getId).collect(Collectors.toList()).contains(userId)) {
-                return true;
+                return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
             }
             // 只能管理自己有权限的路由
-            return !routeService.findChildrenIdByUserId(userId).containsAll(role.getRouteIds());
+            if (!route2Service.findChildrenIdByUserId(userId).containsAll(role.getRoute2Ids())) {
+                return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
+            }
         }
-        return false;
-    }
-
-    /**
-     * 删除路由
-     */
-    @PostMapping("deleteRouteIdList")
-    public Result deleteRouteIdList(@RequestBody RoleVo role) {
-        Long roleId = role.getId();
-        if (isNull(roleId)) {
-            return paramIsError();
+        List<RoleRoute2Vo> roleRoute2s = new ArrayList<>();
+        for (Long id : role.getRoute2Ids()) {
+            RoleRoute2Vo roleRoute = new RoleRoute2Vo();
+            roleRoute.setId(Id.next());
+            roleRoute.setRoleId(roleId);
+            roleRoute.setRoute2Id(id);
+            roleRoute2s.add(roleRoute);
         }
-        if (insufficientPermission(role)) {
-            return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
-        }
-        return Result.o(roleRouteService.deleteByRoleIdAndRouteList(roleId, role.getRouteIds()));
+        return Result.o(roleRoute2Service.deleteByRoleId(roleId) && roleService.addRoute2IdList(roleRoute2s));
     }
 
     /**

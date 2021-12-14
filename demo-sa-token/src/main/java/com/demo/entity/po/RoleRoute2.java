@@ -25,6 +25,6 @@ public class RoleRoute2 extends EntityBase {
     /**
      * 前端路由id
      */
-    private Long routeId;
+    private Long route2Id;
 
 }
