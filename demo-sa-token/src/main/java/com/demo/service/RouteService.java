@@ -260,11 +260,11 @@ public class RouteService extends ServiceBase {
     /**
      * 查询全部id，通过RoleId
      *
-     * @param userId userId
+     * @param roleId roleId
      * @return List&lt;Long>
      */
-    public List<Long> findIdByRoleId(Long userId) {
-        return routeDao.findIdByRoleId(userId);
+    public List<Long> findIdByRoleId(Long roleId) {
+        return routeDao.findIdByRoleId(roleId);
     }
 
 }

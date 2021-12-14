@@ -99,6 +99,14 @@ public class RouteController extends ControllerBase {
     }
 
     /**
+     * 查询全部id，通过RoleId
+     */
+    @PostMapping("findIdByRoleId")
+    public Result findIdByRoleId(@RequestBody RouteVo route) {
+        return Result.o(routeService.findIdByRoleId(route.getId()));
+    }
+
+    /**
      * 移动该节点到其他节点(moveId)下
      */
     @PostMapping("move")
