@@ -72,4 +72,11 @@
     ur.role_id =#{id}
   </select>
 
+  <select id="findAll" resultType="UserVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user
+  </select>
+
 </mapper>

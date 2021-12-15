@@ -56,4 +56,10 @@ public interface UserMapper {
      */
     List<UserVo> findByRoleId(Long roleId);
 
+    /**
+     * 查询全部
+     * @return List&lt;UserVo>
+     */
+    List<UserVo> findAll();
+
 }

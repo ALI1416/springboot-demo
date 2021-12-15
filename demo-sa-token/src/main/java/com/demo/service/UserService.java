@@ -95,4 +95,13 @@ public class UserService extends ServiceBase {
         return userDao.findByRoleId(roleId);
     }
 
+    /**
+     * 查询全部
+     *
+     * @return List&lt;UserVo>
+     */
+    public List<UserVo> findAll() {
+        return userDao.findAll();
+    }
+
 }

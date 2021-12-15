@@ -84,7 +84,7 @@ public class RoleController extends ControllerBase {
     @PostMapping("updateRouteIdList")
     public Result addRouteIdList(@RequestBody RoleVo role) {
         Long roleId = role.getId();
-        if (isNull(roleId)) {
+        if (existNull(roleId, role.getRouteIds()) || role.getRouteIds().size() == 0) {
             return paramIsError();
         }
         long userId = StpUtil.getLoginIdAsLong();
@@ -116,7 +116,7 @@ public class RoleController extends ControllerBase {
     @PostMapping("updateRoute2IdList")
     public Result addRoute2IdList(@RequestBody RoleVo role) {
         Long roleId = role.getId();
-        if (isNull(roleId)) {
+        if (existNull(roleId, role.getRoute2Ids()) || role.getRoute2Ids().size() == 0) {
             return paramIsError();
         }
         long userId = StpUtil.getLoginIdAsLong();

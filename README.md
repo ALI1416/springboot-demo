@@ -4,16 +4,53 @@
 - **`demo-base`** : springboot项目模板
   - SpringBoot Web
   - FastJson
-- **`demo-mysql`** : springboot整合mysql
+- **`demo-mysql`** : 整合mysql
+  - SpringBoot Web
+  - FastJson
   - MySQL
   - MyBatis
   - IP解析
   - 雪花ID生成器
   - IP地址转区域
   - HuTool工具包
-- **`demo-mysql2`** : springboot整合mysql2
+- **`demo-mysql2`** : 整合mysql2
+  - SpringBoot Web
+  - FastJson
+  - MySQL
+  - MyBatis
   - PageHelper分页排序查询
-- **`demo-redis`** : springboot整合redis
+  - IP解析
+  - 雪花ID生成器
+  - IP地址转区域
+  - HuTool工具包
+- **`demo-redis`** : 整合redis
+  - SpringBoot Web
+  - FastJson
+  - Redis
+  - 雪花ID生成器
+- **`mongodb`** : 整合mongodb
+  - SpringBoot Web
+  - FastJson
+  - MongoDB
+  - 雪花ID生成器
+  - HuTool工具包
+- **`rabbitmq`** : 整合rabbitmq
+  - SpringBoot Web
+  - FastJson
+  - Protocol Buffers
+  - Protocol Buffers Util
+  - RabbitMQ
+  - 雪花ID生成器
+- **`sa-token`** : 整合sa-token
+  - SpringBoot Web
+  - FastJson
+  - Redis
+  - SaToken权限认证
+  - SaToken整合Redis(使用jackson序列化)
+  - MySQL
+  - MyBatis
+  - PageHelper分页排序查询
+  - 雪花ID生成器
 - `.gitignore` : git忽略
 - `LICENSE` : 许可证
 - `pom.xml` : 父pom
@@ -64,18 +101,22 @@
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.pagehelper/pagehelper-spring-boot-starter/badge.svg)
     - `SaToken权限认证` : `cn.dev33:sa-token-spring-boot-starter`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.dev33/sa-token-spring-boot-starter/badge.svg)
+    - `SaToken整合Redis(使用jackson序列化)` : `cn.dev33:sa-token-dao-redis-jackson`
+      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.dev33/sa-token-dao-redis-jackson/badge.svg)
     - `雪花ID生成器` : `cn.404z:id-spring-boot-autoconfigure`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.404z/id-spring-boot-autoconfigure/badge.svg)
     - `IP地址转区域` : `cn.404z:ip2region-spring-boot-autoconfigure`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.404z/ip2region-spring-boot-autoconfigure/badge.svg)
     - `IP解析` : `org.lionsoul:ip2region`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.lionsoul/ip2region/badge.svg)
-    - `修复注解异常` : `com.google.code.findbugs:annotations`
-      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.google.code.findbugs/annotations/badge.svg)
     - `FastJson` : `com.alibaba:fastjson`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/fastjson/badge.svg)
     - `EasyExcel` : `com.alibaba:easyexcel`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/easyexcel/badge.svg)
+    - `Protocol Buffers` : `com.google.protobuf:protobuf-java`
+      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.google.protobuf/protobuf-java/badge.svg)
+    - `Protocol Buffers Util` : `com.google.protobuf:protobuf-java-util`
+      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.google.protobuf/protobuf-java-util/badge.svg)
     - `HuTool工具包` : `cn.hutool:hutool-all`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/cn.hutool/hutool-all/badge.svg)
     - `JustAuth第三方登录` : `me.zhyd.oauth:JustAuth`

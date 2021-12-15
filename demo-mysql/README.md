@@ -28,9 +28,9 @@
   - **`mysql`** : mysql的Dao层文件夹
     - `LoginLogTestDao` : 登录日志测试Dao
 - **`entity`** : 实体层文件夹
-  - **`po`**  数据库实体层
+  - **`po`** : 数据库实体层
     - `LoginLogTest` : 登录日志测试实体类
-  - **`pojo`**  普通实体层
+  - **`pojo`** : 普通实体层
     - `Result` : 返回结果实体类
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)

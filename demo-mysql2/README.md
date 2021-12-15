@@ -17,7 +17,6 @@
   - `ControllerBase` : 控制层基类
   - `DaoBase` : 数据访问层基类
   - `EntityBase` : 实体层基类
-  - `ResultBase` : 返回结果基类
   - `ServiceBase` : 服务层基类
   - `ToStringBase` : ToString格式化基类
 - **`config`** : 配置文件夹
@@ -31,17 +30,19 @@
   - **`mysql`** : mysql的Dao层文件夹
     - `LoginLogTestDao` : 登录日志测试Dao
 - **`entity`** : 实体层文件夹
-  - **`po`**  数据库实体层
-    - `LoginLogTest` : 登录日志测试实体类
-  - **`pojo`**  普通实体层
+  - **`po`** : 数据库实体层
+    - `User` : 用户实体类
+    - `UserBak` : 用户备份实体类
+  - **`pojo`** : 普通实体层
     - `Result` : 返回结果实体类
+    - `ResultBatch` : 批量返回结果实体类
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
   - `NotFoundExceptionHandler` : 404异常处理类
 - **`mapper`** : mysql的mapper接口层
-  - `LoginLogTestMapper` : 登录日志测试Mapper接口
+  - `UserMapper` : 用户Mapper接口
 - **`service`** : 服务层
-  - `LoginLogTestService` : 登录日志测试Service
+  - `UserService` : 用户Service
 - **`tool`** : 工具类(无后缀Utils)
   - `Function` : 自定义函数
 - **`util`** : 工具类(有后缀Utils)
@@ -60,7 +61,8 @@
 - **`file.ip2region`** : ip2region数据文件夹
   - `data.db` : ip2region数据文件
 - **`mapper`** : mysql的mapper文件夹
-  - `LoginLogTestMapper` : 登录日志测试Mapper
+  - `BaseMapper` : 基Mapper
+  - `UserMapper` : 用户Mapper
 - **`sql`** : 数据库文件夹
   - `demo.sql` : 初始化数据库文件
 - **`static`** : 静态文件

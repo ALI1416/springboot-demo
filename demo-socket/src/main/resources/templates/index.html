@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+  <meta charset="UTF-8">
+  <title>webSocket</title>
+  <script src="js/jquery-3.6.0.js"></script>
+  <script src="js/sockjs-1.5.2.js"></script>
+  <script src="js/stomp-1.7.1.js"></script>
+</head>
+
+<body>
+<div>
+  <button id="connect">连接</button>
+  <button id="disconnect" disabled="disabled">断开</button>
+</div>
+<div>
+  <h3>广播形式</h3>
+  <input id="broadcastText" type="text">
+  <button id="broadcastButton">发送</button>
+  <h4>广播消息：</h4>
+  <textarea id="broadcastMsg" readonly cols="30" rows="3"></textarea>
+</div>
+<div>
+  <h3>订阅形式</h3>
+  <h4>订阅消息：</h4>
+  <textarea id="subscribeMsg" readonly cols="30" rows="3"></textarea>
+</div>
+<div>
+  <h3>角色形式</h3>
+  <input id="userText" type="text">
+  <button id="userButton">发送</button>
+  <h4>用户消息：</h4>
+  <textarea id="userMsg" readonly cols="30" rows="3"></textarea>
+</div>
+<div>
+  <h3>无APP</h3>
+  <input id="appText" type="text">
+  <button id="appButton">发送</button>
+  <h4>前端消息：</h4>
+  <textarea id="appMsg" readonly cols="30" rows="3"></textarea>
+</div>
+</body>
+<script>
+    var stomp = null;
+    $("#connect").click(function () {
+        const url = "http://localhost:8080/ws";
+        const socket = new SockJS(url);
+        stomp = Stomp.over(socket);
+        //连接
+        stomp.connect({}, function (frame) {
+            //订阅广播
+            stomp.subscribe("/topic/broadcast", function (res) {
+                $("#broadcastMsg").val(res.body);
+            });
+            //订阅，一般只有订阅的时候在返回
+            stomp.subscribe("/app/subscribe/123", function (res) {
+                $("#subscribeMsg").val(res.body);
+            });
+            //用户模式
+            stomp.subscribe("/user/queue/one", function (res) {
+                $("#userMsg").val(res.body);
+            });
+            //无APP
+            stomp.subscribe("/topic/app", function (res) {
+                $("#appMsg").val(res.body);
+            });
+            setConnect(true);
+        });
+    });
+
+    $("#disconnect").click(function () {
+        if (stomp != null) {
+            stomp.disconnect();
+        }
+        setConnect(false);
+    });
+
+    //设置按钮
+    function setConnect(connectStatus) {
+        $("#connect").attr("disabled", connectStatus);
+        $("#disconnect").attr("disabled", !connectStatus);
+    }
+
+    //发送广播消息
+    $("#broadcastButton").click(function () {
+        stomp.send("/app/broadcast", {}, JSON.stringify({"body": $("#broadcastText").val()}))
+    });
+
+    //发送用户消息
+    $("#userButton").click(function () {
+        stomp.send("/app/one", {}, JSON.stringify({"body": $("#userText").val()}))
+    });
+
+    //发送web消息
+    $("#appButton").click(function () {
+        stomp.send("/topic/app", {}, JSON.stringify({"body": $("#appText").val()}))
+    });
+</script>
+
+</html>

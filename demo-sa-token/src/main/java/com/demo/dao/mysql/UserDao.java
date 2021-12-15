@@ -95,4 +95,13 @@ public class UserDao extends DaoBase {
         return userMapper.findByRoleId(roleId);
     }
 
+    /**
+     * 查询全部
+     *
+     * @return List&lt;UserVo>
+     */
+    public List<UserVo> findAll() {
+        return userMapper.findAll();
+    }
+
 }

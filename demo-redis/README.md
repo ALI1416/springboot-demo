@@ -21,16 +21,22 @@
 - **`constant`** : 常数文件夹
   - `ResultCodeEnum` : 返回结果状态枚举类
 - **`controller`** : 控制层文件夹
-  - `IndexController` : 首页
+  - `HashController` : 哈希
+  - `IndexController` : 通用
+  - `ListController` : 列表
+  - `SetController` : 集合
+  - `StringController` : 字符串
 - **`entity`** : 实体层文件夹
-  - **`po`**  数据库实体层
+  - **`po`** : 数据库实体层
     - `User` : 用户
-  - **`pojo`**  普通实体层
+  - **`pojo`** : 普通实体层
     - `Result` : 返回结果实体类
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
   - `NotFoundExceptionHandler` : 404异常处理类
-- `DemoBaseApp` : 启动类
+- **`util`** : 工具
+  - `RedisUtils` : Redis工具类
+- `DemoRedisApp` : 启动类
 
 ### src.main.resources
 - **`config`** : 配置文件
@@ -59,6 +65,12 @@
 
 #### application-xxx.yml
 - `spring.devtools.restart.enabled` : 启用热部署
+- `spring.redis` : redis配置
+  - `database` : 数据库索引
+  - `host` : 地址
+  - `port` : 端口
+  - `password` : 密码
+  - `timeout` : 超时时间
 - `logging.level.root` : 记录日志等级，值如下
   - `trace` : 跟踪
   - `debug` : 调试

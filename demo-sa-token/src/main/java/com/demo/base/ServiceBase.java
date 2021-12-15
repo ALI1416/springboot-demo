@@ -8,7 +8,7 @@ import com.demo.tool.Function;
 import java.util.List;
 
 /**
- * <h1>Service层基类</h1>
+ * <h1>服务层基类</h1>
  *
  * <p>
  * createDate 2021/10/27 14:33:27

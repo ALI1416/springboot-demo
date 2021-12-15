@@ -16,7 +16,7 @@
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.6.0</version>
+    <version>2.6.1</version>
   </parent>
 
   <modules>
@@ -27,6 +27,7 @@
     <module>demo-mongodb</module>
     <module>demo-rabbitmq</module>
     <module>demo-sa-token</module>
+    <module>demo-socket</module>
   </modules>
 
   <properties>
@@ -40,9 +41,13 @@
 
     <!---->
     <!--继承父pom版本号-->
-    <!--SpringBootWeb-->
+    <!--SpringBoot Web-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
     <!--org.springframework.boot:spring-boot-starter-web-->
+
+    <!--SpringBoot WebSocket-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+    <!--org.springframework.boot:spring-boot-starter-websocket-->
 
     <!--邮件-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
@@ -108,7 +113,7 @@
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
     <!-- https://mvnrepository.com/artifact/io.minio/minio -->
-    <minio.version>8.3.3</minio.version>
+    <minio.version>8.3.4</minio.version>
 
     <!--MyBatis-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
@@ -118,12 +123,13 @@
     <!--PageHelper分页排序查询-->
     <!--com.github.pagehelper:pagehelper-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
-    <pagehelper-spring-boot-starter.version>1.4.0</pagehelper-spring-boot-starter.version>
+    <pagehelper-spring-boot-starter.version>1.4.1</pagehelper-spring-boot-starter.version>
 
     <!--SaToken权限认证-->
     <!--cn.dev33:sa-token-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-spring-boot-starter -->
     <!--SaToken整合Redis(使用jackson序列化)-->
+    <!--cn.dev33:sa-token-dao-redis-jackson-->
     <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-dao-redis-jackson -->
     <sa-token.version>1.28.0</sa-token.version>
 
@@ -141,11 +147,6 @@
     <!--org.lionsoul:ip2region-->
     <!-- https://mvnrepository.com/artifact/org.lionsoul/ip2region -->
     <ip2region.version>1.7.2</ip2region.version>
-
-    <!--修复注解异常-->
-    <!--com.google.code.findbugs:annotations-->
-    <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/annotations -->
-    <findbugs-annotations.version>3.0.1</findbugs-annotations.version>
 
     <!--FastJson-->
     <!--com.alibaba:fastjson-->
@@ -168,7 +169,7 @@
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
     <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
-    <hutool-all.version>5.7.16</hutool-all.version>
+    <hutool-all.version>5.7.17</hutool-all.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
@@ -178,7 +179,7 @@
     <!--手机号码归属地查询-->
     <!--me.ihxq.projects:phone-number-geo-->
     <!-- https://mvnrepository.com/artifact/me.ihxq.projects/phone-number-geo -->
-    <phone-number-geo.version>1.0.8-202108</phone-number-geo.version>
+    <phone-number-geo.version>1.0.9-202108</phone-number-geo.version>
 
     <!--图片验证码-->
     <!--com.github.whvcse:easy-captcha-->

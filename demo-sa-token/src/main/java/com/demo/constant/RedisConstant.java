@@ -1,7 +1,7 @@
 package com.demo.constant;
 
 /**
- * <h1>RedisConstant</h1>
+ * <h1>Redis常量</h1>
  *
  * <p>
  * createDate 2021/11/30 09:22:48

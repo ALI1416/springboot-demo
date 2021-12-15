@@ -23,9 +23,9 @@
 - **`controller`** : 控制层文件夹
   - `IndexController` : 首页
 - **`entity`** : 实体层文件夹
-  - **`po`**  数据库实体层
+  - **`po`** : 数据库实体层
     - `User` : 用户
-  - **`pojo`**  普通实体层
+  - **`pojo`** : 普通实体层
     - `Result` : 返回结果实体类
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)

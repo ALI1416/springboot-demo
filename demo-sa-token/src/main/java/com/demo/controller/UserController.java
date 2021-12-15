@@ -121,4 +121,12 @@ public class UserController extends ControllerBase {
         return Result.o(route2Service.findByUserId(StpUtil.getLoginIdAsLong()));
     }
 
+    /**
+     * 查询全部
+     */
+    @PostMapping("findAll")
+    public Result findAll() {
+        return Result.o(userService.findAll());
+    }
+
 }

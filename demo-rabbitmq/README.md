@@ -23,14 +23,21 @@
 - **`controller`** : 控制层文件夹
   - `IndexController` : 首页
 - **`entity`** : 实体层文件夹
-  - **`po`**  数据库实体层
-    - `User` : 用户
-  - **`pojo`**  普通实体层
+  - **`po`** : 数据库实体层
+    - `Car` : 车
+    - `Person` : 用户
+  - **`pojo`** : 普通实体层
     - `Result` : 返回结果实体类
+  - **`proto`** : proto文件
+    - `PersonProto` : PersonProto
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
   - `NotFoundExceptionHandler` : 404异常处理类
-- `DemoBaseApp` : 启动类
+- **`service`** : 服务层
+  - **`rabbit`** : rabbit服务层
+    - `RabbitService` : RabbitService
+    - `RabbitService2` : RabbitService2
+- `DemoRabbitMqApp` : 启动类
 
 ### src.main.resources
 - **`config`** : 配置文件
@@ -40,6 +47,8 @@
   - `application-qas.yml` : 测试环境配置
 - **`static`** : 静态文件
   - `favicon.ico` : 图标
+- **`proto`** : proto文件
+  - `person.proto` : person.proto
 - `404z.cn.jks` : ssl证书
 - `banner.txt` : 横幅
 
@@ -59,6 +68,11 @@
 
 #### application-xxx.yml
 - `spring.devtools.restart.enabled` : 启用热部署
+- `spring.rabbitmq` : rabbitmq配置
+  - `host` : 地址
+  - `port` : 端口
+  - `username` : 用户名
+  - `password` : 密码
 - `logging.level.root` : 记录日志等级，值如下
   - `trace` : 跟踪
   - `debug` : 调试
