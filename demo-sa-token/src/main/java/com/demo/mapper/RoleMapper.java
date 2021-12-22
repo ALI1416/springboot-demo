@@ -41,14 +41,6 @@ public interface RoleMapper {
     int delete(Long id);
 
     /**
-     * 删除RoleRoute表，通过RoleId
-     *
-     * @param id RoleId
-     * @return 执行成功数量
-     */
-    int deleteRoleRouteByRoleId(Long id);
-
-    /**
      * 查询所有
      *
      * @return List&lt;RoleVo>

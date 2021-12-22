@@ -60,16 +60,6 @@ public class RoleDao extends DaoBase {
     }
 
     /**
-     * 删除RoleRoute表，通过RoleId
-     *
-     * @param id RoleId
-     * @return 是否成功
-     */
-    public boolean deleteRoleRouteByRoleId(Long id) {
-        return tryif3(() -> roleMapper.deleteRoleRouteByRoleId(id));
-    }
-
-    /**
      * 查询所有
      *
      * @return List&lt;RoleVo>

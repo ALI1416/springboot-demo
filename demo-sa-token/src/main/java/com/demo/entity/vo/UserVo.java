@@ -29,6 +29,10 @@ public class UserVo extends User {
      */
     private List<RoleVo> roles;
     /**
+     * 角色id
+     */
+    private List<Long> roleIds;
+    /**
      * token
      */
     private String token;

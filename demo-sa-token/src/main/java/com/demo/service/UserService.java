@@ -2,13 +2,17 @@ package com.demo.service;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
+import cn.z.id.Id;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
+import com.demo.dao.mysql.UserRoleDao;
+import com.demo.entity.vo.UserRoleVo;
 import com.demo.entity.vo.UserVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +30,7 @@ import java.util.List;
 public class UserService extends ServiceBase {
 
     private final UserDao userDao;
+    private final UserRoleDao userRoleDao;
 
     /**
      * 登录
@@ -54,11 +59,18 @@ public class UserService extends ServiceBase {
     @Transactional
     public long register(UserVo user) {
         user.setPwd(BCrypt.hashpw(user.getPwd()));
-        if (userDao.existAccount(user.getAccount())) {
-            return 0L;
-        }
         user.setCreateId(StpUtil.getLoginIdAsLong());
         return userDao.insert(user);
+    }
+
+    /**
+     * 是否存在账号
+     *
+     * @param account account
+     * @return 是否存在
+     */
+    public boolean existAccount(String account) {
+        return userDao.existAccount(account);
     }
 
     /**
@@ -73,6 +85,32 @@ public class UserService extends ServiceBase {
         u.setId(user.getId());
         u.setPwd(BCrypt.hashpw(user.getNewPwd()));
         return userDao.update(u);
+    }
+
+    /**
+     * 修改个人信息(除密码)
+     *
+     * @param user UserVo
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean updateMyInfo(UserVo user) {
+        user.setPwd(null);
+        return userDao.update(user);
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param user UserVo
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean update(UserVo user) {
+        if (user.getPwd() != null) {
+            user.setPwd(BCrypt.hashpw(user.getPwd()));
+        }
+        return userDao.update(user);
     }
 
     /**
@@ -102,6 +140,25 @@ public class UserService extends ServiceBase {
      */
     public List<UserVo> findAll() {
         return userDao.findAll();
+    }
+
+    /**
+     * 更新用户的角色
+     *
+     * @param user user
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean updateRole(UserVo user) {
+        List<UserRoleVo> userRoles = new ArrayList<>();
+        for (Long roleId : user.getRoleIds()) {
+            UserRoleVo u = new UserRoleVo();
+            u.setId(Id.next());
+            u.setUserId(user.getId());
+            u.setRoleId(roleId);
+            userRoles.add(u);
+        }
+        return userRoleDao.deleteByUserId(user.getId()) && userRoleDao.insertList(userRoles);
     }
 
 }

@@ -53,9 +53,9 @@ public enum ResultCodeEnum {
      */
     NOT_PERMISSION(1002, "账号没有权限访问"),
     /**
-     * 1003 注册失败，账号已存在
+     * 1003 注册失败
      */
-    REGISTER_FAIL(1003, "注册失败，账号已存在"),
+    REGISTER_FAIL(1003, "注册失败"),
     /**
      * 1004 密码错误
      */
@@ -64,6 +64,10 @@ public enum ResultCodeEnum {
      * 1005 权限不足
      */
     INSUFFICIENT_PERMISSION(1005, "权限不足"),
+    /**
+     * 1006 账号已存在
+     */
+    ACCOUNT_EXIST(1006, "账号已存在"),
     /* ==================== 未知错误-1 ==================== */
     /**
      * -1 未知错误

@@ -347,4 +347,16 @@ public class RouteInterceptor implements HandlerInterceptor {
         RedisUtils.deleteMulti(keys);
     }
 
+    /**
+     * 删除指定id的ROUTE_USER
+     *
+     * @param id 用户id
+     */
+    public void deleteRouteUser(Long id) {
+        Set<String> keys = new HashSet<>();
+        keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
+        keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+        RedisUtils.deleteMulti(keys);
+    }
+
 }

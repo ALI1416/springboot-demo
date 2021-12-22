@@ -8,6 +8,7 @@ import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
+import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RoleService;
 import com.demo.service.Route2Service;
 import com.demo.service.RouteService;
@@ -37,6 +38,7 @@ public class UserController extends ControllerBase {
     private final RoleService roleService;
     private final RouteService routeService;
     private final Route2Service route2Service;
+    private final RouteInterceptor routeInterceptor;
 
     /**
      * 登录
@@ -62,11 +64,14 @@ public class UserController extends ControllerBase {
      */
     @PostMapping("register")
     public Result register(@RequestBody UserVo user) {
-        if (existNull(user.getAccount(), user.getPwd())) {
+        if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
             return paramIsError();
         }
+        if (userService.existAccount(user.getAccount())) {
+            return Result.e(ResultCodeEnum.ACCOUNT_EXIST);
+        }
         long id = userService.register(user);
-        if (id == 0) {
+        if (id == 0L) {
             return Result.e(ResultCodeEnum.REGISTER_FAIL);
         }
         return Result.o(id);
@@ -86,6 +91,32 @@ public class UserController extends ControllerBase {
             return Result.e(ResultCodeEnum.PASSWORD_ERROR);
         }
         return Result.o(userService.changePwd(user));
+    }
+
+    /**
+     * 修改个人信息(除密码)
+     */
+    @PostMapping("updateMyInfo")
+    public Result updateMyInfo(@RequestBody UserVo user) {
+        if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
+            return Result.e(ResultCodeEnum.ACCOUNT_EXIST);
+        }
+        user.setId(StpUtil.getLoginIdAsLong());
+        return Result.o(userService.updateMyInfo(user));
+    }
+
+    /**
+     * 修改用户信息
+     */
+    @PostMapping("update")
+    public Result update(@RequestBody UserVo user) {
+        if (isNull(user.getId())) {
+            return paramIsError();
+        }
+        if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
+            return Result.e(ResultCodeEnum.ACCOUNT_EXIST);
+        }
+        return Result.o(userService.update(user));
     }
 
     /**
@@ -127,6 +158,29 @@ public class UserController extends ControllerBase {
     @PostMapping("findAll")
     public Result findAll() {
         return Result.o(userService.findAll());
+    }
+
+    /**
+     * 修改用户的角色
+     */
+    @PostMapping("updateRole")
+    public Result updateRole(@RequestBody UserVo user) {
+        if (existNull(user.getId(), user.getRoleIds()) || user.getRoleIds().size() == 0) {
+            return paramIsError();
+        }
+        return Result.o(userService.updateRole(user));
+    }
+
+    /**
+     * 刷新用户的角色
+     */
+    @PostMapping("refreshRole")
+    public Result refreshRole(@RequestBody UserVo user) {
+        if (isNull(user.getId())) {
+            return paramIsError();
+        }
+        routeInterceptor.deleteRouteUser(user.getId());
+        return Result.o();
     }
 
 }

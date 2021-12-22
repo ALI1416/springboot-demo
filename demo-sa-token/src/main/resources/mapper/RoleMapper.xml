@@ -37,14 +37,6 @@
     id =#{id}
   </delete>
 
-  <delete id="deleteRoleRouteByRoleId" parameterType="Long">
-    DELETE
-    FROM
-    role_route
-    WHERE
-    role_id =#{id}
-  </delete>
-
   <select id="findAll" resultType="RoleVo">
     SELECT
     <include refid="col"/>

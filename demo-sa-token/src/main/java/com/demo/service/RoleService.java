@@ -28,6 +28,7 @@ public class RoleService extends ServiceBase {
     private final RoleDao roleDao;
     private final RouteDao routeDao;
     private final Route2Dao route2Dao;
+    private final UserRoleDao userRoleDao;
     private final RoleRouteDao roleRouteDao;
     private final RoleRoute2Dao roleRoute2Dao;
 
@@ -61,7 +62,7 @@ public class RoleService extends ServiceBase {
      */
     @Transactional
     public boolean delete(Long id) {
-        return roleDao.deleteRoleRouteByRoleId(id) && roleDao.delete(id);
+        return userRoleDao.deleteByRoleId(id) && roleRouteDao.deleteByRoleId(id) && roleDao.delete(id);
     }
 
     /**
