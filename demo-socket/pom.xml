@@ -32,10 +32,10 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
     </dependency>
-    <!--thymeleaf-->
+    <!--雪花ID生成器-->
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+      <groupId>cn.404z</groupId>
+      <artifactId>id-spring-boot-autoconfigure</artifactId>
     </dependency>
 
     <!--特殊依赖-->

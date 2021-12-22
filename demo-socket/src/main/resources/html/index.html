@@ -42,11 +42,11 @@
 </div>
 </body>
 <script>
-    var stomp = null;
+    let stomp = null;
     $("#connect").click(function () {
-        const url = "http://localhost:8080/ws";
-        const socket = new SockJS(url);
-        stomp = Stomp.over(socket);
+        const url = "ws://localhost:8080/ws";
+        // const socket = new SockJS(url);
+        stomp = Stomp.client(url);
         //连接
         stomp.connect({}, function (frame) {
             //订阅广播
