@@ -11,6 +11,8 @@
 
 <body>
 <div>
+  <span>用户名:</span>
+  <input id="user" type="text" size="10">
   <button id="connect">连接</button>
   <button id="disconnect" disabled="disabled">断开</button>
 </div>
@@ -22,47 +24,71 @@
   <textarea id="broadcastMsg" readonly cols="30" rows="3"></textarea>
 </div>
 <div>
+  <h3>广播形式2</h3>
+  <input id="broadcastText2" type="text">
+  <button id="broadcastButton2">发送</button>
+  <h4>广播消息2：</h4>
+  <textarea id="broadcastMsg2" readonly cols="30" rows="3"></textarea>
+</div>
+<div>
   <h3>订阅形式</h3>
   <h4>订阅消息：</h4>
   <textarea id="subscribeMsg" readonly cols="30" rows="3"></textarea>
+  <h4>订阅异常消息：</h4>
+  <textarea id="subscribeErrorMsg" readonly cols="30" rows="3"></textarea>
 </div>
 <div>
   <h3>角色形式</h3>
+  <span>发送到用户名:</span>
+  <input id="sendUser" type="text" size="10">
+  <br>
   <input id="userText" type="text">
   <button id="userButton">发送</button>
   <h4>用户消息：</h4>
   <textarea id="userMsg" readonly cols="30" rows="3"></textarea>
 </div>
 <div>
-  <h3>无APP</h3>
+  <h3>没有处理方法的广播</h3>
   <input id="appText" type="text">
   <button id="appButton">发送</button>
-  <h4>前端消息：</h4>
+  <h4>消息：</h4>
   <textarea id="appMsg" readonly cols="30" rows="3"></textarea>
 </div>
 </body>
 <script>
     let stomp = null;
     $("#connect").click(function () {
-        const url = "ws://localhost:8080/ws";
-        // const socket = new SockJS(url);
-        stomp = Stomp.client(url);
+        const url = "http://localhost:8080/ws";
+        const socket = new SockJS(url);
+        // 用户名
+        const header = {
+            user: $("#user").val()
+        };
+        stomp = Stomp.over(socket);
         //连接
-        stomp.connect({}, function (frame) {
-            //订阅广播
+        stomp.connect(header, function (frame) {
+            //广播
             stomp.subscribe("/topic/broadcast", function (res) {
                 $("#broadcastMsg").val(res.body);
             });
-            //订阅，一般只有订阅的时候在返回
-            stomp.subscribe("/app/subscribe/123", function (res) {
+            //广播2
+            stomp.subscribe("/topic/broadcast2", function (res) {
+                $("#broadcastMsg2").val(res.body);
+            });
+            //订阅
+            stomp.subscribe("/app/subscribe/" + $("#user").val(), function (res) {
                 $("#subscribeMsg").val(res.body);
             });
-            //用户模式
+            //订阅异常消息
+            stomp.subscribe("/user/queue/errors" , function (res) {
+                $("#subscribeErrorMsg").val(res.body);
+            });
+            //用户
             stomp.subscribe("/user/queue/one", function (res) {
                 $("#userMsg").val(res.body);
             });
-            //无APP
-            stomp.subscribe("/topic/app", function (res) {
+            //没有处理方法的广播
+            stomp.subscribe("/topic/aaa", function (res) {
                 $("#appMsg").val(res.body);
             });
             setConnect(true);
@@ -84,17 +110,22 @@
 
     //发送广播消息
     $("#broadcastButton").click(function () {
-        stomp.send("/app/broadcast", {}, JSON.stringify({"body": $("#broadcastText").val()}))
+        stomp.send("/app/broadcast", {}, JSON.stringify({"msg": $("#broadcastText").val()}))
+    });
+
+    //发送广播消息2
+    $("#broadcastButton2").click(function () {
+        stomp.send("/app/broadcast2", {}, JSON.stringify({"msg": $("#broadcastText2").val()}))
     });
 
     //发送用户消息
     $("#userButton").click(function () {
-        stomp.send("/app/one", {}, JSON.stringify({"body": $("#userText").val()}))
+        stomp.send("/app/one", {}, JSON.stringify({"user": $("#sendUser").val(), "msg": $("#userText").val()}))
     });
 
-    //发送web消息
+    //没有处理方法的广播
     $("#appButton").click(function () {
-        stomp.send("/topic/app", {}, JSON.stringify({"body": $("#appText").val()}))
+        stomp.send("/topic/aaa", {}, JSON.stringify({"msg": $("#appText").val()}))
     });
 </script>
 

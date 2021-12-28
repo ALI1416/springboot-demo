@@ -1,14 +1,19 @@
 package com.demo.config;
 
-import com.demo.interceptor.SessionAuthHandshakeInterceptor;
-import com.demo.interceptor.UserInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
+
+import java.util.List;
 
 /**
  * <h1>WebSocket配置类</h1>
@@ -28,8 +33,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws") // 前缀
                 .setAllowedOriginPatterns("*") // 启用跨域
-                // .withSockJS(); // 使用SockJS
-                .addInterceptors(new HttpSessionHandshakeInterceptor());
+                .withSockJS(); // 使用SockJS
     }
 
     @Override
@@ -39,9 +43,29 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .enableSimpleBroker("/topic", "/queue"); // 服务端--->客户端(广播、队列)
     }
 
-    /*将客户端渠道拦截器加入spring ioc容器*/
-    @Bean
-    public UserInterceptor createUserInterceptor() {
-        return new UserInterceptor();
+    /**
+     * 拦截器
+     */
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ChannelInterceptor() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                if (accessor == null) {
+                    return null;
+                }
+                // 首次连接设置用户名
+                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    List<String> user = accessor.getNativeHeader("user");
+                    if (user == null) {
+                        return null;
+                    }
+                    accessor.setUser(() -> user.get(0));
+                    return message;
+                }
+                return message;
+            }
+        });
     }
 }

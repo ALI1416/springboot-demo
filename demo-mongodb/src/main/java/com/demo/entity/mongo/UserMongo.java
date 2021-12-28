@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.sql.Timestamp;
+
 /**
  * <h1>用户Mongo实体</h1>
  *
@@ -45,5 +47,10 @@ public class UserMongo extends MongoEntityBase {
      * 粉丝人数
      */
     private Integer following;
+
+    /**
+     * 时间
+     */
+    private Timestamp date;
 
 }

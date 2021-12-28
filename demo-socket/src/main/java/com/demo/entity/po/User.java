@@ -21,28 +21,12 @@ import java.util.Date;
 public class User extends ToStringBase {
 
     /**
-     * 账号
-     */
-    private String account;
-
-    /**
      * 用户名
      */
-    private String name;
-
+    private String user;
     /**
-     * 出生年
+     * 消息
      */
-    private int year;
-
-    /**
-     * 性别
-     */
-    private Boolean gender;
-
-    /**
-     * 日期
-     */
-    private Date date;
+    private String msg;
 
 }

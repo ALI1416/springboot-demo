@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import cn.z.clock.Clock;
 import com.demo.entity.mongo.UserMongo;
 import com.demo.entity.pojo.Result;
 import com.demo.service.UserMongoService;
@@ -38,6 +39,7 @@ public class UserMongoController {
      */
     @PostMapping("/insert")
     public Result insert(@RequestBody UserMongo userMongo) {
+        userMongo.setDate(Clock.timestamp());
         return Result.o(userMongoService.insert(userMongo));
     }
 

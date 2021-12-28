@@ -3,13 +3,15 @@ package com.demo.config;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.CustomConversions;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.convert.DbRefResolver;
-import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
-import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.convert.*;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * <h1>MongoDB配置</h1>
@@ -40,5 +42,27 @@ public class MongoDbConfig {
         mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return mappingConverter;
     }
+
+    /**
+     * 自定义转换器
+     */
+    @Bean
+    public MongoCustomConversions customConversions() {
+        return MongoCustomConversions.create(mongoConverterConfigurationAdapter -> {
+            mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter());
+        });
+    }
+
+    /**
+     * Date转Timestamp转换器
+     */
+    @ReadingConverter
+    public static class Date2TimestampConverter implements Converter<Date, Timestamp> {
+        @Override
+        public Timestamp convert(Date date) {
+            return new Timestamp(date.getTime());
+        }
+    }
+
 
 }
