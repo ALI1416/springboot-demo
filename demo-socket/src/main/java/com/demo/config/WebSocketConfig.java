@@ -32,8 +32,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws") // 前缀
-                .setAllowedOriginPatterns("*") // 启用跨域
-                .withSockJS(); // 使用SockJS
+                .setAllowedOriginPatterns("*"); // 启用跨域
     }
 
     @Override
@@ -68,4 +67,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             }
         });
     }
+
 }

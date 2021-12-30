@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <title>webSocket</title>
   <script src="js/jquery-3.6.0.js"></script>
-  <script src="js/sockjs-1.5.2.js"></script>
   <script src="js/stomp-1.7.1.js"></script>
 </head>
 
@@ -58,15 +57,14 @@
 <script>
     let stomp = null;
     $("#connect").click(function () {
-        const url = "http://localhost:8080/ws";
-        const socket = new SockJS(url);
+        const url = "ws://127.0.0.1:8080/ws";
         // 用户名
         const header = {
             user: $("#user").val()
         };
-        stomp = Stomp.over(socket);
+        stomp = Stomp.client(url);
         //连接
-        stomp.connect(header, function (frame) {
+        stomp.connect(header, function () {
             //广播
             stomp.subscribe("/topic/broadcast", function (res) {
                 $("#broadcastMsg").val(res.body);

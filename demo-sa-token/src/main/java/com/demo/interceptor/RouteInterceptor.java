@@ -53,7 +53,6 @@ public class RouteInterceptor implements HandlerInterceptor {
      * @throws cn.dev33.satoken.exception.NotPermissionException 用户没有权限访问该URL
      */
     @Override
-    @SuppressWarnings("all")
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 前端预检查不拦截
         if ("OPTIONS".equals(request.getMethod())) {
