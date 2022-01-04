@@ -241,12 +241,6 @@
         <artifactId>minio</artifactId>
         <version>${minio.version}</version>
       </dependency>
-      <!--修复注解异常-->
-      <dependency>
-        <groupId>com.google.code.findbugs</groupId>
-        <artifactId>annotations</artifactId>
-        <version>${findbugs-annotations.version}</version>
-      </dependency>
       <!--FastJson-->
       <dependency>
         <groupId>com.alibaba</groupId>

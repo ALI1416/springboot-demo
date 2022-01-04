@@ -270,6 +270,28 @@ public class UserMongoController {
     }
 
     /**
+     * <h3>分页查找</h3>
+     * POST /findPage<br>
+     * body JSON {"pages":"0","rows":"2","orderBy":"name desc"}<br>
+     * Page
+     */
+    @PostMapping("/findPage")
+    public Result findPage(@RequestBody UserMongo userMongo) {
+        return Result.o(userMongoService.findPage(userMongo));
+    }
+
+    /**
+     * <h3>排序查找</h3>
+     * POST /findSort<br>
+     * body JSON {"orderBy":"name desc"}<br>
+     * List
+     */
+    @PostMapping("/findSort")
+    public Result findSort(@RequestBody UserMongo userMongo) {
+        return Result.o(userMongoService.findSort(userMongo));
+    }
+
+    /**
      * <h3>查找所有，根据Example和分页</h3>
      * POST /findListPage?page=0&size=1<br>
      * body JSON {"name":"a"}<br>

@@ -78,7 +78,7 @@ public class ServiceBase {
         if (orderBy == null) {
             orderBy = Constant.PAGE_DEFAULT_ORDER_BY;
         }
-        /* 开始排序 */
+        /* 开始分页和排序 */
         if (pages == 0) {
             // 全部查询，不排序
             // pages == 0 && orderBy.isEmpty()

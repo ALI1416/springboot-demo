@@ -1,5 +1,6 @@
 package com.demo.service;
 
+import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.mongo.UserMongo;
 import com.mongodb.client.result.UpdateResult;
@@ -26,7 +27,7 @@ import java.util.function.Function;
  **/
 @Service
 @AllArgsConstructor
-public class UserMongoService {
+public class UserMongoService extends ServiceBase {
 
     private final UserMongoDao userMongoDao;
 
@@ -240,6 +241,26 @@ public class UserMongoService {
      */
     public Page<UserMongo> findList(PageRequest pageRequest) {
         return userMongoDao.findList(pageRequest);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param userMongo UserMongo
+     * @return Page
+     */
+    public Page<UserMongo> findPage(UserMongo userMongo) {
+        return userMongoDao.findList(buildPage(userMongo));
+    }
+
+    /**
+     * 排序查询
+     *
+     * @param userMongo UserMongo
+     * @return List
+     */
+    public List<UserMongo> findSort(UserMongo userMongo) {
+        return userMongoDao.findList(buildSort(userMongo.getOrderBy()));
     }
 
     /**
