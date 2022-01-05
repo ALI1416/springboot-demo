@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>Mongo服务层基类</h1>
+ * <h1>服务层基类</h1>
  *
  * <p>
  * createDate 2022/01/04 10:45:06

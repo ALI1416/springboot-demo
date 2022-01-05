@@ -281,6 +281,17 @@ public class UserMongoController {
     }
 
     /**
+     * <h3>分页查找</h3>
+     * POST /findPage2<br>
+     * body JSON {"pages":"0","rows":"10","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
+     * Page
+     */
+    @PostMapping("/findPage2")
+    public Result findPage2(@RequestBody UserMongo userMongo) {
+        return Result.o(userMongoService.findPage2(userMongo));
+    }
+
+    /**
      * <h3>排序查找</h3>
      * POST /findSort<br>
      * body JSON {"orderBy":"name desc"}<br>
@@ -289,6 +300,17 @@ public class UserMongoController {
     @PostMapping("/findSort")
     public Result findSort(@RequestBody UserMongo userMongo) {
         return Result.o(userMongoService.findSort(userMongo));
+    }
+
+    /**
+     * <h3>排序查找2</h3>
+     * POST /findSort2<br>
+     * body JSON {"orderBy":"name desc","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
+     * List
+     */
+    @PostMapping("/findSort2")
+    public Result findSort2(@RequestBody UserMongo userMongo) {
+        return Result.o(userMongoService.findSort2(userMongo));
     }
 
     /**

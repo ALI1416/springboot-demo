@@ -209,7 +209,7 @@ public class UserMongoService extends ServiceBase {
      * @return [实体]
      */
     public List<UserMongo> findList(Sort sort) {
-        return userMongoDao.findList(sort);
+        return userMongoDao.findSort(sort);
     }
 
     /**
@@ -240,7 +240,7 @@ public class UserMongoService extends ServiceBase {
      * @return Page
      */
     public Page<UserMongo> findList(PageRequest pageRequest) {
-        return userMongoDao.findList(pageRequest);
+        return userMongoDao.findPage(pageRequest);
     }
 
     /**
@@ -250,7 +250,17 @@ public class UserMongoService extends ServiceBase {
      * @return Page
      */
     public Page<UserMongo> findPage(UserMongo userMongo) {
-        return userMongoDao.findList(buildPage(userMongo));
+        return userMongoDao.findPage(buildPage(userMongo));
+    }
+
+    /**
+     * 分页查询2
+     *
+     * @param userMongo UserMongo
+     * @return Page
+     */
+    public Page<UserMongo> findPage2(UserMongo userMongo) {
+        return userMongoDao.findPage2(userMongo, buildPage(userMongo));
     }
 
     /**
@@ -260,7 +270,17 @@ public class UserMongoService extends ServiceBase {
      * @return List
      */
     public List<UserMongo> findSort(UserMongo userMongo) {
-        return userMongoDao.findList(buildSort(userMongo.getOrderBy()));
+        return userMongoDao.findSort(buildSort(userMongo.getOrderBy()));
+    }
+
+    /**
+     * 排序查询2
+     *
+     * @param userMongo UserMongo
+     * @return List
+     */
+    public List<UserMongo> findSort2(UserMongo userMongo) {
+        return userMongoDao.findSort2(userMongo, buildSort(userMongo.getOrderBy()));
     }
 
     /**

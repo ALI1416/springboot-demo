@@ -1,5 +1,6 @@
 package com.demo.dao.mongo;
 
+import com.demo.base.DaoBase;
 import com.demo.entity.mongo.UserMongo;
 import com.demo.repo.UserMongoRepo;
 import com.mongodb.client.result.UpdateResult;
@@ -32,7 +33,7 @@ import java.util.function.Function;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class UserMongoDao {
+public class UserMongoDao extends DaoBase {
 
     private final UserMongoRepo userMongoRepo;
     private final MongoTemplate mongoTemplate;
@@ -223,12 +224,12 @@ public class UserMongoDao {
     }
 
     /**
-     * 查找所有
+     * 排序查询
      *
      * @param sort Sort
      * @return [实体]
      */
-    public List<UserMongo> findList(Sort sort) {
+    public List<UserMongo> findSort(Sort sort) {
         return userMongoRepo.findAll(sort);
     }
 
@@ -254,13 +255,59 @@ public class UserMongoDao {
     }
 
     /**
-     * 查询所有
+     * 分页查询
      *
      * @param pageRequest PageRequest
      * @return Page
      */
-    public Page<UserMongo> findList(PageRequest pageRequest) {
+    public Page<UserMongo> findPage(PageRequest pageRequest) {
         return userMongoRepo.findAll(pageRequest);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param pageRequest PageRequest
+     * @return Page
+     */
+    public Page<UserMongo> findPage2(UserMongo userMongo, PageRequest pageRequest) {
+        Criteria criteria = new Criteria();
+        if (userMongo.getName() != null) {
+            criteria.and("name").is(userMongo.getName());
+        }
+        if (userMongo.getFollowers() != null) {
+            criteria.and("follower").is(userMongo.getFollowers());
+        }
+        if (userMongo.getFollowing() != null) {
+            criteria.and("following").is(userMongo.getFollowing());
+        }
+        if (userMongo.getDate() != null && userMongo.getDateEnd() != null) {
+            criteria.and("date").gte(userMongo.getDate()).lte(userMongo.getDateEnd());
+        }
+        return find(mongoTemplate, UserMongo.class, criteria, pageRequest);
+    }
+
+    /**
+     * 排序查询
+     *
+     * @param sort Sort
+     * @return Page
+     */
+    public List<UserMongo> findSort2(UserMongo userMongo, Sort sort) {
+        Criteria criteria = new Criteria();
+        if (userMongo.getName() != null) {
+            criteria.and("name").is(userMongo.getName());
+        }
+        if (userMongo.getFollowers() != null) {
+            criteria.and("follower").is(userMongo.getFollowers());
+        }
+        if (userMongo.getFollowing() != null) {
+            criteria.and("following").is(userMongo.getFollowing());
+        }
+        if (userMongo.getDate() != null && userMongo.getDateEnd() != null) {
+            criteria.and("date").gte(userMongo.getDate()).lte(userMongo.getDateEnd());
+        }
+        return mongoTemplate.find(Query.query(criteria).with(sort), UserMongo.class);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.demo.entity.mongo;
 import com.demo.base.MongoEntityBase;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -52,5 +53,12 @@ public class UserMongo extends MongoEntityBase {
      * 时间
      */
     private Timestamp date;
+
+    /**
+     * 查询-时间结束<br>
+     * 不放到数据库使用@Transient注解
+     */
+    @Transient
+    private Timestamp dateEnd;
 
 }
