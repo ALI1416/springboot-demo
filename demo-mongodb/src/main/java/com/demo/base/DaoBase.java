@@ -29,11 +29,12 @@ public class DaoBase {
      * @return Page
      */
     public <T> Page<T> find(MongoTemplate mongoTemplate, Class<T> entityClass, Criteria criteria, Pageable pageable) {
-        Query query = Query.query(criteria).with(pageable);
+        Query query = Query.query(criteria);
+        long count = mongoTemplate.count(query, entityClass);
         return new PageImpl<>( //
-                mongoTemplate.find(query, entityClass), // 查询
+                mongoTemplate.find(query.with(pageable), entityClass), // 查询
                 pageable, // 分页
-                mongoTemplate.count(query, entityClass) // 总数
+                count // 总数
         );
     }
 
