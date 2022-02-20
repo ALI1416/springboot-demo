@@ -197,6 +197,22 @@
     <ansj_seg.version>5.1.6</ansj_seg.version>
   </properties>
 
+  <dependencies>
+    <!--实体层注解-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <!--热部署-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
   <dependencyManagement>
     <dependencies>
       <!--MyBatis-->
@@ -313,13 +329,13 @@
 
   <profiles>
     <profile>
-      <!-- 打包 -->
       <id>install</id>
       <activation>
         <activeByDefault>true</activeByDefault>
       </activation>
       <build>
         <plugins>
+          <!--指定编译的jdk版本-->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>

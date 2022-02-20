@@ -43,21 +43,6 @@
       <artifactId>hutool-all</artifactId>
     </dependency>
 
-    <!--特殊依赖-->
-    <!--实体层注解-->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <!--热部署-->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-
     <!--测试依赖-->
     <!--测试-->
     <dependency>
@@ -69,11 +54,11 @@
 
   <build>
     <plugins>
-      <!--Maven插件-->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
+          <!--打包时排除的依赖-->
           <excludes>
             <exclude>
               <groupId>org.projectlombok</groupId>

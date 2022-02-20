@@ -59,7 +59,7 @@ public class UserDao extends DaoBase {
      */
     public long insertNotRollback(UserVo user) {
         user.setId(Id.next());
-        if (tryif(false, () -> userMapper.insert(user))) {
+        if (tryif(() -> userMapper.insert(user), false)) {
             return bak(user.getId()) ? user.getId() : 0L;
         } else {
             return 0L;
