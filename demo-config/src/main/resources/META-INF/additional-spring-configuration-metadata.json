@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "test.stringType",
+      "type": "java.lang.String",
+      "description": "字符串.",
+      "sourceType": "com.demo.property.TestYml",
+      "defaultValue": "字符串"
+    },
+    {
+      "name": "test.intType",
+      "type": "java.lang.Integer",
+      "description": "整数.",
+      "sourceType": "com.demo.property.TestYml",
+      "defaultValue": 123
+    }
+  ]
+}

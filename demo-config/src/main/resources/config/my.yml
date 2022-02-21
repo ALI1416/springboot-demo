@@ -1,0 +1,37 @@
+test2:
+  boolean-type: true
+  byte-type: 66
+  char-type: d
+  short-type: 678
+  int-type: 1234567
+  long-type: 1234567890123456
+  float-type: 1.2345678901234567
+  double-type: 1.2345678901234567
+  string-type: qwertyuiopasdfghjklzxcvbnm 1234567890
+  obj-type:
+    id: 111
+    name: aaa
+    gender: 1
+  int-array-type:
+    - 123
+    - 456
+    - 789
+  string-list-type:
+    - a
+    - b
+    - c
+  obj-list-type:
+    - id: 222
+      name: ccc
+      gender: 0
+    - id: 333
+      name: kkk
+      gender: 1
+  # 持续时间：d天，h时，m分，s秒，ms毫秒，us微秒，ns纳秒
+  # 小写，只能有1个单位，只能是正整数
+  # 默认 ms
+  duration-type: 3h
+  # 储存容量：TB，GB，MB，KB，B
+  # 大写，只能有1个单位，只能是正整数
+  # 默认 B
+  data-size-type: 123MB

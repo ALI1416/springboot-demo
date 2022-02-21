@@ -6,8 +6,8 @@
   <artifactId>demo-rabbitmq</artifactId>
   <version>1.0.0</version>
 
-  <name>demo-rabbitmq</name>
-  <description>demo-rabbitmq</description>
+  <name>${project.artifactId}</name>
+  <description>rabbitmq</description>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -16,7 +16,6 @@
   </parent>
 
   <dependencies>
-    <!--普通依赖-->
     <!--SpringBoot Web-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -46,14 +45,6 @@
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
-    </dependency>
-
-    <!--测试依赖-->
-    <!--测试-->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

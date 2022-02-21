@@ -6,8 +6,8 @@
   <artifactId>demo-mysql</artifactId>
   <version>1.0.0</version>
 
-  <name>demo-mysql</name>
-  <description>demo-mysql</description>
+  <name>${project.artifactId}</name>
+  <description>mysql</description>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -16,7 +16,6 @@
   </parent>
 
   <dependencies>
-    <!--普通依赖-->
     <!--SpringBoot Web-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -52,21 +51,11 @@
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-all</artifactId>
     </dependency>
-
-    <!--特殊依赖-->
     <!--MySQL-->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <scope>runtime</scope>
-    </dependency>
-
-    <!--测试依赖-->
-    <!--测试-->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

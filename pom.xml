@@ -9,8 +9,8 @@
   <packaging>pom</packaging>
   <version>1.0.0</version>
 
-  <name>demo-parent</name>
-  <description>demo-parent</description>
+  <name>${project.artifactId}</name>
+  <description>SpringBoot父模板</description>
 
   <parent>
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
@@ -28,6 +28,8 @@
     <module>demo-rabbitmq</module>
     <module>demo-sa-token</module>
     <module>demo-socket</module>
+    <module>demo-config</module>
+    <module>demo-mail</module>
   </modules>
 
   <properties>
@@ -65,11 +67,11 @@
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
     <!--org.springframework.boot:spring-boot-starter-test-->
 
-    <!--SpringBoot整合Maven插件-->
+    <!--SpringBoot打包插件-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
     <!--org.springframework.boot:spring-boot-maven-plugin-->
 
-    <!--Maven打包插件-->
+    <!--Maven编译插件-->
     <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
 
@@ -198,18 +200,29 @@
   </properties>
 
   <dependencies>
-    <!--实体层注解-->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <optional>true</optional>
-    </dependency>
     <!--热部署-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
+    </dependency>
+    <!--测试-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--实体层注解-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <!--日志-->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
     </dependency>
   </dependencies>
 

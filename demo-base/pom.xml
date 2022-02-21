@@ -6,8 +6,8 @@
   <artifactId>demo-base</artifactId>
   <version>1.0.0</version>
 
-  <name>demo-base</name>
-  <description>demo-base</description>
+  <name>${project.artifactId}</name>
+  <description>基础框架</description>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -16,7 +16,6 @@
   </parent>
 
   <dependencies>
-    <!--普通依赖-->
     <!--SpringBoot Web-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -26,14 +25,6 @@
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
-    </dependency>
-
-    <!--测试依赖-->
-    <!--测试-->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
