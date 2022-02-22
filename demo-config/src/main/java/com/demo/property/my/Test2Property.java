@@ -6,6 +6,7 @@ import org.springframework.util.unit.DataSize;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <h1>my.yml的test2属性</h1>
@@ -78,6 +79,10 @@ public class Test2Property {
      * 对象列表类型
      */
     public final static List<User> OBJ_LIST_TYPE = TEST2.getObjListType();
+    /**
+     * Map类型
+     */
+    public final static Map<String, String> MAP_TYPE = TEST2.getMapType();
     /**
      * 持续时间类型
      */

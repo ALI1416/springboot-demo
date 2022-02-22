@@ -11,6 +11,7 @@ import org.springframework.util.unit.DataSize;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <h1>读取my.yml的test2配置</h1>
@@ -87,6 +88,10 @@ public class Test2Yml {
      * 对象列表类型
      */
     private List<User> objListType;
+    /**
+     * Map类型
+     */
+    private Map<String,String> mapType;
     /**
      * 持续时间类型
      */

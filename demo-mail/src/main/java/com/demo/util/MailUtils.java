@@ -1,6 +1,7 @@
 package com.demo.util;
 
 import com.demo.tool.ThreadPool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,6 +22,7 @@ import javax.mail.internet.MimeMessage;
  * @since 1.0.0
  **/
 @Component
+@Slf4j
 public class MailUtils {
 
     private static MailProperties mailProperties;
@@ -50,7 +52,7 @@ public class MailUtils {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
-        // 使用线程池（邮件发送速度比较慢）
+        // 使用线程池(邮件发送速度比较慢)
         ThreadPool.execute(() -> javaMailSender.send(message));
     }
 
@@ -73,9 +75,10 @@ public class MailUtils {
             messageHelper.setSubject(subject);
             messageHelper.setText(text, true);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("发送HTML邮件异常", e);
         }
-        // 使用线程池（邮件发送速度比较慢）
+        // 使用线程池(邮件发送速度比较慢)
         ThreadPool.execute(() -> javaMailSender.send(messageHelper.getMimeMessage()));
     }
+
 }

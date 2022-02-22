@@ -27,6 +27,10 @@ test2:
     - id: 333
       name: kkk
       gender: 1
+  map-type:
+    map1: str1
+    map2: str2
+    map3: str3
   # 持续时间：d天，h时，m分，s秒，ms毫秒，us微秒，ns纳秒
   # 小写，只能有1个单位，只能是正整数
   # 默认 ms

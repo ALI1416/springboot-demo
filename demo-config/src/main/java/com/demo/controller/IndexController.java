@@ -76,6 +76,7 @@ public class IndexController {
         log.info("整数数组类型:" + Arrays.toString(test2Yml.getIntArrayType()));
         log.info("字符串列表类型:" + test2Yml.getStringListType());
         log.info("对象列表类型:" + test2Yml.getObjListType());
+        log.info("Map类型:" + test2Yml.getMapType());
         log.info("持续时间类型:" + test2Yml.getDurationType());
         log.info("储存容量类型:" + test2Yml.getDataSizeType());
         return Result.o();
@@ -133,6 +134,7 @@ public class IndexController {
         log.info("整数数组类型:" + Arrays.toString(Test2Property.INT_ARRAY_TYPE));
         log.info("字符串列表类型:" + Test2Property.STRING_LIST_TYPE);
         log.info("对象列表类型:" + Test2Property.OBJ_LIST_TYPE);
+        log.info("Map类型:" + Test2Property.MAP_TYPE);
         log.info("持续时间类型:" + Test2Property.DURATION_TYPE);
         log.info("储存容量类型:" + Test2Property.DATA_SIZE_TYPE);
         return Result.o();

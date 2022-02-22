@@ -30,6 +30,8 @@
     <module>demo-socket</module>
     <module>demo-config</module>
     <module>demo-mail</module>
+    <module>demo-util</module>
+    <module>demo-easy-excel</module>
   </modules>
 
   <properties>
@@ -183,11 +185,6 @@
     <!-- https://mvnrepository.com/artifact/me.ihxq.projects/phone-number-geo -->
     <phone-number-geo.version>1.0.9-202108</phone-number-geo.version>
 
-    <!--图片验证码-->
-    <!--com.github.whvcse:easy-captcha-->
-    <!-- https://mvnrepository.com/artifact/com.github.whvcse/easy-captcha -->
-    <easy-captcha.version>1.6.2</easy-captcha.version>
-
     <!--Tika语言、编码、类型检测-->
     <!--org.apache.tika:tika-parsers-->
     <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parsers -->
@@ -317,12 +314,6 @@
         <groupId>me.ihxq.projects</groupId>
         <artifactId>phone-number-geo</artifactId>
         <version>${phone-number-geo.version}</version>
-      </dependency>
-      <!--图片验证码-->
-      <dependency>
-        <groupId>com.github.whvcse</groupId>
-        <artifactId>easy-captcha</artifactId>
-        <version>${easy-captcha.version}</version>
       </dependency>
       <!--Tika语言、编码、类型检测-->
       <dependency>
