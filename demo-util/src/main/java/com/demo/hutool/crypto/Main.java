@@ -42,6 +42,7 @@ public class Main {
      * 以aes为例
      */
     public static void aes() {
+        log.info("---------- 对称加密 ----------");
         String content = "test中文";
         //随机生成密钥
         byte[] key = SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded();
@@ -60,6 +61,7 @@ public class Main {
      * 以rsa为例
      */
     public static void rsa() {
+        log.info("---------- 非对称加密 ----------");
         String str = "test中文";
         byte[] bytes = StrUtil.bytes(str, CharsetUtil.CHARSET_UTF_8);
         RSA rsa = new RSA();
@@ -82,6 +84,7 @@ public class Main {
      * 以MD5、SHA1、BCrypt为例
      */
     public static void md5AndSh1AndBcrypt() {
+        log.info("---------- 摘要加密 ----------");
         String s = "123456";
         log.info("md5Hex:" + DigestUtil.md5Hex(s));
         log.info("sha1Hex:" + DigestUtil.sha1Hex(s));
@@ -95,6 +98,7 @@ public class Main {
      * 以HmacMD5为例
      */
     public static void hMacMd5() {
+        log.info("---------- 消息认证码算法 ----------");
         String s = "test中文";
         byte[] key = "password".getBytes();
         HMac mac = new HMac(HmacAlgorithm.HmacMD5, key);
@@ -106,6 +110,7 @@ public class Main {
      * 以MD5withRSA为例
      */
     public static void md5withRsa() {
+        log.info("---------- 签名和验证 ----------");
         byte[] data = "我是一段测试字符串".getBytes();
         Sign sign = SecureUtil.sign(SignAlgorithm.MD5withRSA);
         byte[] signed = sign.sign(data);

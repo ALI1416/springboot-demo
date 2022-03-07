@@ -36,27 +36,38 @@ public class Main {
     public static void dateUtil() {
         Date date = DateUtil.date();
         /*Date、long、Calendar之间的相互转换*/
+        log.info("---------- Date、long、Calendar之间的相互转换 ----------");
         log.info("当前时间:" + date);
         log.info("当前时间:" + DateUtil.date(Calendar.getInstance()));
         log.info("当前时间:" + DateUtil.date(System.currentTimeMillis()));
         log.info("当前时间字符串，格式：yyyy-MM-dd HH:mm:ss:" + DateUtil.now());
         log.info("当前日期字符串，格式：yyyy-MM-dd:" + DateUtil.today());
+
         /*字符串转日期*/
+        log.info("---------- 字符串转日期 ----------");
         log.info("自动识别一些常用格式:" + DateUtil.parse("2017-03-01"));
         log.info("自定义日期格式转化:" + DateUtil.parse("2017-03-01", "yyyy-MM-dd"));
+
         /*格式化日期输出*/
+        log.info("---------- 格式化日期输出 ----------");
         log.info("自定义格式:" + DateUtil.format(date, "yyyy/MM/dd"));
         log.info("yyyy-MM-dd格式:" + DateUtil.formatDate(date));
         log.info("yyyy-MM-dd HH:mm:ss格式:" + DateUtil.formatDateTime(date));
         log.info("HH:mm:ss格式:" + DateUtil.formatTime(date));
+
         /*获取Date对象的某个部分*/
+        log.info("---------- 获取Date对象的某个部分 ----------");
         log.info("获得年的部分:" + DateUtil.year(date));
         log.info("获得月份，从0开始计数:" + DateUtil.month(date));
         log.info("获得月份枚举:" + DateUtil.monthEnum(date));
+
         /*开始和结束时间*/
+        log.info("---------- 开始和结束时间 ----------");
         log.info("一天的开始:" + DateUtil.beginOfDay(date));
         log.info("一天的结束:" + DateUtil.endOfDay(date));
+
         /*日期时间偏移*/
+        log.info("---------- 日期时间偏移 ----------");
         log.info("+2月:" + DateUtil.offset(date, DateField.DAY_OF_MONTH, 2));
         log.info("+3天:" + DateUtil.offsetDay(date, 3));
         log.info("-3小时:" + DateUtil.offsetHour(date, -3));
@@ -66,14 +77,22 @@ public class Main {
         log.info("下周:" + DateUtil.nextWeek());
         log.info("上月:" + DateUtil.lastMonth());
         log.info("下月:" + DateUtil.nextMonth());
+
         /*日期时间差*/
+        log.info("---------- 日期时间差 ----------");
         log.info("相差天数:" + DateUtil.between(date, DateUtil.offsetDay(date, 3), DateUnit.DAY));
+
         /*格式化时间差*/
+        log.info("---------- 格式化时间差 ----------");
         log.info("相差(精确到分钟):" + DateUtil.formatBetween(123456789, BetweenFormatter.Level.MINUTE));
+
         /*星座和属相*/
+        log.info("---------- 星座和属相 ----------");
         log.info("星座:" + DateUtil.getZodiac(Month.JANUARY.getValue(), 19));
         log.info("属相:" + DateUtil.getChineseZodiac(1994));
+
         /*其它*/
+        log.info("---------- 其它 ----------");
         log.info("年龄:" + DateUtil.ageOfNow("1990-01-30"));
         log.info("是否闰年:" + DateUtil.isLeapYear(2017));
     }
