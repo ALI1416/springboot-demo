@@ -51,6 +51,9 @@ public class Main {
         referenceUtil();
         reUtil();
         idcardUtil();
+        desensitizedUtil();
+        creditCodeUtil();
+        serviceLoaderUtil();
     }
 
     /**
@@ -311,6 +314,33 @@ public class Main {
         String id = "321083197812162119";
         log.info("是否有效:" + IdcardUtil.isValidCard(id));
         log.info("省份:" + IdcardUtil.getProvinceByIdCard(id));
+    }
+
+    /**
+     * 信息脱敏工具
+     */
+    private static void desensitizedUtil() {
+        log.info("---------- 信息脱敏工具 ----------");
+        log.info("【身份证号】前1位后2位:" + DesensitizedUtil.idCardNum("51343620000320711X", 1, 2));
+        log.info("【手机号码】前3位后4位:" + DesensitizedUtil.mobilePhone("18049531999"));
+        log.info("【密码】密码的全部字符都用*代替:" + DesensitizedUtil.password("1234567890"));
+    }
+
+    /**
+     * 社会信用代码工具
+     */
+    private static void creditCodeUtil() {
+        log.info("---------- 社会信用代码工具 ----------");
+        log.info("是否是有效的统一社会信用代码:" + CreditCodeUtil.isCreditCode("91310110666007217T"));
+        log.info("随机的统一社会信用代码:" + CreditCodeUtil.randomCreditCode());
+    }
+
+    /**
+     * SPI加载工具
+     */
+    private static void serviceLoaderUtil() {
+        log.info("---------- SPI加载工具 ----------");
+        // ServiceLoaderUtil.loadFirstAvailable();
     }
 
 }
