@@ -32,6 +32,7 @@
     <module>demo-mail</module>
     <module>demo-util</module>
     <module>demo-easy-excel</module>
+    <module>demo-just-auth</module>
   </modules>
 
   <properties>
@@ -194,6 +195,10 @@
     <!--org.ansj:ansj_seg-->
     <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
     <ansj_seg.version>5.1.6</ansj_seg.version>
+
+    <!--二维码-->
+    <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+    <qr.version>3.4.1</qr.version>
   </properties>
 
   <dependencies>
@@ -327,6 +332,12 @@
         <groupId>org.ansj</groupId>
         <artifactId>ansj_seg</artifactId>
         <version>${ansj_seg.version}</version>
+      </dependency>
+      <!--二维码-->
+      <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>${qr.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

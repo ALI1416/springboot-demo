@@ -3,11 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>demo-util</artifactId>
+  <artifactId>demo-just-auth</artifactId>
   <version>1.0.0</version>
 
   <name>${project.artifactId}</name>
-  <description>工具</description>
+  <description>JustAuth第三方登录</description>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -26,35 +26,10 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
     </dependency>
-    <!--IP解析-->
+    <!--JustAuth第三方登录-->
     <dependency>
-      <groupId>org.lionsoul</groupId>
-      <artifactId>ip2region</artifactId>
-    </dependency>
-    <!--手机号码归属地查询-->
-    <dependency>
-      <groupId>me.ihxq.projects</groupId>
-      <artifactId>phone-number-geo</artifactId>
-    </dependency>
-    <!--Ansj分词-->
-    <dependency>
-      <groupId>org.ansj</groupId>
-      <artifactId>ansj_seg</artifactId>
-    </dependency>
-    <!--二维码-->
-    <dependency>
-      <groupId>com.google.zxing</groupId>
-      <artifactId>core</artifactId>
-    </dependency>
-    <!--雪花ID生成器-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>id-spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <!--HuTool工具包-->
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-all</artifactId>
+      <groupId>me.zhyd.oauth</groupId>
+      <artifactId>JustAuth</artifactId>
     </dependency>
   </dependencies>
 

@@ -3,6 +3,7 @@ package com.demo.entity.pojo;
 import com.demo.base.ToStringBase;
 import com.demo.constant.ResultCodeEnum;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <h1>返回结果实体类</h1>
@@ -15,24 +16,32 @@ import lombok.Getter;
  * @since 1.0.0
  **/
 @Getter
+@Setter
 public class Result extends ToStringBase {
 
     /**
      * 成功(状态码为0)
      */
-    private final boolean ok;
+    private boolean ok;
     /**
      * 状态码
      */
-    private final int code;
+    private int code;
     /**
      * 状态信息
      */
-    private final String msg;
+    private String msg;
     /**
      * 数据
      */
-    private final Object data;
+    private Object data;
+
+    /**
+     * 空的构造函数
+     */
+    public Result() {
+
+    }
 
     /**
      * 构造函数

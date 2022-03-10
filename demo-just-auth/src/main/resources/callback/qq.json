@@ -1,0 +1,43 @@
+{
+  "code": 2000,
+  "data": {
+    "avatar": "http://thirdqq.qlogo.cn/g?b=oidb&k=4LjicYXdGYvgmfqsbrzhcfA&s=100&t=1645945077",
+    "gender": "MALE",
+    "location": "广东-深圳",
+    "nickname": "42#AI",
+    "rawUserInfo": {
+      "ret": 0,
+      "msg": "",
+      "is_lost": 0,
+      "gender": "男",
+      "is_yellow_vip": "0",
+      "city": "深圳",
+      "year": "1990",
+      "level": "0",
+      "figureurl_2": "http://qzapp.qlogo.cn/qzapp/101925994/91449D4BB19893F674C07B111C1BB4FB/100",
+      "figureurl_1": "http://qzapp.qlogo.cn/qzapp/101925994/91449D4BB19893F674C07B111C1BB4FB/50",
+      "gender_type": 2,
+      "is_yellow_year_vip": "0",
+      "province": "广东",
+      "constellation": "",
+      "figureurl": "http://qzapp.qlogo.cn/qzapp/101925994/91449D4BB19893F674C07B111C1BB4FB/30",
+      "figureurl_type": "1",
+      "figureurl_qq": "http://thirdqq.qlogo.cn/g?b=oidb&k=4LjicYXdGYvgmfqsbrzhcfA&s=640&t=1645945077",
+      "nickname": "42#AI",
+      "yellow_vip_level": "0",
+      "figureurl_qq_1": "http://thirdqq.qlogo.cn/g?b=oidb&k=4LjicYXdGYvgmfqsbrzhcfA&s=40&t=1645945077",
+      "vip": "0",
+      "figureurl_qq_2": "http://thirdqq.qlogo.cn/g?b=oidb&k=4LjicYXdGYvgmfqsbrzhcfA&s=100&t=1645945077"
+    },
+    "source": "QQ",
+    "token": {
+      "accessToken": "2BF1CC0C3240AB1E3C97E5B0D795D554",
+      "expireIn": 7776000,
+      "openId": "91449D4BB19893F674C07B111C1BB4FB",
+      "refreshToken": "60C30CB3931CBF1FCBEF607212C62E43",
+      "refreshTokenExpireIn": 0
+    },
+    "username": "42#AI",
+    "uuid": "91449D4BB19893F674C07B111C1BB4FB"
+  }
+}
