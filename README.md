@@ -123,8 +123,6 @@
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.zhyd.oauth/JustAuth/badge.svg)
     - `手机号码归属地查询` : `me.ihxq.projects:phone-number-geo`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.ihxq.projects/phone-number-geo/badge.svg)
-    - `图片验证码` : `com.github.whvcse:easy-captcha`
-      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.whvcse/easy-captcha/badge.svg)
     - `Tika语言、编码、类型检测` : `org.apache.tika:tika-parsers`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.tika/tika-parsers/badge.svg)
     - `Ansj分词` : `org.ansj:ansj_seg`

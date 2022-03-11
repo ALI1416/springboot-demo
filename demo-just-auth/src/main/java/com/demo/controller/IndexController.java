@@ -2,12 +2,12 @@ package com.demo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.demo.constant.Constant;
-import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.config.AuthConfig;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.request.AuthQqRequest;
+import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ public class IndexController {
     /**
      * Request
      */
-    private final AuthQqRequest authQqRequest = new AuthQqRequest(//
+    private final AuthRequest request = new AuthQqRequest(//
             AuthConfig.builder()//
                     .clientId(Constant.QQ_APP_ID)//
                     .clientSecret(Constant.QQ_APP_KEY)//
@@ -42,7 +42,7 @@ public class IndexController {
      */
     @GetMapping(value = {"", "/"})
     public String render() {
-        String authorize = authQqRequest.authorize(AuthStateUtils.createState());
+        String authorize = request.authorize(AuthStateUtils.createState());
         log.info(authorize);
         return "redirect:" + authorize;
     }
@@ -52,10 +52,10 @@ public class IndexController {
      */
     @GetMapping("thirdLogin/qq/callback")
     @ResponseBody
-    public Result callback(AuthCallback callback) {
-        AuthResponse<?> authResponse = authQqRequest.login(callback);
-        log.info(JSON.toJSONString(authResponse));
-        return Result.o(authResponse);
+    public AuthResponse<?> callback(AuthCallback callback) {
+        AuthResponse<?> response = request.login(callback);
+        log.info(JSON.toJSONString(response));
+        return response;
     }
 
 }
