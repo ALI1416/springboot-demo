@@ -51,6 +51,12 @@
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
     </dependency>
+    <!--IP地址转区域-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>ip2region-spring-boot-autoconfigure</artifactId>
+      <version>${ip2region-spring-boot-autoconfigure.version}</version>
+    </dependency>
     <!--HuTool工具包-->
     <dependency>
       <groupId>cn.hutool</groupId>

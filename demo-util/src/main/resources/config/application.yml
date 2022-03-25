@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+
+logging:
+  file:
+    name: /log/demo-mysql.log
+
+id:
+  machine-id: 0
+  machine-bits: 8
+  sequence-bits: 12
+
+ip2region:
+  resource-path: /file/ip2region/data.db
