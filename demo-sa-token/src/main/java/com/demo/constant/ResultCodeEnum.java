@@ -68,6 +68,7 @@ public enum ResultCodeEnum {
      * 1006 账号已存在
      */
     ACCOUNT_EXIST(1006, "账号已存在"),
+
     /* ==================== 未知错误-1 ==================== */
     /**
      * -1 未知错误
@@ -75,6 +76,7 @@ public enum ResultCodeEnum {
     ERROR(-1, "未知错误");
 
     /* ==================== 枚举字段和构造器 ==================== */
+
     /**
      * 状态码
      */
@@ -84,12 +86,6 @@ public enum ResultCodeEnum {
      */
     private final String msg;
 
-    /**
-     * 构造函数
-     *
-     * @param code 状态码
-     * @param msg  信息
-     */
     ResultCodeEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;

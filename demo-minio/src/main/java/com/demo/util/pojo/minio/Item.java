@@ -91,11 +91,11 @@ public class Item extends ToStringBase {
     /**
      * Item转Bean
      *
-     * @param objects Iterable&lt;Result&lt;Item>>
+     * @param items Iterable&lt;Result&lt;Item>>
      * @return List&lt;Item>
      */
-    public static List<Item> getList(Iterable<Result<io.minio.messages.Item>> objects) {
-        return StreamSupport.stream(objects.spliterator(), true).map(item -> {
+    public static List<Item> getList(Iterable<Result<io.minio.messages.Item>> items) {
+        return StreamSupport.stream(items.spliterator(), true).map(item -> {
             try {
                 return new Item(item.get());
             } catch (Exception e) {

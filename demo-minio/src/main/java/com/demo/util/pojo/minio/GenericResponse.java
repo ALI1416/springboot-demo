@@ -47,4 +47,11 @@ public class GenericResponse extends ToStringBase {
         this.name = genericResponse.object();
     }
 
+    public GenericResponse(Headers headers, String bucket, String region, String name) {
+        this.headers = headers;
+        this.bucket = bucket;
+        this.region = region;
+        this.name = name;
+    }
+
 }

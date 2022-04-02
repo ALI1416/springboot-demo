@@ -20,7 +20,7 @@ import lombok.Setter;
 public class Result extends ToStringBase {
 
     /**
-     * 成功(状态码为0)
+     * 是否成功(状态码为0时成功)
      */
     private boolean ok;
     /**
@@ -36,27 +36,18 @@ public class Result extends ToStringBase {
      */
     private Object data;
 
-    /**
-     * 空的构造函数
-     */
     public Result() {
 
     }
 
-    /**
-     * 构造函数
-     */
-    private Result(ResultCodeEnum resultCodeEnum, Object data) {
+    public Result(ResultCodeEnum resultCodeEnum, Object data) {
         this.code = resultCodeEnum.getCode();
         this.msg = resultCodeEnum.getMsg();
         this.data = data;
         this.ok = (this.code == ResultCodeEnum.OK.getCode());
     }
 
-    /**
-     * 构造函数
-     */
-    private Result(int code, String msg, Object data) {
+    public Result(int code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -64,63 +55,69 @@ public class Result extends ToStringBase {
     }
 
     /**
-     * 成功
+     * <h1>成功</h1>
+     * <p>不携带数据</p>
      */
     public static Result o() {
         return new Result(ResultCodeEnum.OK, null);
     }
 
     /**
-     * 成功
+     * <h1>成功</h1>
+     *
+     * @param data 数据
      */
     public static Result o(Object data) {
         return new Result(ResultCodeEnum.OK, data);
     }
 
     /**
-     * 成功
-     */
-    public static Result o(String msg) {
-        return new Result(ResultCodeEnum.OK.getCode(), msg, null);
-    }
-
-    /**
-     * 成功
+     * <h1>成功</h1>
+     *
+     * @param msg  指定状态信息
+     * @param data 数据
      */
     public static Result o(String msg, Object data) {
         return new Result(ResultCodeEnum.OK.getCode(), msg, data);
     }
 
     /**
-     * 错误
+     * <h1>错误</h1>
+     * <p>未知错误，不携带数据</p>
      */
     public static Result e() {
         return new Result(ResultCodeEnum.ERROR, null);
     }
 
     /**
-     * 错误
+     * <h1>错误</h1>
+     * <p>不携带数据</p>
+     *
+     * @param resultCodeEnum 返回结果状态枚举类
+     * @see ResultCodeEnum
      */
     public static Result e(ResultCodeEnum resultCodeEnum) {
         return new Result(resultCodeEnum, null);
     }
 
     /**
-     * 错误
+     * <h1>错误</h1>
+     *
+     * @param resultCodeEnum 返回结果状态枚举类
+     * @param data           数据
+     * @see ResultCodeEnum
      */
     public static Result e(ResultCodeEnum resultCodeEnum, Object data) {
         return new Result(resultCodeEnum, data);
     }
 
     /**
-     * 错误
-     */
-    public static Result e(ResultCodeEnum resultCodeEnum, String msg) {
-        return new Result(resultCodeEnum.getCode(), msg, null);
-    }
-
-    /**
-     * 错误
+     * <h1>错误</h1>
+     *
+     * @param resultCodeEnum 返回结果状态枚举类
+     * @param msg            指定状态信息
+     * @param data           数据
+     * @see ResultCodeEnum
      */
     public static Result e(ResultCodeEnum resultCodeEnum, String msg, Object data) {
         return new Result(resultCodeEnum.getCode(), msg, data);
