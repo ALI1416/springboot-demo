@@ -29,14 +29,14 @@ import java.util.SortedSet;
 @Slf4j
 public class Main {
 
-    private static final BufferedInputStream STREAM = FileUtil.getInputStream("E:/1.docx");
+    private static final BufferedInputStream STREAM = FileUtil.getInputStream("D:\\Desktop\\1.txt");
 
     public static void main(String[] args) {
         try {
             advancedTypeDetector();
+            mediaTypeExample();
             contentHandlerExample();
             language();
-            mediaTypeExample();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,6 +46,7 @@ public class Main {
      * 类型检测
      */
     private static void advancedTypeDetector() throws Exception {
+        log.info("---------- 类型检测 ----------");
         Tika tika = new Tika();
         log.info("类型检测:" + tika.detect(STREAM));
     }
@@ -54,6 +55,7 @@ public class Main {
      * 媒体类型
      */
     private static void mediaTypeExample() {
+        log.info("---------- 媒体类型 ----------");
         // 描述
         String describe = "text/plain;charset=UTF-8";
         MediaType describeType = MediaType.parse(describe);
@@ -79,6 +81,7 @@ public class Main {
      * 文本内容
      */
     private static void contentHandlerExample() throws Exception {
+        log.info("---------- 文本内容 ----------");
         BodyContentHandler handler = new BodyContentHandler();
         AutoDetectParser parser = new AutoDetectParser();
         Metadata metadata = new Metadata();
@@ -88,12 +91,14 @@ public class Main {
         for (String name : metadata.names()) {
             log.info(name + ":" + Arrays.toString(metadata.getValues(name)));
         }
+        log.info("文本编码:" + metadata.getValues("Content-Encoding")[0]);
     }
 
     /**
      * 语言检测
      */
     private static void language() {
+        log.info("---------- 语言检测 ----------");
         LanguageIdentifier identifier = //
                 new LanguageIdentifier("Constructs a language identifier based on a String of text content");
         log.info(identifier.getLanguage());
