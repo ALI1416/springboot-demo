@@ -1,5 +1,6 @@
 package com.demo.service.rabbit;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 // @Queue(value = "hello", durable = "false", autoDelete = "true")中
 // durable = "false"不持久化，autoDelete = "true"队列为空时自动删除
 @RabbitListener(queuesToDeclare = @Queue("hello"))
+@Slf4j
 public class RabbitService {
 
     /**
@@ -33,7 +35,7 @@ public class RabbitService {
      */
     @RabbitHandler
     public void receiver(String message) {
-        System.out.println("RabbitService.receiver收到消息：" + message);
+        log.info("RabbitService.receiver收到消息：" + message);
     }
 
 }

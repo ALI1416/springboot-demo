@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RoleRouteDao;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  **/
 @Service
 @AllArgsConstructor
-public class RoleRouteService extends ServiceBase {
+public class RoleRouteService {
 
     private final RoleRouteDao roleRouteDao;
 

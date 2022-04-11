@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RouteNotInterceptDao;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ import java.util.List;
  **/
 @Service
 @AllArgsConstructor
-public class RouteNotInterceptService extends ServiceBase {
+public class RouteNotInterceptService {
 
     private final RouteNotInterceptDao routeNotInterceptDao;
 

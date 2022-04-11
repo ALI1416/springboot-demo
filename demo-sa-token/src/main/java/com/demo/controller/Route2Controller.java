@@ -72,7 +72,7 @@ public class Route2Controller extends ControllerBase {
         if (existNull(route2.getId(), route2.getDeleteChildren())) {
             return paramIsError();
         }
-        if (route2.getDeleteChildren()) {
+        if (Boolean.TRUE.equals(route2.getDeleteChildren())) {
             return Result.o(route2Service.deleteWithChildren(route2.getId()));
         } else {
             return Result.o(route2Service.deleteAndMoveChildren(route2.getId()));

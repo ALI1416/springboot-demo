@@ -2,10 +2,8 @@ package com.demo.dao.mysql;
 
 import cn.z.id.Id;
 import com.demo.base.DaoBase;
-import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.mapper.RouteMapper;
-import com.demo.mapper.RouteNotInterceptMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

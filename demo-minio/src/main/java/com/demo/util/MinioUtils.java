@@ -603,7 +603,7 @@ public class MinioUtils {
     public static void inputStream2HttpServletResponse(InputStream in, HttpServletResponse response,
                                                        String contentType, String fileName) throws Exception {
         response.setContentType(contentType);
-        fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+        fileName = URLEncoder.encode(fileName, "UTF-8").replace("\\+", "%20");
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName);
         int len;
         byte[] buffer = new byte[1024];

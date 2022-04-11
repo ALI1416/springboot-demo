@@ -106,7 +106,7 @@ public class DaoBase {
      */
     public static boolean tryif2(Function<Boolean> function, boolean exception, boolean inconformity) {
         try {
-            if (!function.run()) {
+            if (Boolean.FALSE.equals(function.run())) {
                 if (inconformity) {
                     log.info("tryif2:条件不符合，已回滚");
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

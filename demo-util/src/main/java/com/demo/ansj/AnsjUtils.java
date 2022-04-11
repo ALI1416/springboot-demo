@@ -23,8 +23,8 @@ public class AnsjUtils {
     public static String getAnsj(String s) {
         return ToAnalysis.parse(s) // 标准分词
                 .toStringWithOutNature(" ") // 没有词性
-                .replaceAll("[\\pP`=~$^+|<>￥｀＝～＄＾＋｜＜＞]", "") // 去掉中英文标点符号
-                .replaceAll("　", " ") // 全角空格转为英文空格
+                .replaceAll("[\\p{P}`=~$^+|<>￥｀＝～＄＾＋｜＜＞]", "") // 去掉中英文标点符号
+                .replace("\u3000", " ") // 全角空格转为英文空格
                 .replaceAll(" +", " ") // 多个空格合成1个
                 .trim(); // 去除首尾空格
     }

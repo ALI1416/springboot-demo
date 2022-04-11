@@ -1,8 +1,6 @@
 package com.demo.mapper;
 
-import com.demo.entity.po.RoleRoute2;
 import com.demo.entity.vo.RoleRoute2Vo;
-import com.demo.entity.vo.RoleRouteVo;
 
 import java.util.List;
 

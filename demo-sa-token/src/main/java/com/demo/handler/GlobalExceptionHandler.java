@@ -131,7 +131,6 @@ public class GlobalExceptionHandler {
     @Order(3)
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e) {
-        System.out.println("exceptionHandler");
         log.error("Exception", e);
         return Result.e(ResultCodeEnum.ERROR, "Exception");
     }

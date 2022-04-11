@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.*;
 import com.demo.entity.vo.RoleRoute2Vo;
 import com.demo.entity.vo.RoleRouteVo;
@@ -23,7 +22,7 @@ import java.util.List;
  **/
 @Service
 @AllArgsConstructor
-public class RoleService extends ServiceBase {
+public class RoleService {
 
     private final RoleDao roleDao;
     private final RouteDao routeDao;

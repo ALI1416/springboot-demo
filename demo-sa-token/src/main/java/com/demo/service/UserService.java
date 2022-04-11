@@ -3,7 +3,6 @@ package com.demo.service;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import cn.z.id.Id;
-import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
 import com.demo.dao.mysql.UserRoleDao;
 import com.demo.entity.vo.UserRoleVo;
@@ -27,7 +26,7 @@ import java.util.List;
  **/
 @Service
 @AllArgsConstructor
-public class UserService extends ServiceBase {
+public class UserService {
 
     private final UserDao userDao;
     private final UserRoleDao userRoleDao;

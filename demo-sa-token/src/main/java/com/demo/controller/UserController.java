@@ -165,7 +165,7 @@ public class UserController extends ControllerBase {
      */
     @PostMapping("updateRole")
     public Result updateRole(@RequestBody UserVo user) {
-        if (existNull(user.getId(), user.getRoleIds()) || user.getRoleIds().size() == 0) {
+        if (existNull(user.getId(), user.getRoleIds()) || user.getRoleIds().isEmpty()) {
             return paramIsError();
         }
         return Result.o(userService.updateRole(user));

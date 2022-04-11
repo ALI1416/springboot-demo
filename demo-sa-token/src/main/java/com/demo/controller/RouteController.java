@@ -72,7 +72,7 @@ public class RouteController extends ControllerBase {
         if (existNull(route.getId(), route.getDeleteChildren())) {
             return paramIsError();
         }
-        if (route.getDeleteChildren()) {
+        if (Boolean.TRUE.equals(route.getDeleteChildren())) {
             return Result.o(routeService.deleteWithChildren(route.getId()));
         } else {
             return Result.o(routeService.deleteAndMoveChildren(route.getId()));

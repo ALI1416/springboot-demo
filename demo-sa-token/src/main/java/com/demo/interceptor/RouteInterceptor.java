@@ -92,7 +92,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         String key = RedisConstant.ROUTE_NOT_INTERCEPT;
         // 查询是否存在key
         // 不存在去添加
-        if (!RedisUtils.exists(key)) {
+        if (Boolean.FALSE.equals(RedisUtils.exists(key))) {
             setNotIntercept();
         }
         // 存在，直接判断值是否存在
@@ -168,7 +168,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             // 获取用户拥有的角色id
             List<Long> roles = roleService.findIdByUserId(id);
             // 用户没有角色，给一个占位符
-            if (roles.size() == 0) {
+            if (roles.isEmpty()) {
                 matcherList = new ArrayList<>();
                 matcherList.add(PLACEHOLDER);
                 directList = new HashSet<>();
@@ -204,12 +204,12 @@ public class RouteInterceptor implements HandlerInterceptor {
             String roleString = RedisConstant.ROUTE_ROLE_PREFIX + role + RedisConstant.ROUTE_MATCHER_SUFFIX;
             rolesList.add(roleString);
             // 不存在角色的路由表，去创建
-            if (!RedisUtils.exists(roleString)) {
+            if (Boolean.FALSE.equals(RedisUtils.exists(roleString))) {
                 setRouteByRoleId(role);
             }
         }
         return RedisUtils.sUnionAll(rolesList) // 先取并集
-                .stream().map(obj -> (String) obj) // 转成字符串
+                .stream().map(String.class::cast) // 转成字符串
                 .sorted(Comparator.comparing(this::charCount)) // 排序
                 .collect(Collectors.toList()); // 打包
     }
@@ -227,14 +227,14 @@ public class RouteInterceptor implements HandlerInterceptor {
         Collection<Object> routeMatcher = RedisUtils.hGetMulti(RedisConstant.ROUTE_MATCHER, routes) // 必须去除null
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // 不存在去创建
-        if (routeMatcher.size() == 0) {
+        if (routeMatcher.isEmpty()) {
             setRouteMatcher();
             // 再次获取"匹配路径"列表
             routeMatcher = RedisUtils.hGetMulti(RedisConstant.ROUTE_MATCHER, routes) // 必须去除null
                     .stream().filter(Objects::nonNull).collect(Collectors.toList());
         }
         // 还是不存在，给一个占位符
-        if (routeMatcher.size() == 0) {
+        if (routeMatcher.isEmpty()) {
             routeMatcher.add(PLACEHOLDER);
         }
         // 设置该角色的"匹配路径"列表
@@ -245,7 +245,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         Collection<Object> routeDirect = RedisUtils.hGetMulti(RedisConstant.ROUTE_DIRECT, routes) // 必须去除null
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // 不存在，给一个占位符
-        if (routeDirect.size() == 0) {
+        if (routeDirect.isEmpty()) {
             routeDirect.add(PLACEHOLDER);
         }
         // 设置该角色的"不可匹配路径"列表

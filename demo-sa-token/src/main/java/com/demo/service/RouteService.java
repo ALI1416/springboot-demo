@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.demo.base.ServiceBase;
 import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 @AllArgsConstructor
-public class RouteService extends ServiceBase {
+public class RouteService {
 
     private final RouteDao routeDao;
     private final RoleRouteDao roleRouteDao;
@@ -78,7 +77,7 @@ public class RouteService extends ServiceBase {
         // 查询子节点
         List<Long> ids = children.stream().map(RouteVo::getId).collect(Collectors.toList());
         // 没有子节点，提前退出这个递归
-        if (ids.size() == 0) {
+        if (ids.isEmpty()) {
             return;
         }
         // 删除子节点
@@ -135,7 +134,7 @@ public class RouteService extends ServiceBase {
             return route;
         }
         route.setMatcherPath((List<String>) RedisUtils.get(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX));
-        route.setDirectPath(RedisUtils.sMembers(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(obj -> (String) obj).collect(Collectors.toList()));
+        route.setDirectPath(RedisUtils.sMembers(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
         return route;
     }
 

@@ -32,7 +32,7 @@ public class MailUtils {
      * 静态注入
      */
     @Autowired
-    private MailUtils(MailProperties mailProperties, JavaMailSender javaMailSender) {
+    public MailUtils(MailProperties mailProperties, JavaMailSender javaMailSender) {
         MailUtils.mailProperties = mailProperties;
         MailUtils.javaMailSender = javaMailSender;
     }

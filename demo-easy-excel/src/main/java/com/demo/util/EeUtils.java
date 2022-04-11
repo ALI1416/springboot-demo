@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 public class EeUtils {
 
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
     /**
      * 写文件
@@ -69,7 +69,7 @@ public class EeUtils {
         response.setCharacterEncoding("utf-8");
         fileName = fileName + DATE_FORMAT.format(new Date());
         try {
-            fileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+            fileName = URLEncoder.encode(fileName, "UTF-8").replace("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
             EasyExcel.write(response.getOutputStream(), clazz)//
                     .registerWriteHandler(style1())//

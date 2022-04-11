@@ -82,7 +82,7 @@ public class Item extends ToStringBase {
         this.versionId = item.versionId();
         this.userMetadata = item.userMetadata();
         this.isDir = item.isDir();
-        if (!this.isDir) {
+        if (Boolean.FALSE.equals(this.isDir)) {
             this.lastModifiedDate = MinioUtils.zonedDateTime2Timestamp(item.lastModified());
             this.owner = new Owner(item.owner());
         }

@@ -1,7 +1,6 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.po.Role;
-import com.demo.entity.po.Route2;
 import lombok.Getter;
 import lombok.Setter;
 

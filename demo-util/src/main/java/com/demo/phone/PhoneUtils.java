@@ -18,7 +18,7 @@ public class PhoneUtils {
     /**
      * PhoneNumberLookup实例
      */
-    private final static PhoneNumberLookup PHONE_NUMBER_LOOKUP = new PhoneNumberLookup();
+    private static final PhoneNumberLookup PHONE_NUMBER_LOOKUP = new PhoneNumberLookup();
 
     /**
      * 获取手机号码信息

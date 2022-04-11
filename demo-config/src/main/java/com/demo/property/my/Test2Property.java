@@ -30,66 +30,66 @@ public class Test2Property {
     /**
      * 布尔类型
      */
-    public final static boolean BOOLEAN_TYPE = TEST2.isBooleanType();
+    public static final boolean BOOLEAN_TYPE = TEST2.isBooleanType();
     /**
      * 字节类型
      */
-    public final static byte BYTE_TYPE = TEST2.getByteType();
+    public static final byte BYTE_TYPE = TEST2.getByteType();
     /**
      * 字符类型
      */
-    public final static char CHAR_TYPE = TEST2.getCharType();
+    public static final char CHAR_TYPE = TEST2.getCharType();
     /**
      * 短整数类型
      */
-    public final static short SHORT_TYPE = TEST2.getShortType();
+    public static final short SHORT_TYPE = TEST2.getShortType();
     /**
      * 整数类型
      */
-    public final static int INT_TYPE = TEST2.getIntType();
+    public static final int INT_TYPE = TEST2.getIntType();
     /**
      * 长整数类型
      */
-    public final static long LONG_TYPE = TEST2.getLongType();
+    public static final long LONG_TYPE = TEST2.getLongType();
     /**
      * 单精度浮点类型
      */
-    public final static float FLOAT_TYPE = TEST2.getFloatType();
+    public static final float FLOAT_TYPE = TEST2.getFloatType();
     /**
      * 双精度浮点类型
      */
-    public final static double DOUBLE_TYPE = TEST2.getDoubleType();
+    public static final double DOUBLE_TYPE = TEST2.getDoubleType();
     /**
      * 字符串类型
      */
-    public final static String STRING_TYPE = TEST2.getStringType();
+    public static final String STRING_TYPE = TEST2.getStringType();
     /**
      * 对象类型
      */
-    public final static User OBJ_TYPE = TEST2.getObjType();
+    public static final User OBJ_TYPE = TEST2.getObjType();
     /**
      * 整数数组类型
      */
-    public final static int[] INT_ARRAY_TYPE = TEST2.getIntArrayType();
+    public static final int[] INT_ARRAY_TYPE = TEST2.getIntArrayType();
     /**
      * 字符串列表类型
      */
-    public final static List<String> STRING_LIST_TYPE = TEST2.getStringListType();
+    public static final List<String> STRING_LIST_TYPE = TEST2.getStringListType();
     /**
      * 对象列表类型
      */
-    public final static List<User> OBJ_LIST_TYPE = TEST2.getObjListType();
+    public static final List<User> OBJ_LIST_TYPE = TEST2.getObjListType();
     /**
      * Map类型
      */
-    public final static Map<String, String> MAP_TYPE = TEST2.getMapType();
+    public static final Map<String, String> MAP_TYPE = TEST2.getMapType();
     /**
      * 持续时间类型
      */
-    public final static Duration DURATION_TYPE = TEST2.getDurationType();
+    public static final Duration DURATION_TYPE = TEST2.getDurationType();
     /**
      * 储存容量类型
      */
-    public final static DataSize DATA_SIZE_TYPE = TEST2.getDataSizeType();
+    public static final DataSize DATA_SIZE_TYPE = TEST2.getDataSizeType();
 
 }

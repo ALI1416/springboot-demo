@@ -31,7 +31,7 @@ public class ThreadPool {
     /**
      * 自定义线程池
      */
-    private final static ExecutorService THREAD_POOL = new ThreadPoolExecutor( // 自定义线程池
+    private static final ExecutorService THREAD_POOL = new ThreadPoolExecutor( // 自定义线程池
             5, // 核心线程数量
             200, // 最大线程数量
             0L, // 保活时间

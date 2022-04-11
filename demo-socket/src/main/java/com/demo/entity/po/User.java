@@ -4,8 +4,6 @@ import com.demo.base.ToStringBase;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
 /**
  * <h1>用户</h1>
  *

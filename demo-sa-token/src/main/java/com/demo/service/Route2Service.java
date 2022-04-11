@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RoleRoute2Dao;
 import com.demo.dao.mysql.Route2Dao;
 import com.demo.entity.vo.RoleVo;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 @AllArgsConstructor
-public class Route2Service extends ServiceBase {
+public class Route2Service {
 
     private final Route2Dao route2Dao;
     private final RoleRoute2Dao roleRoute2Dao;
@@ -77,7 +76,7 @@ public class Route2Service extends ServiceBase {
         // 查询子节点
         List<Long> ids = children.stream().map(Route2Vo::getId).collect(Collectors.toList());
         // 没有子节点，提前退出这个递归
-        if (ids.size() == 0) {
+        if (ids.isEmpty()) {
             return;
         }
         // 删除子节点
@@ -136,12 +135,12 @@ public class Route2Service extends ServiceBase {
         }
         // 获取用户拥有的角色id
         List<Long> roles = roleService.findByUserId(id).stream().map(RoleVo::getId).collect(Collectors.toList());
-        if (roles.size() == 0) {
+        if (roles.isEmpty()) {
             return route2;
         }
         // 获取该角色id的所有路由id
         List<Long> routes = findByRoleId(id).stream().map(Route2Vo::getId).collect(Collectors.toList());
-        if (routes.size() == 0) {
+        if (routes.isEmpty()) {
             return route2;
         }
         // 获取所有"匹配路径"列表和"不可匹配路径"列表
