@@ -25,6 +25,8 @@ public class Main {
         String base32 = Base32.encode(s);
         log.info("base32:" + base32);
         log.info("base32解码:" + Base32.decodeStr(base32));
+
+        /*base62*/
         String base62 = Base62.encode(s);
         log.info("base62:" + base62);
         log.info("base62解码:" + Base62.decodeStr(base62));

@@ -1,23 +1,15 @@
 package com.demo.tika;
 
-import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tika.Tika;
-import org.apache.tika.langdetect.tika.LanguageIdentifier;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.mime.MediaTypeRegistry;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.sax.BodyContentHandler;
 
-import java.io.BufferedInputStream;
 import java.util.Arrays;
 import java.util.SortedSet;
 
 /**
  * <h1>tika</h1>
- *
- * <a href="https://svn.apache.org/repos/asf/tika/trunk/tika-example/src/main/java/org/apache/tika/example/">官方示例</a>
  *
  * <p>
  * createDate 2022/03/11 11:29:13
@@ -29,42 +21,36 @@ import java.util.SortedSet;
 @Slf4j
 public class Main {
 
-    private static final BufferedInputStream STREAM = FileUtil.getInputStream("D:\\Desktop\\1.txt");
+    private static final String FILENAME = "D:\\Desktop\\1.txt";
 
     public static void main(String[] args) {
-        try {
-            advancedTypeDetector();
-            mediaTypeExample();
-            contentHandlerExample();
-            language();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 类型检测
-     */
-    private static void advancedTypeDetector() throws Exception {
-        log.info("---------- 类型检测 ----------");
-        Tika tika = new Tika();
-        log.info("类型检测:" + tika.detect(STREAM));
-    }
-
-    /**
-     * 媒体类型
-     */
-    private static void mediaTypeExample() {
         log.info("---------- 媒体类型 ----------");
-        // 描述
-        String describe = "text/plain;charset=UTF-8";
-        MediaType describeType = MediaType.parse(describe);
-        log.info("描述类型:" + describeType.getType());
-        log.info("描述子类:" + describeType.getSubtype());
-        log.info("描述参数:" + describeType.getParameters());
+        log.info(TikaUtils.mediaType(FILENAME));
+        log.info("---------- 文本内容 ----------");
+        log.info(TikaUtils.textContent(FILENAME));
+        log.info("---------- Metadata ----------");
+        Metadata metadata = TikaUtils.metadata(FILENAME);
+        for (String name : metadata.names()) {
+            log.info(name + ":" + Arrays.toString(metadata.getValues(name)));
+        }
+        log.info("---------- 编码检测 ----------");
+        log.info(TikaUtils.contentEncoding(FILENAME).name());
+        log.info("---------- 语言检测 ----------");
+        log.info(TikaUtils.language("Constructs a language identifier based on a String of text content"));
+        mime();
+    }
+
+    /**
+     * MIME
+     */
+    private static void mime() {
+        log.info("---------- MIME ----------");
         // MIME
         String mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         MediaType type = MediaType.parse(mime);
+        log.info("MIME大类:" + type.getType());
+        log.info("MIME子类:" + type.getSubtype());
+        log.info("MIME参数:" + type.getParameters());
         MediaTypeRegistry registry = MediaTypeRegistry.getDefaultRegistry();
         while (type != null) {
             log.info("MIME类型:" + type);
@@ -75,33 +61,6 @@ public class Main {
         MediaType type1 = MediaType.parse(mp4);
         SortedSet<MediaType> aliases = registry.getAliases(type1);
         log.info("类型:" + type1 + "别名:" + aliases.toString());
-    }
-
-    /**
-     * 文本内容
-     */
-    private static void contentHandlerExample() throws Exception {
-        log.info("---------- 文本内容 ----------");
-        BodyContentHandler handler = new BodyContentHandler();
-        AutoDetectParser parser = new AutoDetectParser();
-        Metadata metadata = new Metadata();
-        parser.parse(STREAM, handler, metadata);
-        log.info("文本内容:" + handler);
-        log.info("元信息:");
-        for (String name : metadata.names()) {
-            log.info(name + ":" + Arrays.toString(metadata.getValues(name)));
-        }
-        log.info("文本编码:" + metadata.getValues("Content-Encoding")[0]);
-    }
-
-    /**
-     * 语言检测
-     */
-    private static void language() {
-        log.info("---------- 语言检测 ----------");
-        LanguageIdentifier identifier = //
-                new LanguageIdentifier("Constructs a language identifier based on a String of text content");
-        log.info(identifier.getLanguage());
     }
 
 }

@@ -127,6 +127,8 @@
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.apache.tika/tika-parsers/badge.svg)
     - `Ansj分词` : `org.ansj:ansj_seg`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.ansj/ansj_seg/badge.svg)
+    - `二维码` : `com.google.zxing:core`
+      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.google.zxing/core/badge.svg)
 - `dependencyManagement` : 依赖管理，不用写版本号
 - `profiles` : 配置
   - `profile.id:install` : 打包配置
