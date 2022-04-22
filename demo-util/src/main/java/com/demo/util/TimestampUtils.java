@@ -11,8 +11,8 @@ import java.util.Date;
  * <h2>SimpleDateFormat格式化代码</h2>
  * <table>
  * <tr>
- * <td><b>标记
- * <td><b>解释
+ * <th>标记
+ * <th>解释
  * <tr>
  * <td>G
  * <td>公元前/后
@@ -93,8 +93,8 @@ import java.util.Date;
  * <h2>Calendar常量代码</h2>
  * <table>
  * <tr>
- * <td><b>字段
- * <td><b>解释
+ * <th>字段
+ * <th>解释
  * <tr>
  * <td>ERA
  * <td>世纪
