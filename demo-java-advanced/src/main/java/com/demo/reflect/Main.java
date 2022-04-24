@@ -21,6 +21,8 @@ public class Main {
     public static final String CLASS_NAME = "com.demo.reflect.User";
 
     public static void main(String[] args) {
+        classLoader();
+        myClassLoader();
         clazz();
         package1();
         constructor();
@@ -31,6 +33,39 @@ public class Main {
         annotation();
         primitive();
         array();
+    }
+
+    /**
+     * 类加载器
+     */
+    private static void classLoader() {
+        try {
+            log.info("---------- classLoader ----------");
+            ClassLoader classLoader = new ClassLoader() {
+            };
+            Class<?> clazz = classLoader.loadClass("com.demo.reflect.HelloWorld");
+            Object obj = clazz.getConstructor().newInstance();
+            Method method = clazz.getMethod("main", String[].class);
+            method.invoke(obj, (Object) null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 自定义类加载器
+     */
+    private static void myClassLoader() {
+        try {
+            log.info("---------- myClassLoader ----------");
+            MyClassLoader myClassLoader = new MyClassLoader();
+            Class<?> clazz = myClassLoader.findClass("demo-java-advanced\\src\\main\\resources\\Hello.class");
+            Object obj = clazz.getConstructor().newInstance();
+            Method method = clazz.getMethod("main", String[].class);
+            method.invoke(obj, (Object) null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

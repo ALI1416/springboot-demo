@@ -8,7 +8,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: 1416978277@qq.com
-    password: akaipgfscehfghci
+    password: password
 
 #server:
 #  compression:
@@ -23,4 +23,4 @@ spring:
 
 logging:
   file:
-    name: /log/demo-base.log
+    name: /log/demo-mail.log

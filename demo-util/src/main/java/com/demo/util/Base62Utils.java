@@ -36,12 +36,11 @@ public class Base62Utils {
     }
 
     /**
-     * 编码<br>
-     * 此方法速度较慢，不推荐使用<br>
-     * 请使用{@link #encoder(long)}
+     * 编码
      *
      * @param n Long
      * @return 编码后的数字
+     * @deprecated 此方法速度较慢，不推荐使用，请使用{@link #encoder(long)}
      */
     @Deprecated
     public static String encoder2(long n) {
@@ -102,12 +101,11 @@ public class Base62Utils {
     }
 
     /**
-     * 解码<br>
-     * 此方法速度较慢，不推荐使用<br>
-     * 请使用{@link #decoder(String)}
+     * 解码
      *
      * @param s Long
      * @return 解码后的数字
+     * @deprecated 此方法速度较慢，不推荐使用，请使用{@link #decoder(String)}
      */
     @Deprecated
     public static long decoder2(String s) {

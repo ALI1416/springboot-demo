@@ -44,7 +44,7 @@ public class MailUtils {
      * @param subject 主题
      * @param text    内容
      * @see SimpleMailMessage
-     * @see ThreadPool#execute(Runnable command)
+     * @see ThreadPool#execute(Runnable)
      */
     public static void sendMail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -64,7 +64,7 @@ public class MailUtils {
      * @param text    内容
      * @see MimeMessage
      * @see MimeMessageHelper
-     * @see ThreadPool#execute(Runnable command)
+     * @see ThreadPool#execute(Runnable)
      */
     public static void sendMailHtml(String to, String subject, String text) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
