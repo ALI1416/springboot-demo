@@ -61,11 +61,27 @@ public class Main {
         String datetime = TimestampUtils.getDatetime();
         log.info("getDatetime():" + datetime);
         log.info("getTimestamp:" + TimestampUtils.getTimestamp(datetime, TimestampUtils.FORMAT_DATETIME));
-        log.info("getTimestamp():" + TimestampUtils.getTimestamp());
+        log.info("getTimestamp:" + TimestampUtils.getTimestamp(datetime));
+        long timestamp = TimestampUtils.getTimestamp();
+        log.info("getTimestamp():" + timestamp);
         log.info("getTimestampStart():" + TimestampUtils.getTimestampStart());
+        log.info("getTimestampStart(timestamp):" + TimestampUtils.getTimestampStart(timestamp));
         log.info("getTimestampStart(1):" + TimestampUtils.getTimestampStart(1));
+        log.info("getTimestampStart(timestamp, 1):" + TimestampUtils.getTimestampStart(timestamp, 1));
         log.info("getTimestampEnd():" + TimestampUtils.getTimestampEnd());
+        log.info("getTimestampEnd(timestamp):" + TimestampUtils.getTimestampEnd(timestamp));
         log.info("getTimestampEnd(1):" + TimestampUtils.getTimestampEnd(1));
+        log.info("getTimestampEnd(timestamp, 1):" + TimestampUtils.getTimestampEnd(timestamp, 1));
+        log.info("getDatetime(timestamp, \"yyyy年MM月dd日 HH时mm分ss秒SSS毫秒\"):" //
+                + TimestampUtils.getDatetime(timestamp, "yyyy年MM月dd日 HH时mm分ss秒SSS毫秒"));
+        log.info("getDatetime(\"yyyy年MM月dd日 HH时mm分ss秒SSS毫秒\"):" //
+                + TimestampUtils.getDatetime("yyyy年MM月dd日 HH时mm分ss秒SSS毫秒"));
+        log.info("getDatetime(timestamp):" + TimestampUtils.getDatetime(timestamp));
+        log.info("getDatetime():" + TimestampUtils.getDatetime());
+        log.info("getDate(timestamp):" + TimestampUtils.getDate(timestamp));
+        log.info("getDate():" + TimestampUtils.getDate());
+        log.info("getTime(timestamp):" + TimestampUtils.getTime(timestamp));
+        log.info("getTime():" + TimestampUtils.getTime());
     }
 
     private static void digitTimestampUtils() {
@@ -77,9 +93,9 @@ public class Main {
         log.info("getDigitTimestampEnd():" + DigitTimestampUtils.getDigitTimestampEnd());
         log.info("getDigitTimestampEnd(1):" + DigitTimestampUtils.getDigitTimestampEnd(1));
         log.info("getTimestampStart(digitTimestamp):" + DigitTimestampUtils.getTimestampStart(digitTimestamp));
-        log.info("getTimestampStart(digitTimestamp,1):" + DigitTimestampUtils.getTimestampStart(digitTimestamp, 1));
+        log.info("getTimestampStart(digitTimestamp, 1):" + DigitTimestampUtils.getTimestampStart(digitTimestamp, 1));
         log.info("getTimestampEnd(digitTimestamp):" + DigitTimestampUtils.getTimestampEnd(digitTimestamp));
-        log.info("getTimestampEnd(digitTimestamp,1):" + DigitTimestampUtils.getTimestampEnd(digitTimestamp, 1));
+        log.info("getTimestampEnd(digitTimestamp, 1):" + DigitTimestampUtils.getTimestampEnd(digitTimestamp, 1));
         log.info("complement(20220415123918679L):" + DigitTimestampUtils.complement(20220415123918679L));
         log.info("complement(2022041512391867L):" + DigitTimestampUtils.complement(2022041512391867L));
         log.info("complement(202204151239186L):" + DigitTimestampUtils.complement(202204151239186L));

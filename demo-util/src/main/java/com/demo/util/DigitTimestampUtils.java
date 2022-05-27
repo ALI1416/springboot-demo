@@ -40,7 +40,6 @@ public class DigitTimestampUtils {
      * @param offsetField    偏移字段(offsetAmount为0时，此参数任意)
      * @param offsetAmount   偏移大小(0为不偏移)
      * @return 时间戳
-     * @see Calendar
      */
     public static long getTimestamp(long digitTimestamp, Boolean isStart, int offsetField, int offsetAmount) {
         // 当前时间戳
@@ -132,7 +131,6 @@ public class DigitTimestampUtils {
      * @param offsetField  偏移字段(offsetAmount为0时，此参数任意)
      * @param offsetAmount 偏移大小(0为不偏移)
      * @return 数字时间戳
-     * @see Calendar
      */
     public static long getDigitTimestamp(long timestamp, Boolean isStart, int offsetField, int offsetAmount) {
         // 当前时间戳

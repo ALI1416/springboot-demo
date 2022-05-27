@@ -1,14 +1,16 @@
 package com.demo.util;
 
 
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * <h1>时间戳工具</h1>
  *
- * <h2>SimpleDateFormat格式化代码</h2>
+ * <h2>DateTimeFormatter格式化代码</h2>
  * <table>
  * <tr>
  * <th>标记
@@ -71,23 +73,14 @@ import java.util.Date;
  * <td>Y
  * <td>当天所在的周属于的年份，一周从周日开始，周六结束
  * <tr>
- * <td>L
- * <td>月(独立窗体)
- * <tr>
  * <td>u
  * <td>星期(1-7)
  * <tr>
- * <td>Z
- * <td>RFC822时区
- * <tr>
- * <td>X
- * <td>ISO8601时区
- * <tr>
  * <td>'
- * <td>文本定界符(a-zA-Z都被保留)
+ * <td>文本定界符
  * <tr>
  * <td>''
- * <td>单引号(双单引号)
+ * <td>单引号
  * </table>
  *
  * <h2>Calendar常量代码</h2>
@@ -228,35 +221,27 @@ public class TimestampUtils {
      */
     public static final String FORMAT_TIME = "HH:mm:ss";
     /**
-     * yyyy-MM-dd HH:mm:ss格式SimpleDateFormat
+     * yyyy-MM-dd HH:mm:ss格式DateTimeFormatter
      */
-    public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat(FORMAT_DATETIME);
+    public static final DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofPattern(FORMAT_DATETIME);
     /**
-     * yyyy-MM-dd格式SimpleDateFormat
+     * yyyy-MM-dd格式DateTimeFormatter
      */
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(FORMAT_DATE);
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(FORMAT_DATE);
     /**
-     * HH:mm:ss格式SimpleDateFormat
+     * HH:mm:ss格式DateTimeFormatter
      */
-    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(FORMAT_TIME);
+    public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern(FORMAT_TIME);
 
     /**
      * 获取指定日期时间字符串的时间戳
      *
      * @param datetime 日期时间字符串
-     * @param format   SimpleDateFormat
-     * @return 时间戳，转换失败返回-1
-     * @see java.text.DateFormat#parse(String)
+     * @param format   DateTimeFormatter
+     * @return 时间戳
      */
-    public static long getTimestamp(String datetime, SimpleDateFormat format) {
-        Date date;
-        try {
-            date = format.parse(datetime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-        return date.getTime();
+    public static long getTimestamp(String datetime, DateTimeFormatter format) {
+        return LocalDateTime.parse(datetime, format).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     /**
@@ -264,18 +249,17 @@ public class TimestampUtils {
      *
      * @param datetime 日期时间字符串
      * @param format   日期时间格式字符串
-     * @return 时间戳，转换失败返回-1
-     * @see java.text.SimpleDateFormat#SimpleDateFormat(String)
+     * @return 时间戳
      */
     public static long getTimestamp(String datetime, String format) {
-        return getTimestamp(datetime, new SimpleDateFormat(format));
+        return getTimestamp(datetime, DateTimeFormatter.ofPattern(format));
     }
 
     /**
      * 获取指定日期时间字符串的时间戳
      *
      * @param datetime 日期时间字符串(yyyy-MM-dd HH:mm:ss格式)
-     * @return 时间戳，转换失败返回-1
+     * @return 时间戳
      */
     public static long getTimestamp(String datetime) {
         return getTimestamp(datetime, DATETIME_FORMAT);
@@ -289,7 +273,6 @@ public class TimestampUtils {
      * @param offsetField  偏移字段(offsetAmount为0时，此参数任意)
      * @param offsetAmount 偏移大小(0为不偏移)
      * @return 时间戳
-     * @see Calendar
      */
     public static long getTimestamp(long timestamp, Boolean isStart, int offsetField, int offsetAmount) {
         // 当前时间戳
@@ -421,18 +404,15 @@ public class TimestampUtils {
      * @param timestamp 时间戳(-1为当前时间)
      * @param format    SimpleDateFormat
      * @return 日期时间字符串
-     * @see java.text.DateFormat#format(Date)
      */
-    public static String getDatetime(long timestamp, SimpleDateFormat format) {
-        Date date;
+    public static String getDatetime(long timestamp, DateTimeFormatter format) {
         if (timestamp < 0) {
             // 当前时间戳
-            date = new Date();
+            return LocalDateTime.now().format(format);
         } else {
             // 指定时间戳
-            date = new Date(timestamp);
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).format(format);
         }
-        return format.format(date);
     }
 
     /**
@@ -441,10 +421,9 @@ public class TimestampUtils {
      * @param timestamp 时间戳(-1为当前时间)
      * @param format    日期时间格式
      * @return 日期时间字符串
-     * @see java.text.SimpleDateFormat#SimpleDateFormat(String)
      */
     public static String getDatetime(long timestamp, String format) {
-        return getDatetime(timestamp, new SimpleDateFormat(format));
+        return getDatetime(timestamp, DateTimeFormatter.ofPattern(format));
     }
 
     /**
@@ -452,10 +431,9 @@ public class TimestampUtils {
      *
      * @param format 日期时间格式
      * @return 日期时间字符串
-     * @see java.text.SimpleDateFormat#SimpleDateFormat(String)
      */
     public static String getDatetime(String format) {
-        return getDatetime(-1, new SimpleDateFormat(format));
+        return getDatetime(-1, DateTimeFormatter.ofPattern(format));
     }
 
     /**
