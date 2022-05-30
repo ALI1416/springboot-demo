@@ -266,31 +266,67 @@ public class TimestampUtils {
     }
 
     /**
-     * 获取(当前/指定)时间戳偏移后的时间戳<br>
-     * 例如：<br>
-     * 当前时间戳的日开始的时间戳 getTimestamp(-1,true,true,-1,0)<br>
-     * 指定时间戳的日结束的时间戳 getTimestamp(1609459200000L,true,false,-1,0)<br>
-     * 当前时间戳+1日的时间戳 getTimestamp(-1,false,true,Calendar.DAY_OF_YEAR,1)<br>
-     * 指定时间戳-2月的日结束的时间戳 getTimestamp(1609459200000L,true,false,Calendar.MONTH,-2)<br>
-     * 注意：<br>
-     * `指定偏移`启用条件：offsetField > -1 && offsetAmount != 0<br>
-     * 如果`日偏移`和`指定偏移`同时启用，首先处理`指定偏移`
+     * <h2>获取(当前/指定)时间戳偏移后的时间戳</h2>
      *
-     * @param timestamp       指定时间戳(-1为当前时间)
-     * @param dayOffsetEnable 日偏移是否启用
-     * @param dayOffset       日偏移<br>
-     *                        true 日开始(0时0分0秒0毫秒)<br>
-     *                        false 日结束(23时59分59秒999毫秒)
-     * @param offsetField     指定偏移-偏移字段<br>
-     *                        年 Calendar.YEAR<br>
-     *                        月 Calendar.MONTH<br>
-     *                        周 Calendar.WEEK_OF_YEAR<br>
-     *                        日 Calendar.DAY_OF_YEAR<br>
-     *                        时 Calendar.HOUR_OF_DAY<br>
-     *                        分 Calendar.MINUTE<br>
-     *                        秒 Calendar.SECOND<br>
-     *                        毫秒 Calendar.MILLISECOND
-     * @param offsetAmount    指定偏移-偏移大小
+     * <b>例如：</b>
+     * <ul>
+     *   <li>当前时间戳的日开始的时间戳 getTimestamp(-1,true,true,-1,0)</li>
+     *   <li>指定时间戳的日结束的时间戳 getTimestamp(1609459200000L,true,false,-1,0)</li>
+     *   <li>当前时间戳+1日的时间戳 getTimestamp(-1,false,true,Calendar.DAY_OF_YEAR,1)</li>
+     *   <li>指定时间戳-2月的日结束的时间戳 getTimestamp(1609459200000L,true,false,Calendar.MONTH,-2)</li>
+     * </ul>
+     * <b>注意：</b>
+     * <ul>
+     *   <li>`指定填充`启用条件：fillField为Calendar.HOUR_OF_DAY、Calendar.MINUTE、Calendar.SECOND、Calendar.MILLISECOND的其中一个</li>
+     *   <li>`指定偏移`启用条件：offsetField > -1 && offsetAmount != 0</li>
+     *   <li>`指定填充`启用后`大的单位`会覆盖`小的单位`，例如：
+     *     <ul>
+     *       <li>填充Calendar.HOUR_OF_DAY为最大，则Calendar.MINUTE、Calendar.SECOND、Calendar.MILLISECOND也都填充为最大</li>
+     *       <li>填充Calendar.MINUTE为最小，则Calendar.SECOND、Calendar.MILLISECOND也都填充为最小</li>
+     *     </ul>
+     *   </li>
+     *   <li>`指定填充`和`指定偏移`同时启用，首先处理`指定填充`</li>
+     * </ul>
+     *
+     * @param timestamp    指定时间戳
+     *                     <ul>
+     *                       <li>当前时间 -1</li>
+     *                     </ul>
+     * @param fillField    指定填充-填充字段
+     *                     <ul>
+     *                       <li>时 Calendar.HOUR_OF_DAY</li>
+     *                       <li>分 Calendar.MINUTE</li>
+     *                       <li>秒 Calendar.SECOND</li>
+     *                       <li>毫秒 Calendar.MILLISECOND</li>
+     *                       <li>不启用 -1</li>
+     *                     </ul>
+     * @param fillMinOrMax 指定填充-填充最小值或最大值
+     *                     <ul>
+     *                       <li>最小值 true 全部为0</li>
+     *                       <li>最大值 false
+     *                         <ul>
+     *                           <li>时 23</li>
+     *                           <li>分 59</li>
+     *                           <li>秒 59</li>
+     *                           <li>毫秒 999</li>
+     *                          </ul>
+     *                     </ul>
+     * @param offsetField  指定偏移-偏移字段
+     *                     <ul>
+     *                       <li>年 Calendar.YEAR</li>
+     *                       <li>月 Calendar.MONTH</li>
+     *                       <li>周 Calendar.WEEK_OF_YEAR</li>
+     *                       <li>日 Calendar.DAY_OF_YEAR</li>
+     *                       <li>时 Calendar.HOUR_OF_DAY</li>
+     *                       <li>分 Calendar.MINUTE</li>
+     *                       <li>秒 Calendar.SECOND</li>
+     *                       <li>毫秒 Calendar.MILLISECOND</li>
+     *                       <li>不启用 -1</li>
+     *                     </ul>
+     * @param offsetAmount 指定偏移-偏移数值
+     *                     <ul>
+     *                       <li>不启用 0</li>
+     *                     </ul>
      * @return 时间戳
      * @see Calendar#YEAR
      * @see Calendar#MONTH
@@ -302,7 +338,7 @@ public class TimestampUtils {
      * @see Calendar#MILLISECOND
      */
     public static long getTimestamp(long timestamp, //
-                                    boolean dayOffsetEnable, boolean dayOffset, //
+                                    int fillField, boolean fillMinOrMax, //
                                     int offsetField, int offsetAmount) {
         // 当前时间戳
         Calendar calendar = Calendar.getInstance();
@@ -310,25 +346,35 @@ public class TimestampUtils {
         if (timestamp > -1) {
             calendar.setTimeInMillis(timestamp);
         }
+        // 填充(switch语句缺少break和default但不存在错误)
+        if (fillMinOrMax) {
+            // 最小值
+            switch (fillField) {
+                case Calendar.HOUR_OF_DAY:
+                    calendar.set(Calendar.HOUR_OF_DAY, 0);
+                case Calendar.MINUTE:
+                    calendar.set(Calendar.MINUTE, 0);
+                case Calendar.SECOND:
+                    calendar.set(Calendar.SECOND, 0);
+                case Calendar.MILLISECOND:
+                    calendar.set(Calendar.MILLISECOND, 0);
+            }
+        } else {
+            // 最大值
+            switch (fillField) {
+                case Calendar.HOUR_OF_DAY:
+                    calendar.set(Calendar.HOUR_OF_DAY, 23);
+                case Calendar.MINUTE:
+                    calendar.set(Calendar.MINUTE, 59);
+                case Calendar.SECOND:
+                    calendar.set(Calendar.SECOND, 59);
+                case Calendar.MILLISECOND:
+                    calendar.set(Calendar.MILLISECOND, 999);
+            }
+        }
         // 指定偏移
         if (offsetField > -1 && offsetAmount != 0) {
             calendar.add(offsetField, offsetAmount);
-        }
-        // 日偏移启用
-        if (dayOffsetEnable) {
-            if (dayOffset) {
-                // 日开始(0时0分0秒0毫秒)
-                calendar.set(Calendar.HOUR_OF_DAY, 0);
-                calendar.set(Calendar.MINUTE, 0);
-                calendar.set(Calendar.SECOND, 0);
-                calendar.set(Calendar.MILLISECOND, 0);
-            } else {
-                // 日结束(23时59分59秒999毫秒)
-                calendar.set(Calendar.HOUR_OF_DAY, 23);
-                calendar.set(Calendar.MINUTE, 59);
-                calendar.set(Calendar.SECOND, 59);
-                calendar.set(Calendar.MILLISECOND, 999);
-            }
         }
         // 返回时间戳
         return calendar.getTimeInMillis();
@@ -342,7 +388,7 @@ public class TimestampUtils {
      */
     @Deprecated
     public static long getTimestamp() {
-        return getTimestamp(-1, false, true, -1, 0);
+        return getTimestamp(-1, -1, true, -1, 0);
     }
 
     /**
@@ -351,7 +397,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampStart() {
-        return getTimestamp(-1, true, true, -1, 0);
+        return getTimestamp(-1, Calendar.HOUR_OF_DAY, true, -1, 0);
     }
 
     /**
@@ -361,7 +407,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampStart(long timestamp) {
-        return getTimestamp(timestamp, true, false, -1, 0);
+        return getTimestamp(timestamp, Calendar.HOUR_OF_DAY, false, -1, 0);
     }
 
     /**
@@ -371,7 +417,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampStart(int dayOffset) {
-        return getTimestamp(-1, true, true, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(-1, Calendar.HOUR_OF_DAY, true, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
@@ -382,7 +428,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampStart(long timestamp, int dayOffset) {
-        return getTimestamp(timestamp, true, false, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(timestamp, Calendar.HOUR_OF_DAY, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
@@ -392,7 +438,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampEnd() {
-        return getTimestamp(-1, true, false, -1, 0);
+        return getTimestamp(-1, Calendar.HOUR_OF_DAY, false, -1, 0);
     }
 
     /**
@@ -403,7 +449,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampEnd(long timestamp) {
-        return getTimestamp(timestamp, true, false, -1, 0);
+        return getTimestamp(timestamp, Calendar.HOUR_OF_DAY, false, -1, 0);
     }
 
     /**
@@ -414,7 +460,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampEnd(int dayOffset) {
-        return getTimestamp(-1, true, false, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(-1, Calendar.HOUR_OF_DAY, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
@@ -426,7 +472,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampEnd(long timestamp, int dayOffset) {
-        return getTimestamp(timestamp, true, false, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(timestamp, Calendar.HOUR_OF_DAY, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**

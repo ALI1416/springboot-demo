@@ -87,21 +87,23 @@ public class Main {
         log.info("getTime():" + TimestampUtils.getTime());
         log.info("当前时间:" + new Timestamp(timestamp));
         log.info("一年前:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.YEAR, -1)));
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.YEAR, -1)));
         log.info("三月后:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.MONTH, 3)));
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.MONTH, 3)));
         log.info("两周后的日开始:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, true, true, Calendar.WEEK_OF_YEAR, 2)));
-        log.info("三日前的日结束:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, true, false, Calendar.DAY_OF_YEAR, -3)));
+                + new Timestamp(TimestampUtils //
+                .getTimestamp(timestamp, Calendar.HOUR_OF_DAY, true, Calendar.WEEK_OF_YEAR, 2)));
+        log.info("三日前的时结束:" //
+                + new Timestamp(TimestampUtils //
+                .getTimestamp(timestamp, Calendar.MINUTE, false, Calendar.DAY_OF_YEAR, -3)));
         log.info("一小时前:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.HOUR_OF_DAY, -1)));
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.HOUR_OF_DAY, -1)));
         log.info("十分钟后:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.MINUTE, 10)));
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.MINUTE, 10)));
         log.info("五秒前:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.SECOND, -5)));
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.SECOND, -5)));
         log.info("两毫秒后:" //
-                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.MILLISECOND, 2)));
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.MILLISECOND, 2)));
     }
 
     private static void digitTimestampUtils() {
