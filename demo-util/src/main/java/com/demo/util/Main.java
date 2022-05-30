@@ -86,16 +86,26 @@ public class Main {
         log.info("getTime(timestamp):" + TimestampUtils.getTime(timestamp));
         log.info("getTime():" + TimestampUtils.getTime());
         log.info("当前时间:" + new Timestamp(timestamp));
+        log.info("年开始:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, Calendar.MONTH, true, -1, 0)));
+        log.info("月结束:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, Calendar.DAY_OF_YEAR, false, -1, 0)));
+        log.info("日开始:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, Calendar.HOUR_OF_DAY, true, -1, 0)));
+        log.info("时结束:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, Calendar.MINUTE, false, -1, 0)));
+        log.info("分开始:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, Calendar.SECOND, true, -1, 0)));
+        log.info("秒结束:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, Calendar.MILLISECOND, false, -1, 0)));
         log.info("一年前:" //
                 + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.YEAR, -1)));
         log.info("三月后:" //
                 + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.MONTH, 3)));
-        log.info("两周后的日开始:" //
-                + new Timestamp(TimestampUtils //
-                .getTimestamp(timestamp, Calendar.HOUR_OF_DAY, true, Calendar.WEEK_OF_YEAR, 2)));
-        log.info("三日前的时结束:" //
-                + new Timestamp(TimestampUtils //
-                .getTimestamp(timestamp, Calendar.MINUTE, false, Calendar.DAY_OF_YEAR, -3)));
+        log.info("两周后:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.WEEK_OF_YEAR, 2)));
+        log.info("三日前:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, false, Calendar.DAY_OF_YEAR, -3)));
         log.info("一小时前:" //
                 + new Timestamp(TimestampUtils.getTimestamp(timestamp, -1, true, Calendar.HOUR_OF_DAY, -1)));
         log.info("十分钟后:" //

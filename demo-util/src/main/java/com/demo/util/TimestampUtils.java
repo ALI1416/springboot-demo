@@ -294,6 +294,8 @@ public class TimestampUtils {
      *                     </ul>
      * @param fillField    指定填充-填充字段
      *                     <ul>
+     *                       <li>月 Calendar.MONTH</li>
+     *                       <li>日 Calendar.DAY_OF_YEAR</li>
      *                       <li>时 Calendar.HOUR_OF_DAY</li>
      *                       <li>分 Calendar.MINUTE</li>
      *                       <li>秒 Calendar.SECOND</li>
@@ -302,9 +304,19 @@ public class TimestampUtils {
      *                     </ul>
      * @param fillMinOrMax 指定填充-填充最小值或最大值
      *                     <ul>
-     *                       <li>最小值 true 全部为0</li>
+     *                       <li>最小值 true</li>
+     *                         <ul>
+     *                           <li>月 1</li>
+     *                           <li>日 1</li>
+     *                           <li>时 0</li>
+     *                           <li>分 0</li>
+     *                           <li>秒 0</li>
+     *                           <li>毫秒 0</li>
+     *                          </ul>
      *                       <li>最大值 false
      *                         <ul>
+     *                           <li>月 12</li>
+     *                           <li>日 当前月份的最大日期(28/29/30/31)</li>
      *                           <li>时 23</li>
      *                           <li>分 59</li>
      *                           <li>秒 59</li>
@@ -350,6 +362,11 @@ public class TimestampUtils {
         if (fillMinOrMax) {
             // 最小值
             switch (fillField) {
+                case Calendar.MONTH:
+                    // 1月
+                    calendar.set(Calendar.MONTH, 0);
+                case Calendar.DAY_OF_YEAR:
+                    calendar.set(Calendar.DAY_OF_MONTH, 1);
                 case Calendar.HOUR_OF_DAY:
                     calendar.set(Calendar.HOUR_OF_DAY, 0);
                 case Calendar.MINUTE:
@@ -362,6 +379,12 @@ public class TimestampUtils {
         } else {
             // 最大值
             switch (fillField) {
+                case Calendar.MONTH:
+                    // 12月
+                    calendar.set(Calendar.MONTH, 11);
+                case Calendar.DAY_OF_YEAR:
+                    // 获取当月的最大日期
+                    calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
                 case Calendar.HOUR_OF_DAY:
                     calendar.set(Calendar.HOUR_OF_DAY, 23);
                 case Calendar.MINUTE:
