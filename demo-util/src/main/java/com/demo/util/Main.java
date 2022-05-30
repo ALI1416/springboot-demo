@@ -2,7 +2,9 @@ package com.demo.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -60,18 +62,19 @@ public class Main {
         log.info("---------- timestampUtils ----------");
         String datetime = TimestampUtils.getDatetime();
         log.info("getDatetime():" + datetime);
-        log.info("getTimestamp:" + TimestampUtils.getTimestamp(datetime, TimestampUtils.FORMAT_DATETIME));
-        log.info("getTimestamp:" + TimestampUtils.getTimestamp(datetime));
+        log.info("getTimestamp(datetime, TimestampUtils.FORMAT_DATETIME):" //
+                + new Timestamp(TimestampUtils.getTimestamp(datetime, TimestampUtils.FORMAT_DATETIME)));
+        log.info("getTimestamp(datetime):" + new Timestamp(TimestampUtils.getTimestamp(datetime)));
         long timestamp = TimestampUtils.getTimestamp();
-        log.info("getTimestamp():" + timestamp);
-        log.info("getTimestampStart():" + TimestampUtils.getTimestampStart());
-        log.info("getTimestampStart(timestamp):" + TimestampUtils.getTimestampStart(timestamp));
-        log.info("getTimestampStart(1):" + TimestampUtils.getTimestampStart(1));
-        log.info("getTimestampStart(timestamp, 1):" + TimestampUtils.getTimestampStart(timestamp, 1));
-        log.info("getTimestampEnd():" + TimestampUtils.getTimestampEnd());
-        log.info("getTimestampEnd(timestamp):" + TimestampUtils.getTimestampEnd(timestamp));
-        log.info("getTimestampEnd(1):" + TimestampUtils.getTimestampEnd(1));
-        log.info("getTimestampEnd(timestamp, 1):" + TimestampUtils.getTimestampEnd(timestamp, 1));
+        log.info("getTimestamp():" + new Timestamp(timestamp));
+        log.info("getTimestampStart():" + new Timestamp(TimestampUtils.getTimestampStart()));
+        log.info("getTimestampStart(timestamp):" + new Timestamp(TimestampUtils.getTimestampStart(timestamp)));
+        log.info("getTimestampStart(1):" + new Timestamp(TimestampUtils.getTimestampStart(1)));
+        log.info("getTimestampStart(timestamp, 1):" + new Timestamp(TimestampUtils.getTimestampStart(timestamp, 1)));
+        log.info("getTimestampEnd():" + new Timestamp(TimestampUtils.getTimestampEnd()));
+        log.info("getTimestampEnd(timestamp):" + new Timestamp(TimestampUtils.getTimestampEnd(timestamp)));
+        log.info("getTimestampEnd(1):" + new Timestamp(TimestampUtils.getTimestampEnd(1)));
+        log.info("getTimestampEnd(timestamp, 1):" + new Timestamp(TimestampUtils.getTimestampEnd(timestamp, 1)));
         log.info("getDatetime(timestamp, \"yyyy年MM月dd日 HH时mm分ss秒SSS毫秒\"):" //
                 + TimestampUtils.getDatetime(timestamp, "yyyy年MM月dd日 HH时mm分ss秒SSS毫秒"));
         log.info("getDatetime(\"yyyy年MM月dd日 HH时mm分ss秒SSS毫秒\"):" //
@@ -82,6 +85,23 @@ public class Main {
         log.info("getDate():" + TimestampUtils.getDate());
         log.info("getTime(timestamp):" + TimestampUtils.getTime(timestamp));
         log.info("getTime():" + TimestampUtils.getTime());
+        log.info("当前时间:" + new Timestamp(timestamp));
+        log.info("一年前:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.YEAR, -1)));
+        log.info("三月后:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.MONTH, 3)));
+        log.info("两周后的日开始:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, true, true, Calendar.WEEK_OF_YEAR, 2)));
+        log.info("三日前的日结束:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, true, false, Calendar.DAY_OF_YEAR, -3)));
+        log.info("一小时前:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.HOUR_OF_DAY, -1)));
+        log.info("十分钟后:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.MINUTE, 10)));
+        log.info("五秒前:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.SECOND, -5)));
+        log.info("两毫秒后:" //
+                + new Timestamp(TimestampUtils.getTimestamp(timestamp, false, true, Calendar.MILLISECOND, 2)));
     }
 
     private static void digitTimestampUtils() {

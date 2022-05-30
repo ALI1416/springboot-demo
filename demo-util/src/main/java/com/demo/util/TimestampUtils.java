@@ -266,52 +266,83 @@ public class TimestampUtils {
     }
 
     /**
-     * 获取(当前/指定)时间戳的(指定偏移字段、偏移大小)的(开始/结束/当前)时间戳
+     * 获取(当前/指定)时间戳偏移后的时间戳<br>
+     * 例如：<br>
+     * 当前时间戳的日开始的时间戳 getTimestamp(-1,true,true,-1,0)<br>
+     * 指定时间戳的日结束的时间戳 getTimestamp(1609459200000L,true,false,-1,0)<br>
+     * 当前时间戳+1日的时间戳 getTimestamp(-1,false,true,Calendar.DAY_OF_YEAR,1)<br>
+     * 指定时间戳-2月的日结束的时间戳 getTimestamp(1609459200000L,true,false,Calendar.MONTH,-2)<br>
+     * 注意：<br>
+     * `指定偏移`启用条件：offsetField > -1 && offsetAmount != 0<br>
+     * 如果`日偏移`和`指定偏移`同时启用，首先处理`指定偏移`
      *
-     * @param timestamp    指定时间戳(-1为当前时间)
-     * @param isStart      开始(true)/结束(false)/当前(null)
-     * @param offsetField  偏移字段(offsetAmount为0时，此参数任意)
-     * @param offsetAmount 偏移大小(0为不偏移)
+     * @param timestamp       指定时间戳(-1为当前时间)
+     * @param dayOffsetEnable 日偏移是否启用
+     * @param dayOffset       日偏移<br>
+     *                        true 日开始(0时0分0秒0毫秒)<br>
+     *                        false 日结束(23时59分59秒999毫秒)
+     * @param offsetField     指定偏移-偏移字段<br>
+     *                        年 Calendar.YEAR<br>
+     *                        月 Calendar.MONTH<br>
+     *                        周 Calendar.WEEK_OF_YEAR<br>
+     *                        日 Calendar.DAY_OF_YEAR<br>
+     *                        时 Calendar.HOUR_OF_DAY<br>
+     *                        分 Calendar.MINUTE<br>
+     *                        秒 Calendar.SECOND<br>
+     *                        毫秒 Calendar.MILLISECOND
+     * @param offsetAmount    指定偏移-偏移大小
      * @return 时间戳
+     * @see Calendar#YEAR
+     * @see Calendar#MONTH
+     * @see Calendar#WEEK_OF_YEAR
+     * @see Calendar#DAY_OF_YEAR
+     * @see Calendar#HOUR_OF_DAY
+     * @see Calendar#MINUTE
+     * @see Calendar#SECOND
+     * @see Calendar#MILLISECOND
      */
-    public static long getTimestamp(long timestamp, Boolean isStart, int offsetField, int offsetAmount) {
+    public static long getTimestamp(long timestamp, //
+                                    boolean dayOffsetEnable, boolean dayOffset, //
+                                    int offsetField, int offsetAmount) {
         // 当前时间戳
         Calendar calendar = Calendar.getInstance();
         // 指定时间戳
         if (timestamp > -1) {
             calendar.setTimeInMillis(timestamp);
         }
-        if (isStart != null) {
-            // 设置时分秒毫秒
-            if (isStart) {
-                // 开始时间
+        // 指定偏移
+        if (offsetField > -1 && offsetAmount != 0) {
+            calendar.add(offsetField, offsetAmount);
+        }
+        // 日偏移启用
+        if (dayOffsetEnable) {
+            if (dayOffset) {
+                // 日开始(0时0分0秒0毫秒)
                 calendar.set(Calendar.HOUR_OF_DAY, 0);
                 calendar.set(Calendar.MINUTE, 0);
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
             } else {
-                // 结束时间
+                // 日结束(23时59分59秒999毫秒)
                 calendar.set(Calendar.HOUR_OF_DAY, 23);
                 calendar.set(Calendar.MINUTE, 59);
                 calendar.set(Calendar.SECOND, 59);
                 calendar.set(Calendar.MILLISECOND, 999);
             }
         }
-        // 指定偏移
-        if (offsetField > -1 && offsetAmount > 0) {
-            calendar.add(offsetField, offsetAmount);
-        }
         // 返回时间戳
         return calendar.getTimeInMillis();
     }
 
     /**
-     * 获取当前时间戳
+     * 获取当前时间戳<br>
+     * 效率低，不推荐使用
      *
      * @return 时间戳
      */
+    @Deprecated
     public static long getTimestamp() {
-        return getTimestamp(-1, null, -1, 0);
+        return getTimestamp(-1, false, true, -1, 0);
     }
 
     /**
@@ -320,7 +351,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampStart() {
-        return getTimestamp(-1, true, -1, 0);
+        return getTimestamp(-1, true, true, -1, 0);
     }
 
     /**
@@ -330,28 +361,28 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampStart(long timestamp) {
-        return getTimestamp(timestamp, true, -1, 0);
+        return getTimestamp(timestamp, true, false, -1, 0);
     }
 
     /**
-     * 获取当前时间戳+偏移天0时0分0秒0毫秒的时间戳
+     * 获取当前时间戳+偏移日0时0分0秒0毫秒的时间戳
      *
-     * @param dayOffset 相对于当前时间戳的偏移天
+     * @param dayOffset 相对于当前时间戳的偏移日
      * @return 时间戳
      */
     public static long getTimestampStart(int dayOffset) {
-        return getTimestamp(-1, true, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(-1, true, true, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
-     * 获取指定时间戳+偏移天0时0分0秒0毫秒的时间戳
+     * 获取指定时间戳+偏移日0时0分0秒0毫秒的时间戳
      *
      * @param timestamp 指定时间戳
-     * @param dayOffset 相对于指定时间戳的偏移天
+     * @param dayOffset 相对于指定时间戳的偏移日
      * @return 时间戳
      */
     public static long getTimestampStart(long timestamp, int dayOffset) {
-        return getTimestamp(timestamp, true, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(timestamp, true, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
@@ -361,7 +392,7 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampEnd() {
-        return getTimestamp(-1, false, -1, 0);
+        return getTimestamp(-1, true, false, -1, 0);
     }
 
     /**
@@ -372,30 +403,30 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestampEnd(long timestamp) {
-        return getTimestamp(timestamp, false, -1, 0);
+        return getTimestamp(timestamp, true, false, -1, 0);
     }
 
     /**
-     * 获取当前时间戳+偏移天23时59分59秒999毫秒的时间戳<br>
+     * 获取当前时间戳+偏移日23时59分59秒999毫秒的时间戳<br>
      * 如果已经调用过getTimestampStart，请保存变量并+INTERVAL_DAY来替代getTimestampEnd，这样速度更快
      *
-     * @param dayOffset 相对于当前时间戳的偏移天
+     * @param dayOffset 相对于当前时间戳的偏移日
      * @return 时间戳
      */
     public static long getTimestampEnd(int dayOffset) {
-        return getTimestamp(-1, false, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(-1, true, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
-     * 获取指定时间戳+偏移天23时59分59秒999毫秒的时间戳<br>
+     * 获取指定时间戳+偏移日23时59分59秒999毫秒的时间戳<br>
      * 如果已经调用过getTimestampStart，请保存变量并+INTERVAL_DAY来替代getTimestampEnd，这样速度更快
      *
      * @param timestamp 指定时间戳
-     * @param dayOffset 相对于指定时间戳的偏移天
+     * @param dayOffset 相对于指定时间戳的偏移日
      * @return 时间戳
      */
     public static long getTimestampEnd(long timestamp, int dayOffset) {
-        return getTimestamp(timestamp, false, Calendar.DAY_OF_YEAR, dayOffset);
+        return getTimestamp(timestamp, true, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
