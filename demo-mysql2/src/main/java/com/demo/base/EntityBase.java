@@ -60,29 +60,29 @@ public class EntityBase extends ToStringBase {
     /* ==================== vo ==================== */
     /* -------------------- 大多数表 -------------------- */
     /**
-     * 创建时间-否定
-     */
-    private Timestamp createTimeNot;
-    /**
      * 创建时间-结束
      */
     private Timestamp createTimeEnd;
     /**
-     * 更新时间-否定
+     * 创建时间-否定
      */
-    private Timestamp updateTimeNot;
+    private Boolean createTimeNot;
     /**
      * 更新时间-结束
      */
     private Timestamp updateTimeEnd;
     /**
-     * 版本-否定
+     * 更新时间-否定
      */
-    private Integer versionNot;
+    private Boolean updateTimeNot;
     /**
      * 版本-结束
      */
     private Integer versionEnd;
+    /**
+     * 版本-否定
+     */
+    private Boolean versionNot;
     /* -------------------- 分页 -------------------- */
     /**
      * 分页-页码
@@ -96,5 +96,29 @@ public class EntityBase extends ToStringBase {
      * 分页-排序
      */
     private String orderBy;
+
+    public EntityBase() {
+
+    }
+
+    public EntityBase(EntityBase base) {
+        this.id = base.id;
+        this.isDelete = base.isDelete;
+        this.createId = base.createId;
+        this.createTime = base.createTime;
+        this.updateId = base.updateId;
+        this.updateTime = base.updateTime;
+        this.version = base.version;
+        this.refId = base.refId;
+        this.createTimeEnd = base.createTimeEnd;
+        this.createTimeNot = base.createTimeNot;
+        this.updateTimeEnd = base.updateTimeEnd;
+        this.updateTimeNot = base.updateTimeNot;
+        this.versionEnd = base.versionEnd;
+        this.versionNot = base.versionNot;
+        this.pages = base.pages;
+        this.rows = base.rows;
+        this.orderBy = base.orderBy;
+    }
 
 }

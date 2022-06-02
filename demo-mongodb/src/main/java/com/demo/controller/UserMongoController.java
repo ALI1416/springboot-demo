@@ -3,6 +3,7 @@ package com.demo.controller;
 import cn.z.clock.Clock;
 import com.demo.entity.mongo.UserMongo;
 import com.demo.entity.pojo.Result;
+import com.demo.entity.vo.UserMongoVo;
 import com.demo.service.UserMongoService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -38,7 +39,7 @@ public class UserMongoController {
      * 再次插入 返回 false
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody UserMongo userMongo) {
+    public Result insert(@RequestBody UserMongoVo userMongo) {
         userMongo.setDate(Clock.timestamp());
         return Result.o(userMongoService.insert(userMongo));
     }
@@ -65,7 +66,7 @@ public class UserMongoController {
      * id=1已存在会更新，不存在会插入
      */
     @PostMapping("/save")
-    public Result save(@RequestBody UserMongo userMongo) {
+    public Result save(@RequestBody UserMongoVo userMongo) {
         userMongoService.save(userMongo);
         return Result.o();
     }
@@ -143,7 +144,7 @@ public class UserMongoController {
      * body JSON {"id":1}
      */
     @PostMapping("/delete")
-    public Result delete(@RequestBody UserMongo userMongo) {
+    public Result delete(@RequestBody UserMongoVo userMongo) {
         userMongoService.delete(userMongo);
         return Result.o();
     }
@@ -276,7 +277,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findPage")
-    public Result findPage(@RequestBody UserMongo userMongo) {
+    public Result findPage(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage(userMongo));
     }
 
@@ -287,7 +288,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findPage2")
-    public Result findPage2(@RequestBody UserMongo userMongo) {
+    public Result findPage2(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage2(userMongo));
     }
 
@@ -298,7 +299,7 @@ public class UserMongoController {
      * List
      */
     @PostMapping("/findSort")
-    public Result findSort(@RequestBody UserMongo userMongo) {
+    public Result findSort(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort(userMongo));
     }
 
@@ -309,7 +310,7 @@ public class UserMongoController {
      * List
      */
     @PostMapping("/findSort2")
-    public Result findSort2(@RequestBody UserMongo userMongo) {
+    public Result findSort2(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort2(userMongo));
     }
 

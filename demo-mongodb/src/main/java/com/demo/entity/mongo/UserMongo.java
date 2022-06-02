@@ -54,11 +54,15 @@ public class UserMongo extends MongoEntityBase {
      */
     private Timestamp date;
 
-    /**
-     * 查询-时间结束<br>
-     * 不放到数据库使用@Transient注解
-     */
-    @Transient
-    private Timestamp dateEnd;
+    public UserMongo() {
+
+    }
+
+    public UserMongo(UserMongo mongo) {
+        this.name = mongo.name;
+        this.followers = mongo.followers;
+        this.following = mongo.following;
+        this.date = mongo.date;
+    }
 
 }

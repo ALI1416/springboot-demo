@@ -41,36 +41,36 @@ public class MongoEntityBase extends ToStringBase {
 
     /* ==================== vo ==================== */
     /**
-     * 创建时间-否定<br>
+     * 创建时间-结束<br>
      * 不保存到数据库中需要加@Transient注解
-     */
-    @Transient
-    private Timestamp createTimeNot;
-    /**
-     * 创建时间-结束
      */
     @Transient
     private Timestamp createTimeEnd;
     /**
-     * 更新时间-否定
+     * 创建时间-否定
      */
     @Transient
-    private Timestamp updateTimeNot;
+    private Boolean createTimeNot;
     /**
      * 更新时间-结束
      */
     @Transient
     private Timestamp updateTimeEnd;
     /**
-     * 版本-否定
+     * 更新时间-否定
      */
     @Transient
-    private Integer versionNot;
+    private Boolean updateTimeNot;
     /**
      * 版本-结束
      */
     @Transient
     private Integer versionEnd;
+    /**
+     * 版本-否定
+     */
+    @Transient
+    private Boolean versionNot;
 
     /* -------------------- 分页 -------------------- */
     /**
@@ -88,5 +88,25 @@ public class MongoEntityBase extends ToStringBase {
      */
     @Transient
     private String orderBy;
+
+    public MongoEntityBase() {
+
+    }
+
+    public MongoEntityBase(MongoEntityBase base) {
+        this.id = base.id;
+        this.createTime = base.createTime;
+        this.updateTime = base.updateTime;
+        this.version = base.version;
+        this.createTimeEnd = base.createTimeEnd;
+        this.createTimeNot = base.createTimeNot;
+        this.updateTimeEnd = base.updateTimeEnd;
+        this.updateTimeNot = base.updateTimeNot;
+        this.versionEnd = base.versionEnd;
+        this.versionNot = base.versionNot;
+        this.pages = base.pages;
+        this.rows = base.rows;
+        this.orderBy = base.orderBy;
+    }
 
 }

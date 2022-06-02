@@ -32,13 +32,13 @@
     <choose>
       <!-- 不查询，SE同时为null -->
       <when test="${alias} == null and ${alias}End == null"/>
-      <!-- SE不同时为null。SE相等时，根据N是否为null决定==和!= -->
+      <!-- SE不同时为null。SE相等时，根据N是否为null或false决定==和!= -->
       <!-- ___(S=E)___ 等于-->
-      <when test="${alias} == ${alias}End and ${alias}Not == null">
+      <when test="${alias} == ${alias}End and (${alias}Not == null or ${alias}Not == false)">
         and ${field} = #{${alias}}
       </when>
       <!-- _xxx(S=E)xxx_(N) 不等 -->
-      <when test="${alias} == ${alias}End and ${alias}Not != null">
+      <when test="${alias} == ${alias}End and (${alias}Not != null or ${alias}Not == true)">
         and ${field} != #{${alias}}
       </when>
       <!-- SE有一个为null，N无效。根据SE是否为null<和> -->
@@ -50,13 +50,13 @@
       <when test="${alias}End == null">
         and ${field} &gt;= #{${alias}}
       </when>
-      <!-- SE既不同时为null也不相等。根据N是否为null决定between和not between -->
+      <!-- SE既不同时为null也不相等。根据N是否为null或false决定between和not between -->
       <!-- ___(S)xxx(E)___ 在...与...之间 -->
-      <when test="${alias}Not == null">
+      <when test="${alias}Not == null or ${alias}Not == false">
         and ${field} between #{${alias}} and #{${alias}End}
       </when>
       <!-- _xxx(S)___(E)xxx_(N) 不在...与...之间 -->
-      <when test="${alias}Not != null">
+      <when test="${alias}Not != null or ${alias}Not == true">
         and ${field} not between #{${alias}} and #{${alias}End}
       </when>
     </choose>

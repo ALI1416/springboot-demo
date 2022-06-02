@@ -3,17 +3,16 @@ package com.demo.service;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.mongo.UserMongo;
+import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * <h1>UserMongoService</h1>
@@ -37,7 +36,7 @@ public class UserMongoService extends ServiceBase {
      * @param userMongo 实体，必须有id
      * @return 是否成功
      */
-    public boolean insert(UserMongo userMongo) {
+    public boolean insert(UserMongoVo userMongo) {
         return userMongoDao.insert(userMongo);
     }
 
@@ -56,7 +55,7 @@ public class UserMongoService extends ServiceBase {
      *
      * @param userMongo 实体，必须有id
      */
-    public void save(UserMongo userMongo) {
+    public void save(UserMongoVo userMongo) {
         userMongoDao.save(userMongo);
     }
 
@@ -122,7 +121,7 @@ public class UserMongoService extends ServiceBase {
      *
      * @param userMongo 实体，必须有id
      */
-    public void delete(UserMongo userMongo) {
+    public void delete(UserMongoVo userMongo) {
         userMongoDao.delete(userMongo);
     }
 
@@ -169,18 +168,6 @@ public class UserMongoService extends ServiceBase {
      */
     public UserMongo findOne(Example<UserMongo> example) {
         return userMongoDao.findOne(example);
-    }
-
-    /**
-     * findBy
-     *
-     * @param example       Example
-     * @param queryFunction Function<FluentQuery.FetchableFluentQuery<UserMongo>, Long>
-     * @return Long
-     */
-    public Long findBy(Example<UserMongo> example,
-                       Function<FluentQuery.FetchableFluentQuery<UserMongo>, Long> queryFunction) {
-        return userMongoDao.findBy(example, queryFunction);
     }
 
     /**
@@ -249,7 +236,7 @@ public class UserMongoService extends ServiceBase {
      * @param userMongo UserMongo
      * @return Page
      */
-    public Page<UserMongo> findPage(UserMongo userMongo) {
+    public Page<UserMongo> findPage(UserMongoVo userMongo) {
         return userMongoDao.findPage(buildPage(userMongo));
     }
 
@@ -259,7 +246,7 @@ public class UserMongoService extends ServiceBase {
      * @param userMongo UserMongo
      * @return Page
      */
-    public Page<UserMongo> findPage2(UserMongo userMongo) {
+    public Page<UserMongo> findPage2(UserMongoVo userMongo) {
         return userMongoDao.findPage2(userMongo, buildPage(userMongo));
     }
 
@@ -269,7 +256,7 @@ public class UserMongoService extends ServiceBase {
      * @param userMongo UserMongo
      * @return List
      */
-    public List<UserMongo> findSort(UserMongo userMongo) {
+    public List<UserMongo> findSort(UserMongoVo userMongo) {
         return userMongoDao.findSort(buildSort(userMongo.getOrderBy()));
     }
 
@@ -279,7 +266,7 @@ public class UserMongoService extends ServiceBase {
      * @param userMongo UserMongo
      * @return List
      */
-    public List<UserMongo> findSort2(UserMongo userMongo) {
+    public List<UserMongo> findSort2(UserMongoVo userMongo) {
         return userMongoDao.findSort2(userMongo, buildSort(userMongo.getOrderBy()));
     }
 

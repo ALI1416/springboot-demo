@@ -1,9 +1,7 @@
 package com.demo.util;
 
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
@@ -96,7 +94,7 @@ import java.util.Calendar;
  * <td>年
  * <tr>
  * <td>MONTH
- * <td>月
+ * <td>月(一月为0,二月为1,...十二月为11)
  * <tr>
  * <td>DATE/DAY_OF_MONTH
  * <td>日
@@ -129,7 +127,7 @@ import java.util.Calendar;
  * <td>一年中的第几天
  * <tr>
  * <td>DAY_OF_WEEK
- * <td>一年中的第几周
+ * <td>周几(周日为1,周一为2,...周六为7)
  * <tr>
  * <td>DAY_OF_WEEK_IN_MONTH
  * <td>当前月份内一周中的第几天
@@ -234,14 +232,29 @@ public class TimestampUtils {
     public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern(FORMAT_TIME);
 
     /**
-     * 获取指定日期时间字符串的时间戳
+     * 获取指定日期时间字符串的时间戳<br>
+     * 没有时间：时间默认为0时0分0秒0毫秒<br>
+     * 没有日期：日期默认为1970年1月1日<br>
+     * 错误格式：返回0
      *
      * @param datetime 日期时间字符串
      * @param format   DateTimeFormatter
      * @return 时间戳
      */
     public static long getTimestamp(String datetime, DateTimeFormatter format) {
-        return LocalDateTime.parse(datetime, format).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        try {
+            return LocalDateTime.parse(datetime, format).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        } catch (Exception ignore) {
+            try {
+                return LocalDate.parse(datetime, format).toEpochDay() * MILLS_OF_DAY;
+            } catch (Exception ignore2) {
+                try {
+                    return LocalTime.parse(datetime, format).toNanoOfDay() / 1000000;
+                } catch (Exception ignore3) {
+                    return 0;
+                }
+            }
+        }
     }
 
     /**
@@ -358,7 +371,7 @@ public class TimestampUtils {
         if (timestamp > -1) {
             calendar.setTimeInMillis(timestamp);
         }
-        // 填充(switch语句缺少break和default但不存在错误)
+        // 填充(switch语句缺少break但不存在错误)
         if (fillMinOrMax) {
             // 最小值
             switch (fillField) {

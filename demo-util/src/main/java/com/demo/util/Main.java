@@ -21,10 +21,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        base62Utils();
-        stringUtils();
+        // base62Utils();
+        // stringUtils();
         timestampUtils();
-        digitTimestampUtils();
+        // digitTimestampUtils();
     }
 
     private static void base62Utils() {
@@ -60,21 +60,23 @@ public class Main {
 
     private static void timestampUtils() {
         log.info("---------- timestampUtils ----------");
-        String datetime = TimestampUtils.getDatetime();
-        log.info("getDatetime():" + datetime);
-        log.info("getTimestamp(datetime, TimestampUtils.FORMAT_DATETIME):" //
-                + new Timestamp(TimestampUtils.getTimestamp(datetime, TimestampUtils.FORMAT_DATETIME)));
-        log.info("getTimestamp(datetime):" + new Timestamp(TimestampUtils.getTimestamp(datetime)));
+        // String datetime = TimestampUtils.getDatetime();
+        // log.info("yyyy-MM-dd HH:mm:ss格式当前时间:" + datetime);
+        // log.info("默认yyyy-MM-dd HH:mm:ss格式时间转时间戳:" + new Timestamp(TimestampUtils.getTimestamp(datetime)));
+        String date = TimestampUtils.getDate();
+        log.info("yyyy-MM-dd格式当前时间:" + date);
+        log.info("指定yyyy-MM-dd格式时间转时间戳:" //
+                + new Timestamp(TimestampUtils.getTimestamp(date, TimestampUtils.FORMAT_DATE)));
         long timestamp = TimestampUtils.getTimestamp();
-        log.info("getTimestamp():" + new Timestamp(timestamp));
-        log.info("getTimestampStart():" + new Timestamp(TimestampUtils.getTimestampStart()));
-        log.info("getTimestampStart(timestamp):" + new Timestamp(TimestampUtils.getTimestampStart(timestamp)));
-        log.info("getTimestampStart(1):" + new Timestamp(TimestampUtils.getTimestampStart(1)));
-        log.info("getTimestampStart(timestamp, 1):" + new Timestamp(TimestampUtils.getTimestampStart(timestamp, 1)));
-        log.info("getTimestampEnd():" + new Timestamp(TimestampUtils.getTimestampEnd()));
-        log.info("getTimestampEnd(timestamp):" + new Timestamp(TimestampUtils.getTimestampEnd(timestamp)));
-        log.info("getTimestampEnd(1):" + new Timestamp(TimestampUtils.getTimestampEnd(1)));
-        log.info("getTimestampEnd(timestamp, 1):" + new Timestamp(TimestampUtils.getTimestampEnd(timestamp, 1)));
+        log.info("当前时间戳:" + new Timestamp(timestamp));
+        log.info("当前时间戳起始:" + new Timestamp(TimestampUtils.getTimestampStart()));
+        log.info("指定时间戳起始:" + new Timestamp(TimestampUtils.getTimestampStart(timestamp)));
+        log.info("当前时间戳+1日起始:" + new Timestamp(TimestampUtils.getTimestampStart(1)));
+        log.info("指定时间戳+1日起始:" + new Timestamp(TimestampUtils.getTimestampStart(timestamp, 1)));
+        log.info("当前时间戳结束:" + new Timestamp(TimestampUtils.getTimestampEnd()));
+        log.info("指定时间戳结束:" + new Timestamp(TimestampUtils.getTimestampEnd(timestamp)));
+        log.info("当前时间戳+1日结束:" + new Timestamp(TimestampUtils.getTimestampEnd(1)));
+        log.info("指定时间戳+1日结束:" + new Timestamp(TimestampUtils.getTimestampEnd(timestamp, 1)));
         log.info("getDatetime(timestamp, \"yyyy年MM月dd日 HH时mm分ss秒SSS毫秒\"):" //
                 + TimestampUtils.getDatetime(timestamp, "yyyy年MM月dd日 HH时mm分ss秒SSS毫秒"));
         log.info("getDatetime(\"yyyy年MM月dd日 HH时mm分ss秒SSS毫秒\"):" //
