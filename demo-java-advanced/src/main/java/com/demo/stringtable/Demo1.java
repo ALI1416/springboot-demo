@@ -56,6 +56,7 @@ public class Demo1 {
         // 27: astore        4
         // 参考StringBuilder.toString()可知，创建了一个新的String对象，
         // 即相当于new String("ab")
+        // 同理`String s4 = s1 + "b";`与`String s4 = new String("ab");`，效果一样
         String s4 = s1 + s2;
 
         // 由于StringTable中已经有字符串"ab"了，所以直接返回该对象
@@ -97,6 +98,8 @@ public class Demo1 {
         // 编译器自动优化代码
         // 118: ldc           #40                 // String cd
         // 120: astore        10
+        // 同理`String s10 = s7 + "d";`效果一样
+        // 但是`String s8 = "d"`时，就为false了
         String s10 = s7 + s8;
 
         // s9,s10都是同一个对象，
