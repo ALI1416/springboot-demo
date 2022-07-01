@@ -27,6 +27,7 @@
     <module>demo-redis</module>
     <module>demo-mongodb</module>
     <module>demo-rabbitmq</module>
+    <module>demo-mqtt</module>
     <module>demo-sa-token</module>
     <module>demo-socket</module>
     <module>demo-config</module>
@@ -100,6 +101,14 @@
     <!--org.springframework.boot:spring-boot-starter-amqp-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp -->
     <!--<rabbit-amqp-client.version></rabbit-amqp-client.version>-->
+
+    <!--MQTT(无法修改版本号)-->
+    <!--org.springframework.boot:spring-boot-starter-integration-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-integration -->
+    <!--org.springframework.integration:spring-integration-stream-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-stream -->
+    <!--org.springframework.integration:spring-integration-mqtt-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-mqtt -->
 
     <!--实体层注解(与IDE安装的版本号对应，不需一致)-->
     <!--org.projectlombok:lombok-->
