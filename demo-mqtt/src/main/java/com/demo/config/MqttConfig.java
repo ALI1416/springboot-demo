@@ -74,9 +74,9 @@ public class MqttConfig {
      * `+`匹配一个层次<br>
      * 例如：<br>
      * topic/a只能匹配topic/a<br>
-     * topic/#可以匹配topic/a、topic/a/b，但不能匹配a/b<br>
-     * topic/+可以匹配topic/a、topic/b，但不能匹配topic/a/b<br>
-     * topic/+/b可以匹配topic/a/b、topic/a/c，但不能匹配topic/a、topic/a/c、topic/a/b/c
+     * topic/b/#可以匹配topic/b、topic/b/、topic/b/c，但不能匹配b/c<br>
+     * topic/c/+可以匹配topic/c/、topic/c/d，但不能匹配topic/c、topic/c/d/e<br>
+     * topic/+/d可以匹配topic/e/d、topic//d，但不能匹配topic/e/f/d、topic/e/d/f
      *
      * <h2>QoS 服务质量</h2>
      * `0`尽力而为。消息发送者会想尽办法发送消息，但是遇到意外并不会重试<br>

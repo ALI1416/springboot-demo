@@ -40,7 +40,7 @@ public class MqttSend2Service {
     /**
      * 默认主题
      */
-    private static final String TOPIC = "topic/b";
+    private static final String TOPIC = "topic/c";
     /**
      * 默认QoS
      */

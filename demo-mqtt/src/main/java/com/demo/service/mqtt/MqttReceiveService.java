@@ -42,7 +42,7 @@ public class MqttReceiveService {
     /**
      * 主题
      */
-    private static final String[] TOPIC = {"topic/#", "topic/a"};
+    private static final String[] TOPIC = {"topic/a", "topic/b/#"};
     /**
      * QoS
      */
@@ -84,15 +84,10 @@ public class MqttReceiveService {
     @Bean("handlerMethod_" + NAME)
     @ServiceActivator(inputChannel = NAME)
     public MessageHandler handler() {
-        return message -> {
-            log.info("--------------------");
-            log.info("message:" + message);
-            log.info("payload:" + message.getPayload());
-            log.info("id:" + message.getHeaders().getId());
-            log.info("qos:" + message.getHeaders().get(MqttHeaders.RECEIVED_QOS));
-            log.info("topic:" + message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC));
-            log.info("--------------------");
-        };
+        return message -> log.info("payload:{},topic:{},qos:{}", //
+                message.getPayload(), //
+                message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC), //
+                message.getHeaders().get(MqttHeaders.RECEIVED_QOS));
     }
 
 }

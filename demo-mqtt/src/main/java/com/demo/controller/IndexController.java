@@ -25,12 +25,38 @@ public class IndexController {
     private final MqttSend2 mqttSend2;
 
     /**
-     * 发送
+     * 默认主题和QoS
      */
     @GetMapping(value = {"", "/", "index"})
     public Result index() {
-        mqttSend.send("2333");
-        mqttSend2.send("666");
+        mqttSend.send("默认主题和QoS");
+        return Result.o();
+    }
+
+    /**
+     * 默认QoS
+     */
+    @GetMapping("topic")
+    public Result qos(String topic) {
+        mqttSend2.send(topic, "默认QoS".getBytes());
+        return Result.o();
+    }
+
+    /**
+     * 默认主题
+     */
+    @GetMapping("qos")
+    public Result topic(Integer qos) {
+        mqttSend.send(qos, "默认主题".getBytes());
+        return Result.o();
+    }
+
+    /**
+     * 发送
+     */
+    @GetMapping("send")
+    public Result send(String topic, Integer qos) {
+        mqttSend2.send(topic, qos, "无默认");
         return Result.o();
     }
 
