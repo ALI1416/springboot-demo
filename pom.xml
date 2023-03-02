@@ -13,10 +13,13 @@
   <description>SpringBoot父模板</description>
 
   <parent>
+    <!--SpringBoot Parent-->
+    <!--请使用2.x.x版本-->
+    <!--org.springframework.boot:spring-boot-starter-parent-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.0</version>
+    <version>2.7.9</version>
   </parent>
 
   <modules>
@@ -51,40 +54,40 @@
     <!---->
     <!--继承父pom版本号-->
     <!--SpringBoot Web-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
     <!--org.springframework.boot:spring-boot-starter-web-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
 
     <!--SpringBoot WebSocket-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
     <!--org.springframework.boot:spring-boot-starter-websocket-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
 
     <!--邮件-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
     <!--org.springframework.boot:spring-boot-starter-mail-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
 
     <!--热部署-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
     <!--org.springframework.boot:spring-boot-devtools-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools -->
 
     <!--配置-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
     <!--org.springframework.boot:spring-boot-configuration-processor-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
 
     <!--测试-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
     <!--org.springframework.boot:spring-boot-starter-test-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
 
     <!--SpringBoot打包插件-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
     <!--org.springframework.boot:spring-boot-maven-plugin-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
 
     <!--Maven编译插件-->
-    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
 
     <!--MySQL(与服务器版本号对应，不需一致)-->
-    <!--mysql:mysql-connector-java-->
-    <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+    <!--com.mysql:mysql-connector-j-->
+    <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
     <!--<mysql.version></mysql.version>-->
 
     <!--MongoDB(与服务器版本号对应，不需一致)-->
@@ -129,17 +132,18 @@
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
     <!-- https://mvnrepository.com/artifact/io.minio/minio -->
-    <minio.version>8.4.1</minio.version>
+    <minio.version>8.5.2</minio.version>
 
     <!--MyBatis-->
+    <!--请使用2.x.x版本-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-    <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
+    <mybatis-spring-boot-starter.version>2.3.0</mybatis-spring-boot-starter.version>
 
     <!--PageHelper分页排序查询-->
     <!--com.github.pagehelper:pagehelper-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
-    <pagehelper-spring-boot-starter.version>1.4.2</pagehelper-spring-boot-starter.version>
+    <pagehelper-spring-boot-starter.version>1.4.6</pagehelper-spring-boot-starter.version>
 
     <!--SaToken权限认证-->
     <!--cn.dev33:sa-token-spring-boot-starter-->
@@ -147,7 +151,7 @@
     <!--SaToken整合Redis(使用jackson序列化)-->
     <!--cn.dev33:sa-token-dao-redis-jackson-->
     <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-dao-redis-jackson -->
-    <sa-token.version>1.30.0</sa-token.version>
+    <sa-token.version>1.34.0</sa-token.version>
 
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
@@ -160,6 +164,7 @@
     <ip2region-spring-boot-autoconfigure.version>1.1.0</ip2region-spring-boot-autoconfigure.version>
 
     <!--IP解析-->
+    <!--请使用1.x.x版本-->
     <!--org.lionsoul:ip2region-->
     <!-- https://mvnrepository.com/artifact/org.lionsoul/ip2region -->
     <ip2region.version>1.7.2</ip2region.version>
@@ -172,7 +177,7 @@
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
     <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
-    <easyexcel.version>3.1.0</easyexcel.version>
+    <easyexcel.version>3.2.1</easyexcel.version>
 
     <!--Protocol Buffers-->
     <!--com.google.protobuf:protobuf-java-->
@@ -180,12 +185,12 @@
     <!--Protocol Buffers Util-->
     <!--com.google.protobuf:protobuf-java-util-->
     <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java-util -->
-    <protobuf.version>3.21.1</protobuf.version>
+    <protobuf.version>3.22.0</protobuf.version>
 
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
     <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
-    <hutool-all.version>5.8.2</hutool-all.version>
+    <hutool-all.version>5.8.12</hutool-all.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
@@ -200,7 +205,7 @@
     <!--Tika-->
     <!--org.apache.tika:tika-parsers-->
     <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
-    <tika.version>2.4.0</tika.version>
+    <tika.version>2.7.0</tika.version>
 
     <!--Ansj分词-->
     <!--org.ansj:ansj_seg-->
@@ -209,7 +214,7 @@
 
     <!--二维码-->
     <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
-    <qr.version>3.5.0</qr.version>
+    <qr.version>3.5.1</qr.version>
   </properties>
 
   <dependencies>

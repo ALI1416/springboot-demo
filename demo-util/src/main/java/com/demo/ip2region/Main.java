@@ -10,6 +10,13 @@ import java.io.IOException;
  * <h1>IP解析</h1>
  *
  * <p>
+ * 文件路径为<br>
+ * https://cdn.jsdelivr.net/gh/lionsoul2014/ip2region/v1.0/data/ip2region.db
+ * 实际路径为<br>
+ * https://gitee.com/lionsoul/ip2region/blob/master/v1.0/data/ip2region.db
+ * </p>
+ *
+ * <p>
  * createDate 2022/02/22 10:18:51
  * </p>
  *
