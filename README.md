@@ -111,6 +111,10 @@
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.lionsoul/ip2region/badge.svg)
     - `FastJson` : `com.alibaba:fastjson`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/fastjson/badge.svg)
+    - `FastJson` : `com.alibaba.fastjson2:fastjson2`
+      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba.fastjson2/fastjson2/badge.svg)
+    - `FastJson Extension Spring5` : `com.alibaba.fastjson2:fastjson2-extension-spring5`
+      <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba.fastjson2/fastjson2-extension-spring5/badge.svg)
     - `EasyExcel` : `com.alibaba:easyexcel`
       <br>![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.alibaba/easyexcel/badge.svg)
     - `Protocol Buffers` : `com.google.protobuf:protobuf-java`

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,26 +39,39 @@ public class GlobalExceptionHandler {
      */
     @Order(1)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public Result notSupportedHandler(Exception e) {
-        log.warn(ResultCodeEnum.NOT_SUPPORTED.getMsg(), e);
-        return Result.e(ResultCodeEnum.NOT_SUPPORTED);
+    public Result requestMethodNotSupportedHandler(Exception e) {
+        log.warn(e.getMessage());
+        return Result.e(ResultCodeEnum.REQUEST_METHOD_NOT_SUPPORTED);
+    }
+
+    /**
+     * 媒体类型不支持异常
+     *
+     * @see HttpMediaTypeNotSupportedException
+     */
+    @Order(1)
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    public Result mediaTypeNotSupportedHandler(Exception e) {
+        log.warn(e.getMessage());
+        return Result.e(ResultCodeEnum.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
     /**
      * <h2>参数异常</h2>
      * <h3>Params</h3>
-     * --{@linkplain IllegalStateException IllegalStateException}：拆箱类型不能为null<br>
+     * --{@linkplain IllegalStateException IllegalStateException}：拆箱类型为null错误<br>
      * --{@linkplain MethodArgumentTypeMismatchException MethodArgumentTypeMismatchException}：参数类型错误<br>
+     * --{@linkplain BindException BindException}：对象的属性类型错误<br>
      * <h3>Body</h3>
-     * --form-data<br>
-     * --x-www-form-urlencoded<br>
-     * ----{@linkplain BindException BindException}：参数类型错误<br>
      * --raw<br>
      * ----JSON<br>
      * ------{@linkplain HttpMessageNotReadableException HttpMessageNotReadableException}：为null、不是JSON格式、参数类型错误<br>
      * ----XML<br>
      * ----HTML<br>
      * ----Text<br>
+     * --form-data<br>
+     * ----等同于Params
+     * --x-www-form-urlencoded<br>
      * --binary<br>
      *
      * @see IllegalStateException
@@ -66,15 +80,19 @@ public class GlobalExceptionHandler {
      * @see HttpMessageNotReadableException
      */
     @Order(1)
-    @ExceptionHandler({IllegalStateException.class, MethodArgumentTypeMismatchException.class, BindException.class,
-            HttpMessageNotReadableException.class})
+    @ExceptionHandler({ //
+            IllegalStateException.class, //
+            MethodArgumentTypeMismatchException.class, //
+            BindException.class,  //
+            HttpMessageNotReadableException.class //
+    })
     public Result paramErrorHandler(Exception e) {
-        log.warn(ResultCodeEnum.PARAM_IS_ERROR.getMsg(), e);
+        log.warn(e.getMessage());
         return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
     }
 
     /**
-     * RuntimeException 运行异常
+     * 运行时异常
      *
      * @see RuntimeException
      */
@@ -82,11 +100,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public Result runtimeExceptionHandler(Exception e) {
         log.error("RuntimeException", e);
-        return Result.e(ResultCodeEnum.ERROR, "RuntimeException");
+        return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "RuntimeException");
     }
 
     /**
-     * IOException IO异常
+     * IO异常
      *
      * @see IOException
      */
@@ -94,11 +112,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public Result ioExceptionHandler(Exception e) {
         log.error("IOException", e);
-        return Result.e(ResultCodeEnum.ERROR, "IOException");
+        return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "IOException");
     }
 
     /**
-     * Exception 异常
+     * 异常
      *
      * @see Exception
      */
@@ -106,7 +124,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e) {
         log.error("Exception", e);
-        return Result.e(ResultCodeEnum.ERROR, "Exception");
+        return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "Exception");
     }
 
 }

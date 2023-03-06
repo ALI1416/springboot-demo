@@ -47,11 +47,11 @@ public class TomcatConfig {
         // connector.setRedirectPort(443);
         // factory.addAdditionalTomcatConnectors(connector);
 
-        /*功能2(默认开启)：请求地址和参数可以接收"<>[\]^`{|}字符*/
+        /*功能2(默认开启)：请求地址和参数允许接收`^\|[]{}字符*/
         TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
         factory.addConnectorCustomizers((Connector connectorCustomize) -> {
-            connectorCustomize.setProperty("relaxedPathChars", "\"<>[\\]^`{|}");
-            connectorCustomize.setProperty("relaxedQueryChars", "\"<>[\\]^`{|}");
+            connectorCustomize.setProperty("relaxedPathChars", "`^\\|[]{}");
+            connectorCustomize.setProperty("relaxedQueryChars", "`^\\|[]{}");
         });
         return factory;
     }
