@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
  * <h1>Tomcat配置类</h1>
  *
  * <p>
- * 功能1(默认关闭)：http(80)协议切换到https(443)协议<br>
- * 功能2(默认开启)：请求地址和参数可以接收<code>"<>[\]^`{|}</code>字符
+ * 特性1(默认关闭)：http(80)协议切换到https(443)协议<br>
+ * 特性2(默认开启)：请求地址和参数允许接收`^\|[]{}字符
  * </p>
  *
  * <p>
@@ -28,7 +28,7 @@ public class TomcatConfig {
      */
     @Bean
     public TomcatServletWebServerFactory webServerFactory() {
-        /*功能1(默认关闭)：http(80)协议切换到https(443)协议*/
+        /*特性1(默认关闭)：http(80)协议切换到https(443)协议*/
         // TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
         //     @Override
         //     protected void postProcessContext(Context context) {
@@ -47,7 +47,7 @@ public class TomcatConfig {
         // connector.setRedirectPort(443);
         // factory.addAdditionalTomcatConnectors(connector);
 
-        /*功能2(默认开启)：请求地址和参数允许接收`^\|[]{}字符*/
+        /*特性2(默认开启)：请求地址和参数允许接收`^\|[]{}字符*/
         TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
         factory.addConnectorCustomizers((Connector connectorCustomize) -> {
             connectorCustomize.setProperty("relaxedPathChars", "`^\\|[]{}");

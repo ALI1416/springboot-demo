@@ -189,7 +189,7 @@ public class IndexController {
      * <h3>正常请求</h3>
      * GET http://localhost:8080/exception?enable=false<br>
      * 结果 {"code":0,"data":false,"msg":"成功","ok":true}
-     * <h3>拒绝访问异常</h3>
+     * <h3>自定义异常</h3>
      * GET http://localhost:8080/exception?enable=true<br>
      * 结果 {"code":100,"data":"Exception","msg":"系统内部错误","ok":false}
      */
@@ -198,7 +198,7 @@ public class IndexController {
         if (enable) {
             throw new Exception("异常");
         }
-        return Result.o(enable);
+        return Result.o(false);
     }
 
 }

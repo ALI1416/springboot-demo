@@ -8,7 +8,7 @@ spring:
 
 logging:
   file:
-    name: /log/demo-mysql.log
+    name: /log/demo-util.log
 
 id:
   machine-id: 0

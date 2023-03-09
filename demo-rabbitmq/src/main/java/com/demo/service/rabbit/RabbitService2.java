@@ -1,6 +1,6 @@
 package com.demo.service.rabbit;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.demo.entity.po.Person;
 import com.demo.entity.proto.PersonProto;
 import com.google.protobuf.util.JsonFormat;

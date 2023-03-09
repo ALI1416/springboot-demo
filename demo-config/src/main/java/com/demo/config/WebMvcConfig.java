@@ -1,13 +1,12 @@
 package com.demo.config;
 
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
+import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
 import com.demo.constant.FormatConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -25,11 +24,10 @@ import java.util.List;
  **/
 
 @Configuration
-@EnableWebMvc
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
-     * 消息转换器
+     * 重写消息转换器
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

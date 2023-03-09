@@ -1,7 +1,7 @@
 package com.demo.base;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
+import com.demo.constant.FormatConstant;
 
 import java.io.Serializable;
 
@@ -22,12 +22,7 @@ public class ToStringBase implements Serializable {
      */
     @Override
     public String toString() {
-        return JSON.toJSONStringWithDateFormat(//
-                this, //
-                "yyyy-MM-dd HH:mm:ss", // 日期格式化样式
-                SerializerFeature.DisableCircularReferenceDetect, // 禁用对象循环引用：避免$ref
-                SerializerFeature.WriteNonStringValueAsString// 非String转为String：防止long丢失精度
-        );
+        return JSON.toJSONString(this, FormatConstant.DATE, FormatConstant.JSON_WRITER_FEATURE);
     }
 
 }

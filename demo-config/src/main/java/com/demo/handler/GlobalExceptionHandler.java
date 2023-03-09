@@ -39,8 +39,7 @@ public class GlobalExceptionHandler {
      */
     @Order(1)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public Result requestMethodNotSupportedHandler(Exception e) {
-        log.warn(e.getMessage());
+    public Result requestMethodNotSupportedHandler() {
         return Result.e(ResultCodeEnum.REQUEST_METHOD_NOT_SUPPORTED);
     }
 
@@ -51,8 +50,7 @@ public class GlobalExceptionHandler {
      */
     @Order(1)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public Result mediaTypeNotSupportedHandler(Exception e) {
-        log.warn(e.getMessage());
+    public Result mediaTypeNotSupportedHandler() {
         return Result.e(ResultCodeEnum.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
@@ -86,8 +84,7 @@ public class GlobalExceptionHandler {
             BindException.class,  //
             HttpMessageNotReadableException.class //
     })
-    public Result paramErrorHandler(Exception e) {
-        log.warn(e.getMessage());
+    public Result paramErrorHandler() {
         return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
     }
 
@@ -98,7 +95,7 @@ public class GlobalExceptionHandler {
      */
     @Order(2)
     @ExceptionHandler(RuntimeException.class)
-    public Result runtimeExceptionHandler(Exception e) {
+    public Result runtimeExceptionHandler(RuntimeException e) {
         log.error("RuntimeException", e);
         return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "RuntimeException");
     }
@@ -110,7 +107,7 @@ public class GlobalExceptionHandler {
      */
     @Order(2)
     @ExceptionHandler(IOException.class)
-    public Result ioExceptionHandler(Exception e) {
+    public Result ioExceptionHandler(IOException e) {
         log.error("IOException", e);
         return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "IOException");
     }

@@ -16,11 +16,6 @@
   </parent>
 
   <dependencies>
-    <!--FastJson-->
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-    </dependency>
     <!--HuTool工具包-->
     <dependency>
       <groupId>cn.hutool</groupId>
