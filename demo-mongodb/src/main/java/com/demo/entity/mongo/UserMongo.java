@@ -3,7 +3,6 @@ package com.demo.entity.mongo;
 import com.demo.base.MongoEntityBase;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -32,7 +31,7 @@ public class UserMongo extends MongoEntityBase {
     /**
      * 用户名<br>
      * 索引使用@Indexed()注解，默认升序
-     * 降序需要@Indexed(direction = IndexDirection.DESCENDING)这样使用
+     * 降序用@Indexed(direction = IndexDirection.DESCENDING)
      */
     @Indexed()
     private String name;

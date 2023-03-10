@@ -23,11 +23,6 @@
     </dependency>
     <!--FastJson-->
     <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-    </dependency>
-    <!--FastJson-->
-    <dependency>
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2</artifactId>
     </dependency>
@@ -55,11 +50,6 @@
       <groupId>org.mybatis.spring.boot</groupId>
       <artifactId>mybatis-spring-boot-starter</artifactId>
     </dependency>
-    <!--PageHelper分页排序查询-->
-<!--    <dependency>-->
-<!--      <groupId>com.github.pagehelper</groupId>-->
-<!--      <artifactId>pagehelper-spring-boot-starter</artifactId>-->
-<!--    </dependency>-->
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>

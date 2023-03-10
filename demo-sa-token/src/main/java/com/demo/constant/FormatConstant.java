@@ -20,18 +20,28 @@ public class FormatConstant {
      */
     public static final String DATE = "yyyy-MM-dd HH:mm:ss";
     /**
-     * JSON读特性<br>
-     * https://github.com/alibaba/fastjson2/blob/main/docs/features_cn.md#4-jsonreaderfeature介绍
+     * JSON读特性
      */
     public static final JSONReader.Feature[] JSON_READER_FEATURE = { //
             JSONReader.Feature.SupportSmartMatch // 智能匹配
     };
     /**
-     * JSON写特性<br>
-     * https://github.com/alibaba/fastjson2/blob/main/docs/features_cn.md#5-jsonwriterfeature介绍
+     * JSON写特性
      */
     public static final JSONWriter.Feature[] JSON_WRITER_FEATURE = { //
             JSONWriter.Feature.WriteLongAsString // Long转String
+    };
+    /**
+     * Redis的JSON序列化特性
+     */
+    public static final JSONWriter.Feature[] REDIS_JSON_SERIALIZE_FEATURE = { //
+            JSONWriter.Feature.WriteClassName // 写类名
+    };
+    /**
+     * Redis的JSON反序列化特性
+     */
+    public static final JSONReader.Feature[] REDIS_JSON_DESERIALIZE_FEATURE = { //
+            JSONReader.Feature.SupportAutoType // 类型自动探测
     };
 
 }

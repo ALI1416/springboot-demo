@@ -167,12 +167,7 @@
     <!--请使用1.x.x版本-->
     <!--org.lionsoul:ip2region-->
     <!-- https://mvnrepository.com/artifact/org.lionsoul/ip2region -->
-    <ip2region.version>1.7.2</ip2region.version>
-
-    <!--FastJson-->
-    <!--com.alibaba:fastjson-->
-    <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-    <fastjson.version>1.2.83</fastjson.version>
+    <ip2region.version>2.7.0</ip2region.version>
 
     <!--FastJson-->
     <!--com.alibaba.fastjson2:fastjson2-->
@@ -295,12 +290,6 @@
         <groupId>io.minio</groupId>
         <artifactId>minio</artifactId>
         <version>${minio.version}</version>
-      </dependency>
-      <!--FastJson-->
-      <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>fastjson</artifactId>
-        <version>${fastjson.version}</version>
       </dependency>
       <!--FastJson-->
       <dependency>

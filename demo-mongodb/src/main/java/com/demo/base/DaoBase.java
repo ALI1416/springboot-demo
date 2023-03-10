@@ -1,6 +1,6 @@
 package com.demo.base;
 
-import com.alibaba.fastjson.parser.JSONScanner;
+import com.alibaba.fastjson2.util.DateUtils;
 import com.demo.entity.pojo.ParamsQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -99,21 +99,9 @@ public class DaoBase {
                 break;
             }
             case "timestamp": {
-                // fastjson转换时间
-                JSONScanner dateLexer = new JSONScanner(value);
-                try {
-                    dateLexer.scanISO8601DateIfMatch(false);
-                    objects[0] = new Timestamp(dateLexer.getCalendar().getTimeInMillis());
-                    if (value2 != null) {
-                        dateLexer.close();
-                        dateLexer = new JSONScanner(value2);
-                        dateLexer.scanISO8601DateIfMatch(false);
-                        objects[1] = new Timestamp(dateLexer.getCalendar().getTimeInMillis());
-                    }
-                } catch (Exception ignore) {
-
-                } finally {
-                    dateLexer.close();
+                objects[0] = new Timestamp(DateUtils.parseMillis(value));
+                if (value2 != null) {
+                    objects[1] = new Timestamp(DateUtils.parseMillis(value2));
                 }
                 break;
             }

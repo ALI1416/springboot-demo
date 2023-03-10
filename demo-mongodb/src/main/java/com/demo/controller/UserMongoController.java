@@ -285,6 +285,7 @@ public class UserMongoController {
      * <h3>分页查找</h3>
      * POST /findPage2<br>
      * body JSON {"pages":"0","rows":"10","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
+     * body JSON {"pages":"0","rows":"10","paramsQueryList":[{"field":"date","value":"2023-03-09","value2":"2023-03-10","type":"timestamp","operator":"bt"}]}<br>
      * Page
      */
     @PostMapping("/findPage2")

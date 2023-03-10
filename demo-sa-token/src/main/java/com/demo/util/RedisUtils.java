@@ -1,23 +1,15 @@
 package com.demo.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.data.redis.connection.DataType;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.ConvertingCursor;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.SerializationException;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -40,41 +32,7 @@ public class RedisUtils {
     public static RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public RedisUtils(RedisConnectionFactory factory) {
-        //FastJson序列化
-        RedisSerializer<Object> fastJsonRedisSerializer = new RedisSerializer<Object>() {
-            @Override
-            public byte[] serialize(Object o) throws SerializationException {
-                if (o == null) {
-                    return new byte[0];
-                }
-                return JSON.toJSONStringWithDateFormat(//
-                        o,//
-                        "yyyy-MM-dd HH:mm:ss", // 日期格式化样式
-                        SerializerFeature.DisableCircularReferenceDetect, // 禁用对象循环引用：避免$ref
-                        SerializerFeature.WriteClassName // 写入类名
-                ).getBytes(StandardCharsets.UTF_8);
-            }
-
-            @Override
-            public Object deserialize(byte[] bytes) throws SerializationException {
-                if (bytes == null || bytes.length == 0) {
-                    return null;
-                }
-                return JSON.parseObject(new String(bytes, StandardCharsets.UTF_8), Object.class,
-                        Feature.SupportAutoType);
-            }
-        };
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(factory);
-        //key采用String序列化
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        redisTemplate.setKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        //value采用FastJson序列化
-        redisTemplate.setValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
+    public RedisUtils(RedisTemplate<String, Object> redisTemplate) {
         RedisUtils.redisTemplate = redisTemplate;
     }
 
