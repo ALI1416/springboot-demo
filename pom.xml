@@ -161,10 +161,9 @@
     <!--IP地址转区域-->
     <!--cn.404z:ip2region-spring-boot-autoconfigure-->
     <!-- https://mvnrepository.com/artifact/cn.404z/ip2region-spring-boot-autoconfigure -->
-    <ip2region-spring-boot-autoconfigure.version>1.1.0</ip2region-spring-boot-autoconfigure.version>
+    <ip2region-spring-boot-autoconfigure.version>2.0.0</ip2region-spring-boot-autoconfigure.version>
 
     <!--IP解析-->
-    <!--请使用1.x.x版本-->
     <!--org.lionsoul:ip2region-->
     <!-- https://mvnrepository.com/artifact/org.lionsoul/ip2region -->
     <ip2region.version>2.7.0</ip2region.version>

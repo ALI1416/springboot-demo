@@ -10,10 +10,7 @@ import java.io.IOException;
  * <h1>IP解析</h1>
  *
  * <p>
- * 文件路径为<br>
- * https://cdn.jsdelivr.net/gh/lionsoul2014/ip2region/v1.0/data/ip2region.db
- * 实际路径为<br>
- * https://gitee.com/lionsoul/ip2region/blob/master/v1.0/data/ip2region.db
+ * 文件地址为：https://cdn.jsdelivr.net/gh/ali1416/ip2region-test/data/ip2region.zxdb
  * </p>
  *
  * <p>
@@ -28,8 +25,8 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            Ip2Region.init(Ip2Region.inputStream2bytes(new ClassPathResource("file/ip2region/data.db").getInputStream()));
-        } catch (IOException e) {
+            Ip2Region.init(new ClassPathResource("file/ip2region/ip2region.zxdb").getInputStream());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         log.info(Ip2Region.parse("157.122.178.42").toString());
