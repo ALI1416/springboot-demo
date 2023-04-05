@@ -6,12 +6,12 @@
   <artifactId>demo-sa-token</artifactId>
   <version>1.0.0</version>
 
-  <name>${project.artifactId}</name>
-  <description>sa-token</description>
+  <name>demo-sa-token</name>
+  <description>SaToken权限认证</description>
 
   <parent>
     <groupId>com.demo</groupId>
-    <artifactId>demo-parent</artifactId>
+    <artifactId>springboot-demo</artifactId>
     <version>1.0.0</version>
   </parent>
 
