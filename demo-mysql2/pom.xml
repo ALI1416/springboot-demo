@@ -6,12 +6,12 @@
   <artifactId>demo-mysql2</artifactId>
   <version>1.0.0</version>
 
-  <name>${project.artifactId}</name>
-  <description>mysql2</description>
+  <name>demo-mysql2</name>
+  <description>MySQL2</description>
 
   <parent>
     <groupId>com.demo</groupId>
-    <artifactId>demo-parent</artifactId>
+    <artifactId>springboot-demo</artifactId>
     <version>1.0.0</version>
   </parent>
 
