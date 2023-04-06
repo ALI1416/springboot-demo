@@ -1,24 +1,27 @@
 # demo-rabbitmq
 
 ## 目录结构
+
 - **`src.main.java`** : 项目代码
 - **`src.main.resources`** : 项目资源文件
 - **`src.test.java`** : 测试代码
-- `pom.xml` : 本模块pom
-- `README.md` : 说明
+- `pom.xml` : 项目pom
+- `README.md` : 自述文件
 
 ### pom.xml
-- `parent` : 父pom : `com.demo:demo-parent`
+- `parent` : 父pom : `com.demo:springboot-demo`
 - `dependencies` : 依赖
 - `build` : 构建插件
 
 ### src.main.java.com.demo
+
 - **`base`** : 基类文件夹
   - `ToStringBase` : ToString格式化基类
 - **`config`** : 配置文件夹
-  - `HttpMessageConvertersConfig` : 消息转换器配置类
   - `TomcatConfig` : Tomcat配置类
+  - `WebMvcConfig` : WebMvc配置类
 - **`constant`** : 常数文件夹
+  - `FormatConstant` : 格式常量类
   - `ResultCodeEnum` : 返回结果状态枚举类
 - **`controller`** : 控制层文件夹
   - `IndexController` : 首页
@@ -40,6 +43,7 @@
 - `DemoRabbitMqApp` : 启动类
 
 ### src.main.resources
+
 - **`config`** : 配置文件
   - `application.yml` : 总配置
   - `application-dev.yml` : 开发环境配置
@@ -53,6 +57,7 @@
 - `banner.txt` : 横幅
 
 #### application.yml
+
 - `spring.profiles.active` : 使用的配置文件后缀
 - `spring.servlet.multipart` : 传输文件
   - `max-file-size` : 最大文件大小
@@ -67,6 +72,7 @@
 - `logging.file.name` : 日志文件(可带路径)
 
 #### application-xxx.yml
+
 - `spring.devtools.restart.enabled` : 启用热部署
 - `spring.rabbitmq` : rabbitmq配置
   - `host` : 地址
@@ -83,4 +89,6 @@
   - `off` : 关闭
 
 ### src.test.java.com.demo
-- `AppTest` : 启动类测试
+
+- `AppTest` : SpringBoot测试
+- `MainTest` : 普通测试

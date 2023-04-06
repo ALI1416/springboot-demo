@@ -37,4 +37,4 @@ id:
   sequence-bits: 12
 
 ip2region:
-  resource-path: /file/ip2region/data.db
+  resource-path: /file/ip2region/ip2region.zdb

@@ -35,11 +35,6 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2-extension-spring5</artifactId>
     </dependency>
-    <!--雪花ID生成器-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>id-spring-boot-autoconfigure</artifactId>
-    </dependency>
   </dependencies>
 
   <build>

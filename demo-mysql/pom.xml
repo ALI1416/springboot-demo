@@ -35,11 +35,6 @@
       <groupId>org.mybatis.spring.boot</groupId>
       <artifactId>mybatis-spring-boot-starter</artifactId>
     </dependency>
-    <!--IP解析-->
-    <dependency>
-      <groupId>org.lionsoul</groupId>
-      <artifactId>ip2region</artifactId>
-    </dependency>
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>

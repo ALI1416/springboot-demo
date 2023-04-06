@@ -30,26 +30,6 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2-extension-spring5</artifactId>
     </dependency>
-    <!--IP解析-->
-    <dependency>
-      <groupId>org.lionsoul</groupId>
-      <artifactId>ip2region</artifactId>
-    </dependency>
-    <!--手机号码归属地查询-->
-    <dependency>
-      <groupId>me.ihxq.projects</groupId>
-      <artifactId>phone-number-geo</artifactId>
-    </dependency>
-    <!--Ansj分词-->
-    <dependency>
-      <groupId>org.ansj</groupId>
-      <artifactId>ansj_seg</artifactId>
-    </dependency>
-    <!--二维码-->
-    <dependency>
-      <groupId>com.google.zxing</groupId>
-      <artifactId>core</artifactId>
-    </dependency>
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>
@@ -59,7 +39,11 @@
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>ip2region-spring-boot-autoconfigure</artifactId>
-      <version>${ip2region-spring-boot-autoconfigure.version}</version>
+    </dependency>
+    <!--手机号码转区域-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>phone2region-spring-boot-autoconfigure</artifactId>
     </dependency>
     <!--HuTool工具包-->
     <dependency>
@@ -78,6 +62,16 @@
     <dependency>
       <groupId>org.apache.tika</groupId>
       <artifactId>tika-langdetect-tika</artifactId>
+    </dependency>
+    <!--Ansj分词-->
+    <dependency>
+      <groupId>org.ansj</groupId>
+      <artifactId>ansj_seg</artifactId>
+    </dependency>
+    <!--二维码-->
+    <dependency>
+      <groupId>com.google.zxing</groupId>
+      <artifactId>core</artifactId>
     </dependency>
   </dependencies>
 

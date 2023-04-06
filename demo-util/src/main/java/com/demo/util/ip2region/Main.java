@@ -10,7 +10,7 @@ import java.io.IOException;
  * <h1>IP解析</h1>
  *
  * <p>
- * 文件地址为：https://cdn.jsdelivr.net/gh/ali1416/ip2region-test/data/ip2region.zxdb
+ * 文件地址为：https://cdn.jsdelivr.net/gh/ali1416/ip2region@3.0.0/data/ip2region.zdb
  * </p>
  *
  * <p>
@@ -25,12 +25,11 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            Ip2Region.init(new ClassPathResource("file/ip2region/ip2region.zxdb").getInputStream());
+            Ip2Region.init(new ClassPathResource("file/ip2region/ip2region.zdb").getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        log.info(Ip2Region.parse("157.122.178.42").toString());
-        log.info(Ip2Region.parse("183.237.231.74").toString());
+        log.info(String.valueOf(Ip2Region.parse("123.132.0.0")));
     }
 
 }

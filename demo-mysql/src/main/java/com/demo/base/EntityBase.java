@@ -1,10 +1,10 @@
 package com.demo.base;
 
+import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import cn.z.ip2region.Ip2Region;
 import cn.z.ip2region.Region;
-import com.demo.util.ClientInfoUtils;
-import com.demo.util.UserAgentUtils;
-import com.demo.util.pojo.UserAgentInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -84,6 +84,10 @@ public class EntityBase extends ToStringBase {
      */
     private String ipCity;
     /**
+     * IP地址-ISP
+     */
+    private String ipIsp;
+    /**
      * 浏览器标识-操作系统
      */
     private String uaOs;
@@ -101,17 +105,25 @@ public class EntityBase extends ToStringBase {
 
     /**
      * 设置ip信息<br>
-     * 包括ip,ipCountry,ipProvince,ipCity
+     * 包括ip,ipCountry,ipProvince,ipCity,ipIsp
      *
      * @param request HttpServletRequest
      */
     public void setIpInfo(HttpServletRequest request) {
-        String ipString = ClientInfoUtils.getIp(request);
-        Region region = Ip2Region.parse(ClientInfoUtils.getIp(request));
+        String ipString = ServletUtil.getClientIP(request);
         setIp(ipString);
-        setIpCountry(region.getCountry());
-        setIpProvince(region.getProvince());
-        setIpCity(region.getCity());
+        try {
+            Region region = Ip2Region.parse(ipString);
+            setIpCountry(region.getCountry());
+            setIpProvince(region.getProvince());
+            setIpCity(region.getCity());
+            setIpIsp(region.getIsp());
+        } catch (Exception ignored) {
+            setIpCountry("");
+            setIpProvince("");
+            setIpCity("");
+            setIpIsp("");
+        }
     }
 
     /**
@@ -121,12 +133,48 @@ public class EntityBase extends ToStringBase {
      * @param request HttpServletRequest
      */
     public void setUserAgentInfo(HttpServletRequest request) {
-        String userAgentString = ClientInfoUtils.getUserAgent(request);
-        UserAgentInfo userAgentInfo = UserAgentUtils.getUserAgentInfo(userAgentString);
-        setUserAgent(userAgentString);
-        setUaOs(userAgentInfo.getOs());
-        setUaBrowser(userAgentInfo.getBrowser());
-        setUaIsMobile(userAgentInfo.getIsMobile());
+        String userAgentString = request.getHeader("User-Agent");
+        if (userAgentString == null) {
+            setUserAgent("");
+            setUaOs("");
+            setUaBrowser("");
+            setUaIsMobile(0);
+        } else {
+            setUserAgent(userAgentString);
+            UserAgent userAgentInfo = UserAgentUtil.parse(userAgentString);
+            if (userAgentInfo != null) {
+                // 浏览器标识-操作系统
+                String platformString = userAgentInfo.getPlatform().toString();
+                if (!"Unknown".equals(platformString)) {
+                    String osVersionString = userAgentInfo.getOsVersion();
+                    if (osVersionString != null) {
+                        setUaOs(platformString + " " + osVersionString);
+                    } else {
+                        setUaOs(platformString);
+                    }
+                } else {
+                    setUaOs("");
+                }
+                // 浏览器标识-浏览器
+                String browserString = userAgentInfo.getBrowser().toString();
+                if (!"Unknown".equals(browserString)) {
+                    String versionString = userAgentInfo.getVersion();
+                    if (versionString != null) {
+                        setUaBrowser(browserString + " " + versionString);
+                    } else {
+                        setUaBrowser(browserString);
+                    }
+                } else {
+                    setUaBrowser("");
+                }
+                // 浏览器标识-是手机
+                if (userAgentInfo.isMobile()) {
+                    setUaIsMobile(1);
+                } else {
+                    setUaIsMobile(0);
+                }
+            }
+        }
     }
 
 }

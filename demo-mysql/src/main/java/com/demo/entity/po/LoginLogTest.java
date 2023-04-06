@@ -42,6 +42,10 @@ public class LoginLogTest extends EntityBase {
      */
     private String ipCity;
     /**
+     * IP地址-ISP
+     */
+    private String ipIsp;
+    /**
      * 浏览器标识-操作系统
      */
     private String uaOs;

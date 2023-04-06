@@ -1,18 +1,21 @@
 # demo-base
 
 ## 目录结构
+
 - **`src.main.java`** : 项目代码
 - **`src.main.resources`** : 项目资源文件
 - **`src.test.java`** : 测试代码
-- `pom.xml` : 本模块pom
+- `pom.xml` : 项目pom
 - `README.md` : 自述文件
 
 ### pom.xml
-- `parent` : 父pom : `com.demo:demo-parent`
+
+- `parent` : 父pom : `com.demo:springboot-demo`
 - `dependencies` : 依赖
 - `build` : 构建插件
 
 ### src.main.java.com.demo
+
 - **`base`** : 基类文件夹
   - `ToStringBase` : ToString格式化基类
 - **`config`** : 配置文件夹
@@ -34,6 +37,7 @@
 - `DemoBaseApp` : 启动类
 
 ### src.main.resources
+
 - **`config`** : 配置文件
   - `application.yml` : 总配置
   - `application-dev.yml` : 开发环境配置
@@ -45,6 +49,7 @@
 - `banner.txt` : 横幅
 
 #### application.yml
+
 - `spring.profiles.active` : 使用的配置文件后缀
 - `spring.servlet.multipart` : 传输文件
   - `max-file-size` : 最大文件大小
@@ -59,6 +64,7 @@
 - `logging.file.name` : 日志文件(可带路径)
 
 #### application-xxx.yml
+
 - `spring.devtools.restart.enabled` : 启用热部署
 - `logging.level.root` : 记录日志等级，值如下
   - `trace` : 跟踪
@@ -70,5 +76,6 @@
   - `off` : 关闭
 
 ### src.test.java.com.demo
+
 - `AppTest` : SpringBoot测试
 - `MainTest` : 普通测试

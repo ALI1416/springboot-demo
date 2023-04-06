@@ -10,64 +10,106 @@ SpringBoot示例
 
 ## 目录结构
 
-- **`demo-base`** : springboot项目模板
+- **`demo-base`** : 基础框架
   - SpringBoot Web
   - FastJson
-- **`demo-mysql`** : 整合mysql
+- **`demo-config`** : 配置
   - SpringBoot Web
   - FastJson
-  - MySQL
-  - MyBatis
-  - IP解析
-  - 雪花ID生成器
-  - IP地址转区域
+  - 配置
+- **`demo-easy-excel`** : EasyExcel
+  - SpringBoot Web
+  - FastJson
+  - EasyExcel
+- **`demo-elastic-search`** : ElasticSearch
+  - SpringBoot Web
+  - FastJson
+  - ElasticSearch
+- **`demo-java-advanced`** : Java进阶
   - HuTool工具包
-- **`demo-mysql2`** : 整合mysql2
+- **`demo-just-auth`** : JustAuth第三方登录
   - SpringBoot Web
   - FastJson
-  - MySQL
-  - MyBatis
-  - PageHelper分页排序查询
-  - IP解析
-  - 雪花ID生成器
-  - IP地址转区域
-  - HuTool工具包
-- **`demo-redis`** : 整合redis
+  - JustAuth第三方登录
+- **`demo-mail`** : 邮件
   - SpringBoot Web
   - FastJson
-  - Redis
-  - 雪花ID生成器
-- **`mongodb`** : 整合mongodb
+  - 邮件
+- **`demo-minio`** : minio
+  - SpringBoot Web
+  - FastJson
+  - Minio
+- **`demo-mongodb`** : MongoDB
   - SpringBoot Web
   - FastJson
   - MongoDB
   - 雪花ID生成器
   - HuTool工具包
-- **`rabbitmq`** : 整合rabbitmq
+- **`demo-mqtt`** : MQTT
+  - SpringBoot Web
+  - FastJson
+  - MQTT
+- **`demo-mysql`** : MySQL
+  - SpringBoot Web
+  - FastJson
+  - MySQL
+  - MyBatis
+  - IP解析
+  - 雪花ID生成器
+  - IP地址转区域
+  - HuTool工具包
+- **`demo-mysql2`** : MySQL2
+  - SpringBoot Web
+  - FastJson
+  - MySQL
+  - MyBatis
+  - PageHelper分页排序查询
+  - IP解析
+  - 雪花ID生成器
+  - IP地址转区域
+  - HuTool工具包
+- **`demo-rabbitmq`** : RabbitMQ
   - SpringBoot Web
   - FastJson
   - Protocol Buffers
-  - Protocol Buffers Util
   - RabbitMQ
   - 雪花ID生成器
-- **`sa-token`** : 整合sa-token
+- **`demo-redis`** : Redis
+  - SpringBoot Web
+  - FastJson
+  - Redis
+  - 雪花ID生成器
+- **`demo-sa-token`** : SaToken权限认证
   - SpringBoot Web
   - FastJson
   - Redis
   - SaToken权限认证
-  - SaToken整合Redis(使用jackson序列化)
   - MySQL
   - MyBatis
-  - PageHelper分页排序查询
   - 雪花ID生成器
+  - HuTool工具包
+- **`demo-socket`** :WebSocket
+  - SpringBoot Web
+  - SpringBoot WebSocket
+  - FastJson
+- **`demo-util`** :工具
+  - SpringBoot Web
+  - FastJson
+  - 雪花ID生成器
+  - IP地址转区域
+  - 手机号码转区域
+  - HuTool工具包
+  - Tika
+  - Ansj分词
+  - 二维码
 - `.gitignore` : git忽略
 - `LICENSE` : 许可证
-- `pom.xml` : 父pom
-- `README.md` : 说明
+- `pom.xml` : 项目父pom
+- `README.md` : 自述文件
 
 ### pom.xml
 
-- `parent` : 父pom : `org.springframework.boot:spring-boot-starter-parent`  
+- `parent` : `SpringBoot Parent` : `org.springframework.boot:spring-boot-starter-parent`  
   ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-parent?label=Maven%20Central)
 - `modules` : 模块，新增时添加`module`子标签
 - `properties` : 属性
@@ -75,7 +117,7 @@ SpringBoot示例
   - `maven.compiler.source`和`maven.compiler.target` : 打包成jar时指定java版本
   - `maven.compiler.encoding`、`project.build.sourceEncoding`和`project.reporting.outputEncoding` : 项目编码
   - 继承父pom版本号 :
-    - `SpringBootWeb` : `org.springframework.boot:spring-boot-starter-web`  
+    - `SpringBoot Web` : `org.springframework.boot:spring-boot-starter-web`  
       ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-web?label=Maven%20Central)
     - `邮件` : `org.springframework.boot:spring-boot-starter-mail`  
       ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-mail?label=Maven%20Central)
@@ -117,8 +159,8 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/id-spring-boot-autoconfigure?label=Maven%20Central)
     - `IP地址转区域` : `cn.404z:ip2region-spring-boot-autoconfigure`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/ip2region-spring-boot-autoconfigure?label=Maven%20Central)
-    - `IP解析` : `org.lionsoul:ip2region`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.lionsoul/ip2region?label=Maven%20Central)
+    - `手机号码区域` : `cn.404z:phone2region-spring-boot-autoconfigure`  
+      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
     - `FastJson` : `com.alibaba:fastjson`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/fastjson?label=Maven%20Central)
     - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
@@ -135,8 +177,6 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/cn.hutool/hutool-all?label=Maven%20Central)
     - `JustAuth第三方登录` : `me.zhyd.oauth:JustAuth`  
       ![Maven Central](https://img.shields.io/maven-central/v/me.zhyd.oauth/JustAuth?label=Maven%20Central)
-    - `手机号码归属地查询` : `me.ihxq.projects:phone-number-geo`  
-      ![Maven Central](https://img.shields.io/maven-central/v/me.ihxq.projects/phone-number-geo?label=Maven%20Central)
     - `Tika语言、编码、类型检测` : `org.apache.tika:tika-parsers`  
       ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-parsers?label=Maven%20Central)
     - `Ansj分词` : `org.ansj:ansj_seg`  

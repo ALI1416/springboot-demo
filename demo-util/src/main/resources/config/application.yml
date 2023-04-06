@@ -27,4 +27,7 @@ id:
   sequence-bits: 12
 
 ip2region:
-  resource-path: /file/ip2region/ip2region.zxdb
+  resource-path: /file/ip2region/ip2region.zdb
+
+phone2region:
+  resource-path: /file/phone2region/phone2region.zdb

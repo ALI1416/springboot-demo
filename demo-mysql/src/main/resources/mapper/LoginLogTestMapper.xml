@@ -3,15 +3,15 @@
 <mapper namespace="com.demo.mapper.LoginLogTestMapper">
 
   <sql id="col">
-    id,ip,user_agent,ip_country,ip_province,ip_city,ua_os,ua_browser,ua_is_mobile,create_time
+    id,ip,user_agent,ip_country,ip_province,ip_city,ip_isp,ua_os,ua_browser,ua_is_mobile,create_time
   </sql>
 
   <insert id="insert" parameterType="LoginLogTest">
     INSERT
     login_log_test(
-    id,ip,user_agent,ip_country,ip_province,ip_city,ua_os,ua_browser,ua_is_mobile
+    id,ip,user_agent,ip_country,ip_province,ip_city,ip_isp,ua_os,ua_browser,ua_is_mobile
     )VALUES(
-    #{id},#{ip},#{userAgent},#{ipCountry},#{ipProvince},#{ipCity},#{uaOs},#{uaBrowser},#{uaIsMobile}
+    #{id},#{ip},#{userAgent},#{ipCountry},#{ipProvince},#{ipCity},#{ipIsp},#{uaOs},#{uaBrowser},#{uaIsMobile}
     )
   </insert>
 
