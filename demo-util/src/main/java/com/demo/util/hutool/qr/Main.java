@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <h1>二维码</h1>
@@ -21,11 +22,19 @@ import java.io.File;
 @Slf4j
 public class Main {
 
+    private static final String content = "爱上对方过后就哭了啊123456789012345678901234567890";
+    private static final ErrorCorrectionLevel level = ErrorCorrectionLevel.M;
+    private static final String path1 = "E:/qr1.png";
+    private static final String path2 = "E:/qr2.png";
+
     public static void main(String[] args) {
-        String s = "https://hutool.cn/";
-        File file = new File("E:/qr.png");
         /*生成二维码*/
-        QrCodeUtil.generate(s, 300, 300, file);
+        File file = new File(path1);
+        // 默认M和UTF-8
+        QrCodeUtil.generate(content, 300, 300, file);
+        /*识别二维码*/
+        String decode = QrCodeUtil.decode(file);
+        log.info("二维码:" + decode);
 
         /*自定义参数*/
         QrConfig config = new QrConfig(300, 300);
@@ -38,13 +47,11 @@ public class Main {
         // 设置二维码中的Logo
         config.setImg(file);
         // 设置纠错级别
-        config.setErrorCorrection(ErrorCorrectionLevel.H);
+        config.setErrorCorrection(level);
+        // 设置文本编码
+        config.setCharset(StandardCharsets.UTF_8);
         // 生成二维码到文件，也可以到流
-        QrCodeUtil.generate(s, config, new File("E:/qr2.png"));
-
-        /*识别二维码*/
-        String decode = QrCodeUtil.decode(file);
-        log.info("二维码:" + decode);
+        QrCodeUtil.generate(content, config, new File(path2));
     }
 
 }
