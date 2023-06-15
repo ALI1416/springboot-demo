@@ -161,6 +161,8 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/ip2region-spring-boot-autoconfigure?label=Maven%20Central)
     - `手机号码区域` : `cn.404z:phone2region-spring-boot-autoconfigure`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
+    - `二维码生成器Java版` : `cn.404z:qrcode-encoder`  
+      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/qrcode-encoder?label=Maven%20Central)
     - `FastJson` : `com.alibaba:fastjson`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/fastjson?label=Maven%20Central)
     - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
@@ -192,9 +194,7 @@ SpringBoot示例
 
 ## 关于
 
-<object data="https://404z.cn/images/about.svg" style="max-width:100%;">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://404z.cn/images/about.dark.svg">
-    <img alt="About" src="https://404z.cn/images/about.light.svg">
-  </picture>
-</object>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://www.404z.cn/images/about.dark.svg">
+  <img alt="About" src="https://www.404z.cn/images/about.light.svg">
+</picture>
