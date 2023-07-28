@@ -355,7 +355,7 @@ public class StringController {
      */
     @PostMapping("multiGetArray")
     public Result multiGet(String[] keys) {
-        return Result.o(RedisUtils.getMultiArray(keys));
+        return Result.o(RedisUtils.getMulti(keys));
     }
 
     /**

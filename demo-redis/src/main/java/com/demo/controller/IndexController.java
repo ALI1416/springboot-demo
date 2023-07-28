@@ -113,7 +113,7 @@ public class IndexController {
      */
     @PostMapping("countExistingKeys")
     public Result countExistingKeys(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.countExistingKeys(keys));
+        return Result.o(RedisUtils.existsCount(keys));
     }
 
     /**
@@ -126,7 +126,7 @@ public class IndexController {
      */
     @PostMapping("countExistingKeysArray")
     public Result countExistingKeys(String[] keys) {
-        return Result.o(RedisUtils.countExistingKeysArray(keys));
+        return Result.o(RedisUtils.existsCount(keys));
     }
 
     /**
@@ -164,7 +164,7 @@ public class IndexController {
      */
     @PostMapping("deleteArray")
     public Result delete(String[] keys) {
-        return Result.o(RedisUtils.deleteMultiArray(keys));
+        return Result.o(RedisUtils.deleteMulti(keys));
     }
 
     /**
@@ -202,7 +202,7 @@ public class IndexController {
      */
     @PostMapping("unlinkArray")
     public Result unlink(String[] keys) {
-        return Result.o(RedisUtils.unlinkMultiArray(keys));
+        return Result.o(RedisUtils.unlinkMulti(keys));
     }
 
     /**

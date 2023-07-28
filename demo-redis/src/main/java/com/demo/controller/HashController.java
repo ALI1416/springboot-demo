@@ -32,7 +32,7 @@ public class HashController {
      */
     @PostMapping("hDeleteArray")
     public Result hDelete(String key, String[] items) {
-        return Result.o(RedisUtils.hDeleteMultiArray(key, items));
+        return Result.o(RedisUtils.hDeleteMulti(key, items));
     }
 
     /**
@@ -76,7 +76,7 @@ public class HashController {
      */
     @PostMapping("hMultiGetArray")
     public Result hMultiGet(String key, String[] items) {
-        return Result.o(RedisUtils.hGetMultiArray(key, items));
+        return Result.o(RedisUtils.hGetMulti(key, items));
     }
 
     /**
