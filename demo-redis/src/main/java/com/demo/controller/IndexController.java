@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -25,107 +23,51 @@ import java.util.List;
 public class IndexController {
 
     /**
-     * <h3>获取失效时间(秒，-1不过期，-2不存在)</h3>
-     * POST /getExpire?key=a<br>
-     * 不过期 -1<br>
-     * 不存在 -2<br>
-     * 还有23秒过期 23
+     * <h3></h3>
+     * POST /copy?sourceKey=a&targetKey=b&replace=false<br>
+     * 成功 true<br>
+     * 失败 false
      */
-    @PostMapping("getExpire")
-    public Result getExpire(String key) {
-        return Result.o(RedisUtils.getExpire(key));
-    }
-
-    /**
-     * <h3>指定为持久数据(移除失效时间)</h3>
-     * POST /persist?key=a<br>
-     * 还有10秒过期 true<br>
-     * 不过期/不存在 false
-     */
-    @PostMapping("persist")
-    public Result persist(String key) {
-        return Result.o(RedisUtils.persist(key));
-    }
-
-    /**
-     * <h3>指定失效时间(秒，<=0删除)</h3>
-     * POST /expire?key=a&timeout=100<br>
-     * 还有10秒过期/不过期 true<br>
-     * 不存在 false<br>
-     * POST /expire?key=a&timeout=0<br>
-     * POST /expire?key=a&timeout=-2<br>
-     * 被删除
-     */
-    @PostMapping("expire")
-    public Result expire(String key, long timeout) {
-        return Result.o(RedisUtils.expire(key, timeout));
-    }
-
-    /**
-     * <h3>指定失效时间</h3>
-     * POST /expireDuration?key=a&timeout=PT100H<br>
-     * 失效时间100小时
-     */
-    @PostMapping("expireDuration")
-    public Result expire(String key, String timeout) {
-        return Result.o(RedisUtils.expire(key, Duration.parse(timeout)));
-    }
-
-    /**
-     * <h3>指定失效日期</h3>
-     * POST /expireAt?key=a&timeout=2022/01/01 00:00:00<br>
-     * 在2022/01/01 00:00:00时失效
-     */
-    @PostMapping("expireAt")
-    public Result expireAt(String key, Date timeout) {
-        return Result.o(RedisUtils.expireAt(key, timeout));
-    }
-
-    /**
-     * <h3>指定失效日期</h3>
-     * POST /expireAtInstant?key=a&timeout=2022-01-01T00:00:00Z<br>
-     * 在2022-01-01T00:00:00Z时到期
-     */
-    @PostMapping("expireAtInstant")
-    public Result expireAt(String key, String timeout) {
-        return Result.o(RedisUtils.expireAt(key, Instant.parse(timeout)));
+    @PostMapping("copy")
+    public Result copy(String sourceKey, String targetKey, boolean replace) {
+        return Result.o(RedisUtils.copy(sourceKey, targetKey, replace));
     }
 
     /**
      * <h3>key是否存在</h3>
-     * POST /hasKey?key=a<br>
+     * POST /exists?key=a<br>
      * 存在 true<br>
      * 不存在 false
      */
-    @PostMapping("hasKey")
-    public Result hasKey(String key) {
+    @PostMapping("exists")
+    public Result exists(String key) {
         return Result.o(RedisUtils.exists(key));
     }
 
     /**
      * <h3>集合中存在的key的数量</h3>
      * 实际存在key有a/b/c<br>
-     * POST /countExistingKeys<br>
+     * POST /existsCount<br>
      * body JSON ["a","b","c"] 3<br>
      * body JSON ["a","b","d"] 2<br>
      * body JSON ["a","b","c","c"] 4<br>
      * body JSON ["d"] 0
      */
-    @PostMapping("countExistingKeys")
-    public Result countExistingKeys(@RequestBody List<String> keys) {
+    @PostMapping("existsCount")
+    public Result existsCount(@RequestBody List<String> keys) {
         return Result.o(RedisUtils.existsCount(keys));
     }
 
     /**
      * <h3>集合中存在的key的数量</h3>
      * 实际存在key有a/b/c<br>
-     * POST /countExistingKeysArray?keys=a&keys=b&keys=c 3<br>
-     * POST /countExistingKeysArray?keys=a&keys=b&keys=d 2<br>
-     * POST /countExistingKeysArray?keys=a&keys=b&keys=c&keys=c 4<br>
-     * POST /countExistingKeysArray?keys=d 0
+     * POST /existsCount2?keys=a&keys=b&keys=c 3<br>
+     * POST /existsCount2?keys=a&keys=b&keys=d 2<br>
+     * POST /existsCount2?keys=a&keys=b&keys=c&keys=c 4<br>
+     * POST /existsCount2?keys=d 0
      */
-    @PostMapping("countExistingKeysArray")
-    public Result countExistingKeys(String[] keys) {
+    @PostMapping("existsCount2")
+    public Result existsCount(String[] keys) {
         return Result.o(RedisUtils.existsCount(keys));
     }
 
@@ -165,6 +107,53 @@ public class IndexController {
     @PostMapping("deleteArray")
     public Result delete(String[] keys) {
         return Result.o(RedisUtils.deleteMulti(keys));
+    }
+
+    /**
+     * <h3>获取失效时间(秒，-1不过期，-2不存在)</h3>
+     * POST /getExpire?key=a<br>
+     * 不过期 -1<br>
+     * 不存在 -2<br>
+     * 还有23秒过期 23
+     */
+    @PostMapping("getExpire")
+    public Result getExpire(String key) {
+        return Result.o(RedisUtils.getExpire(key));
+    }
+
+    /**
+     * <h3>指定为持久数据(移除失效时间)</h3>
+     * POST /persist?key=a<br>
+     * 还有10秒过期 true<br>
+     * 不过期/不存在 false
+     */
+    @PostMapping("persist")
+    public Result persist(String key) {
+        return Result.o(RedisUtils.persist(key));
+    }
+
+    /**
+     * <h3>指定失效时间(秒，<=0删除)</h3>
+     * POST /expire?key=a&timeout=100<br>
+     * 还有10秒过期/不过期 true<br>
+     * 不存在 false<br>
+     * POST /expire?key=a&timeout=0<br>
+     * POST /expire?key=a&timeout=-2<br>
+     * 被删除
+     */
+    @PostMapping("expire")
+    public Result expire(String key, long timeout) {
+        return Result.o(RedisUtils.expire(key, timeout));
+    }
+
+    /**
+     * <h3>指定失效日期</h3>
+     * POST /expireAt?key=a&timeout=2022/01/01 00:00:00<br>
+     * 在2022/01/01 00:00:00时失效
+     */
+    @PostMapping("expireAt")
+    public Result expireAt(String key, Date timeout) {
+        return Result.o(RedisUtils.expireAt(key, timeout));
     }
 
     /**

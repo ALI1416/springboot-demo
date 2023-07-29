@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ import java.util.Map;
 public class StringController {
 
     /* ==================== set各种类型 ==================== */
-    //region
+    // region
 
     /**
      * <h3>放入int</h3>
@@ -201,7 +200,7 @@ public class StringController {
         return Result.o();
     }
 
-    //endregion
+    // endregion
 
     /**
      * <h3>放入，并设置失效时间</h3>
@@ -211,17 +210,6 @@ public class StringController {
     @PostMapping("setExpire")
     public Result setExpire(String key, String value, long timeout) {
         RedisUtils.set(key, value, timeout);
-        return Result.o();
-    }
-
-    /**
-     * <h3>放入，并设置持续时间</h3>
-     * POST /string/setExpireDuration?key=a&value=aa&timeout=PT100H</h3>
-     * 倒计时100小时
-     */
-    @PostMapping("setExpireDuration")
-    public Result setExpireDuration(String key, String value, String timeout) {
-        RedisUtils.set(key, value, Duration.parse(timeout));
         return Result.o();
     }
 
@@ -248,17 +236,6 @@ public class StringController {
     }
 
     /**
-     * <h3>如果key不存在，则放入，并设置持续时间</h3>
-     * POST /string/setIfAbsentExpireDuration?key=a&value=a&timeout=PT100H</h3>
-     * 存在 false</h3>
-     * 不存在 true
-     */
-    @PostMapping("setIfAbsentExpireDuration")
-    public Result setIfAbsent(String key, String value, String timeout) {
-        return Result.o(RedisUtils.setIfAbsent(key, value, Duration.parse(timeout)));
-    }
-
-    /**
      * <h3>如果key存在，则放入</h3>
      * POST /string/setIfPresent?key=a&value=a</h3>
      * 存在 true</h3>
@@ -278,17 +255,6 @@ public class StringController {
     @PostMapping("setIfPresentExpire")
     public Result setIfPresent(String key, String value, long timeout) {
         return Result.o(RedisUtils.setIfPresent(key, value, timeout));
-    }
-
-    /**
-     * <h3>如果key存在，则放入，并设置持续时间</h3>
-     * POST /string/setIfPresentExpireDuration?key=a&value=a&timeout=PT100H</h3>
-     * 存在 true</h3>
-     * 不存在 false
-     */
-    @PostMapping("setIfPresentExpireDuration")
-    public Result setIfPresent(String key, String value, String timeout) {
-        return Result.o(RedisUtils.setIfPresent(key, value, Duration.parse(timeout)));
     }
 
     /**

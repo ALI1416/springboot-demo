@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
 import java.util.List;
 
 /**
@@ -373,16 +372,6 @@ public class ListController {
     }
 
     /**
-     * <h3>删除并返回左侧的值，并阻塞指定时间</h3>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     * POST /list/lLeftPopDuration?key=a&timeout=PT20S<br>
-     */
-    @PostMapping("lLeftPopDuration")
-    public Result lLeftPop(String key, String timeout) {
-        return Result.o(RedisUtils.lLeftPop(key, Duration.parse(timeout)));
-    }
-
-    /**
      * <h3>删除并返回右侧的值</h3>
      * POST /list/lRightPop?key=a<br>
      * 存在值 [111,222,333,444,555]<br>
@@ -402,16 +391,6 @@ public class ListController {
     @PostMapping("lRightPopSecond")
     public Result lRightPop(String key, long timeout) {
         return Result.o(RedisUtils.lRightPop(key, timeout));
-    }
-
-    /**
-     * <h3>删除并返回右侧的值，并阻塞指定时间</h3>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     * POST /list/lRightPopDuration?key=a&timeout=PT20S<br>
-     */
-    @PostMapping("lRightPopDuration")
-    public Result lRightPop(String key, String timeout) {
-        return Result.o(RedisUtils.lRightPop(key, Duration.parse(timeout)));
     }
 
     /**
@@ -436,16 +415,6 @@ public class ListController {
     @PostMapping("lRightPopAndLeftPushSecond")
     public Result lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
         return Result.o(RedisUtils.lRightPopAndLeftPush(sourceKey, destinationKey, timeout));
-    }
-
-    /**
-     * <h3>从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间</h3>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     * POST /list/lRightPopAndLeftPushDuration?sourceKey=a&destinationKey=b&timeout=PT20S<br>
-     */
-    @PostMapping("lRightPopAndLeftPushDuration")
-    public Result lRightPopAndLeftPush(String sourceKey, String destinationKey, String timeout) {
-        return Result.o(RedisUtils.lRightPopAndLeftPush(sourceKey, destinationKey, Duration.parse(timeout)));
     }
 
 }

@@ -9,8 +9,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +35,46 @@ public class RedisUtils {
 
     /* ==================== 通用操作 ==================== */
     // region 通用操作
+
+
+    /**
+     * TODO 拷贝(copy)
+     *
+     * @return 是否成功
+     */
+    public static Boolean copy(String sourceKey, String targetKey, boolean replace) {
+        return redisTemplate.copy(sourceKey, targetKey, replace);
+    }
+
+    /**
+     * key是否存在(exists)
+     *
+     * @param key 键
+     * @return 是否存在
+     */
+    public static Boolean exists(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 集合中存在的key的数量(exists)
+     *
+     * @param keys 键
+     * @return 存在的数量(key重复会计算多次)
+     */
+    public static Long existsCount(Collection<String> keys) {
+        return redisTemplate.countExistingKeys(keys);
+    }
+
+    /**
+     * 集合中存在的key的数量(exists)
+     *
+     * @param keys 键
+     * @return 存在的数量(key重复会计算多次)
+     */
+    public static Long existsCount(String... keys) {
+        return redisTemplate.countExistingKeys(Arrays.asList(keys));
+    }
 
     /**
      * 删除key(del)
@@ -99,97 +137,13 @@ public class RedisUtils {
     }
 
     /**
-     * key是否存在(exists)
+     * 获取存储的数据类型(type)
      *
      * @param key 键
-     * @return 是否存在
+     * @return none/string/list/set/zset/hash/stream
      */
-    public static Boolean exists(String key) {
-        return redisTemplate.hasKey(key);
-    }
-
-    /**
-     * 集合中存在的key的数量(exists)
-     *
-     * @param keys 键
-     * @return 存在的数量(key重复会计算多次)
-     */
-    public static Long existsCount(Collection<String> keys) {
-        return redisTemplate.countExistingKeys(keys);
-    }
-
-    /**
-     * 集合中存在的key的数量(exists)
-     *
-     * @param keys 键
-     * @return 存在的数量(key重复会计算多次)
-     */
-    public static Long existsCount(String... keys) {
-        return redisTemplate.countExistingKeys(Arrays.asList(keys));
-    }
-
-    /**
-     * 指定失效时间(expire)
-     *
-     * @param key     键
-     * @param timeout 失效时间(秒，<=0删除)
-     * @return 是否成功
-     */
-    public static Boolean expire(String key, long timeout) {
-        return redisTemplate.expire(key, timeout, SECONDS);
-    }
-
-    /**
-     * 指定失效时间(expire)
-     *
-     * @param key     键
-     * @param timeout 持续时间
-     * @return 是否成功
-     */
-    public static Boolean expire(String key, Duration timeout) {
-        return redisTemplate.expire(key, timeout);
-    }
-
-    /**
-     * 指定失效日期(expire)
-     *
-     * @param key  键
-     * @param date 失效日期
-     * @return 是否成功
-     */
-    public static Boolean expireAt(String key, Date date) {
-        return redisTemplate.expireAt(key, date);
-    }
-
-    /**
-     * 指定失效日期(expire)
-     *
-     * @param key      键
-     * @param expireAt 失效日期
-     * @return 是否成功
-     */
-    public static Boolean expireAt(String key, Instant expireAt) {
-        return redisTemplate.expireAt(key, expireAt);
-    }
-
-    /**
-     * 获取失效时间(ttl)
-     *
-     * @param key 键
-     * @return 失效时间(秒 ， - 1不过期 ， - 2不存在)
-     */
-    public static Long getExpire(String key) {
-        return redisTemplate.getExpire(key, SECONDS);
-    }
-
-    /**
-     * 指定为持久数据(persist)
-     *
-     * @param key 键
-     * @return 是否成功
-     */
-    public static Boolean persist(String key) {
-        return redisTemplate.persist(key);
+    public static DataType type(String key) {
+        return redisTemplate.type(key);
     }
 
     /**
@@ -204,10 +158,63 @@ public class RedisUtils {
      *                [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
      *                [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *                \ : 转义(字符*?[]^-\等)
-     * @return 键
+     * @return 键列表
      */
     public static Set<String> keys(String pattern) {
         return redisTemplate.keys(pattern);
+    }
+
+    /**
+     * 模糊查询，一次扫描1000条(scan)
+     *
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @return 键列表
+     */
+    public static Set<String> scan(String match) {
+        return scan(match, 1000);
+    }
+
+    /**
+     * 模糊查询(scan)
+     *
+     * @param match 匹配模式<br>
+     *              * : 匹配0+个任意字符<br>
+     *              ? : 匹配1个任意字符<br>
+     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
+     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
+     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
+     *              \ : 转义(字符*?[]^-\等)
+     * @param count 一次扫描条数
+     * @return 键列表
+     */
+    public static Set<String> scan(String match, long count) {
+        Set<String> keys = new HashSet<>();
+        Cursor<String> cursor = (Cursor<String>) redisTemplate.executeWithStickyConnection( //
+                connection -> new ConvertingCursor<>( //
+                        connection.scan(ScanOptions.scanOptions().match(match).count(count).build()), //
+                        redisTemplate.getKeySerializer()::deserialize));
+        if (cursor == null) {
+            return keys;
+        }
+        while (cursor.hasNext()) {
+            keys.add(cursor.next());
+        }
+        return keys;
+    }
+
+    /**
+     * 获取一个随机的key(randomKey)
+     *
+     * @return 键(不存在任何键返回null)
+     */
+    public static String randomKey() {
+        return redisTemplate.randomKey();
     }
 
     /**
@@ -243,22 +250,35 @@ public class RedisUtils {
     }
 
     /**
-     * 返回存储的数据类型(type)
+     * 指定失效时间(expire)
      *
-     * @param key 键
-     * @return none/string/list/set/zset/hash/stream
+     * @param key     键
+     * @param timeout 失效时间(秒，<=0删除)
+     * @return 是否成功
      */
-    public static DataType type(String key) {
-        return redisTemplate.type(key);
+    public static Boolean expire(String key, long timeout) {
+        return redisTemplate.expire(key, timeout, SECONDS);
     }
 
     /**
-     * 返回一个随机的key(randomKey)
+     * 指定失效日期(expire)
      *
-     * @return 键(管道或事务中使用或不存在任何键为null)
+     * @param key  键
+     * @param date 失效日期
+     * @return 是否成功
      */
-    public static String randomKey() {
-        return redisTemplate.randomKey();
+    public static Boolean expireAt(String key, Date date) {
+        return redisTemplate.expireAt(key, date);
+    }
+
+    /**
+     * 指定为持久数据(persist)
+     *
+     * @param key 键
+     * @return 是否成功
+     */
+    public static Boolean persist(String key) {
+        return redisTemplate.persist(key);
     }
 
     /**
@@ -272,49 +292,20 @@ public class RedisUtils {
         return redisTemplate.move(key, dbIndex);
     }
 
-    /**
-     * 模糊查询，一次扫描1000条(scan)
-     *
-     * @param match 匹配模式<br>
-     *              * : 匹配0+个任意字符<br>
-     *              ? : 匹配1个任意字符<br>
-     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
-     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
-     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
-     *              \ : 转义(字符*?[]^-\等)
-     * @return 键
-     */
-    public static Set<String> scan(String match) {
-        return scan(match, 1000);
-    }
 
     /**
-     * 模糊查询(scan)
+     * 获取失效时间(ttl)
      *
-     * @param match 匹配模式<br>
-     *              * : 匹配0+个任意字符<br>
-     *              ? : 匹配1个任意字符<br>
-     *              [abc] : 匹配1个指定字符(括号内字符abc)<br>
-     *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
-     *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
-     *              \ : 转义(字符*?[]^-\等)
-     * @param count 一次扫描条数
-     * @return 键
+     * @param key 键
+     * @return 失效时间(秒 ， - 1不过期 ， - 2不存在)
      */
-    public static Set<String> scan(String match, long count) {
-        Set<String> keys = new HashSet<>();
-        Cursor<String> cursor = (Cursor<String>) redisTemplate.executeWithStickyConnection( //
-                connection -> new ConvertingCursor<>( //
-                        connection.scan(ScanOptions.scanOptions().match(match).count(count).build()), //
-                        redisTemplate.getKeySerializer()::deserialize));
-        if (cursor == null) {
-            return keys;
-        }
-        while (cursor.hasNext()) {
-            keys.add(cursor.next());
-        }
-        return keys;
+    public static Long getExpire(String key) {
+        return redisTemplate.getExpire(key, SECONDS);
     }
+
+    // TODO dump
+    // TODO restore
+    // TODO sort
 
     // endregion
 
@@ -322,49 +313,97 @@ public class RedisUtils {
     // region 字符串Value操作
 
     /**
-     * 递减1，值必须是整数类型(decr)<br>
-     * (键不存在自动创建并赋值为0后再递减)
+     * 放入(set)
      *
-     * @param key 键
-     * @return 递减后的值
-     */
-    public static Long decrement(String key) {
-        return redisTemplate.opsForValue().decrement(key);
-    }
-
-    /**
-     * 递减，值必须是整数类型(decrBy)<br>
-     * (键不存在自动创建并赋值为0后再递减)
-     *
+     * @param <T>   指定数据类型
      * @param key   键
-     * @param delta 减量
-     * @return 递减后的值
+     * @param value 值
      */
-    public static Long decrement(String key, long delta) {
-        return redisTemplate.opsForValue().decrement(key, delta);
+    public static <T> void set(String key, T value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
     /**
-     * 递增1，值必须是整数类型(incr)<br>
-     * (键不存在自动创建并赋值为0后再递增)
+     * 放入，并设置失效时间(setEX)
      *
-     * @param key 键
-     * @return 递增后的值
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 失效时间(秒，必须>0)
      */
-    public static Long increment(String key) {
-        return redisTemplate.opsForValue().increment(key);
+    public static <T> void set(String key, T value, long timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout, SECONDS);
     }
 
     /**
-     * 递增，值必须是整数类型(incrBy)<br>
-     * (键不存在自动创建并赋值为0后再递增)
+     * 如果key不存在，则放入(setNX)
      *
+     * @param <T>   指定数据类型
      * @param key   键
-     * @param delta 增量
-     * @return 递增后的值
+     * @param value 值
+     * @return 是否成功
      */
-    public static Long increment(String key, long delta) {
-        return redisTemplate.opsForValue().increment(key, delta);
+    public static <T> Boolean setIfAbsent(String key, T value) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value);
+    }
+
+    /**
+     * 如果key不存在，则放入，并设置失效时间(set)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 失效时间(秒，必须>0)
+     * @return 是否成功
+     */
+    public static <T> Boolean setIfAbsent(String key, T value, long timeout) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, SECONDS);
+    }
+
+    /**
+     * 如果key存在，则放入(set)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param value 值
+     * @return 是否成功
+     */
+    public static <T> Boolean setIfPresent(String key, T value) {
+        return redisTemplate.opsForValue().setIfPresent(key, value);
+    }
+
+    /**
+     * 如果key存在，则放入，并设置失效时间(set)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 失效时间(秒，必须>0)
+     * @return 是否成功
+     */
+    public static <T> Boolean setIfPresent(String key, T value, long timeout) {
+        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, SECONDS);
+    }
+
+    /**
+     * map中的key和value依次放入(mSet)<br>
+     * (键存在则不会放入)
+     *
+     * @param <T> 指定数据类型
+     * @param map map
+     */
+    public static <T> void setMulti(Map<String, T> map) {
+        redisTemplate.opsForValue().multiSet(map);
+    }
+
+    /**
+     * 如果map中的key全部不存在，则map中的key和value依次放入(mSetNX)
+     *
+     * @param <T> 指定数据类型
+     * @param map map
+     */
+    public static <T> Boolean setMultiIfAbsent(Map<String, T> map) {
+        return redisTemplate.opsForValue().multiSetIfAbsent(map);
     }
 
     /**
@@ -376,6 +415,10 @@ public class RedisUtils {
     public static Object get(String key) {
         return redisTemplate.opsForValue().get(key);
     }
+
+    // TODO getAndDelete
+    // TODO getAndExpire
+    // TODO getAndPersist
 
     /**
      * 获取并放入(getSet)
@@ -410,141 +453,77 @@ public class RedisUtils {
     }
 
     /**
-     * 放入(set)
+     * 递增1，值必须是整数类型(incr)<br>
+     * (键不存在自动创建并赋值为0后再递增)
      *
-     * @param <T>   指定数据类型
+     * @param key 键
+     * @return 递增后的值
+     */
+    public static Long increment(String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    /**
+     * 递增，值必须是整数类型(incrBy)<br>
+     * (键不存在自动创建并赋值为0后再递增)
+     *
      * @param key   键
-     * @param value 值
+     * @param delta 增量
+     * @return 递增后的值
      */
-    public static <T> void set(String key, T value) {
-        redisTemplate.opsForValue().set(key, value);
+    public static Long increment(String key, long delta) {
+        return redisTemplate.opsForValue().increment(key, delta);
+    }
+
+    // TODO increment
+
+    /**
+     * 递减1，值必须是整数类型(decr)<br>
+     * (键不存在自动创建并赋值为0后再递减)
+     *
+     * @param key 键
+     * @return 递减后的值
+     */
+    public static Long decrement(String key) {
+        return redisTemplate.opsForValue().decrement(key);
     }
 
     /**
-     * 如果key不存在，则放入(setNX)
+     * 递减，值必须是整数类型(decrBy)<br>
+     * (键不存在自动创建并赋值为0后再递减)
      *
-     * @param <T>   指定数据类型
      * @param key   键
-     * @param value 值
-     * @return 是否成功
+     * @param delta 减量
+     * @return 递减后的值
      */
-    public static <T> Boolean setIfAbsent(String key, T value) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value);
+    public static Long decrement(String key, long delta) {
+        return redisTemplate.opsForValue().decrement(key, delta);
     }
 
-    /**
-     * 如果key存在，则放入(set)
-     *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param value 值
-     * @return 是否成功
-     */
-    public static <T> Boolean setIfPresent(String key, T value) {
-        return redisTemplate.opsForValue().setIfPresent(key, value);
-    }
-
-    /**
-     * 放入，并设置失效时间(setEX)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 失效时间(秒，必须>0)
-     */
-    public static <T> void set(String key, T value, long timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout, SECONDS);
-    }
-
-    /**
-     * 放入，并设置持续时间(setEX)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 持续时间
-     */
-    public static <T> void set(String key, T value, Duration timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout);
-    }
-
-    /**
-     * 如果key不存在，则放入，并设置失效时间(set)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 失效时间(秒，必须>0)
-     * @return 是否成功
-     */
-    public static <T> Boolean setIfAbsent(String key, T value, long timeout) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, SECONDS);
-    }
-
-    /**
-     * 如果key不存在，则放入，并设置持续时间(set)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 持续时间
-     * @return 是否成功
-     */
-    public static <T> Boolean setIfAbsent(String key, T value, Duration timeout) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout);
-    }
-
-    /**
-     * 如果key存在，则放入，并设置失效时间(set)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 失效时间(秒，必须>0)
-     * @return 是否成功
-     */
-    public static <T> Boolean setIfPresent(String key, T value, long timeout) {
-        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, SECONDS);
-    }
-
-    /**
-     * 如果key存在，则放入，并设置持续时间(set)
-     *
-     * @param <T>     指定数据类型
-     * @param key     键
-     * @param value   值
-     * @param timeout 持续时间
-     * @return 是否成功
-     */
-    public static <T> Boolean setIfPresent(String key, T value, Duration timeout) {
-        return redisTemplate.opsForValue().setIfPresent(key, value, timeout);
-    }
-
-    /**
-     * map中的key和value依次放入(mSet)<br>
-     * (键存在则不会放入)
-     *
-     * @param <T> 指定数据类型
-     * @param map map
-     */
-    public static <T> void setMulti(Map<String, T> map) {
-        redisTemplate.opsForValue().multiSet(map);
-    }
-
-    /**
-     * 如果map中的key全部不存在，则map中的key和value依次放入(mSetNX)
-     *
-     * @param <T> 指定数据类型
-     * @param map map
-     */
-    public static <T> Boolean setMultiIfAbsent(Map<String, T> map) {
-        return redisTemplate.opsForValue().multiSetIfAbsent(map);
-    }
+    // TODO append
+    // TODO get
+    // TODO set
+    // TODO size
+    // TODO setBit
+    // TODO getBit
+    // TODO bitField
 
     // endregion
 
     /* ==================== 哈希Hash操作 ==================== */
     // region 哈希Hash操作
+
+    /**
+     * 删除map中指定项(hDel)
+     *
+     * @param key  键
+     * @param item 项
+     * @return 删除成功个数<br>
+     * 注意：当key中不存在item时，key将被删除
+     */
+    public static Long hDelete(String key, String item) {
+        return redisTemplate.opsForHash().delete(key, item);
+    }
 
     /**
      * 删除map中指定多个项(hDel)
@@ -586,7 +565,7 @@ public class RedisUtils {
      *
      * @param key  键
      * @param item 项
-     * @return 值
+     * @return 值(不存在key或不存在item时为null)
      */
     public static Object hGet(String key, String item) {
         return redisTemplate.opsForHash().get(key, item);
@@ -664,17 +643,31 @@ public class RedisUtils {
         return redisTemplate.opsForHash().increment(key, item, -delta);
     }
 
+    // TODO increment
+    // TODO randomKey
+    // TODO randomEntry
+    // TODO randomEntries
+
     /**
-     * 设置map的1个键值(hSet)<br>
-     * (项已存在会被覆盖)
+     * 获取map中所有的项(hKeys)
      *
-     * @param <T>   指定数据类型
-     * @param key   键
-     * @param item  项
-     * @param value 值
+     * @param key 键
+     * @return 项
      */
-    public static <T> void hSet(String key, String item, T value) {
-        redisTemplate.opsForHash().put(key, item, value);
+    public static Set<Object> hGetAllItem(String key) {
+        return redisTemplate.opsForHash().keys(key);
+    }
+
+    // TODO lengthOfValue
+
+    /**
+     * 获取项的个数(hLen)
+     *
+     * @param key 键
+     * @return 项的个数(键不存在返回0)
+     */
+    public static Long hSize(String key) {
+        return redisTemplate.opsForHash().size(key);
     }
 
     /**
@@ -690,6 +683,19 @@ public class RedisUtils {
     }
 
     /**
+     * 设置map的1个键值(hSet)<br>
+     * (项已存在会被覆盖)
+     *
+     * @param <T>   指定数据类型
+     * @param key   键
+     * @param item  项
+     * @param value 值
+     */
+    public static <T> void hSet(String key, String item, T value) {
+        redisTemplate.opsForHash().put(key, item, value);
+    }
+
+    /**
      * 项不存在时，设置map的1个键值(hSetNX)
      *
      * @param <T>   指定数据类型
@@ -700,26 +706,6 @@ public class RedisUtils {
      */
     public static <T> Boolean hPutIfAbsent(String key, String item, T value) {
         return redisTemplate.opsForHash().putIfAbsent(key, item, value);
-    }
-
-    /**
-     * 获取项的个数(hLen)
-     *
-     * @param key 键
-     * @return 项的个数(键不存在返回0)
-     */
-    public static Long hSize(String key) {
-        return redisTemplate.opsForHash().size(key);
-    }
-
-    /**
-     * 获取map中所有的项(hKeys)
-     *
-     * @param key 键
-     * @return 项
-     */
-    public static Set<Object> hGetAllItem(String key) {
-        return redisTemplate.opsForHash().keys(key);
     }
 
     /**
@@ -790,37 +776,6 @@ public class RedisUtils {
     // region 列表List操作
 
     /**
-     * 获取指定下标的值(lIndex)
-     *
-     * @param key   键
-     * @param index 下标
-     * @return 值
-     */
-    public static Object lGet(String key, long index) {
-        return redisTemplate.opsForList().index(key, index);
-    }
-
-    /**
-     * 获取第一个(lIndex)
-     *
-     * @param key 键
-     * @return 值
-     */
-    public static Object lGetFirst(String key) {
-        return redisTemplate.opsForList().index(key, 0);
-    }
-
-    /**
-     * 获取最后一个(lIndex)
-     *
-     * @param key 键
-     * @return 值
-     */
-    public static Object lGetLast(String key) {
-        return redisTemplate.opsForList().index(key, -1);
-    }
-
-    /**
      * 获取(lRange)
      *
      * @param key   键
@@ -841,6 +796,59 @@ public class RedisUtils {
     public static List<Object> lGetAll(String key) {
         return redisTemplate.opsForList().range(key, 0, -1);
     }
+
+    /**
+     * 修剪(只要start和end之间的值)(lTrim)
+     *
+     * @param key   键
+     * @param start 开始(开头0)
+     * @param end   结束(末尾-1)
+     */
+    public static void lTrim(String key, long start, long end) {
+        redisTemplate.opsForList().trim(key, start, end);
+    }
+
+    /**
+     * 获取列表的长度(lLen)
+     *
+     * @param key 键
+     * @return 列表长度
+     */
+    public static Long lSize(String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    /**
+     * 获取指定下标的值(lIndex)
+     *
+     * @param key   键
+     * @param index 下标
+     * @return 值(键不存在或下标不存在为null)
+     */
+    public static Object lGet(String key, long index) {
+        return redisTemplate.opsForList().index(key, index);
+    }
+
+    /**
+     * 获取第一个(lIndex)
+     *
+     * @param key 键
+     * @return 值(键不存在或下标不存在为null)
+     */
+    public static Object lGetFirst(String key) {
+        return redisTemplate.opsForList().index(key, 0);
+    }
+
+    /**
+     * 获取最后一个(lIndex)
+     *
+     * @param key 键
+     * @return 值(键不存在或下标不存在为null)
+     */
+    public static Object lGetLast(String key) {
+        return redisTemplate.opsForList().index(key, -1);
+    }
+
 
     /**
      * 添加到指定值的左侧(lInsert before)
@@ -985,18 +993,6 @@ public class RedisUtils {
     }
 
     /**
-     * 删除并返回左侧的值，并阻塞指定时间(bLPop)<br>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     *
-     * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
-     */
-    public static Object lLeftPop(String key, Duration timeout) {
-        return redisTemplate.opsForList().leftPop(key, timeout);
-    }
-
-    /**
      * 删除并返回右侧的值(rPop)
      *
      * @param key 键
@@ -1016,28 +1012,6 @@ public class RedisUtils {
      */
     public static Object lRightPop(String key, long timeout) {
         return redisTemplate.opsForList().rightPop(key, timeout, SECONDS);
-    }
-
-    /**
-     * 删除并返回右侧的值，并阻塞指定时间(bRPop)<br>
-     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     *
-     * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
-     */
-    public static Object lRightPop(String key, Duration timeout) {
-        return redisTemplate.opsForList().rightPop(key, timeout);
-    }
-
-    /**
-     * 获取列表的长度(lLen)
-     *
-     * @param key 键
-     * @return 列表长度
-     */
-    public static Long lSize(String key) {
-        return redisTemplate.opsForList().size(key);
     }
 
     /**
@@ -1062,17 +1036,6 @@ public class RedisUtils {
      */
     public static <T> Long lLastIndexOf(String key, T value) {
         return redisTemplate.opsForList().lastIndexOf(key, value);
-    }
-
-    /**
-     * 修剪(只要start和end之间的值)(lTrim)
-     *
-     * @param key   键
-     * @param start 开始(开头0)
-     * @param end   结束(末尾-1)
-     */
-    public static void lTrim(String key, long start, long end) {
-        redisTemplate.opsForList().trim(key, start, end);
     }
 
     /**
@@ -1165,18 +1128,7 @@ public class RedisUtils {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, SECONDS);
     }
 
-    /**
-     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(bRPopLPush)
-     *
-     * @param sourceKey      源键
-     * @param destinationKey 目的键
-     * @param timeout        阻塞时间
-     * @return 值(sourceKey不存在时为null)
-     */
-    public static Object lRightPopAndLeftPush(String sourceKey, String destinationKey,
-                                              Duration timeout) {
-        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout);
-    }
+    // TODO move
 
     // endregion
 
@@ -1616,7 +1568,7 @@ public class RedisUtils {
     // endregion
 
     /* ==================== 有序集合ZSet操作 ==================== */
-    // region 有序集合ZSet操作
+    // region TODO 有序集合ZSet操作
     // endregion
 
 }

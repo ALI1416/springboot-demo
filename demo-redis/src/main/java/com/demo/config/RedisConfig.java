@@ -8,7 +8,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * <h1>Redis配置类</h1>
@@ -25,13 +24,20 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(factory);
+        // key使用String序列化
+        RedisSerializer<String> stringRedisSerializer = RedisSerializer.string();
+        redisTemplate.setKeySerializer(stringRedisSerializer);
+        redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        // value使用FastJson序列化
         RedisSerializer<Object> fastJsonRedisSerializer = new RedisSerializer<Object>() {
             @Override
             public byte[] serialize(Object object) throws SerializationException {
                 if (object == null) {
                     return new byte[0];
                 }
-                return JSON.toJSONBytes(object, FormatConstant.DATE, null, FormatConstant.REDIS_JSON_SERIALIZE_FEATURE);
+                return JSON.toJSONBytes(object, FormatConstant.DATE, FormatConstant.REDIS_JSON_SERIALIZE_FEATURE);
             }
 
             @Override
@@ -42,13 +48,6 @@ public class RedisConfig {
                 return JSON.parseObject(bytes, Object.class, FormatConstant.REDIS_JSON_DESERIALIZE_FEATURE);
             }
         };
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(factory);
-        // key使用String序列化
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        redisTemplate.setKeySerializer(stringRedisSerializer);
-        redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        // value使用FastJson序列化
         redisTemplate.setValueSerializer(fastJsonRedisSerializer);
         redisTemplate.setHashValueSerializer(fastJsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
