@@ -249,19 +249,17 @@ public class ListController {
      * 存在值 [111,222,333,444,555]<br>
      * POST /list/lSet?key=a&index=0&value=aa<br>
      * 变成 ["aa",222,333,444,555]<br>
-     * 返回 true<br>
      * POST /list/lSet?key=a&index=2&value=aa<br>
      * 变成[111,222,"aa",444,555]<br>
-     * 返回 true<br>
      * POST /list/lSet?key=a&index=-1&value=aa<br>
      * 变成[111,222,333,444,"aa"]<br>
-     * 返回 true<br>
      * POST /list/lSet?key=a&index=5&value=aa<br>
-     * 返回 false
+     * 报错
      */
     @PostMapping("lSet")
     public Result lSet(String key, long index, String value) {
-        return Result.o(RedisUtils.lSet(key, index, value));
+        RedisUtils.lSet(key, index, value);
+        return Result.o();
     }
 
     /**

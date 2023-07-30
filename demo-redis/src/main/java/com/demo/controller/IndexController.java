@@ -2,6 +2,9 @@ package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
 import com.demo.util.RedisUtils;
+import org.springframework.data.redis.connection.SortParameters;
+import org.springframework.data.redis.core.query.SortQuery;
+import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -119,6 +122,46 @@ public class IndexController {
     @PostMapping("getExpire")
     public Result getExpire(String key) {
         return Result.o(RedisUtils.getExpire(key));
+    }
+
+    /**
+     * <h3>dump</h3>
+     * POST /dump?key=a<br>
+     * 字符串"abc" [0, 5, 34, 97, 98, 99, 34, 9, 0, 1, -3, -98, 28, 120, -86, 35, 37]
+     */
+    @PostMapping("dump")
+    public Result dump(String key) {
+        return Result.o(RedisUtils.dump(key));
+    }
+
+    /**
+     * <h3>restore</h3>
+     * 实际存在key有a<br>
+     * POST /restore?key=a&timeout=0&replace=false<br>
+     * 报错<br>
+     * POST /restore?key=a&timeout=0&replace=true<br>
+     * 内容被替换为字符串"abc"，ttl为-1<br>
+     * POST /restore?key=b&timeout=100&replace=false<br>
+     * 新建key为b，内容为字符串"abc"，ttl为100
+     */
+    @PostMapping("restore")
+    public Result restore(String key, long timeout, boolean replace) {
+        RedisUtils.restore(key, new byte[]{0, 5, 34, 97, 98, 99, 34, 9, 0, 1, -3, -98, 28, 120, -86, 35, 37}, timeout, replace);
+        return Result.o();
+    }
+
+    /**
+     * <h3>指定为持久数据(移除失效时间)</h3>
+     * key为a类型为list数据有"3","1","d","0"<br>
+     * POST /sort?key=a&asc=true<br>
+     * ["0","1","3","d"]<br>
+     * POST /sort?key=a&asc=false<br>
+     * ["d","3","1","0"]
+     */
+    @PostMapping("sort")
+    public Result sort(String key, boolean asc) {
+        SortQuery<String> query = SortQueryBuilder.sort(key).alphabetical(true).order(asc ? SortParameters.Order.ASC : SortParameters.Order.DESC).build();
+        return Result.o(RedisUtils.sort(query));
     }
 
     /**
@@ -240,13 +283,14 @@ public class IndexController {
     /**
      * <h3>重命名key</h3>
      * POST /rename?oldKey=a&newKey=b
-     * 存在a，不存在b true<br>
+     * 存在a，不存在b<br>
      * 存在ab true b被覆盖<br>
-     * 不存在a false
+     * 不存在a 报错
      */
     @PostMapping("rename")
     public Result rename(String oldKey, String newKey) {
-        return Result.o(RedisUtils.rename(oldKey, newKey));
+        RedisUtils.rename(oldKey, newKey);
+        return Result.o();
     }
 
     /**

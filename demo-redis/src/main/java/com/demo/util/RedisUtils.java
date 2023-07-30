@@ -1,12 +1,13 @@
 package com.demo.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.RedisSystemException;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.ConvertingCursor;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -35,7 +36,6 @@ public class RedisUtils {
 
     /* ==================== 通用操作 ==================== */
     // region 通用操作
-
 
     /**
      * TODO 拷贝(copy)
@@ -223,15 +223,9 @@ public class RedisUtils {
      *
      * @param oldKey 旧键
      * @param newKey 新键
-     * @return 是否成功
      */
-    public static boolean rename(String oldKey, String newKey) {
-        try {
-            redisTemplate.rename(oldKey, newKey);
-            return true;
-        } catch (Exception ignore) {
-            return false;
-        }
+    public static void rename(String oldKey, String newKey) {
+        redisTemplate.rename(oldKey, newKey);
     }
 
     /**
@@ -242,18 +236,14 @@ public class RedisUtils {
      * @return 是否成功
      */
     public static Boolean renameIfAbsent(String oldKey, String newKey) {
-        try {
-            return redisTemplate.renameIfAbsent(oldKey, newKey);
-        } catch (Exception ignore) {
-            return false;
-        }
+        return redisTemplate.renameIfAbsent(oldKey, newKey);
     }
 
     /**
-     * 指定失效时间(expire)
+     * 指定超时时间(expire)
      *
      * @param key     键
-     * @param timeout 失效时间(秒，<=0删除)
+     * @param timeout 超时时间(秒，<=0删除)
      * @return 是否成功
      */
     public static Boolean expire(String key, long timeout) {
@@ -292,20 +282,47 @@ public class RedisUtils {
         return redisTemplate.move(key, dbIndex);
     }
 
-
     /**
-     * 获取失效时间(ttl)
+     * 导出
      *
      * @param key 键
-     * @return 失效时间(秒 ， - 1不过期 ， - 2不存在)
+     * @return byte[]
      */
-    public static Long getExpire(String key) {
-        return redisTemplate.getExpire(key, SECONDS);
+    public static byte[] dump(String key) {
+        return redisTemplate.dump(key);
     }
 
-    // TODO dump
-    // TODO restore
-    // TODO sort
+    /**
+     * 导入
+     *
+     * @param key     键
+     * @param value   byte[]
+     * @param timeout 超时时间(秒，必须>=0，0不过期)
+     * @param replace key已存在也执行操作
+     */
+    public static void restore(String key, byte[] value, long timeout, boolean replace) {
+        redisTemplate.restore(key, value, timeout, SECONDS, replace);
+    }
+
+    /**
+     * 获取超时时间(ttl)
+     *
+     * @param key 键
+     * @return 超时时间(秒 ， - 1不过期 ， - 2不存在)
+     */
+    public static Long getExpire(String key) {
+        return redisTemplate.getExpire(key);
+    }
+
+    /**
+     * 排序
+     *
+     * @param query SortQuery
+     * @return 排序后的列表
+     */
+    public static List<Object> sort(SortQuery<String> query) {
+        return redisTemplate.sort(query);
+    }
 
     // endregion
 
@@ -324,12 +341,12 @@ public class RedisUtils {
     }
 
     /**
-     * 放入，并设置失效时间(setEX)
+     * 放入，并设置超时时间(setEX)
      *
      * @param <T>     指定数据类型
      * @param key     键
      * @param value   值
-     * @param timeout 失效时间(秒，必须>0)
+     * @param timeout 超时时间(秒，必须>0)
      */
     public static <T> void set(String key, T value, long timeout) {
         redisTemplate.opsForValue().set(key, value, timeout, SECONDS);
@@ -348,12 +365,12 @@ public class RedisUtils {
     }
 
     /**
-     * 如果key不存在，则放入，并设置失效时间(set)
+     * 如果key不存在，则放入，并设置超时时间(set)
      *
      * @param <T>     指定数据类型
      * @param key     键
      * @param value   值
-     * @param timeout 失效时间(秒，必须>0)
+     * @param timeout 超时时间(秒，必须>0)
      * @return 是否成功
      */
     public static <T> Boolean setIfAbsent(String key, T value, long timeout) {
@@ -373,12 +390,12 @@ public class RedisUtils {
     }
 
     /**
-     * 如果key存在，则放入，并设置失效时间(set)
+     * 如果key存在，则放入，并设置超时时间(set)
      *
      * @param <T>     指定数据类型
      * @param key     键
      * @param value   值
-     * @param timeout 失效时间(秒，必须>0)
+     * @param timeout 超时时间(秒，必须>0)
      * @return 是否成功
      */
     public static <T> Boolean setIfPresent(String key, T value, long timeout) {
@@ -390,7 +407,7 @@ public class RedisUtils {
      * (键存在则不会放入)
      *
      * @param <T> 指定数据类型
-     * @param map map
+     * @param map Map
      */
     public static <T> void setMulti(Map<String, T> map) {
         redisTemplate.opsForValue().multiSet(map);
@@ -400,7 +417,7 @@ public class RedisUtils {
      * 如果map中的key全部不存在，则map中的key和value依次放入(mSetNX)
      *
      * @param <T> 指定数据类型
-     * @param map map
+     * @param map Map
      */
     public static <T> Boolean setMultiIfAbsent(Map<String, T> map) {
         return redisTemplate.opsForValue().multiSetIfAbsent(map);
@@ -416,9 +433,36 @@ public class RedisUtils {
         return redisTemplate.opsForValue().get(key);
     }
 
-    // TODO getAndDelete
-    // TODO getAndExpire
-    // TODO getAndPersist
+    /**
+     * TODO 获取并删除(getDel)
+     *
+     * @param key 键
+     * @return 值
+     */
+    public static Object getAndDelete(String key) {
+        return redisTemplate.opsForValue().getAndDelete(key);
+    }
+
+    /**
+     * TODO 获取并设置超时时间(getEx)
+     *
+     * @param key     键
+     * @param timeout 超时时间(秒，必须>0)
+     * @return 值
+     */
+    public static Object getAndExpire(String key, long timeout) {
+        return redisTemplate.opsForValue().getAndExpire(key, timeout, SECONDS);
+    }
+
+    /**
+     * TODO 获取并设置为持久数据(getEx)
+     *
+     * @param key 键
+     * @return 值
+     */
+    public static Object getAndPersist(String key) {
+        return redisTemplate.opsForValue().getAndPersist(key);
+    }
 
     /**
      * 获取并放入(getSet)
@@ -475,7 +519,18 @@ public class RedisUtils {
         return redisTemplate.opsForValue().increment(key, delta);
     }
 
-    // TODO increment
+    /**
+     * 递增，值必须是数字(redis值中不能带字母)类型(incrByFloat)<br>
+     * (键不存在自动创建并赋值为0后再递增)<br>
+     * 注意：慎用
+     *
+     * @param key   键
+     * @param delta 增量
+     * @return 递增后的值
+     */
+    public static Double increment(String key, double delta) {
+        return redisTemplate.opsForValue().increment(key, delta);
+    }
 
     /**
      * 递减1，值必须是整数类型(decr)<br>
@@ -500,13 +555,105 @@ public class RedisUtils {
         return redisTemplate.opsForValue().decrement(key, delta);
     }
 
-    // TODO append
-    // TODO get
-    // TODO set
-    // TODO size
-    // TODO setBit
-    // TODO getBit
-    // TODO bitField
+    /**
+     * 递减，值必须是数字(redis值中不能带字母)类型(incrByFloat)<br>
+     * (键不存在自动创建并赋值为0后再递减)<br>
+     * 注意：慎用
+     *
+     * @param key   键
+     * @param delta 减量
+     * @return 递减后的值
+     */
+    public static Double decrement(String key, double delta) {
+        return redisTemplate.opsForValue().increment(key, -delta);
+    }
+
+    /**
+     * 追加字符串(append)<br>
+     * (键不存在自动创建并赋值为空字符串后再追加)<br>
+     * 注意：慎用
+     *
+     * @param key   键
+     * @param value 字符串
+     * @return 追加后的长度
+     */
+    public static Integer append(String key, String value) {
+        return redisTemplate.opsForValue().append(key, value);
+    }
+
+    /**
+     * 获取字符串(getRange)<br>
+     * 注意：慎用
+     *
+     * @param key   键
+     * @param start 起始下标
+     * @param end   结束下标
+     * @return 字符串
+     */
+    public static String get(String key, long start, long end) {
+        return redisTemplate.opsForValue().get(key, start, end);
+    }
+
+    /**
+     * 设置字符串(setRange)<br>
+     * 注意：慎用
+     *
+     * @param <T>    指定数据类型
+     * @param key    键
+     * @param value  值
+     * @param offset 下标
+     */
+    public static <T> void setValue(String key, T value, long offset) {
+        redisTemplate.opsForValue().set(key, value, offset);
+    }
+
+    /**
+     * 获取字符串长度(strLen)<br>
+     * 注意：慎用
+     *
+     * @param key 键
+     * @return 长度
+     */
+    public static Long size(String key) {
+        return redisTemplate.opsForValue().size(key);
+    }
+
+    /**
+     * 设置bit(setBit)<br>
+     * 注意：慎用
+     *
+     * @param key    键
+     * @param offset 下标
+     * @param value  值
+     * @return 是否成功
+     */
+    public static Boolean setBit(String key, long offset, boolean value) {
+        return redisTemplate.opsForValue().setBit(key, offset, value);
+    }
+
+    /**
+     * 获取bit(getBit)<br>
+     * 注意：慎用
+     *
+     * @param key    键
+     * @param offset 下标
+     * @return bit
+     */
+    public static Boolean getBit(String key, long offset) {
+        return redisTemplate.opsForValue().getBit(key, offset);
+    }
+
+    /**
+     * bitField<br>
+     * 注意：慎用
+     *
+     * @param key         键
+     * @param subCommands BitFieldSubCommands
+     * @return List<Long>
+     */
+    public static List<Long> bitField(String key, BitFieldSubCommands subCommands) {
+        return redisTemplate.opsForValue().bitField(key, subCommands);
+    }
 
     // endregion
 
@@ -1045,15 +1192,9 @@ public class RedisUtils {
      * @param key   键
      * @param index 下标
      * @param value 值
-     * @return 是否成功
      */
-    public static <T> boolean lSet(String key, long index, T value) {
-        try {
-            redisTemplate.opsForList().set(key, index, value);
-            return true;
-        } catch (RedisSystemException ignore) {
-            return false;
-        }
+    public static <T> void lSet(String key, long index, T value) {
+        redisTemplate.opsForList().set(key, index, value);
     }
 
     /**
@@ -1565,10 +1706,6 @@ public class RedisUtils {
         return values;
     }
 
-    // endregion
-
-    /* ==================== 有序集合ZSet操作 ==================== */
-    // region TODO 有序集合ZSet操作
     // endregion
 
 }

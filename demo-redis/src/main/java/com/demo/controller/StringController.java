@@ -3,6 +3,7 @@ package com.demo.controller;
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import com.demo.util.RedisUtils;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -293,6 +294,33 @@ public class StringController {
     }
 
     /**
+     * <h3>获取并删除</h3>
+     * POST /string/getAndDelete?key=a<br>
+     */
+    @PostMapping("getAndDelete")
+    public Result getAndDelete(String key) {
+        return Result.o(RedisUtils.getAndDelete(key));
+    }
+
+    /**
+     * <h3>获取并设置超时时间</h3>
+     * POST /string/getAndExpire?key=a&timeout=100<br>
+     */
+    @PostMapping("getAndExpire")
+    public Result getAndExpire(String key, long timeout) {
+        return Result.o(RedisUtils.getAndExpire(key, timeout));
+    }
+
+    /**
+     * <h3>获取并设置为持久数据</h3>
+     * POST /string/getAndPersist?key=a<br>
+     */
+    @PostMapping("getAndPersist")
+    public Result getAndPersist(String key) {
+        return Result.o(RedisUtils.getAndPersist(key));
+    }
+
+    /**
      * <h3>获取并放入</h3>
      * POST /string/getAndSet?key=a&value=abc<br>
      * 存在a a的值<br>
@@ -347,6 +375,17 @@ public class StringController {
     }
 
     /**
+     * <h3>数字型递增(键不存在自动创建并赋值为0后再递增)</h3>
+     * POST /string/incrementD?key=a&delta=1.2<br>
+     * 值为1 返回2.2，值改变为2.2<br>
+     * 不存在键 返回1.2，值改变为1.2
+     */
+    @PostMapping("incrementD")
+    public Result incrementD(String key, double delta) {
+        return Result.o(RedisUtils.increment(key, delta));
+    }
+
+    /**
      * <h3>整数型递减1(键不存在自动创建并赋值为0后再递减)</h3>
      * POST /string/decrement1?key=a<br>
      * 值为123 返回122，值改变为122<br>
@@ -366,6 +405,97 @@ public class StringController {
     @PostMapping("decrement")
     public Result decrement(String key, long delta) {
         return Result.o(RedisUtils.decrement(key, delta));
+    }
+
+    /**
+     * <h3>整数型递减(键不存在自动创建并赋值为0后再递减)</h3>
+     * POST /string/decrementD?key=a&delta=1.2<br>
+     * 值为2 返回0.8，值改变为0.8<br>
+     * 不存在键 返回-1.2，值改变为-1.2
+     */
+    @PostMapping("decrementD")
+    public Result decrementD(String key, double delta) {
+        return Result.o(RedisUtils.decrement(key, delta));
+    }
+
+    /**
+     * <h3>追加字符串</h3>
+     * POST /string/append?key=a&value=2<br>
+     * 值为123 返回5，值改变为12345<br>
+     * 不存在键 返回2，值改变为45
+     */
+    @PostMapping("append")
+    public Result append(String key, String value) {
+        return Result.o(RedisUtils.append(key, value));
+    }
+
+    /**
+     * <h3>获取字符串</h3>
+     * POST /string/get2?key=a&start=1&end=5<br>
+     * 值为12345 返回2345<br>
+     * 不存在键 返回空字符串
+     */
+    @PostMapping("get2")
+    public Result get2(String key, long start, long end) {
+        return Result.o(RedisUtils.get(key, start, end));
+    }
+
+    /**
+     * <h3>设置字符串</h3>
+     * POST /string/setValue?key=a&offset=1&value=678<br>
+     * 值为12345 值改变为16785<br>
+     * 不存在键 值改变为(空格)678
+     */
+    @PostMapping("setValue")
+    public Result setValue(String key, Integer value, long offset) {
+        RedisUtils.setValue(key, value, offset);
+        return Result.o();
+    }
+
+    /**
+     * <h3>获取字符串长度</h3>
+     * POST /string/size?key=a<br>
+     * 值为12345 返回5<br>
+     * 不存在键 返回0
+     */
+    @PostMapping("size")
+    public Result size(String key) {
+        return Result.o(RedisUtils.size(key));
+    }
+
+    /**
+     * <h3>设置bit</h3>
+     * POST /string/setBit?key=a&offset=6&value=true<br>
+     * 值为1(0b00110001) 返回false 值改变为3(0b00110011)<br>
+     * 不存在键 返回false 值改变为(0b00000010)
+     */
+    @PostMapping("setBit")
+    public Result setBit(String key, long offset, boolean value) {
+        return Result.o(RedisUtils.setBit(key, offset, value));
+    }
+
+    /**
+     * <h3>获取bit</h3>
+     * POST /string/getBit?key=a&offset=7<br>
+     * 值为1(0b00110001) 返回true<br>
+     * 不存在键 返回false
+     */
+    @PostMapping("getBit")
+    public Result getBit(String key, long offset) {
+        return Result.o(RedisUtils.getBit(key, offset));
+    }
+
+    /**
+     * <h3>bitField</h3>
+     * POST /string/bitField?key=a&offset=0<br>
+     * 值为12345 返回[49]<br>
+     * 不存在键 返回[0]
+     */
+    @PostMapping("bitField")
+    public Result bitField(String key, long offset) {
+        BitFieldSubCommands.BitFieldGet bitFieldSubCommand = BitFieldSubCommands.BitFieldGet.create(BitFieldSubCommands.BitFieldType.INT_8, BitFieldSubCommands.Offset.offset(offset));
+        BitFieldSubCommands subCommands = BitFieldSubCommands.create(bitFieldSubCommand);
+        return Result.o(RedisUtils.bitField(key, subCommands));
     }
 
 }

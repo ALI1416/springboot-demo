@@ -26,6 +26,17 @@ public class HashController {
 
     /**
      * <h3>删除map中指定多个项</h3>
+     * POST /hash/hDelete?key=a&item=a1<br>
+     * 存在项a1/a2/a3 返回1<br>
+     * 存在项a/b/c 返回0
+     */
+    @PostMapping("hDelete")
+    public Result hDelete(String key, String item) {
+        return Result.o(RedisUtils.hDelete(key, item));
+    }
+
+    /**
+     * <h3>删除map中指定多个项</h3>
      * POST /hash/hDeleteArray?key=a&items=a1&items=a2&items=a4<br>
      * 存在项a1/a2/a3 返回2<br>
      * 存在项a/b/c 返回0
