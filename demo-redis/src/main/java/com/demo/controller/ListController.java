@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
 import com.demo.util.RedisUtils;
+import org.springframework.data.redis.connection.RedisListCommands;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -326,9 +327,12 @@ public class ListController {
     }
 
     /**
-     * <h3>指定值第一次出现的下标(Redis版本需要6.0.6及以上)</h3>
+     * <h3>指定值第一次出现的下标</h3>
+     * 存在值 ["a","b","a","c",]<br>
      * POST /list/lIndexOf?key=a&value=a<br>
-     * 无法测试
+     * 返回 0<br>
+     * POST /list/lIndexOf?key=a&value=d<br>
+     * 返回 null<br>
      */
     @PostMapping("lIndexOf")
     public Result lIndexOf(String key, String value) {
@@ -336,9 +340,12 @@ public class ListController {
     }
 
     /**
-     * <h3>指定值最后一次出现的下标(Redis版本需要6.0.6及以上)</h3>
-     * POST /list/lLastIndexOf?key=a&value=a<br>
-     * 无法测试
+     * <h3>指定值最后一次出现的下标</h3>
+     * 存在值 ["a","b","a","c",]<br>
+     * POST /list/lIndexOf?key=a&value=a<br>
+     * 返回 2<br>
+     * POST /list/lIndexOf?key=a&value=d<br>
+     * 返回 null<br>
      */
     @PostMapping("lLastIndexOf")
     public Result lLastIndexOf(String key, String value) {
@@ -408,11 +415,35 @@ public class ListController {
     /**
      * <h3>从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(秒)</h3>
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
-     * POST /list/lRightPopAndLeftPushSecond?sourceKey=a&destinationKey=b&timeout=20<br>
+     * POST /list/lRightPopAndLeftPushSecond?sourceKey=a&destinationKey=b&timeout=5<br>
      */
     @PostMapping("lRightPopAndLeftPushSecond")
     public Result lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
         return Result.o(RedisUtils.lRightPopAndLeftPush(sourceKey, destinationKey, timeout));
+    }
+
+    /**
+     * <h3>从sourceKey的右侧删除，添加到destinationKey的右侧，并返回这个值</h3>
+     * POST /list/lMove?sourceKey=a&destinationKey=b<br>
+     * 存在键 a 值 [111,222,333]<br>
+     * 存在键 b 值 [444,555,666]<br>
+     * 变成键 a 值 [111,222]<br>
+     * 变成键 b 值 [444,555,666,333]<br>
+     * 返回 333
+     */
+    @PostMapping("lMove")
+    public Result lMove(String sourceKey, String destinationKey) {
+        return Result.o(RedisUtils.lMove(sourceKey, RedisListCommands.Direction.RIGHT, destinationKey, RedisListCommands.Direction.RIGHT));
+    }
+
+    /**
+     * <h3>从sourceKey的右侧删除，添加到destinationKey的右侧，并返回这个值，并阻塞指定时间(秒)</h3>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     * POST /list/lMove2?sourceKey=a&destinationKey=b&timeout=5<br>
+     */
+    @PostMapping("lMove2")
+    public Result lMove2(String sourceKey, String destinationKey, long timeout) {
+        return Result.o(RedisUtils.lMove(sourceKey, RedisListCommands.Direction.RIGHT, destinationKey, RedisListCommands.Direction.RIGHT, timeout));
     }
 
 }

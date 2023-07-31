@@ -3,6 +3,7 @@ package com.demo.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.connection.RedisListCommands;
 import org.springframework.data.redis.core.ConvertingCursor;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,8 +39,11 @@ public class RedisUtils {
     // region 通用操作
 
     /**
-     * TODO 拷贝(copy)
+     * 拷贝(copy)
      *
+     * @param sourceKey 源键
+     * @param targetKey 目标键(不存在将创建)
+     * @param replace   targetKey已存在也执行操作
      * @return 是否成功
      */
     public static Boolean copy(String sourceKey, String targetKey, boolean replace) {
@@ -59,8 +63,8 @@ public class RedisUtils {
     /**
      * 集合中存在的key的数量(exists)
      *
-     * @param keys 键
-     * @return 存在的数量(key重复会计算多次)
+     * @param keys 键(重复会计算多次)
+     * @return 存在的数量
      */
     public static Long existsCount(Collection<String> keys) {
         return redisTemplate.countExistingKeys(keys);
@@ -69,8 +73,8 @@ public class RedisUtils {
     /**
      * 集合中存在的key的数量(exists)
      *
-     * @param keys 键
-     * @return 存在的数量(key重复会计算多次)
+     * @param keys 键(重复会计算多次)
+     * @return 存在的数量
      */
     public static Long existsCount(String... keys) {
         return redisTemplate.countExistingKeys(Arrays.asList(keys));
@@ -211,18 +215,17 @@ public class RedisUtils {
     /**
      * 获取一个随机的key(randomKey)
      *
-     * @return 键(不存在任何键返回null)
+     * @return 键(不存在任何key返回null)
      */
     public static String randomKey() {
         return redisTemplate.randomKey();
     }
 
     /**
-     * 重命名key(rename)<br>
-     * (新键已存在会被覆盖)
+     * 重命名key(rename)
      *
-     * @param oldKey 旧键
-     * @param newKey 新键
+     * @param oldKey 旧键(不存在报错)
+     * @param newKey 新键(已存在会被覆盖)
      */
     public static void rename(String oldKey, String newKey) {
         redisTemplate.rename(oldKey, newKey);
@@ -283,7 +286,7 @@ public class RedisUtils {
     }
 
     /**
-     * 导出
+     * 导出(dump)
      *
      * @param key 键
      * @return byte[]
@@ -293,9 +296,9 @@ public class RedisUtils {
     }
 
     /**
-     * 导入
+     * 导入(restore)
      *
-     * @param key     键
+     * @param key     键(已存在并且replace为false时报错)
      * @param value   byte[]
      * @param timeout 超时时间(秒，必须>=0，0不过期)
      * @param replace key已存在也执行操作
@@ -315,7 +318,7 @@ public class RedisUtils {
     }
 
     /**
-     * 排序
+     * 排序(sort)
      *
      * @param query SortQuery
      * @return 排序后的列表
@@ -333,7 +336,7 @@ public class RedisUtils {
      * 放入(set)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(已存在会被覆盖)
      * @param value 值
      */
     public static <T> void set(String key, T value) {
@@ -344,7 +347,7 @@ public class RedisUtils {
      * 放入，并设置超时时间(setEX)
      *
      * @param <T>     指定数据类型
-     * @param key     键
+     * @param key     键(已存在会被覆盖)
      * @param value   值
      * @param timeout 超时时间(秒，必须>0)
      */
@@ -403,11 +406,10 @@ public class RedisUtils {
     }
 
     /**
-     * map中的key和value依次放入(mSet)<br>
-     * (键存在则不会放入)
+     * map中的key和value依次放入(mSet)
      *
      * @param <T> 指定数据类型
-     * @param map Map
+     * @param map Map(key已存在会被覆盖)
      */
     public static <T> void setMulti(Map<String, T> map) {
         redisTemplate.opsForValue().multiSet(map);
@@ -426,7 +428,7 @@ public class RedisUtils {
     /**
      * 获取(get)
      *
-     * @param key 键
+     * @param key 键(不存在返回null)
      * @return 值
      */
     public static Object get(String key) {
@@ -434,9 +436,9 @@ public class RedisUtils {
     }
 
     /**
-     * TODO 获取并删除(getDel)
+     * 获取并删除(getDel)
      *
-     * @param key 键
+     * @param key 键(不存在返回null)
      * @return 值
      */
     public static Object getAndDelete(String key) {
@@ -444,9 +446,9 @@ public class RedisUtils {
     }
 
     /**
-     * TODO 获取并设置超时时间(getEx)
+     * 获取并设置超时时间(getEx)
      *
-     * @param key     键
+     * @param key     键(不存在返回null)
      * @param timeout 超时时间(秒，必须>0)
      * @return 值
      */
@@ -455,9 +457,9 @@ public class RedisUtils {
     }
 
     /**
-     * TODO 获取并设置为持久数据(getEx)
+     * 获取并设置为持久数据(getEx)
      *
-     * @param key 键
+     * @param key 键(不存在返回null)
      * @return 值
      */
     public static Object getAndPersist(String key) {
@@ -468,7 +470,7 @@ public class RedisUtils {
      * 获取并放入(getSet)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在返回null)
      * @param value 值
      * @return 值
      */
@@ -479,7 +481,7 @@ public class RedisUtils {
     /**
      * 获取多个(mGet)
      *
-     * @param keys 多个键
+     * @param keys 多个键(不存在返回null)
      * @return 多个值
      */
     public static List<Object> getMulti(Collection<String> keys) {
@@ -489,7 +491,7 @@ public class RedisUtils {
     /**
      * 获取多个(mGet)
      *
-     * @param keys 多个键
+     * @param keys 多个键(不存在返回null)
      * @return 多个值
      */
     public static List<Object> getMulti(String... keys) {
@@ -497,10 +499,9 @@ public class RedisUtils {
     }
 
     /**
-     * 递增1，值必须是整数类型(incr)<br>
-     * (键不存在自动创建并赋值为0后再递增)
+     * 递增1，值必须是整数类型(incr)
      *
-     * @param key 键
+     * @param key 键(不存在自动创建并赋值为0后再执行操作)
      * @return 递增后的值
      */
     public static Long increment(String key) {
@@ -508,10 +509,9 @@ public class RedisUtils {
     }
 
     /**
-     * 递增，值必须是整数类型(incrBy)<br>
-     * (键不存在自动创建并赋值为0后再递增)
+     * 递增，值必须是整数类型(incrBy)
      *
-     * @param key   键
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
      * @param delta 增量
      * @return 递增后的值
      */
@@ -521,10 +521,9 @@ public class RedisUtils {
 
     /**
      * 递增，值必须是数字(redis值中不能带字母)类型(incrByFloat)<br>
-     * (键不存在自动创建并赋值为0后再递增)<br>
      * 注意：慎用
      *
-     * @param key   键
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
      * @param delta 增量
      * @return 递增后的值
      */
@@ -533,10 +532,9 @@ public class RedisUtils {
     }
 
     /**
-     * 递减1，值必须是整数类型(decr)<br>
-     * (键不存在自动创建并赋值为0后再递减)
+     * 递减1，值必须是整数类型(decr)
      *
-     * @param key 键
+     * @param key 键(不存在自动创建并赋值为0后再执行操作)
      * @return 递减后的值
      */
     public static Long decrement(String key) {
@@ -544,10 +542,9 @@ public class RedisUtils {
     }
 
     /**
-     * 递减，值必须是整数类型(decrBy)<br>
-     * (键不存在自动创建并赋值为0后再递减)
+     * 递减，值必须是整数类型(decrBy)
      *
-     * @param key   键
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
      * @param delta 减量
      * @return 递减后的值
      */
@@ -557,10 +554,9 @@ public class RedisUtils {
 
     /**
      * 递减，值必须是数字(redis值中不能带字母)类型(incrByFloat)<br>
-     * (键不存在自动创建并赋值为0后再递减)<br>
      * 注意：慎用
      *
-     * @param key   键
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
      * @param delta 减量
      * @return 递减后的值
      */
@@ -570,10 +566,9 @@ public class RedisUtils {
 
     /**
      * 追加字符串(append)<br>
-     * (键不存在自动创建并赋值为空字符串后再追加)<br>
      * 注意：慎用
      *
-     * @param key   键
+     * @param key   键(键不存在自动创建并赋值为空字符串后再执行操作)
      * @param value 字符串
      * @return 追加后的长度
      */
@@ -585,7 +580,7 @@ public class RedisUtils {
      * 获取字符串(getRange)<br>
      * 注意：慎用
      *
-     * @param key   键
+     * @param key   键(不存在返回空字符串)
      * @param start 起始下标
      * @param end   结束下标
      * @return 字符串
@@ -599,7 +594,7 @@ public class RedisUtils {
      * 注意：慎用
      *
      * @param <T>    指定数据类型
-     * @param key    键
+     * @param key    键(不存在将创建)
      * @param value  值
      * @param offset 下标
      */
@@ -611,7 +606,7 @@ public class RedisUtils {
      * 获取字符串长度(strLen)<br>
      * 注意：慎用
      *
-     * @param key 键
+     * @param key 键(不存在返回0)
      * @return 长度
      */
     public static Long size(String key) {
@@ -622,7 +617,7 @@ public class RedisUtils {
      * 设置bit(setBit)<br>
      * 注意：慎用
      *
-     * @param key    键
+     * @param key    键(不存在将创建)
      * @param offset 下标
      * @param value  值
      * @return 是否成功
@@ -635,7 +630,7 @@ public class RedisUtils {
      * 获取bit(getBit)<br>
      * 注意：慎用
      *
-     * @param key    键
+     * @param key    键(不存在返回false)
      * @param offset 下标
      * @return bit
      */
@@ -644,12 +639,12 @@ public class RedisUtils {
     }
 
     /**
-     * bitField<br>
+     * bitField(bitField)<br>
      * 注意：慎用
      *
      * @param key         键
      * @param subCommands BitFieldSubCommands
-     * @return List<Long>
+     * @return List
      */
     public static List<Long> bitField(String key, BitFieldSubCommands subCommands) {
         return redisTemplate.opsForValue().bitField(key, subCommands);
@@ -710,9 +705,9 @@ public class RedisUtils {
     /**
      * 获取map中指定项的值(hGet)
      *
-     * @param key  键
-     * @param item 项
-     * @return 值(不存在key或不存在item时为null)
+     * @param key  键(不存在返回null)
+     * @param item 项(不存在返回null)
+     * @return 值
      */
     public static Object hGet(String key, String item) {
         return redisTemplate.opsForHash().get(key, item);
@@ -721,8 +716,8 @@ public class RedisUtils {
     /**
      * 获取map中指定多个项的值(hMGet)
      *
-     * @param key   键
-     * @param items 多个项
+     * @param key   键(不存在返回null)
+     * @param items 多个项(不存在返回null)
      * @return 值
      */
     public static List<Object> hGetMulti(String key, Collection<String> items) {
@@ -732,8 +727,8 @@ public class RedisUtils {
     /**
      * 获取map中指定多个项的值(hMGet)
      *
-     * @param key   键
-     * @param items 多个项
+     * @param key   键(不存在返回null)
+     * @param items 多个项(不存在返回null)
      * @return 值
      */
     public static List<Object> hGetMulti(String key, String... items) {
@@ -741,11 +736,10 @@ public class RedisUtils {
     }
 
     /**
-     * map指定项的值递增1，值必须是整数类型(hIncrBy)<br>
-     * (键或项不存在自动创建并赋值为0后再递增)
+     * map指定项的值递增1，值必须是整数类型(hIncrBy)
      *
-     * @param key  键
-     * @param item 项
+     * @param key  键(不存在自动创建并赋值为0后再执行操作)
+     * @param item 项(不存在自动创建并赋值为0后再执行操作)
      * @return 递增后的值
      */
     public static Long hIncrement(String key, String item) {
@@ -753,11 +747,10 @@ public class RedisUtils {
     }
 
     /**
-     * map指定项的值递增，值必须是整数类型(hIncrBy)<br>
-     * (键或项不存在自动创建并赋值为0后再递增)
+     * map指定项的值递增，值必须是整数类型(hIncrBy)
      *
-     * @param key   键
-     * @param item  项
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
+     * @param item  项(不存在自动创建并赋值为0后再执行操作)
      * @param delta 增量
      * @return 递增后的值
      */
@@ -766,11 +759,23 @@ public class RedisUtils {
     }
 
     /**
-     * map指定项的值递减1，值必须是整数类型(hIncrBy)<br>
-     * (键或项不存在自动创建并赋值为0后再递减)
+     * map指定项的值递增，值必须是数字(redis值中不能带字母)类型(hIncrByFloat)<br>
+     * 注意：慎用
      *
-     * @param key  键
-     * @param item 项
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
+     * @param item  项(不存在自动创建并赋值为0后再执行操作)
+     * @param delta 增量
+     * @return 递增后的值
+     */
+    public static Double hIncrement(String key, String item, double delta) {
+        return redisTemplate.opsForHash().increment(key, item, delta);
+    }
+
+    /**
+     * map指定项的值递减1，值必须是整数类型(hIncrBy)
+     *
+     * @param key  键(不存在自动创建并赋值为0后再执行操作)
+     * @param item 项(不存在自动创建并赋值为0后再执行操作)
      * @return 递减后的值
      */
     public static Long hDecrement(String key, String item) {
@@ -778,11 +783,10 @@ public class RedisUtils {
     }
 
     /**
-     * map指定项的值递减，值必须是整数类型(hIncrBy)<br>
-     * (键或项不存在自动创建并赋值为0后再递减)
+     * map指定项的值递减，值必须是整数类型(hIncrBy)
      *
-     * @param key   键
-     * @param item  项
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
+     * @param item  项(不存在自动创建并赋值为0后再执行操作)
      * @param delta 减量
      * @return 递减后的值
      */
@@ -790,52 +794,107 @@ public class RedisUtils {
         return redisTemplate.opsForHash().increment(key, item, -delta);
     }
 
-    // TODO increment
-    // TODO randomKey
-    // TODO randomEntry
-    // TODO randomEntries
+    /**
+     * map指定项的值递减，值必须是数字(redis值中不能带字母)类型(hIncrByFloat)<br>
+     * 注意：慎用
+     *
+     * @param key   键(不存在自动创建并赋值为0后再执行操作)
+     * @param item  项(不存在自动创建并赋值为0后再执行操作)
+     * @param delta 减量
+     * @return 递减后的值
+     */
+    public static Double hDecrement(String key, String item, double delta) {
+        return redisTemplate.opsForHash().increment(key, item, -delta);
+    }
+
+    /**
+     * 获取一个随机的项(hRandField)
+     *
+     * @param key 键(不存在返回null)
+     * @return 项
+     */
+    public static String hRandomItem(String key) {
+        return (String) redisTemplate.opsForHash().randomKey(key);
+    }
+
+    /**
+     * 获取一个随机的项和值(hRandField)
+     *
+     * @param key 键(不存在返回null)
+     * @return 项
+     */
+    public static Map.Entry<Object, Object> hRandomMap(String key) {
+        return redisTemplate.opsForHash().randomEntry(key);
+    }
+
+    /**
+     * 获取多个随机的项(hRandField)
+     *
+     * @param key 键(不存在返回[])
+     * @return 项
+     */
+    public static List<Object> hRandomItem(String key, long count) {
+        return redisTemplate.opsForHash().randomKeys(key, count);
+    }
+
+    /**
+     * 获取多个随机的项和值(hRandField)
+     *
+     * @param key 键(不存在报错)
+     * @return 项
+     */
+    public static Map<Object, Object> hRandomMap(String key, long count) {
+        return redisTemplate.opsForHash().randomEntries(key, count);
+    }
 
     /**
      * 获取map中所有的项(hKeys)
      *
-     * @param key 键
+     * @param key 键(不存在返回[])
      * @return 项
      */
     public static Set<Object> hGetAllItem(String key) {
         return redisTemplate.opsForHash().keys(key);
     }
 
-    // TODO lengthOfValue
+    /**
+     * 获取map中指定项的长度(hStrLen)
+     *
+     * @param key  键(不存在返回0)
+     * @param item 项(不存在返回0)
+     * @return 长度
+     */
+    public static Long hLengthOfValue(String key, String item) {
+        return redisTemplate.opsForHash().lengthOfValue(key, item);
+    }
 
     /**
      * 获取项的个数(hLen)
      *
-     * @param key 键
-     * @return 项的个数(键不存在返回0)
+     * @param key 键(不存在返回0)
+     * @return 项的个数
      */
     public static Long hSize(String key) {
         return redisTemplate.opsForHash().size(key);
     }
 
     /**
-     * 设置map的多个键值(hMSet)<br>
-     * (项已存在会被覆盖)
+     * 设置map的多个键值(hMSet)
      *
      * @param <T> 指定数据类型
      * @param key 键
-     * @param map 多个键值
+     * @param map 多个键值(已存在会被覆盖)
      */
     public static <T> void hSetMulti(String key, Map<String, T> map) {
         redisTemplate.opsForHash().putAll(key, map);
     }
 
     /**
-     * 设置map的1个键值(hSet)<br>
-     * (项已存在会被覆盖)
+     * 设置map的1个键值(hSet)
      *
      * @param <T>   指定数据类型
      * @param key   键
-     * @param item  项
+     * @param item  项(已存在会被覆盖)
      * @param value 值
      */
     public static <T> void hSet(String key, String item, T value) {
@@ -858,7 +917,7 @@ public class RedisUtils {
     /**
      * 获取map中所有的值(hVals)
      *
-     * @param key 键
+     * @param key 键(不存在返回[])
      * @return 值
      */
     public static List<Object> hGetAllValue(String key) {
@@ -868,7 +927,7 @@ public class RedisUtils {
     /**
      * 获取map中所有的项和值(hGetAll)
      *
-     * @param key 键
+     * @param key 键(不存在返回{})
      * @return 项和值
      */
     public static Map<Object, Object> hGetAllItemAndValue(String key) {
@@ -925,10 +984,10 @@ public class RedisUtils {
     /**
      * 获取(lRange)
      *
-     * @param key   键
-     * @param start 开始(开头0)
-     * @param end   结束(末尾-1)
-     * @return 值(键或项不存在为[])
+     * @param key   键(不存在返回[])
+     * @param start 起始下标
+     * @param end   结束下标
+     * @return 值
      */
     public static List<Object> lGetMulti(String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
@@ -937,19 +996,19 @@ public class RedisUtils {
     /**
      * 获取全部(lRange)
      *
-     * @param key 键
-     * @return 值(键或项不存在为[])
+     * @param key 键(不存在返回[])
+     * @return 值
      */
     public static List<Object> lGetAll(String key) {
         return redisTemplate.opsForList().range(key, 0, -1);
     }
 
     /**
-     * 修剪(只要start和end之间的值)(lTrim)
+     * 修剪(只保留下标为[start,end]的值)(lTrim)
      *
      * @param key   键
-     * @param start 开始(开头0)
-     * @param end   结束(末尾-1)
+     * @param start 起始下标
+     * @param end   结束下标
      */
     public static void lTrim(String key, long start, long end) {
         redisTemplate.opsForList().trim(key, start, end);
@@ -958,7 +1017,7 @@ public class RedisUtils {
     /**
      * 获取列表的长度(lLen)
      *
-     * @param key 键
+     * @param key 键(不存在返回0)
      * @return 列表长度
      */
     public static Long lSize(String key) {
@@ -968,9 +1027,9 @@ public class RedisUtils {
     /**
      * 获取指定下标的值(lIndex)
      *
-     * @param key   键
-     * @param index 下标
-     * @return 值(键不存在或下标不存在为null)
+     * @param key   键(不存在返回null)
+     * @param index 下标(不存在返回null)
+     * @return 值
      */
     public static Object lGet(String key, long index) {
         return redisTemplate.opsForList().index(key, index);
@@ -979,8 +1038,8 @@ public class RedisUtils {
     /**
      * 获取第一个(lIndex)
      *
-     * @param key 键
-     * @return 值(键不存在或下标不存在为null)
+     * @param key 键(不存在返回null)
+     * @return 值
      */
     public static Object lGetFirst(String key) {
         return redisTemplate.opsForList().index(key, 0);
@@ -989,22 +1048,21 @@ public class RedisUtils {
     /**
      * 获取最后一个(lIndex)
      *
-     * @param key 键
-     * @return 值(键不存在或下标不存在为null)
+     * @param key 键(不存在返回null)
+     * @return 值
      */
     public static Object lGetLast(String key) {
         return redisTemplate.opsForList().index(key, -1);
     }
 
-
     /**
      * 添加到指定值的左侧(lInsert before)
      *
      * @param <T>   指定数据类型
-     * @param key   键
-     * @param pivot 指定值
+     * @param key   键(不存在返回0)
+     * @param pivot 指定值(不存在返回 - 1)
      * @param value 值
-     * @return 列表长度(不存在返回 - 1)
+     * @return 列表长度
      */
     public static <T> Long lInsertLeft(String key, T pivot, T value) {
         return redisTemplate.opsForList().leftPush(key, pivot, value);
@@ -1014,10 +1072,10 @@ public class RedisUtils {
      * 添加到指定值的右侧(lInsert after)
      *
      * @param <T>   指定数据类型
-     * @param key   键
-     * @param pivot 指定值
+     * @param key   键(不存在返回0)
+     * @param pivot 指定值(不存在返回 - 1)
      * @param value 值
-     * @return 列表长度(不存在返回 - 1)
+     * @return 列表长度
      */
     public static <T> Long lInsertRight(String key, T pivot, T value) {
         return redisTemplate.opsForList().rightPush(key, pivot, value);
@@ -1027,7 +1085,7 @@ public class RedisUtils {
      * 添加到左侧(lPush)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在将新建)
      * @param value 值
      * @return 列表长度
      */
@@ -1038,7 +1096,7 @@ public class RedisUtils {
     /**
      * 添加到左侧(多个值依次添加a/b/c变成c/b/a)(lPush)
      *
-     * @param key   键
+     * @param key   键(不存在将新建)
      * @param value 多个值
      * @return 列表长度
      */
@@ -1050,7 +1108,7 @@ public class RedisUtils {
      * 添加到左侧(多个值依次添加a/b/c变成c/b/a)(lPush)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在将新建)
      * @param value 多个值
      * @return 列表长度
      */
@@ -1059,12 +1117,12 @@ public class RedisUtils {
     }
 
     /**
-     * 当列表存在时，添加到左侧(lPushX)
+     * 当key存在时，添加到左侧(lPushX)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在返回0)
      * @param value 值
-     * @return 列表长度(不存在返回0)
+     * @return 列表长度
      */
     public static <T> Long lLeftPushIfPresent(String key, T value) {
         return redisTemplate.opsForList().leftPushIfPresent(key, value);
@@ -1074,7 +1132,7 @@ public class RedisUtils {
      * 添加到右侧(rPush)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在将新建)
      * @param value 值
      * @return 列表长度
      */
@@ -1085,7 +1143,7 @@ public class RedisUtils {
     /**
      * 添加到右侧(多个值依次添加a/b/c还是a/b/c)(rPush)
      *
-     * @param key   键
+     * @param key   键(不存在将新建)
      * @param value 多个值
      * @return 列表长度
      */
@@ -1097,7 +1155,7 @@ public class RedisUtils {
      * 添加到右侧(多个值依次添加a/b/c还是a/b/c)(rPush)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在将新建)
      * @param value 多个值
      * @return 列表长度
      */
@@ -1109,7 +1167,7 @@ public class RedisUtils {
      * 当列表存在时，添加到右侧(rPushX)
      *
      * @param <T>   指定数据类型
-     * @param key   键
+     * @param key   键(不存在返回0)
      * @param value 值
      * @return 列表长度
      */
@@ -1120,8 +1178,8 @@ public class RedisUtils {
     /**
      * 删除并返回左侧的值(lPop)
      *
-     * @param key 键
-     * @return 值(不存在键时为null)
+     * @param key 键(不存在返回null)
+     * @return 值
      */
     public static Object lLeftPop(String key) {
         return redisTemplate.opsForList().leftPop(key);
@@ -1132,8 +1190,8 @@ public class RedisUtils {
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
+     * @param timeout 阻塞时间(秒)
+     * @return 值
      */
     public static Object lLeftPop(String key, long timeout) {
         return redisTemplate.opsForList().leftPop(key, timeout, SECONDS);
@@ -1142,8 +1200,8 @@ public class RedisUtils {
     /**
      * 删除并返回右侧的值(rPop)
      *
-     * @param key 键
-     * @return 值(不存在键时为null)
+     * @param key 键(不存在返回null)
+     * @return 值
      */
     public static Object lRightPop(String key) {
         return redisTemplate.opsForList().rightPop(key);
@@ -1154,20 +1212,20 @@ public class RedisUtils {
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param key     键
-     * @param timeout 阻塞时间
-     * @return 值(超过指定时间该键还是为空时为null)
+     * @param timeout 阻塞时间(秒)
+     * @return 值
      */
     public static Object lRightPop(String key, long timeout) {
         return redisTemplate.opsForList().rightPop(key, timeout, SECONDS);
     }
 
     /**
-     * 指定值第一次出现的下标(Redis版本需要6.0.6及以上)(lPos)
+     * 指定值第一次出现的下标(lPos)
      *
      * @param <T>   指定数据类型
      * @param key   键
-     * @param value 值
-     * @return 下标(没有指定值为null)
+     * @param value 值(不存在返回null)
+     * @return 下标
      */
     public static <T> Long lIndexOf(String key, T value) {
         return redisTemplate.opsForList().indexOf(key, value);
@@ -1178,8 +1236,8 @@ public class RedisUtils {
      *
      * @param <T>   指定数据类型
      * @param key   键
-     * @param value 值
-     * @return 下标(没有指定值为null)
+     * @param value 值(不存在返回null)
+     * @return 下标
      */
     public static <T> Long lLastIndexOf(String key, T value) {
         return redisTemplate.opsForList().lastIndexOf(key, value);
@@ -1190,7 +1248,7 @@ public class RedisUtils {
      *
      * @param <T>   指定数据类型
      * @param key   键
-     * @param index 下标
+     * @param index 下标(越界报错)
      * @param value 值
      */
     public static <T> void lSet(String key, long index, T value) {
@@ -1249,27 +1307,54 @@ public class RedisUtils {
     /**
      * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值(rPopLPush)
      *
-     * @param sourceKey      源键
+     * @param sourceKey      源键(不存在返回null)
      * @param destinationKey 目的键
-     * @return 值(sourceKey不存在时为null)
+     * @return 值
      */
     public static Object lRightPopAndLeftPush(String sourceKey, String destinationKey) {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey);
     }
 
     /**
-     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(秒)(bRPopLPush)
+     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(秒)(bRPopLPush)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
-     * @param sourceKey      源键
+     * @param sourceKey      源键(不存在返回null)
      * @param destinationKey 目的键
-     * @param timeout        阻塞时间
-     * @return 值(sourceKey不存在时为null)
+     * @param timeout        阻塞时间(秒)
+     * @return 值
      */
     public static Object lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
         return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, SECONDS);
     }
 
-    // TODO move
+    /**
+     * 从sourceKey的左侧/右侧，添加到destinationKey的左侧/右侧(lMove)
+     *
+     * @param sourceKey      源键(不存在返回null)
+     * @param from           从源键的左侧/右侧
+     * @param destinationKey 目的键
+     * @param to             到目的键左侧/右侧
+     * @return 值
+     */
+    public static Object lMove(String sourceKey, RedisListCommands.Direction from, String destinationKey, RedisListCommands.Direction to) {
+        return redisTemplate.opsForList().move(sourceKey, from, destinationKey, to);
+    }
+
+    /**
+     * 从sourceKey的左侧/右侧，添加到destinationKey的左侧/右侧，并返回这个值，并阻塞指定时间(秒)(bLMove)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param sourceKey      源键(不存在返回null)
+     * @param from           从源键的左侧/右侧
+     * @param destinationKey 目的键
+     * @param to             到目的键左侧/右侧
+     * @param timeout        阻塞时间(秒)
+     * @return 值
+     */
+    public static Object lMove(String sourceKey, RedisListCommands.Direction from, String destinationKey, RedisListCommands.Direction to, long timeout) {
+        return redisTemplate.opsForList().move(sourceKey, from, destinationKey, to, timeout, SECONDS);
+    }
 
     // endregion
 
@@ -1309,7 +1394,7 @@ public class RedisUtils {
      * @return 列表长度
      */
     @SafeVarargs
-    public static <T> Long sAddMultiArray(String key, T... value) {
+    public static <T> Long sAddMulti(String key, T... value) {
         return redisTemplate.opsForSet().add(key, value);
     }
 
@@ -1346,7 +1431,7 @@ public class RedisUtils {
      * @return 列表长度
      */
     @SafeVarargs
-    public static <T> Long sDeleteMultiArray(String key, T... value) {
+    public static <T> Long sDeleteMulti(String key, T... value) {
         return redisTemplate.opsForSet().remove(key, Arrays.copyOf(value, value.length, Object[].class));
     }
 
@@ -1405,7 +1490,7 @@ public class RedisUtils {
     }
 
     /**
-     * 是否存在多个元素(Redis版本需要6.2.0及以上)(sMIsMember)
+     * 是否存在多个元素(sMIsMember)
      *
      * @param key   键
      * @param value 值
@@ -1416,9 +1501,9 @@ public class RedisUtils {
     }
 
     /**
-     * 是否存在多个元素(Redis版本需要6.2.0及以上)(sMIsMember)
+     * 是否存在多个元素(sMIsMember)
      *
-     * @param key   键
+     * @param key   键(不存在返回false)
      * @param value 值
      * @return Map
      */

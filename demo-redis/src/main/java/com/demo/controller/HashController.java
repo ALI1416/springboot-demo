@@ -113,13 +113,24 @@ public class HashController {
     }
 
     /**
-     * <h3>map指定项的值递增1</h3>
+     * <h3>map指定项的值递增</h3>
      * POST /hash/hIncrement?key=a&item=a1&delta=2<br>
      * 值为123 返回125，值改变为125<br>
      * 不存在键或项 返回2，值改变为2
      */
     @PostMapping("hIncrement")
     public Result hIncrement(String key, String item, long delta) {
+        return Result.o(RedisUtils.hIncrement(key, item, delta));
+    }
+
+    /**
+     * <h3>map指定项的值递增</h3>
+     * POST /hash/hIncrementD?key=a&item=a1&delta=1.2<br>
+     * 值为123 返回124.2，值改变为124.2<br>
+     * 不存在键或项 返回1.2，值改变为1.2
+     */
+    @PostMapping("hIncrementD")
+    public Result hIncrementD(String key, String item, double delta) {
         return Result.o(RedisUtils.hIncrement(key, item, delta));
     }
 
@@ -135,7 +146,7 @@ public class HashController {
     }
 
     /**
-     * <h3>map指定项的值递减1</h3>
+     * <h3>map指定项的值递减</h3>
      * POST /hash/hDecrement?key=a&item=a1&delta=2<br>
      * 值为123 返回121，值改变为121<br>
      * 不存在键或项 返回-2，值改变为-2
@@ -143,6 +154,72 @@ public class HashController {
     @PostMapping("hDecrement")
     public Result hDecrement(String key, String item, long delta) {
         return Result.o(RedisUtils.hDecrement(key, item, delta));
+    }
+
+    /**
+     * <h3>map指定项的值递减</h3>
+     * POST /hash/hDecrementD?key=a&item=a1&delta=1.2<br>
+     * 值为123 返回121.8，值改变为121.8<br>
+     * 不存在键或项 返回-1.2，值改变为-1.2
+     */
+    @PostMapping("hDecrementD")
+    public Result hDecrementD(String key, String item, double delta) {
+        return Result.o(RedisUtils.hDecrement(key, item, delta));
+    }
+
+    /**
+     * <h3>获取一个随机的项</h3>
+     * POST /hash/hRandomItem?key=a<br>
+     * 存在项a1/a2/a3 返回a2<br>
+     * 不存在键 null
+     */
+    @PostMapping("hRandomItem")
+    public Result hRandomItem(String key) {
+        return Result.o(RedisUtils.hRandomItem(key));
+    }
+
+    /**
+     * <h3>获取一个随机的项和值</h3>
+     * POST /hash/hRandomMap?key=a<br>
+     * 存在项a1/a2/a3 值1/2/3 返回a2/2<br>
+     * 不存在键 null
+     */
+    @PostMapping("hRandomMap")
+    public Result hRandomMap(String key) {
+        return Result.o(RedisUtils.hRandomMap(key));
+    }
+
+    /**
+     * <h3>获取多个随机的项</h3>
+     * POST /hash/hRandomItem2?key=a&count=2<br>
+     * 存在项a1/a2/a3 返回a2/a3<br>
+     * 不存在键 []
+     */
+    @PostMapping("hRandomItem2")
+    public Result hRandomItem2(String key, long count) {
+        return Result.o(RedisUtils.hRandomItem(key, count));
+    }
+
+    /**
+     * <h3>获取多个随机的项和值</h3>
+     * POST /hash/hRandomMap2?key=a&count=2<br>
+     * 存在项a1/a2/a3 值1/2/3 返回a2/2 a3/3<br>
+     * 不存在键 报错
+     */
+    @PostMapping("hRandomMap2")
+    public Result hRandomMap2(String key, long count) {
+        return Result.o(RedisUtils.hRandomMap(key, count));
+    }
+
+    /**
+     * <h3>获取项的个数</h3>
+     * POST /hash/hLengthOfValue?key=a&item=a1<br>
+     * 存在项a1 值123 返回3<br>
+     * 不存在键 返回0
+     */
+    @PostMapping("hLengthOfValue")
+    public Result hLengthOfValue(String key, String item) {
+        return Result.o(RedisUtils.hLengthOfValue(key, item));
     }
 
     /**
@@ -192,7 +269,7 @@ public class HashController {
 
     /**
      * <h3>获取map中所有的项</h3>
-     * POST /hash/hGetAllItem?key=a&item=a1&value=abc<br>
+     * POST /hash/hGetAllItem?key=a<br>
      * 存在项a1/a2/a3值为111/222/333 返回["a1","a2","a3"]
      */
     @PostMapping("hGetAllItem")
@@ -202,7 +279,7 @@ public class HashController {
 
     /**
      * <h3>获取map中所有的值</h3>
-     * POST /hash/hGetAllValue?key=a&item=a1&value=abc<br>
+     * POST /hash/hGetAllValue?key=a<br>
      * 存在项a1/a2/a3值为111/222/333 返回[111,222,333]
      */
     @PostMapping("hGetAllValue")
@@ -212,7 +289,7 @@ public class HashController {
 
     /**
      * <h3>获取map中所有的项和值</h3>
-     * POST /hash/hGetAllItemAndValue?key=a&item=a1&value=abc<br>
+     * POST /hash/hGetAllItemAndValue?key=a<br>
      * 存在项a1/a2/a3值为111/222/333 返回{"a":"111","b":"222","c":"333"}
      */
     @PostMapping("hGetAllItemAndValue")

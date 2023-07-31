@@ -52,7 +52,7 @@ public class SetController {
      */
     @PostMapping("sAddMultiArray")
     public Result sAddMultiArray(String key, String[] value) {
-        return Result.o(RedisUtils.sAddMultiArray(key, value));
+        return Result.o(RedisUtils.sAddMulti(key, value));
     }
 
     /**
@@ -85,7 +85,7 @@ public class SetController {
      */
     @PostMapping("sDeleteMultiArray")
     public Result sDeleteMultiArray(String key, String[] value) {
-        return Result.o(RedisUtils.sDeleteMultiArray(key, value));
+        return Result.o(RedisUtils.sDeleteMulti(key, value));
     }
 
     /**
@@ -144,7 +144,9 @@ public class SetController {
 
     /**
      * <h3>是否存在多个元素</h3>
-     * 无法测试
+     * 存在元素a/b/c
+     * POST /set/sIsMultiMember?key=a<br>
+     * body JSON ["a","b","d"] {"a":true,"b":true,"d":false}<br>
      */
     @PostMapping("sIsMultiMember")
     public Result sIsMultiMember(String key, @RequestBody List<String> value) {
@@ -153,7 +155,9 @@ public class SetController {
 
     /**
      * <h3>是否存在多个元素</h3>
-     * 无法测试
+     * 存在元素a/b/c
+     * POST /set/sIsMultiMember?key=a&value=a&value=b&value=d<br>
+     * {"a":true,"b":true,"d":false}
      */
     @PostMapping("sIsMultiMemberArray")
     public Result sIsMultiMemberArray(String key, String[] value) {

@@ -26,10 +26,14 @@ import java.util.List;
 public class IndexController {
 
     /**
-     * <h3></h3>
+     * <h3>拷贝</h3>
+     * 实际存在key有a 值为123 b值为45<br>
      * POST /copy?sourceKey=a&targetKey=b&replace=false<br>
-     * 成功 true<br>
-     * 失败 false
+     * false<br>
+     * POST /copy?sourceKey=a&targetKey=c&replace=false<br>
+     * true 新增key c 值123<br>
+     * POST /copy?sourceKey=a&targetKey=b&replace=true<br>
+     * true key b 值改变为123
      */
     @PostMapping("copy")
     public Result copy(String sourceKey, String targetKey, boolean replace) {

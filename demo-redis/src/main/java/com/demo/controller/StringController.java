@@ -259,10 +259,10 @@ public class StringController {
     }
 
     /**
-     * <h3>map中的key和value依次放入(键存在则不会放入)</h3>
+     * <h3>map中的key和value依次放入(键已存在会被覆盖)</h3>
      * POST /string/multiSet<br>
      * body JSON {"a":"a","b":"b","c":"c","d":"d"}<br>
-     * 存在键b，acd依次放入，b未被修改
+     * 存在键b，acd依次放入，b被修改
      */
     @PostMapping("multiSet")
     public Result multiSet(@RequestBody Map<String, Object> map) {
@@ -295,7 +295,11 @@ public class StringController {
 
     /**
      * <h3>获取并删除</h3>
+     * 存在key a 值 123<br>
      * POST /string/getAndDelete?key=a<br>
+     * 返回123 a被删除<br>
+     * POST /string/getAndDelete?key=b<br>
+     * 返回null
      */
     @PostMapping("getAndDelete")
     public Result getAndDelete(String key) {
@@ -304,7 +308,11 @@ public class StringController {
 
     /**
      * <h3>获取并设置超时时间</h3>
+     * 存在key a 值 123 ttl为-1<br>
      * POST /string/getAndExpire?key=a&timeout=100<br>
+     * 返回123 a ttl 100<br>
+     * POST /string/getAndExpire?key=b&timeout=100<br>
+     * 返回null 无新增
      */
     @PostMapping("getAndExpire")
     public Result getAndExpire(String key, long timeout) {
@@ -313,7 +321,11 @@ public class StringController {
 
     /**
      * <h3>获取并设置为持久数据</h3>
+     * 存在key a 值 123 ttl为100<br>
      * POST /string/getAndPersist?key=a<br>
+     * 返回123 a ttl -1<br>
+     * POST /string/getAndPersist?key=b<br>
+     * 返回null 无新增
      */
     @PostMapping("getAndPersist")
     public Result getAndPersist(String key) {
@@ -323,8 +335,8 @@ public class StringController {
     /**
      * <h3>获取并放入</h3>
      * POST /string/getAndSet?key=a&value=abc<br>
-     * 存在a a的值<br>
-     * 不存在a null
+     * 存在a a的值 值被修改<br>
+     * 不存在a null 值被修改
      */
     @PostMapping("getAndSet")
     public Result getAndSet(String key, String value) {
