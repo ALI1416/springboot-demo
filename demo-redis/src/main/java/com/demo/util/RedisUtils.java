@@ -64,7 +64,7 @@ public class RedisUtils {
      * 集合中存在的key的数量(exists)
      *
      * @param keys 键(重复会计算多次)
-     * @return 存在的数量
+     * @return 数量
      */
     public static Long existsCount(Collection<String> keys) {
         return redisTemplate.countExistingKeys(keys);
@@ -74,7 +74,7 @@ public class RedisUtils {
      * 集合中存在的key的数量(exists)
      *
      * @param keys 键(重复会计算多次)
-     * @return 存在的数量
+     * @return 数量
      */
     public static Long existsCount(String... keys) {
         return redisTemplate.countExistingKeys(Arrays.asList(keys));
@@ -275,6 +275,16 @@ public class RedisUtils {
     }
 
     /**
+     * 获取超时时间(ttl)
+     *
+     * @param key 键
+     * @return 超时时间(秒 ， - 1不过期 ， - 2不存在)
+     */
+    public static Long getExpire(String key) {
+        return redisTemplate.getExpire(key);
+    }
+
+    /**
      * 将key移动到指定索引的数据库(move)
      *
      * @param key     键
@@ -305,16 +315,6 @@ public class RedisUtils {
      */
     public static void restore(String key, byte[] value, long timeout, boolean replace) {
         redisTemplate.restore(key, value, timeout, SECONDS, replace);
-    }
-
-    /**
-     * 获取超时时间(ttl)
-     *
-     * @param key 键
-     * @return 超时时间(秒 ， - 1不过期 ， - 2不存在)
-     */
-    public static Long getExpire(String key) {
-        return redisTemplate.getExpire(key);
     }
 
     /**
@@ -406,20 +406,20 @@ public class RedisUtils {
     }
 
     /**
-     * map中的key和value依次放入(mSet)
+     * 键和值依次放入(mSet)
      *
      * @param <T> 指定数据类型
-     * @param map Map(key已存在会被覆盖)
+     * @param map 键和值(key已存在会被覆盖)
      */
     public static <T> void setMulti(Map<String, T> map) {
         redisTemplate.opsForValue().multiSet(map);
     }
 
     /**
-     * 如果map中的key全部不存在，则map中的key和value依次放入(mSetNX)
+     * 如果键和值全部不存在，则依次放入(mSetNX)
      *
      * @param <T> 指定数据类型
-     * @param map Map
+     * @param map 键和值
      */
     public static <T> Boolean setMultiIfAbsent(Map<String, T> map) {
         return redisTemplate.opsForValue().multiSetIfAbsent(map);
@@ -482,7 +482,7 @@ public class RedisUtils {
      * 获取多个(mGet)
      *
      * @param keys 多个键(不存在返回null)
-     * @return 多个值
+     * @return 值列表
      */
     public static List<Object> getMulti(Collection<String> keys) {
         return redisTemplate.opsForValue().multiGet(keys);
@@ -492,7 +492,7 @@ public class RedisUtils {
      * 获取多个(mGet)
      *
      * @param keys 多个键(不存在返回null)
-     * @return 多个值
+     * @return 值列表
      */
     public static List<Object> getMulti(String... keys) {
         return redisTemplate.opsForValue().multiGet(Arrays.asList(keys));
@@ -718,7 +718,7 @@ public class RedisUtils {
      *
      * @param key   键(不存在返回null)
      * @param items 多个项(不存在返回null)
-     * @return 值
+     * @return 值列表
      */
     public static List<Object> hGetMulti(String key, Collection<String> items) {
         return redisTemplate.opsForHash().multiGet(key, Arrays.asList(items.toArray()));
@@ -729,7 +729,7 @@ public class RedisUtils {
      *
      * @param key   键(不存在返回null)
      * @param items 多个项(不存在返回null)
-     * @return 值
+     * @return 值列表
      */
     public static List<Object> hGetMulti(String key, String... items) {
         return redisTemplate.opsForHash().multiGet(key, Arrays.asList(items));
@@ -821,7 +821,7 @@ public class RedisUtils {
      * 获取一个随机的项和值(hRandField)
      *
      * @param key 键(不存在返回null)
-     * @return 项
+     * @return 项和值
      */
     public static Map.Entry<Object, Object> hRandomMap(String key) {
         return redisTemplate.opsForHash().randomEntry(key);
@@ -831,7 +831,7 @@ public class RedisUtils {
      * 获取多个随机的项(hRandField)
      *
      * @param key 键(不存在返回[])
-     * @return 项
+     * @return 项列表
      */
     public static List<Object> hRandomItem(String key, long count) {
         return redisTemplate.opsForHash().randomKeys(key, count);
@@ -841,24 +841,15 @@ public class RedisUtils {
      * 获取多个随机的项和值(hRandField)
      *
      * @param key 键(不存在报错)
-     * @return 项
+     * @return 项和值列表
      */
     public static Map<Object, Object> hRandomMap(String key, long count) {
         return redisTemplate.opsForHash().randomEntries(key, count);
     }
 
     /**
-     * 获取map中所有的项(hKeys)
-     *
-     * @param key 键(不存在返回[])
-     * @return 项
-     */
-    public static Set<Object> hGetAllItem(String key) {
-        return redisTemplate.opsForHash().keys(key);
-    }
-
-    /**
-     * 获取map中指定项的长度(hStrLen)
+     * 获取map中指定项的长度(hStrLen)<br>
+     * 注意：慎用
      *
      * @param key  键(不存在返回0)
      * @param item 项(不存在返回0)
@@ -869,24 +860,13 @@ public class RedisUtils {
     }
 
     /**
-     * 获取项的个数(hLen)
+     * 获取项的数量(hLen)
      *
      * @param key 键(不存在返回0)
-     * @return 项的个数
+     * @return 数量
      */
     public static Long hSize(String key) {
         return redisTemplate.opsForHash().size(key);
-    }
-
-    /**
-     * 设置map的多个键值(hMSet)
-     *
-     * @param <T> 指定数据类型
-     * @param key 键
-     * @param map 多个键值(已存在会被覆盖)
-     */
-    public static <T> void hSetMulti(String key, Map<String, T> map) {
-        redisTemplate.opsForHash().putAll(key, map);
     }
 
     /**
@@ -899,6 +879,17 @@ public class RedisUtils {
      */
     public static <T> void hSet(String key, String item, T value) {
         redisTemplate.opsForHash().put(key, item, value);
+    }
+
+    /**
+     * 设置map的多个键值(hMSet)
+     *
+     * @param <T> 指定数据类型
+     * @param key 键
+     * @param map 多个键值(已存在会被覆盖)
+     */
+    public static <T> void hSetMulti(String key, Map<String, T> map) {
+        redisTemplate.opsForHash().putAll(key, map);
     }
 
     /**
@@ -915,10 +906,20 @@ public class RedisUtils {
     }
 
     /**
+     * 获取map中所有的项(hKeys)
+     *
+     * @param key 键(不存在返回[])
+     * @return 项列表
+     */
+    public static Set<Object> hGetAllItem(String key) {
+        return redisTemplate.opsForHash().keys(key);
+    }
+
+    /**
      * 获取map中所有的值(hVals)
      *
      * @param key 键(不存在返回[])
-     * @return 值
+     * @return 值列表
      */
     public static List<Object> hGetAllValue(String key) {
         return redisTemplate.opsForHash().values(key);
@@ -928,7 +929,7 @@ public class RedisUtils {
      * 获取map中所有的项和值(hGetAll)
      *
      * @param key 键(不存在返回{})
-     * @return 项和值
+     * @return 项和值列表
      */
     public static Map<Object, Object> hGetAllItemAndValue(String key) {
         return redisTemplate.opsForHash().entries(key);
@@ -945,7 +946,7 @@ public class RedisUtils {
      *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
      *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *              \ : 转义(字符*?[]^-\等)
-     * @return 项和值
+     * @return 项和值列表
      */
     public static Map<String, Object> hScan(String key, String match) {
         return hScan(key, match, 100);
@@ -963,7 +964,7 @@ public class RedisUtils {
      *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *              \ : 转义(字符*?[]^-\等)
      * @param count 一次扫描条数
-     * @return 项和值
+     * @return 项和值列表
      */
     public static Map<String, Object> hScan(String key, String match, long count) {
         Map<String, Object> map = new HashMap<>();
@@ -980,49 +981,6 @@ public class RedisUtils {
 
     /* ==================== 列表List操作 ==================== */
     // region 列表List操作
-
-    /**
-     * 获取(lRange)
-     *
-     * @param key   键(不存在返回[])
-     * @param start 起始下标
-     * @param end   结束下标
-     * @return 值
-     */
-    public static List<Object> lGetMulti(String key, long start, long end) {
-        return redisTemplate.opsForList().range(key, start, end);
-    }
-
-    /**
-     * 获取全部(lRange)
-     *
-     * @param key 键(不存在返回[])
-     * @return 值
-     */
-    public static List<Object> lGetAll(String key) {
-        return redisTemplate.opsForList().range(key, 0, -1);
-    }
-
-    /**
-     * 修剪(只保留下标为[start,end]的值)(lTrim)
-     *
-     * @param key   键
-     * @param start 起始下标
-     * @param end   结束下标
-     */
-    public static void lTrim(String key, long start, long end) {
-        redisTemplate.opsForList().trim(key, start, end);
-    }
-
-    /**
-     * 获取列表的长度(lLen)
-     *
-     * @param key 键(不存在返回0)
-     * @return 列表长度
-     */
-    public static Long lSize(String key) {
-        return redisTemplate.opsForList().size(key);
-    }
 
     /**
      * 获取指定下标的值(lIndex)
@@ -1053,6 +1011,49 @@ public class RedisUtils {
      */
     public static Object lGetLast(String key) {
         return redisTemplate.opsForList().index(key, -1);
+    }
+
+    /**
+     * 获取(lRange)
+     *
+     * @param key   键(不存在返回[])
+     * @param start 起始下标
+     * @param end   结束下标
+     * @return 值列表
+     */
+    public static List<Object> lGetMulti(String key, long start, long end) {
+        return redisTemplate.opsForList().range(key, start, end);
+    }
+
+    /**
+     * 获取全部(lRange)
+     *
+     * @param key 键(不存在返回[])
+     * @return 值列表
+     */
+    public static List<Object> lGetAll(String key) {
+        return redisTemplate.opsForList().range(key, 0, -1);
+    }
+
+    /**
+     * 修剪(只保留下标为[start,end]的值)(lTrim)
+     *
+     * @param key   键
+     * @param start 起始下标
+     * @param end   结束下标
+     */
+    public static void lTrim(String key, long start, long end) {
+        redisTemplate.opsForList().trim(key, start, end);
+    }
+
+    /**
+     * 获取列表的长度(lLen)
+     *
+     * @param key 键(不存在返回0)
+     * @return 长度
+     */
+    public static Long lSize(String key) {
+        return redisTemplate.opsForList().size(key);
     }
 
     /**
@@ -1112,7 +1113,7 @@ public class RedisUtils {
      * @param value 多个值
      * @return 列表长度
      */
-    public static <T> Long lLeftPushMultiArray(String key, T[] value) {
+    public static <T> Long lLeftPushMulti(String key, T[] value) {
         return redisTemplate.opsForList().leftPushAll(key, value);
     }
 
@@ -1159,7 +1160,7 @@ public class RedisUtils {
      * @param value 多个值
      * @return 列表长度
      */
-    public static <T> Long lRightPushMultiArray(String key, T[] value) {
+    public static <T> Long lRightPushMulti(String key, T[] value) {
         return redisTemplate.opsForList().rightPushAll(key, value);
     }
 
@@ -1227,19 +1228,19 @@ public class RedisUtils {
      * @param value 值(不存在返回null)
      * @return 下标
      */
-    public static <T> Long lIndexOf(String key, T value) {
+    public static <T> Long lIndexOfFirst(String key, T value) {
         return redisTemplate.opsForList().indexOf(key, value);
     }
 
     /**
-     * 指定值最后一次出现的下标(Redis版本需要6.0.6及以上)(lPos)
+     * 指定值最后一次出现的下标(lPos)
      *
      * @param <T>   指定数据类型
      * @param key   键
      * @param value 值(不存在返回null)
      * @return 下标
      */
-    public static <T> Long lLastIndexOf(String key, T value) {
+    public static <T> Long lIndexOfLast(String key, T value) {
         return redisTemplate.opsForList().lastIndexOf(key, value);
     }
 
@@ -1332,13 +1333,13 @@ public class RedisUtils {
      * 从sourceKey的左侧/右侧，添加到destinationKey的左侧/右侧(lMove)
      *
      * @param sourceKey      源键(不存在返回null)
-     * @param from           从源键的左侧/右侧
+     * @param from           从源键的左侧(true)/右侧(false)
      * @param destinationKey 目的键
-     * @param to             到目的键左侧/右侧
+     * @param to             到目的键左侧(true)/右侧(false)
      * @return 值
      */
-    public static Object lMove(String sourceKey, RedisListCommands.Direction from, String destinationKey, RedisListCommands.Direction to) {
-        return redisTemplate.opsForList().move(sourceKey, from, destinationKey, to);
+    public static Object lMove(String sourceKey, boolean from, String destinationKey, boolean to) {
+        return redisTemplate.opsForList().move(sourceKey, from ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, destinationKey, to ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT);
     }
 
     /**
@@ -1346,14 +1347,14 @@ public class RedisUtils {
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param sourceKey      源键(不存在返回null)
-     * @param from           从源键的左侧/右侧
+     * @param from           从源键的左侧(true)/右侧(false)
      * @param destinationKey 目的键
-     * @param to             到目的键左侧/右侧
+     * @param to             到目的键左侧(true)/右侧(false)
      * @param timeout        阻塞时间(秒)
      * @return 值
      */
-    public static Object lMove(String sourceKey, RedisListCommands.Direction from, String destinationKey, RedisListCommands.Direction to, long timeout) {
-        return redisTemplate.opsForList().move(sourceKey, from, destinationKey, to, timeout, SECONDS);
+    public static Object lMove(String sourceKey, boolean from, String destinationKey, boolean to, long timeout) {
+        return redisTemplate.opsForList().move(sourceKey, from ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, destinationKey, to ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, timeout, SECONDS);
     }
 
     // endregion
@@ -1450,7 +1451,7 @@ public class RedisUtils {
      *
      * @param key   键
      * @param count 数量
-     * @return 值
+     * @return 值列表
      */
     public static List<Object> sPopMulti(String key, long count) {
         return redisTemplate.opsForSet().pop(key, count);
@@ -1469,10 +1470,10 @@ public class RedisUtils {
     }
 
     /**
-     * 元素个数(sCard)
+     * 元素数量(sCard)
      *
      * @param key 键
-     * @return 个数
+     * @return 数量
      */
     public static Long sSize(String key) {
         return redisTemplate.opsForSet().size(key);
@@ -1496,7 +1497,7 @@ public class RedisUtils {
      * @param value 值
      * @return Map
      */
-    public static <T> Map<Object, Boolean> sIsMultiMember(String key, Collection<T> value) {
+    public static <T> Map<Object, Boolean> sIsMemberMulti(String key, Collection<T> value) {
         return redisTemplate.opsForSet().isMember(key, value.toArray());
     }
 
@@ -1508,7 +1509,7 @@ public class RedisUtils {
      * @return Map
      */
     @SafeVarargs
-    public static <T> Map<Object, Boolean> sIsMultiMemberArray(String key, T... value) {
+    public static <T> Map<Object, Boolean> sIsMemberMulti(String key, T... value) {
         return redisTemplate.opsForSet().isMember(key, Arrays.copyOf(value, value.length, Object[].class));
     }
 
@@ -1516,7 +1517,7 @@ public class RedisUtils {
      * 所有元素(sMembers)
      *
      * @param key 键
-     * @return 元素
+     * @return 元素列表
      */
     public static Set<Object> sMembers(String key) {
         return redisTemplate.opsForSet().members(key);
@@ -1535,22 +1536,22 @@ public class RedisUtils {
     /**
      * 随机获取多个元素(sRandMember)
      *
-     * @param key   键
+     * @param key   键(不存在返回[])
      * @param count 个数(大于0)
-     * @return 元素(key不存在返回空List)
+     * @return 元素列表
      */
-    public static List<Object> sRandomMultiMember(String key, long count) {
+    public static List<Object> sRandomMemberMulti(String key, long count) {
         return redisTemplate.opsForSet().randomMembers(key, count);
     }
 
     /**
      * 随机获取多个不重复元素(sRandMember)
      *
-     * @param key   键
+     * @param key   键(不存在返回[])
      * @param count 个数(大于0)
-     * @return 元素(key不存在返回空Set)
+     * @return 元素列表
      */
-    public static Set<Object> sRandomMultiDistinctMember(String key, long count) {
+    public static Set<Object> sRandomMemberMultiDistinct(String key, long count) {
         return redisTemplate.opsForSet().distinctRandomMembers(key, count);
     }
 
@@ -1559,7 +1560,7 @@ public class RedisUtils {
      *
      * @param key      键
      * @param otherKey 另一个键
-     * @return 交集
+     * @return 交集列表
      */
     public static Set<Object> sIntersect(String key, String otherKey) {
         return redisTemplate.opsForSet().intersect(key, otherKey);
@@ -1570,7 +1571,7 @@ public class RedisUtils {
      *
      * @param key      键
      * @param otherKey 其他键
-     * @return 交集
+     * @return 交集列表
      */
     public static Set<Object> sIntersectMulti(String key, Collection<String> otherKey) {
         return redisTemplate.opsForSet().intersect(key, otherKey);
@@ -1580,7 +1581,7 @@ public class RedisUtils {
      * 所有键的交集(sInter)
      *
      * @param keys 键
-     * @return 交集
+     * @return 交集列表
      */
     public static Set<Object> sIntersectAll(Collection<String> keys) {
         return redisTemplate.opsForSet().intersect(keys);
@@ -1604,7 +1605,7 @@ public class RedisUtils {
      * @param otherKey 其他键
      * @return 交集个数
      */
-    public static Long sIntersectMultiAndStore(String key, Collection<String> otherKey,
+    public static Long sIntersectAndStoreMulti(String key, Collection<String> otherKey,
                                                String destKey) {
         return redisTemplate.opsForSet().intersectAndStore(key, otherKey, destKey);
     }
@@ -1615,7 +1616,7 @@ public class RedisUtils {
      * @param keys 键
      * @return 交集个数
      */
-    public static Long sIntersectAllAndStore(Collection<String> keys, String destKey) {
+    public static Long sIntersectAndStoreAll(Collection<String> keys, String destKey) {
         return redisTemplate.opsForSet().intersectAndStore(keys, destKey);
     }
 
@@ -1624,7 +1625,7 @@ public class RedisUtils {
      *
      * @param key      键
      * @param otherKey 另一个键
-     * @return 并集
+     * @return 并集列表
      */
     public static Set<Object> sUnion(String key, String otherKey) {
         return redisTemplate.opsForSet().union(key, otherKey);
@@ -1635,7 +1636,7 @@ public class RedisUtils {
      *
      * @param key      键
      * @param otherKey 其他键
-     * @return 并集
+     * @return 并集列表
      */
     public static Set<Object> sUnionMulti(String key, Collection<String> otherKey) {
         return redisTemplate.opsForSet().union(key, otherKey);
@@ -1645,7 +1646,7 @@ public class RedisUtils {
      * 所有键的并集(sUnion)
      *
      * @param keys 键
-     * @return 并集
+     * @return 并集列表
      */
     public static Set<Object> sUnionAll(Collection<String> keys) {
         return redisTemplate.opsForSet().union(keys);
@@ -1669,7 +1670,7 @@ public class RedisUtils {
      * @param otherKey 其他键
      * @return 并集个数
      */
-    public static Long sUnionMultiAndStore(String key, Collection<String> otherKey,
+    public static Long sUnionAndStoreMulti(String key, Collection<String> otherKey,
                                            String destKey) {
         return redisTemplate.opsForSet().unionAndStore(key, otherKey, destKey);
     }
@@ -1680,7 +1681,7 @@ public class RedisUtils {
      * @param keys 键
      * @return 并集个数
      */
-    public static Long sUnionAllAndStore(Collection<String> keys, String destKey) {
+    public static Long sUnionAndStoreAll(Collection<String> keys, String destKey) {
         return redisTemplate.opsForSet().unionAndStore(keys, destKey);
     }
 
@@ -1689,7 +1690,7 @@ public class RedisUtils {
      *
      * @param key      键
      * @param otherKey 另一个键
-     * @return 差集
+     * @return 差集列表
      */
     public static Set<Object> sDifference(String key, String otherKey) {
         return redisTemplate.opsForSet().difference(key, otherKey);
@@ -1700,7 +1701,7 @@ public class RedisUtils {
      *
      * @param key      键
      * @param otherKey 其他键
-     * @return 差集
+     * @return 差集列表
      */
     public static Set<Object> sDifferenceMulti(String key, Collection<String> otherKey) {
         return redisTemplate.opsForSet().difference(key, otherKey);
@@ -1710,7 +1711,7 @@ public class RedisUtils {
      * 所有键的差集(sDiff)
      *
      * @param keys 键
-     * @return 差集
+     * @return 差集列表
      */
     public static Set<Object> sDifferenceAll(Collection<String> keys) {
         return redisTemplate.opsForSet().difference(keys);
@@ -1734,7 +1735,7 @@ public class RedisUtils {
      * @param otherKey 其他键
      * @return 差集个数
      */
-    public static Long sDifferenceMultiAndStore(String key, Collection<String> otherKey,
+    public static Long sDifferenceAndStoreMulti(String key, Collection<String> otherKey,
                                                 String destKey) {
         return redisTemplate.opsForSet().differenceAndStore(key, otherKey, destKey);
     }
@@ -1745,7 +1746,7 @@ public class RedisUtils {
      * @param keys 键
      * @return 差集个数
      */
-    public static Long sDifferenceAllAndStore(Collection<String> keys, String destKey) {
+    public static Long sDifferenceAndStoreAll(Collection<String> keys, String destKey) {
         return redisTemplate.opsForSet().differenceAndStore(keys, destKey);
     }
 

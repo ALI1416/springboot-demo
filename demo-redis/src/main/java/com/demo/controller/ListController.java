@@ -2,7 +2,6 @@ package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
 import com.demo.util.RedisUtils;
-import org.springframework.data.redis.connection.RedisListCommands;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -135,7 +134,7 @@ public class ListController {
      */
     @PostMapping("lLeftPushAllArray")
     public Result lLeftPushAll(String key, String[] value) {
-        return Result.o(RedisUtils.lLeftPushMultiArray(key, value));
+        return Result.o(RedisUtils.lLeftPushMulti(key, value));
     }
 
     /**
@@ -202,7 +201,7 @@ public class ListController {
      */
     @PostMapping("lRightPushAllArray")
     public Result lRightPushAll(String key, String[] value) {
-        return Result.o(RedisUtils.lRightPushMultiArray(key, value));
+        return Result.o(RedisUtils.lRightPushMulti(key, value));
     }
 
     /**
@@ -336,7 +335,7 @@ public class ListController {
      */
     @PostMapping("lIndexOf")
     public Result lIndexOf(String key, String value) {
-        return Result.o(RedisUtils.lIndexOf(key, value));
+        return Result.o(RedisUtils.lIndexOfFirst(key, value));
     }
 
     /**
@@ -349,7 +348,7 @@ public class ListController {
      */
     @PostMapping("lLastIndexOf")
     public Result lLastIndexOf(String key, String value) {
-        return Result.o(RedisUtils.lLastIndexOf(key, value));
+        return Result.o(RedisUtils.lIndexOfLast(key, value));
     }
 
     /**
@@ -433,7 +432,7 @@ public class ListController {
      */
     @PostMapping("lMove")
     public Result lMove(String sourceKey, String destinationKey) {
-        return Result.o(RedisUtils.lMove(sourceKey, RedisListCommands.Direction.RIGHT, destinationKey, RedisListCommands.Direction.RIGHT));
+        return Result.o(RedisUtils.lMove(sourceKey, false, destinationKey, false));
     }
 
     /**
@@ -443,7 +442,7 @@ public class ListController {
      */
     @PostMapping("lMove2")
     public Result lMove2(String sourceKey, String destinationKey, long timeout) {
-        return Result.o(RedisUtils.lMove(sourceKey, RedisListCommands.Direction.RIGHT, destinationKey, RedisListCommands.Direction.RIGHT, timeout));
+        return Result.o(RedisUtils.lMove(sourceKey, false, destinationKey, false, timeout));
     }
 
 }
