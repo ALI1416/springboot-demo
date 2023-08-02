@@ -1761,7 +1761,7 @@ public class RedisUtils {
      *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
      *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *              \ : 转义(字符*?[]^-\等)
-     * @return 值
+     * @return 值列表
      */
     public static Set<Object> sScan(String key, String match) {
         return sScan(key, match, 100);
@@ -1779,7 +1779,7 @@ public class RedisUtils {
      *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *              \ : 转义(字符*?[]^-\等)
      * @param count 一次扫描条数
-     * @return 值
+     * @return 值列表
      */
     public static Set<Object> sScan(String key, String match, long count) {
         Set<Object> values = new HashSet<>();

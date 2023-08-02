@@ -1,0 +1,11 @@
+knife4j:
+  enable: true
+  production: true
+
+springdoc:
+  api-docs:
+    enabled: false
+
+logging:
+  level:
+    root: warn

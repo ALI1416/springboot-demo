@@ -88,11 +88,11 @@ SpringBoot示例
   - MyBatis
   - 雪花ID生成器
   - HuTool工具包
-- **`demo-socket`** :WebSocket
+- **`demo-socket`** : WebSocket
   - SpringBoot Web
   - SpringBoot WebSocket
   - FastJson
-- **`demo-util`** :工具
+- **`demo-util`** : 工具
   - SpringBoot Web
   - FastJson
   - 雪花ID生成器
@@ -102,6 +102,10 @@ SpringBoot示例
   - Tika
   - Ansj分词
   - 二维码
+- **`demo-knife4j`** : Knife4j
+  - SpringBoot Web
+  - FastJson
+  - Knife4j
 - `.gitignore` : git忽略
 - `LICENSE` : 许可证
 - `pom.xml` : 项目父pom
@@ -185,6 +189,8 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/org.ansj/ansj_seg?label=Maven%20Central)
     - `二维码` : `com.google.zxing:core`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
+    - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
+      ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
 - `dependencyManagement` : 依赖管理，不用写版本号
 - `profiles` : 配置
   - `profile.id:install` : 打包配置
