@@ -1,7 +1,8 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.util.RedisUtils;
+import com.demo.template.RedisTemp;
+import lombok.AllArgsConstructor;
 import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
@@ -23,7 +24,10 @@ import java.util.List;
  * @since 1.0.0
  **/
 @RestController
+@AllArgsConstructor
 public class IndexController {
+
+    private final RedisTemp redisTemp;
 
     /**
      * <h3>拷贝</h3>
@@ -37,7 +41,7 @@ public class IndexController {
      */
     @PostMapping("copy")
     public Result copy(String sourceKey, String targetKey, boolean replace) {
-        return Result.o(RedisUtils.copy(sourceKey, targetKey, replace));
+        return Result.o(redisTemp.copy(sourceKey, targetKey, replace));
     }
 
     /**
@@ -48,7 +52,7 @@ public class IndexController {
      */
     @PostMapping("exists")
     public Result exists(String key) {
-        return Result.o(RedisUtils.exists(key));
+        return Result.o(redisTemp.exists(key));
     }
 
     /**
@@ -62,7 +66,7 @@ public class IndexController {
      */
     @PostMapping("existsCount")
     public Result existsCount(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.existsCount(keys));
+        return Result.o(redisTemp.existsCount(keys));
     }
 
     /**
@@ -75,7 +79,7 @@ public class IndexController {
      */
     @PostMapping("existsCount2")
     public Result existsCount(String[] keys) {
-        return Result.o(RedisUtils.existsCount(keys));
+        return Result.o(redisTemp.existsCount(keys));
     }
 
     /**
@@ -86,7 +90,7 @@ public class IndexController {
      */
     @PostMapping("delete")
     public Result delete(String key) {
-        return Result.o(RedisUtils.delete(key));
+        return Result.o(redisTemp.delete(key));
     }
 
     /**
@@ -100,7 +104,7 @@ public class IndexController {
      */
     @PostMapping("deleteList")
     public Result delete(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.deleteMulti(keys));
+        return Result.o(redisTemp.deleteMulti(keys));
     }
 
     /**
@@ -113,7 +117,7 @@ public class IndexController {
      */
     @PostMapping("deleteArray")
     public Result delete(String[] keys) {
-        return Result.o(RedisUtils.deleteMulti(keys));
+        return Result.o(redisTemp.deleteMulti(keys));
     }
 
     /**
@@ -125,7 +129,7 @@ public class IndexController {
      */
     @PostMapping("getExpire")
     public Result getExpire(String key) {
-        return Result.o(RedisUtils.getExpire(key));
+        return Result.o(redisTemp.getExpire(key));
     }
 
     /**
@@ -135,7 +139,7 @@ public class IndexController {
      */
     @PostMapping("dump")
     public Result dump(String key) {
-        return Result.o(RedisUtils.dump(key));
+        return Result.o(redisTemp.dump(key));
     }
 
     /**
@@ -150,7 +154,7 @@ public class IndexController {
      */
     @PostMapping("restore")
     public Result restore(String key, long timeout, boolean replace) {
-        RedisUtils.restore(key, new byte[]{0, 5, 34, 97, 98, 99, 34, 9, 0, 1, -3, -98, 28, 120, -86, 35, 37}, timeout, replace);
+        redisTemp.restore(key, new byte[]{0, 5, 34, 97, 98, 99, 34, 9, 0, 1, -3, -98, 28, 120, -86, 35, 37}, timeout, replace);
         return Result.o();
     }
 
@@ -165,7 +169,7 @@ public class IndexController {
     @PostMapping("sort")
     public Result sort(String key, boolean asc) {
         SortQuery<String> query = SortQueryBuilder.sort(key).alphabetical(true).order(asc ? SortParameters.Order.ASC : SortParameters.Order.DESC).build();
-        return Result.o(RedisUtils.sort(query));
+        return Result.o(redisTemp.sort(query));
     }
 
     /**
@@ -176,7 +180,7 @@ public class IndexController {
      */
     @PostMapping("persist")
     public Result persist(String key) {
-        return Result.o(RedisUtils.persist(key));
+        return Result.o(redisTemp.persist(key));
     }
 
     /**
@@ -190,7 +194,7 @@ public class IndexController {
      */
     @PostMapping("expire")
     public Result expire(String key, long timeout) {
-        return Result.o(RedisUtils.expire(key, timeout));
+        return Result.o(redisTemp.expire(key, timeout));
     }
 
     /**
@@ -200,7 +204,7 @@ public class IndexController {
      */
     @PostMapping("expireAt")
     public Result expireAt(String key, Date timeout) {
-        return Result.o(RedisUtils.expireAt(key, timeout));
+        return Result.o(redisTemp.expireAt(key, timeout));
     }
 
     /**
@@ -211,7 +215,7 @@ public class IndexController {
      */
     @PostMapping("unlink")
     public Result unlink(String key) {
-        return Result.o(RedisUtils.unlink(key));
+        return Result.o(redisTemp.unlink(key));
     }
 
     /**
@@ -225,7 +229,7 @@ public class IndexController {
      */
     @PostMapping("unlinkList")
     public Result unlink(List<String> keys) {
-        return Result.o(RedisUtils.unlinkMulti(keys));
+        return Result.o(redisTemp.unlinkMulti(keys));
     }
 
     /**
@@ -238,7 +242,7 @@ public class IndexController {
      */
     @PostMapping("unlinkArray")
     public Result unlink(String[] keys) {
-        return Result.o(RedisUtils.unlinkMulti(keys));
+        return Result.o(redisTemp.unlinkMulti(keys));
     }
 
     /**
@@ -253,7 +257,7 @@ public class IndexController {
      */
     @PostMapping("type")
     public Result type(String key) {
-        return Result.o(RedisUtils.type(key));
+        return Result.o(redisTemp.type(key));
     }
 
     /**
@@ -270,7 +274,7 @@ public class IndexController {
      */
     @PostMapping("keys")
     public Result keys(String pattern) {
-        return Result.o(RedisUtils.keys(pattern));
+        return Result.o(redisTemp.keys(pattern));
     }
 
     /**
@@ -281,7 +285,7 @@ public class IndexController {
      */
     @PostMapping("randomKey")
     public Result randomKey() {
-        return Result.o(RedisUtils.randomKey());
+        return Result.o(redisTemp.randomKey());
     }
 
     /**
@@ -293,7 +297,7 @@ public class IndexController {
      */
     @PostMapping("rename")
     public Result rename(String oldKey, String newKey) {
-        RedisUtils.rename(oldKey, newKey);
+        redisTemp.rename(oldKey, newKey);
         return Result.o();
     }
 
@@ -306,7 +310,7 @@ public class IndexController {
      */
     @PostMapping("renameIfAbsent")
     public Result renameIfAbsent(String oldKey, String newKey) {
-        return Result.o(RedisUtils.renameIfAbsent(oldKey, newKey));
+        return Result.o(redisTemp.renameIfAbsent(oldKey, newKey));
     }
 
     /**
@@ -317,7 +321,7 @@ public class IndexController {
      */
     @PostMapping("move")
     public Result move(String key, int dbIndex) {
-        return Result.o(RedisUtils.move(key, dbIndex));
+        return Result.o(redisTemp.move(key, dbIndex));
     }
 
     /**
@@ -334,7 +338,7 @@ public class IndexController {
      */
     @PostMapping("scan")
     public Result scan(String match) {
-        return Result.o(RedisUtils.scan(match));
+        return Result.o(redisTemp.scan(match));
     }
 
 }

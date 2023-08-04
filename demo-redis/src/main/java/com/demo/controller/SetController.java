@@ -1,7 +1,8 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.util.RedisUtils;
+import com.demo.template.RedisTemp;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,10 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("set")
+@AllArgsConstructor
 public class SetController {
+
+    private final RedisTemp redisTemp;
 
     /**
      * <h3>添加</h3>
@@ -31,7 +35,7 @@ public class SetController {
      */
     @PostMapping("sAdd")
     public Result sAdd(String key, String value) {
-        return Result.o(RedisUtils.sAdd(key, value));
+        return Result.o(redisTemp.sAdd(key, value));
     }
 
     /**
@@ -42,7 +46,7 @@ public class SetController {
      */
     @PostMapping("sAddMulti")
     public Result sAddMulti(String key, @RequestBody List<String> value) {
-        return Result.o(RedisUtils.sAddMulti(key, value));
+        return Result.o(redisTemp.sAddMulti(key, value));
     }
 
     /**
@@ -52,7 +56,7 @@ public class SetController {
      */
     @PostMapping("sAddMultiArray")
     public Result sAddMultiArray(String key, String[] value) {
-        return Result.o(RedisUtils.sAddMulti(key, value));
+        return Result.o(redisTemp.sAddMulti(key, value));
     }
 
     /**
@@ -64,7 +68,7 @@ public class SetController {
      */
     @PostMapping("sDelete")
     public Result sDelete(String key, String value) {
-        return Result.o(RedisUtils.sDelete(key, value));
+        return Result.o(redisTemp.sDelete(key, value));
     }
 
     /**
@@ -75,7 +79,7 @@ public class SetController {
      */
     @PostMapping("sDeleteMulti")
     public Result sDeleteMulti(String key, @RequestBody List<String> value) {
-        return Result.o(RedisUtils.sDeleteMulti(key, value));
+        return Result.o(redisTemp.sDeleteMulti(key, value));
     }
 
     /**
@@ -85,7 +89,7 @@ public class SetController {
      */
     @PostMapping("sDeleteMultiArray")
     public Result sDeleteMultiArray(String key, String[] value) {
-        return Result.o(RedisUtils.sDeleteMulti(key, value));
+        return Result.o(redisTemp.sDeleteMulti(key, value));
     }
 
     /**
@@ -96,7 +100,7 @@ public class SetController {
      */
     @PostMapping("sPop")
     public Result sPop(String key) {
-        return Result.o(RedisUtils.sPop(key));
+        return Result.o(redisTemp.sPop(key));
     }
 
     /**
@@ -107,7 +111,7 @@ public class SetController {
      */
     @PostMapping("sPopMulti")
     public Result sPopMulti(String key, long count) {
-        return Result.o(RedisUtils.sPopMulti(key, count));
+        return Result.o(redisTemp.sPopMulti(key, count));
     }
 
     /**
@@ -117,7 +121,7 @@ public class SetController {
      */
     @PostMapping("sMove")
     public Result sMove(String key, String value, String destKey) {
-        return Result.o(RedisUtils.sMove(key, value, destKey));
+        return Result.o(redisTemp.sMove(key, value, destKey));
     }
 
     /**
@@ -127,7 +131,7 @@ public class SetController {
      */
     @PostMapping("sSize")
     public Result sSize(String key) {
-        return Result.o(RedisUtils.sSize(key));
+        return Result.o(redisTemp.sSize(key));
     }
 
     /**
@@ -139,7 +143,7 @@ public class SetController {
      */
     @PostMapping("sIsMember")
     public Result sIsMember(String key, String value) {
-        return Result.o(RedisUtils.sIsMember(key, value));
+        return Result.o(redisTemp.sIsMember(key, value));
     }
 
     /**
@@ -150,7 +154,7 @@ public class SetController {
      */
     @PostMapping("sIsMultiMember")
     public Result sIsMultiMember(String key, @RequestBody List<String> value) {
-        return Result.o(RedisUtils.sIsMemberMulti(key, value));
+        return Result.o(redisTemp.sIsMemberMulti(key, value));
     }
 
     /**
@@ -161,7 +165,7 @@ public class SetController {
      */
     @PostMapping("sIsMultiMemberArray")
     public Result sIsMultiMemberArray(String key, String[] value) {
-        return Result.o(RedisUtils.sIsMemberMulti(key, value));
+        return Result.o(redisTemp.sIsMemberMulti(key, value));
     }
 
     /**
@@ -172,7 +176,7 @@ public class SetController {
      */
     @PostMapping("sMembers")
     public Result sMembers(String key) {
-        return Result.o(RedisUtils.sMembers(key));
+        return Result.o(redisTemp.sMembers(key));
     }
 
     /**
@@ -184,7 +188,7 @@ public class SetController {
      */
     @PostMapping("sRandomMember")
     public Result sRandomMember(String key) {
-        return Result.o(RedisUtils.sRandomMember(key));
+        return Result.o(redisTemp.sRandomMember(key));
     }
 
     /**
@@ -196,7 +200,7 @@ public class SetController {
      */
     @PostMapping("sRandomMultiMember")
     public Result sRandomMultiMember(String key, long count) {
-        return Result.o(RedisUtils.sRandomMemberMulti(key, count));
+        return Result.o(redisTemp.sRandomMemberMulti(key, count));
     }
 
     /**
@@ -208,7 +212,7 @@ public class SetController {
      */
     @PostMapping("sRandomMultiDistinctMember")
     public Result sRandomMultiDistinctMember(String key, long count) {
-        return Result.o(RedisUtils.sRandomMemberMultiDistinct(key, count));
+        return Result.o(redisTemp.sRandomMemberMultiDistinct(key, count));
     }
 
     /**
@@ -220,7 +224,7 @@ public class SetController {
      */
     @PostMapping("sIntersect")
     public Result sIntersect(String key, String otherKey) {
-        return Result.o(RedisUtils.sIntersect(key, otherKey));
+        return Result.o(redisTemp.sIntersect(key, otherKey));
     }
 
     /**
@@ -234,7 +238,7 @@ public class SetController {
      */
     @PostMapping("sIntersectMulti")
     public Result sIntersectMulti(String key, @RequestBody List<String> otherKey) {
-        return Result.o(RedisUtils.sIntersectMulti(key, otherKey));
+        return Result.o(redisTemp.sIntersectMulti(key, otherKey));
     }
 
     /**
@@ -248,7 +252,7 @@ public class SetController {
      */
     @PostMapping("sIntersectAll")
     public Result sIntersect(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.sIntersectAll(keys));
+        return Result.o(redisTemp.sIntersectAll(keys));
     }
 
     /**
@@ -260,7 +264,7 @@ public class SetController {
      */
     @PostMapping("sIntersectAndStore")
     public Result sIntersectAndStore(String key, String otherKey, String destKey) {
-        return Result.o(RedisUtils.sIntersectAndStore(key, otherKey, destKey));
+        return Result.o(redisTemp.sIntersectAndStore(key, otherKey, destKey));
     }
 
     /**
@@ -274,7 +278,7 @@ public class SetController {
      */
     @PostMapping("sIntersectMultiAndStore")
     public Result sIntersectMultiAndStore(String key, @RequestBody List<String> otherKey, String destKey) {
-        return Result.o(RedisUtils.sIntersectAndStoreMulti(key, otherKey, destKey));
+        return Result.o(redisTemp.sIntersectAndStoreMulti(key, otherKey, destKey));
     }
 
     /**
@@ -288,7 +292,7 @@ public class SetController {
      */
     @PostMapping("sIntersectAllAndStore")
     public Result sIntersectAndStore(@RequestBody List<String> keys, String destKey) {
-        return Result.o(RedisUtils.sIntersectAndStoreAll(keys, destKey));
+        return Result.o(redisTemp.sIntersectAndStoreAll(keys, destKey));
     }
 
     /**
@@ -300,7 +304,7 @@ public class SetController {
      */
     @PostMapping("sUnion")
     public Result sUnion(String key, String otherKey) {
-        return Result.o(RedisUtils.sUnion(key, otherKey));
+        return Result.o(redisTemp.sUnion(key, otherKey));
     }
 
     /**
@@ -314,7 +318,7 @@ public class SetController {
      */
     @PostMapping("sUnionMulti")
     public Result sUnionMulti(String key, @RequestBody List<String> otherKey) {
-        return Result.o(RedisUtils.sUnionMulti(key, otherKey));
+        return Result.o(redisTemp.sUnionMulti(key, otherKey));
     }
 
     /**
@@ -328,7 +332,7 @@ public class SetController {
      */
     @PostMapping("sUnionAll")
     public Result sUnion(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.sUnionAll(keys));
+        return Result.o(redisTemp.sUnionAll(keys));
     }
 
     /**
@@ -340,7 +344,7 @@ public class SetController {
      */
     @PostMapping("sUnionAndStore")
     public Result sUnionAndStore(String key, String otherKey, String destKey) {
-        return Result.o(RedisUtils.sUnionAndStore(key, otherKey, destKey));
+        return Result.o(redisTemp.sUnionAndStore(key, otherKey, destKey));
     }
 
     /**
@@ -354,7 +358,7 @@ public class SetController {
      */
     @PostMapping("sUnionMultiAndStore")
     public Result sUnionMultiAndStore(String key, @RequestBody List<String> otherKey, String destKey) {
-        return Result.o(RedisUtils.sUnionAndStoreMulti(key, otherKey, destKey));
+        return Result.o(redisTemp.sUnionAndStoreMulti(key, otherKey, destKey));
     }
 
     /**
@@ -368,7 +372,7 @@ public class SetController {
      */
     @PostMapping("sUnionAllAndStore")
     public Result sUnionAndStore(@RequestBody List<String> keys, String destKey) {
-        return Result.o(RedisUtils.sUnionAndStoreAll(keys, destKey));
+        return Result.o(redisTemp.sUnionAndStoreAll(keys, destKey));
     }
 
     /**
@@ -380,7 +384,7 @@ public class SetController {
      */
     @PostMapping("sDifference")
     public Result sDifference(String key, String otherKey) {
-        return Result.o(RedisUtils.sDifference(key, otherKey));
+        return Result.o(redisTemp.sDifference(key, otherKey));
     }
 
     /**
@@ -394,7 +398,7 @@ public class SetController {
      */
     @PostMapping("sDifferenceMulti")
     public Result sDifferenceMulti(String key, @RequestBody List<String> otherKey) {
-        return Result.o(RedisUtils.sDifferenceMulti(key, otherKey));
+        return Result.o(redisTemp.sDifferenceMulti(key, otherKey));
     }
 
     /**
@@ -408,7 +412,7 @@ public class SetController {
      */
     @PostMapping("sDifferenceAll")
     public Result sDifference(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.sDifferenceAll(keys));
+        return Result.o(redisTemp.sDifferenceAll(keys));
     }
 
     /**
@@ -420,7 +424,7 @@ public class SetController {
      */
     @PostMapping("sDifferenceAndStore")
     public Result sDifferenceAndStore(String key, String otherKey, String destKey) {
-        return Result.o(RedisUtils.sDifferenceAndStore(key, otherKey, destKey));
+        return Result.o(redisTemp.sDifferenceAndStore(key, otherKey, destKey));
     }
 
     /**
@@ -434,7 +438,7 @@ public class SetController {
      */
     @PostMapping("sDifferenceMultiAndStore")
     public Result sDifferenceMultiAndStore(String key, @RequestBody List<String> otherKey, String destKey) {
-        return Result.o(RedisUtils.sDifferenceAndStoreMulti(key, otherKey, destKey));
+        return Result.o(redisTemp.sDifferenceAndStoreMulti(key, otherKey, destKey));
     }
 
     /**
@@ -448,7 +452,7 @@ public class SetController {
      */
     @PostMapping("sDifferenceAllAndStore")
     public Result sDifferenceAndStore(@RequestBody List<String> keys, String destKey) {
-        return Result.o(RedisUtils.sDifferenceAndStoreAll(keys, destKey));
+        return Result.o(redisTemp.sDifferenceAndStoreAll(keys, destKey));
     }
 
     /**
@@ -465,7 +469,7 @@ public class SetController {
      */
     @PostMapping("sScan")
     public Result sScan(String key, String match) {
-        return Result.o(RedisUtils.sScan(key, match));
+        return Result.o(redisTemp.sScan(key, match));
     }
 
 }

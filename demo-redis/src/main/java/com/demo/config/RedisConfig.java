@@ -22,6 +22,9 @@ import org.springframework.data.redis.serializer.SerializationException;
 @Configuration
 public class RedisConfig {
 
+    /**
+     * redis模板
+     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();

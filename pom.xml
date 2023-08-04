@@ -25,6 +25,7 @@
   <modules>
     <module>demo-java-advanced</module>
     <module>demo-base</module>
+    <module>demo-base2</module>
     <module>demo-mysql</module>
     <module>demo-mysql2</module>
     <module>demo-redis</module>

@@ -1,7 +1,8 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.util.RedisUtils;
+import com.demo.template.RedisTemp;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,10 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("list")
+@AllArgsConstructor
 public class ListController {
+
+    private final RedisTemp redisTemp;
 
     /**
      * <h3>获取指定下标的值</h3>
@@ -35,7 +39,7 @@ public class ListController {
      */
     @PostMapping("lGet")
     public Result lGet(String key, long index) {
-        return Result.o(RedisUtils.lGet(key, index));
+        return Result.o(redisTemp.lGet(key, index));
     }
 
     /**
@@ -46,7 +50,7 @@ public class ListController {
      */
     @PostMapping("lGetFirst")
     public Result lGetFirst(String key) {
-        return Result.o(RedisUtils.lGetFirst(key));
+        return Result.o(redisTemp.lGetFirst(key));
     }
 
     /**
@@ -57,7 +61,7 @@ public class ListController {
      */
     @PostMapping("lGetLast")
     public Result lGetLast(String key) {
-        return Result.o(RedisUtils.lGetLast(key));
+        return Result.o(redisTemp.lGetLast(key));
     }
 
     /**
@@ -70,7 +74,7 @@ public class ListController {
      */
     @PostMapping("lGetList")
     public Result lGetList(String key, long start, long end) {
-        return Result.o(RedisUtils.lGetMulti(key, start, end));
+        return Result.o(redisTemp.lGetMulti(key, start, end));
     }
 
     /**
@@ -81,7 +85,7 @@ public class ListController {
      */
     @PostMapping("lGetAll")
     public Result lGetAll(String key) {
-        return Result.o(RedisUtils.lGetAll(key));
+        return Result.o(redisTemp.lGetAll(key));
     }
 
     /**
@@ -95,7 +99,7 @@ public class ListController {
      */
     @PostMapping("lTrim")
     public Result lTrim(String key, long start, long end) {
-        RedisUtils.lTrim(key, start, end);
+        redisTemp.lTrim(key, start, end);
         return Result.o();
     }
 
@@ -106,7 +110,7 @@ public class ListController {
      */
     @PostMapping("lSize")
     public Result lSize(String key) {
-        return Result.o(RedisUtils.lSize(key));
+        return Result.o(redisTemp.lSize(key));
     }
 
     /**
@@ -122,7 +126,7 @@ public class ListController {
      */
     @PostMapping("lLeftPush")
     public Result lLeftPush(String key, String value) {
-        return Result.o(RedisUtils.lLeftPush(key, value));
+        return Result.o(redisTemp.lLeftPush(key, value));
     }
 
     /**
@@ -134,7 +138,7 @@ public class ListController {
      */
     @PostMapping("lLeftPushAllArray")
     public Result lLeftPushAll(String key, String[] value) {
-        return Result.o(RedisUtils.lLeftPushMulti(key, value));
+        return Result.o(redisTemp.lLeftPushMulti(key, value));
     }
 
     /**
@@ -147,7 +151,7 @@ public class ListController {
      */
     @PostMapping("lLeftPushAllList")
     public Result lLeftPushAll(String key, @RequestBody List<Object> value) {
-        return Result.o(RedisUtils.lLeftPushMulti(key, value));
+        return Result.o(redisTemp.lLeftPushMulti(key, value));
     }
 
     /**
@@ -162,7 +166,7 @@ public class ListController {
      */
     @PostMapping("lLeftPushIfPresent")
     public Result lLeftPushIfPresent(String key, String value) {
-        return Result.o(RedisUtils.lLeftPushIfPresent(key, value));
+        return Result.o(redisTemp.lLeftPushIfPresent(key, value));
     }
 
     /**
@@ -177,7 +181,7 @@ public class ListController {
      */
     @PostMapping("lLeftPushOfValue")
     public Result lLeftPush(String key, int pivot, String value) {
-        return Result.o(RedisUtils.lInsertLeft(key, pivot, value));
+        return Result.o(redisTemp.lInsertLeft(key, pivot, value));
     }
 
     /**
@@ -189,7 +193,7 @@ public class ListController {
      */
     @PostMapping("lRightPush")
     public Result lRightPush(String key, String value) {
-        return Result.o(RedisUtils.lRightPush(key, value));
+        return Result.o(redisTemp.lRightPush(key, value));
     }
 
     /**
@@ -201,7 +205,7 @@ public class ListController {
      */
     @PostMapping("lRightPushAllArray")
     public Result lRightPushAll(String key, String[] value) {
-        return Result.o(RedisUtils.lRightPushMulti(key, value));
+        return Result.o(redisTemp.lRightPushMulti(key, value));
     }
 
     /**
@@ -214,7 +218,7 @@ public class ListController {
      */
     @PostMapping("lRightPushAllList")
     public Result lRightPushAll(String key, @RequestBody List<Object> value) {
-        return Result.o(RedisUtils.lRightPushMulti(key, value));
+        return Result.o(redisTemp.lRightPushMulti(key, value));
     }
 
     /**
@@ -226,7 +230,7 @@ public class ListController {
      */
     @PostMapping("lRightPushIfPresent")
     public Result lRightPushIfPresent(String key, String value) {
-        return Result.o(RedisUtils.lRightPushIfPresent(key, value));
+        return Result.o(redisTemp.lRightPushIfPresent(key, value));
     }
 
     /**
@@ -241,7 +245,7 @@ public class ListController {
      */
     @PostMapping("lRightPushOfValue")
     public Result lRightPush(String key, int pivot, String value) {
-        return Result.o(RedisUtils.lInsertRight(key, pivot, value));
+        return Result.o(redisTemp.lInsertRight(key, pivot, value));
     }
 
     /**
@@ -258,7 +262,7 @@ public class ListController {
      */
     @PostMapping("lSet")
     public Result lSet(String key, long index, String value) {
-        RedisUtils.lSet(key, index, value);
+        redisTemp.lSet(key, index, value);
         return Result.o();
     }
 
@@ -286,7 +290,7 @@ public class ListController {
      */
     @PostMapping("lRemove")
     public Result lRemove(String key, long count, int value) {
-        return Result.o(RedisUtils.lDelete(key, count, value));
+        return Result.o(redisTemp.lDelete(key, count, value));
     }
 
     /**
@@ -298,7 +302,7 @@ public class ListController {
      */
     @PostMapping("lRemoveLeft")
     public Result lRemoveLeft(String key, int value) {
-        return Result.o(RedisUtils.lDeleteLeft(key, value));
+        return Result.o(redisTemp.lDeleteLeft(key, value));
     }
 
     /**
@@ -310,7 +314,7 @@ public class ListController {
      */
     @PostMapping("lRemoveRight")
     public Result lRemoveLast(String key, int value) {
-        return Result.o(RedisUtils.lDeleteRight(key, value));
+        return Result.o(redisTemp.lDeleteRight(key, value));
     }
 
     /**
@@ -322,7 +326,7 @@ public class ListController {
      */
     @PostMapping("lRemoveAll")
     public Result lRemoveAll(String key, int value) {
-        return Result.o(RedisUtils.lDeleteAll(key, value));
+        return Result.o(redisTemp.lDeleteAll(key, value));
     }
 
     /**
@@ -335,7 +339,7 @@ public class ListController {
      */
     @PostMapping("lIndexOf")
     public Result lIndexOf(String key, String value) {
-        return Result.o(RedisUtils.lIndexOfFirst(key, value));
+        return Result.o(redisTemp.lIndexOfFirst(key, value));
     }
 
     /**
@@ -348,7 +352,7 @@ public class ListController {
      */
     @PostMapping("lLastIndexOf")
     public Result lLastIndexOf(String key, String value) {
-        return Result.o(RedisUtils.lIndexOfLast(key, value));
+        return Result.o(redisTemp.lIndexOfLast(key, value));
     }
 
     /**
@@ -362,7 +366,7 @@ public class ListController {
      */
     @PostMapping("lLeftPop")
     public Result lLeftPop(String key) {
-        return Result.o(RedisUtils.lLeftPop(key));
+        return Result.o(redisTemp.lLeftPop(key));
     }
 
     /**
@@ -372,7 +376,7 @@ public class ListController {
      */
     @PostMapping("lLeftPopSecond")
     public Result lLeftPop(String key, long timeout) {
-        return Result.o(RedisUtils.lLeftPop(key, timeout));
+        return Result.o(redisTemp.lLeftPop(key, timeout));
     }
 
     /**
@@ -384,7 +388,7 @@ public class ListController {
      */
     @PostMapping("lRightPop")
     public Result lRightPop(String key) {
-        return Result.o(RedisUtils.lRightPop(key));
+        return Result.o(redisTemp.lRightPop(key));
     }
 
     /**
@@ -394,7 +398,7 @@ public class ListController {
      */
     @PostMapping("lRightPopSecond")
     public Result lRightPop(String key, long timeout) {
-        return Result.o(RedisUtils.lRightPop(key, timeout));
+        return Result.o(redisTemp.lRightPop(key, timeout));
     }
 
     /**
@@ -408,7 +412,7 @@ public class ListController {
      */
     @PostMapping("lRightPopAndLeftPush")
     public Result lRightPopAndLeftPush(String sourceKey, String destinationKey) {
-        return Result.o(RedisUtils.lRightPopAndLeftPush(sourceKey, destinationKey));
+        return Result.o(redisTemp.lRightPopAndLeftPush(sourceKey, destinationKey));
     }
 
     /**
@@ -418,7 +422,7 @@ public class ListController {
      */
     @PostMapping("lRightPopAndLeftPushSecond")
     public Result lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
-        return Result.o(RedisUtils.lRightPopAndLeftPush(sourceKey, destinationKey, timeout));
+        return Result.o(redisTemp.lRightPopAndLeftPush(sourceKey, destinationKey, timeout));
     }
 
     /**
@@ -432,7 +436,7 @@ public class ListController {
      */
     @PostMapping("lMove")
     public Result lMove(String sourceKey, String destinationKey) {
-        return Result.o(RedisUtils.lMove(sourceKey, false, destinationKey, false));
+        return Result.o(redisTemp.lMove(sourceKey, false, destinationKey, false));
     }
 
     /**
@@ -442,7 +446,7 @@ public class ListController {
      */
     @PostMapping("lMove2")
     public Result lMove2(String sourceKey, String destinationKey, long timeout) {
-        return Result.o(RedisUtils.lMove(sourceKey, false, destinationKey, false, timeout));
+        return Result.o(redisTemp.lMove(sourceKey, false, destinationKey, false, timeout));
     }
 
 }

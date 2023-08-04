@@ -1,7 +1,8 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.util.RedisUtils;
+import com.demo.template.RedisTemp;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,10 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("hash")
+@AllArgsConstructor
 public class HashController {
+
+    private final RedisTemp redisTemp;
 
     /**
      * <h3>删除map中指定多个项</h3>
@@ -32,7 +36,7 @@ public class HashController {
      */
     @PostMapping("hDelete")
     public Result hDelete(String key, String item) {
-        return Result.o(RedisUtils.hDelete(key, item));
+        return Result.o(redisTemp.hDelete(key, item));
     }
 
     /**
@@ -43,7 +47,7 @@ public class HashController {
      */
     @PostMapping("hDeleteArray")
     public Result hDelete(String key, String[] items) {
-        return Result.o(RedisUtils.hDeleteMulti(key, items));
+        return Result.o(redisTemp.hDeleteMulti(key, items));
     }
 
     /**
@@ -55,7 +59,7 @@ public class HashController {
      */
     @PostMapping("hDeleteList")
     public Result hDelete(String key, @RequestBody List<String> items) {
-        return Result.o(RedisUtils.hDeleteMulti(key, items));
+        return Result.o(redisTemp.hDeleteMulti(key, items));
     }
 
     /**
@@ -66,7 +70,7 @@ public class HashController {
      */
     @PostMapping("hHasKey")
     public Result hHasKey(String key, String item) {
-        return Result.o(RedisUtils.hExists(key, item));
+        return Result.o(redisTemp.hExists(key, item));
     }
 
     /**
@@ -77,7 +81,7 @@ public class HashController {
      */
     @PostMapping("hGet")
     public Result hGet(String key, String item) {
-        return Result.o(RedisUtils.hGet(key, item));
+        return Result.o(redisTemp.hGet(key, item));
     }
 
     /**
@@ -87,7 +91,7 @@ public class HashController {
      */
     @PostMapping("hMultiGetArray")
     public Result hMultiGet(String key, String[] items) {
-        return Result.o(RedisUtils.hGetMulti(key, items));
+        return Result.o(redisTemp.hGetMulti(key, items));
     }
 
     /**
@@ -98,7 +102,7 @@ public class HashController {
      */
     @PostMapping("hMultiGetList")
     public Result hMultiGet(String key, @RequestBody List<String> items) {
-        return Result.o(RedisUtils.hGetMulti(key, items));
+        return Result.o(redisTemp.hGetMulti(key, items));
     }
 
     /**
@@ -109,7 +113,7 @@ public class HashController {
      */
     @PostMapping("hIncrement1")
     public Result hIncrement(String key, String item) {
-        return Result.o(RedisUtils.hIncrement(key, item));
+        return Result.o(redisTemp.hIncrement(key, item));
     }
 
     /**
@@ -120,7 +124,7 @@ public class HashController {
      */
     @PostMapping("hIncrement")
     public Result hIncrement(String key, String item, long delta) {
-        return Result.o(RedisUtils.hIncrement(key, item, delta));
+        return Result.o(redisTemp.hIncrement(key, item, delta));
     }
 
     /**
@@ -131,7 +135,7 @@ public class HashController {
      */
     @PostMapping("hIncrementD")
     public Result hIncrementD(String key, String item, double delta) {
-        return Result.o(RedisUtils.hIncrement(key, item, delta));
+        return Result.o(redisTemp.hIncrement(key, item, delta));
     }
 
     /**
@@ -142,7 +146,7 @@ public class HashController {
      */
     @PostMapping("hDecrement1")
     public Result hDecrement(String key, String item) {
-        return Result.o(RedisUtils.hDecrement(key, item));
+        return Result.o(redisTemp.hDecrement(key, item));
     }
 
     /**
@@ -153,7 +157,7 @@ public class HashController {
      */
     @PostMapping("hDecrement")
     public Result hDecrement(String key, String item, long delta) {
-        return Result.o(RedisUtils.hDecrement(key, item, delta));
+        return Result.o(redisTemp.hDecrement(key, item, delta));
     }
 
     /**
@@ -164,7 +168,7 @@ public class HashController {
      */
     @PostMapping("hDecrementD")
     public Result hDecrementD(String key, String item, double delta) {
-        return Result.o(RedisUtils.hDecrement(key, item, delta));
+        return Result.o(redisTemp.hDecrement(key, item, delta));
     }
 
     /**
@@ -175,7 +179,7 @@ public class HashController {
      */
     @PostMapping("hRandomItem")
     public Result hRandomItem(String key) {
-        return Result.o(RedisUtils.hRandomItem(key));
+        return Result.o(redisTemp.hRandomItem(key));
     }
 
     /**
@@ -186,7 +190,7 @@ public class HashController {
      */
     @PostMapping("hRandomMap")
     public Result hRandomMap(String key) {
-        return Result.o(RedisUtils.hRandomMap(key));
+        return Result.o(redisTemp.hRandomMap(key));
     }
 
     /**
@@ -197,7 +201,7 @@ public class HashController {
      */
     @PostMapping("hRandomItem2")
     public Result hRandomItem2(String key, long count) {
-        return Result.o(RedisUtils.hRandomItem(key, count));
+        return Result.o(redisTemp.hRandomItem(key, count));
     }
 
     /**
@@ -208,7 +212,7 @@ public class HashController {
      */
     @PostMapping("hRandomMap2")
     public Result hRandomMap2(String key, long count) {
-        return Result.o(RedisUtils.hRandomMap(key, count));
+        return Result.o(redisTemp.hRandomMap(key, count));
     }
 
     /**
@@ -219,7 +223,7 @@ public class HashController {
      */
     @PostMapping("hLengthOfValue")
     public Result hLengthOfValue(String key, String item) {
-        return Result.o(RedisUtils.hLengthOfValue(key, item));
+        return Result.o(redisTemp.hLengthOfValue(key, item));
     }
 
     /**
@@ -230,7 +234,7 @@ public class HashController {
      */
     @PostMapping("hSize")
     public Result hSize(String key) {
-        return Result.o(RedisUtils.hSize(key));
+        return Result.o(redisTemp.hSize(key));
     }
 
     /**
@@ -241,7 +245,7 @@ public class HashController {
      */
     @PostMapping("hPutAll")
     public Result hPutAll(String key, @RequestBody Map<String, Object> map) {
-        RedisUtils.hSetMulti(key, map);
+        redisTemp.hSetMulti(key, map);
         return Result.o();
     }
 
@@ -252,7 +256,7 @@ public class HashController {
      */
     @PostMapping("hPut")
     public Result hPut(String key, String item, String value) {
-        RedisUtils.hSet(key, item, value);
+        redisTemp.hSet(key, item, value);
         return Result.o();
     }
 
@@ -264,7 +268,7 @@ public class HashController {
      */
     @PostMapping("hPutIfAbsent")
     public Result hPutIfAbsent(String key, String item, String value) {
-        return Result.o(RedisUtils.hPutIfAbsent(key, item, value));
+        return Result.o(redisTemp.hPutIfAbsent(key, item, value));
     }
 
     /**
@@ -274,7 +278,7 @@ public class HashController {
      */
     @PostMapping("hGetAllItem")
     public Result hGetAllItem(String key) {
-        return Result.o(RedisUtils.hGetAllItem(key));
+        return Result.o(redisTemp.hGetAllItem(key));
     }
 
     /**
@@ -284,7 +288,7 @@ public class HashController {
      */
     @PostMapping("hGetAllValue")
     public Result hGetAllValue(String key) {
-        return Result.o(RedisUtils.hGetAllValue(key));
+        return Result.o(redisTemp.hGetAllValue(key));
     }
 
     /**
@@ -294,7 +298,7 @@ public class HashController {
      */
     @PostMapping("hGetAllItemAndValue")
     public Result hGetAllItemAndValue(String key) {
-        return Result.o(RedisUtils.hGetAllItemAndValue(key));
+        return Result.o(redisTemp.hGetAllItemAndValue(key));
     }
 
     /**
@@ -311,7 +315,7 @@ public class HashController {
      */
     @PostMapping("hScan")
     public Result hScan(String key, String match) {
-        return Result.o(RedisUtils.hScan(key, match));
+        return Result.o(redisTemp.hScan(key, match));
     }
 
 }

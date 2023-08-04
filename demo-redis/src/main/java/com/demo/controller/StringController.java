@@ -2,7 +2,8 @@ package com.demo.controller;
 
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
-import com.demo.util.RedisUtils;
+import com.demo.template.RedisTemp;
+import lombok.AllArgsConstructor;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,10 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("string")
+@AllArgsConstructor
 public class StringController {
+
+    private final RedisTemp redisTemp;
 
     /* ==================== set各种类型 ==================== */
     // region
@@ -37,7 +41,7 @@ public class StringController {
      */
     @PostMapping("intSet")
     public Result intSet(String key, int value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -49,7 +53,7 @@ public class StringController {
      */
     @PostMapping("shortSet")
     public Result shortSet(String key, short value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -61,7 +65,7 @@ public class StringController {
      */
     @PostMapping("longSet")
     public Result longSet(String key, long value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -73,7 +77,7 @@ public class StringController {
      */
     @PostMapping("booleanSet")
     public Result booleanSet(String key, boolean value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -85,7 +89,7 @@ public class StringController {
      */
     @PostMapping("byteSet")
     public Result byteSet(String key, byte value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -97,7 +101,7 @@ public class StringController {
      */
     @PostMapping("charSet")
     public Result charSet(String key, char value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -109,7 +113,7 @@ public class StringController {
      */
     @PostMapping("floatSet")
     public Result floatSet(String key, float value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -121,7 +125,7 @@ public class StringController {
      */
     @PostMapping("doubleSet")
     public Result doubleSet(String key, double value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -133,7 +137,7 @@ public class StringController {
      */
     @PostMapping("stringSet")
     public Result stringSet(String key, String value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -145,7 +149,7 @@ public class StringController {
      */
     @PostMapping("integerSet")
     public Result integerSet(String key, Integer value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -159,7 +163,7 @@ public class StringController {
      */
     @PostMapping("userSet")
     public Result userSet(String key, @RequestBody User user) {
-        RedisUtils.set(key, user);
+        redisTemp.set(key, user);
         return Result.o();
     }
 
@@ -172,7 +176,7 @@ public class StringController {
      */
     @PostMapping("mapStringObjectSet")
     public Result mapStringObjectSet(String key, @RequestBody Map<String, Object> value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -184,7 +188,7 @@ public class StringController {
      */
     @PostMapping("arrayIntegerSet")
     public Result arrayIntegerSet(String key, Integer[] value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -197,7 +201,7 @@ public class StringController {
      */
     @PostMapping("listIntegerSet")
     public Result listIntegerSet(String key, @RequestBody List<Integer> value) {
-        RedisUtils.set(key, value);
+        redisTemp.set(key, value);
         return Result.o();
     }
 
@@ -210,7 +214,7 @@ public class StringController {
      */
     @PostMapping("setExpire")
     public Result setExpire(String key, String value, long timeout) {
-        RedisUtils.set(key, value, timeout);
+        redisTemp.set(key, value, timeout);
         return Result.o();
     }
 
@@ -222,7 +226,7 @@ public class StringController {
      */
     @PostMapping("setIfAbsent")
     public Result setIfAbsent(String key, String value) {
-        return Result.o(RedisUtils.setIfAbsent(key, value));
+        return Result.o(redisTemp.setIfAbsent(key, value));
     }
 
     /**
@@ -233,7 +237,7 @@ public class StringController {
      */
     @PostMapping("setIfAbsentExpire")
     public Result setIfAbsent(String key, String value, long timeout) {
-        return Result.o(RedisUtils.setIfAbsent(key, value, timeout));
+        return Result.o(redisTemp.setIfAbsent(key, value, timeout));
     }
 
     /**
@@ -244,7 +248,7 @@ public class StringController {
      */
     @PostMapping("setIfPresent")
     public Result setIfPresent(String key, String value) {
-        return Result.o(RedisUtils.setIfPresent(key, value));
+        return Result.o(redisTemp.setIfPresent(key, value));
     }
 
     /**
@@ -255,7 +259,7 @@ public class StringController {
      */
     @PostMapping("setIfPresentExpire")
     public Result setIfPresent(String key, String value, long timeout) {
-        return Result.o(RedisUtils.setIfPresent(key, value, timeout));
+        return Result.o(redisTemp.setIfPresent(key, value, timeout));
     }
 
     /**
@@ -266,7 +270,7 @@ public class StringController {
      */
     @PostMapping("multiSet")
     public Result multiSet(@RequestBody Map<String, Object> map) {
-        RedisUtils.setMulti(map);
+        redisTemp.setMulti(map);
         return Result.o();
     }
 
@@ -279,7 +283,7 @@ public class StringController {
      */
     @PostMapping("multiSetIfAbsent")
     public Result multiSetIfAbsent(@RequestBody Map<String, Object> map) {
-        return Result.o(RedisUtils.setMultiIfAbsent(map));
+        return Result.o(redisTemp.setMultiIfAbsent(map));
     }
 
     /**
@@ -290,7 +294,7 @@ public class StringController {
      */
     @PostMapping("get")
     public Result get(String key) {
-        return Result.o(RedisUtils.get(key));
+        return Result.o(redisTemp.get(key));
     }
 
     /**
@@ -303,7 +307,7 @@ public class StringController {
      */
     @PostMapping("getAndDelete")
     public Result getAndDelete(String key) {
-        return Result.o(RedisUtils.getAndDelete(key));
+        return Result.o(redisTemp.getAndDelete(key));
     }
 
     /**
@@ -316,7 +320,7 @@ public class StringController {
      */
     @PostMapping("getAndExpire")
     public Result getAndExpire(String key, long timeout) {
-        return Result.o(RedisUtils.getAndExpire(key, timeout));
+        return Result.o(redisTemp.getAndExpire(key, timeout));
     }
 
     /**
@@ -329,7 +333,7 @@ public class StringController {
      */
     @PostMapping("getAndPersist")
     public Result getAndPersist(String key) {
-        return Result.o(RedisUtils.getAndPersist(key));
+        return Result.o(redisTemp.getAndPersist(key));
     }
 
     /**
@@ -340,7 +344,7 @@ public class StringController {
      */
     @PostMapping("getAndSet")
     public Result getAndSet(String key, String value) {
-        return Result.o(RedisUtils.getAndSet(key, value));
+        return Result.o(redisTemp.getAndSet(key, value));
     }
 
     /**
@@ -351,7 +355,7 @@ public class StringController {
      */
     @PostMapping("multiGetList")
     public Result multiGet(@RequestBody List<String> keys) {
-        return Result.o(RedisUtils.getMulti(keys));
+        return Result.o(redisTemp.getMulti(keys));
     }
 
     /**
@@ -361,7 +365,7 @@ public class StringController {
      */
     @PostMapping("multiGetArray")
     public Result multiGet(String[] keys) {
-        return Result.o(RedisUtils.getMulti(keys));
+        return Result.o(redisTemp.getMulti(keys));
     }
 
     /**
@@ -372,7 +376,7 @@ public class StringController {
      */
     @PostMapping("increment1")
     public Result increment(String key) {
-        return Result.o(RedisUtils.increment(key));
+        return Result.o(redisTemp.increment(key));
     }
 
     /**
@@ -383,7 +387,7 @@ public class StringController {
      */
     @PostMapping("increment")
     public Result increment(String key, long delta) {
-        return Result.o(RedisUtils.increment(key, delta));
+        return Result.o(redisTemp.increment(key, delta));
     }
 
     /**
@@ -394,7 +398,7 @@ public class StringController {
      */
     @PostMapping("incrementD")
     public Result incrementD(String key, double delta) {
-        return Result.o(RedisUtils.increment(key, delta));
+        return Result.o(redisTemp.increment(key, delta));
     }
 
     /**
@@ -405,7 +409,7 @@ public class StringController {
      */
     @PostMapping("decrement1")
     public Result decrement(String key) {
-        return Result.o(RedisUtils.decrement(key));
+        return Result.o(redisTemp.decrement(key));
     }
 
     /**
@@ -416,7 +420,7 @@ public class StringController {
      */
     @PostMapping("decrement")
     public Result decrement(String key, long delta) {
-        return Result.o(RedisUtils.decrement(key, delta));
+        return Result.o(redisTemp.decrement(key, delta));
     }
 
     /**
@@ -427,7 +431,7 @@ public class StringController {
      */
     @PostMapping("decrementD")
     public Result decrementD(String key, double delta) {
-        return Result.o(RedisUtils.decrement(key, delta));
+        return Result.o(redisTemp.decrement(key, delta));
     }
 
     /**
@@ -438,7 +442,7 @@ public class StringController {
      */
     @PostMapping("append")
     public Result append(String key, String value) {
-        return Result.o(RedisUtils.append(key, value));
+        return Result.o(redisTemp.append(key, value));
     }
 
     /**
@@ -449,7 +453,7 @@ public class StringController {
      */
     @PostMapping("get2")
     public Result get2(String key, long start, long end) {
-        return Result.o(RedisUtils.get(key, start, end));
+        return Result.o(redisTemp.get(key, start, end));
     }
 
     /**
@@ -460,7 +464,7 @@ public class StringController {
      */
     @PostMapping("setValue")
     public Result setValue(String key, Integer value, long offset) {
-        RedisUtils.setValue(key, value, offset);
+        redisTemp.setValue(key, value, offset);
         return Result.o();
     }
 
@@ -472,7 +476,7 @@ public class StringController {
      */
     @PostMapping("size")
     public Result size(String key) {
-        return Result.o(RedisUtils.size(key));
+        return Result.o(redisTemp.size(key));
     }
 
     /**
@@ -483,7 +487,7 @@ public class StringController {
      */
     @PostMapping("setBit")
     public Result setBit(String key, long offset, boolean value) {
-        return Result.o(RedisUtils.setBit(key, offset, value));
+        return Result.o(redisTemp.setBit(key, offset, value));
     }
 
     /**
@@ -494,7 +498,7 @@ public class StringController {
      */
     @PostMapping("getBit")
     public Result getBit(String key, long offset) {
-        return Result.o(RedisUtils.getBit(key, offset));
+        return Result.o(redisTemp.getBit(key, offset));
     }
 
     /**
@@ -507,7 +511,7 @@ public class StringController {
     public Result bitField(String key, long offset) {
         BitFieldSubCommands.BitFieldGet bitFieldSubCommand = BitFieldSubCommands.BitFieldGet.create(BitFieldSubCommands.BitFieldType.INT_8, BitFieldSubCommands.Offset.offset(offset));
         BitFieldSubCommands subCommands = BitFieldSubCommands.create(bitFieldSubCommand);
-        return Result.o(RedisUtils.bitField(key, subCommands));
+        return Result.o(redisTemp.bitField(key, subCommands));
     }
 
 }
