@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -336,7 +337,7 @@ public class IndexController {
      * POST /scan?match=[A-z] 匹配1个指定字符[a,b,c]<br>
      * POST /scan?match=\[* 转义匹配匹配1个指定字符[[]]
      */
-    @PostMapping("scan")
+    @GetMapping("scan")
     public Result scan(String match) {
         return Result.o(redisTemp.scan(match));
     }

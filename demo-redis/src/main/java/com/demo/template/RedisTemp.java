@@ -3,7 +3,6 @@ package com.demo.template;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.RedisListCommands;
-import org.springframework.data.redis.core.ConvertingCursor;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -178,7 +177,7 @@ public class RedisTemp {
      *              \ : 转义(字符*?[]^-\等)
      * @return 键列表
      */
-    public Set<String> scan(String match) {
+    public List<String> scan(String match) {
         return scan(match, 1000);
     }
 
@@ -195,19 +194,14 @@ public class RedisTemp {
      * @param count 一次扫描条数
      * @return 键列表
      */
-    public Set<String> scan(String match, long count) {
-        Set<String> keys = new HashSet<>();
-        Cursor<String> cursor = (Cursor<String>) redisTemplate.executeWithStickyConnection( //
-                connection -> new ConvertingCursor<>( //
-                        connection.scan(ScanOptions.scanOptions().match(match).count(count).build()), //
-                        redisTemplate.getKeySerializer()::deserialize));
-        if (cursor == null) {
-            return keys;
+    public List<String> scan(String match, long count) {
+        List<String> list = new ArrayList<>();
+        try (Cursor<String> cursor = redisTemplate.scan(ScanOptions.scanOptions().match(match).count(count).build())) {
+            while (cursor.hasNext()) {
+                list.add(cursor.next());
+            }
         }
-        while (cursor.hasNext()) {
-            keys.add(cursor.next());
-        }
-        return keys;
+        return list;
     }
 
     /**
@@ -944,7 +938,7 @@ public class RedisTemp {
      *              [^abc] : 不匹配1个指定字符(括号内字符abc)<br>
      *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *              \ : 转义(字符*?[]^-\等)
-     * @return 项和值列表
+     * @return 项和值Map
      */
     public Map<String, Object> hScan(String key, String match) {
         return hScan(key, match, 100);
@@ -962,15 +956,15 @@ public class RedisTemp {
      *              [A-z] : 匹配1个指定字符(括号内字符A-z)<br>
      *              \ : 转义(字符*?[]^-\等)
      * @param count 一次扫描条数
-     * @return 项和值列表
+     * @return 项和值Map
      */
     public Map<String, Object> hScan(String key, String match, long count) {
         Map<String, Object> map = new HashMap<>();
-        Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan( //
-                key, ScanOptions.scanOptions().match(match).count(count).build());
-        while (cursor.hasNext()) {
-            Map.Entry<Object, Object> next = cursor.next();
-            map.put((String) next.getKey(), next.getValue());
+        try (Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(key, ScanOptions.scanOptions().match(match).count(count).build())) {
+            while (cursor.hasNext()) {
+                Map.Entry<Object, Object> entry = cursor.next();
+                map.put((String) entry.getKey(), entry.getValue());
+            }
         }
         return map;
     }
@@ -1758,7 +1752,7 @@ public class RedisTemp {
      *              \ : 转义(字符*?[]^-\等)
      * @return 值列表
      */
-    public Set<Object> sScan(String key, String match) {
+    public List<Object> sScan(String key, String match) {
         return sScan(key, match, 100);
     }
 
@@ -1776,15 +1770,14 @@ public class RedisTemp {
      * @param count 一次扫描条数
      * @return 值列表
      */
-    public Set<Object> sScan(String key, String match, long count) {
-        Set<Object> values = new HashSet<>();
-        Cursor<Object> cursor = redisTemplate.opsForSet().scan( //
-                key, ScanOptions.scanOptions().match(match).count(count).build());
-        while (cursor.hasNext()) {
-            Object next = cursor.next();
-            values.add(next);
+    public List<Object> sScan(String key, String match, long count) {
+        List<Object> list = new ArrayList<>();
+        try (Cursor<Object> cursor = redisTemplate.opsForSet().scan(key, ScanOptions.scanOptions().match(match).count(count).build())) {
+            while (cursor.hasNext()) {
+                list.add(cursor.next());
+            }
         }
-        return values;
+        return list;
     }
 
     // endregion

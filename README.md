@@ -35,7 +35,7 @@ SpringBoot示例
   - SpringBoot Web
   - FastJson
   - 邮件
-- **`demo-minio`** : minio
+- **`demo-minio`** : Minio
   - SpringBoot Web
   - FastJson
   - Minio
@@ -167,6 +167,8 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
     - `二维码生成器Java版` : `cn.404z:qrcode-encoder`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/qrcode-encoder?label=Maven%20Central)
+    - `轻量级权限认证SpringBoot启动器` : `cn.404z:tiny-token-spring-boot-starter`  
+      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-token-spring-boot-starter?label=Maven%20Central)
     - `FastJson` : `com.alibaba:fastjson`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/fastjson?label=Maven%20Central)
     - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
