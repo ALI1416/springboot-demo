@@ -7,7 +7,7 @@
   <version>1.0.0</version>
 
   <name>demo-tiny-token</name>
-  <description>tiny-token</description>
+  <description>轻量级权限认证SpringBoot启动器</description>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -39,6 +39,27 @@
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>tiny-token-spring-boot-starter</artifactId>
+    </dependency>
+    <!--MyBatis-->
+    <dependency>
+      <groupId>org.mybatis.spring.boot</groupId>
+      <artifactId>mybatis-spring-boot-starter</artifactId>
+    </dependency>
+    <!--雪花ID生成器-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>id-spring-boot-autoconfigure</artifactId>
+    </dependency>
+    <!--HuTool工具包-->
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-all</artifactId>
+    </dependency>
+    <!--MySQL-->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 

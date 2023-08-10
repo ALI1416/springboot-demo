@@ -42,6 +42,7 @@
     <module>demo-elastic-search</module>
     <module>demo-minio</module>
     <module>demo-knife4j</module>
+    <module>demo-tiny-token-starter</module>
     <module>demo-tiny-token</module>
   </modules>
 

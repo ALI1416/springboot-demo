@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.RoleMapper">
+
+  <sql id="col">
+    id,name,seq,create_id
+  </sql>
+
+  <insert id="insert" parameterType="RoleVo">
+    INSERT
+    role(
+    <include refid="col"/>
+    )VALUES(
+    #{id},#{name},#{seq},#{createId}
+    )
+  </insert>
+
+  <update id="update" parameterType="RoleVo">
+    UPDATE role
+    <set>
+      <if test="name != null">
+        name =# {name},
+      </if>
+      <if test="seq != null">
+        seq =# {seq},
+      </if>
+    </set>
+    WHERE
+    id =# {id}
+  </update>
+
+  <delete id="delete" parameterType="Long">
+    DELETE
+    FROM
+    role
+    WHERE
+    id =# {id}
+  </delete>
+
+  <select id="findAll" resultType="RoleVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    role
+  </select>
+
+  <select id="findByCreateId" parameterType="Long" resultType="RoleVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    role
+    WHERE
+    create_id =# {id}
+  </select>
+
+  <select id="findByUserId" parameterType="Long" resultType="RoleVo">
+    SELECT
+    r.id,
+    r.name,
+    r.seq,
+    r.create_id
+    FROM
+    role r
+    INNER JOIN user_role ur ON ur.role_id = r.id
+    WHERE
+    ur.user_id =# {userId}
+  </select>
+
+  <select id="findIdByUserId" parameterType="Long" resultType="Long">
+    SELECT
+    r.id
+    FROM
+    role r
+    INNER JOIN user_role ur ON ur.role_id = r.id
+    WHERE
+    ur.user_id =# {userId}
+  </select>
+
+</mapper>

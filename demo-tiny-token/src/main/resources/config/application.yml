@@ -5,12 +5,10 @@ spring:
     multipart:
       max-file-size: 4GB
       max-request-size: 4GB
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    password:
-    timeout: 10s
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      max-lifetime: 60000
 
 #server:
 #  compression:
@@ -23,10 +21,16 @@ spring:
 #    key-store-password: ChengKai1998!
 #    key-store-type: JKS
 
-tiny-token:
-  prefix: tinytoken
-  timeout: 2592000
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.demo.entity.po,com.demo.entity.vo
+  configuration:
+    map-underscore-to-camel-case: true
+
+sa-token:
+  is-print: false
+  is-share: false
 
 logging:
   file:
-    name: /log/demo-base.log
+    name: /log/demo-sa-token.log

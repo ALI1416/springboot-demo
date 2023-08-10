@@ -133,7 +133,7 @@ public class UserController extends ControllerBase {
      * 查询通过account
      *
      * @param account account
-     * @return PageInfo<UserVo>
+     * @return PageInfo UserVo
      */
     @PostMapping("/findByAccount")
     public Result findByAccount(String account) {
@@ -144,7 +144,7 @@ public class UserController extends ControllerBase {
      * 精确查询
      *
      * @param user UserVo
-     * @return PageInfo<UserVo>
+     * @return PageInfo UserVo
      */
     @PostMapping("/findExact")
     public Result findExact(@RequestBody UserVo user) {
@@ -155,7 +155,7 @@ public class UserController extends ControllerBase {
      * 查询
      *
      * @param user UserVo
-     * @return PageInfo<UserVo>
+     * @return PageInfo UserVo
      */
     @PostMapping("/find")
     public Result find(@RequestBody UserVo user) {
@@ -166,7 +166,7 @@ public class UserController extends ControllerBase {
      * 查询备份
      *
      * @param user id
-     * @return PageInfo<UserBak>
+     * @return PageInfo UserBak
      */
     @PostMapping("/findBak")
     public Result find(@RequestBody UserBak user) {

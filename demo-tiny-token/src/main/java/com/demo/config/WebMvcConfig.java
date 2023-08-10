@@ -3,10 +3,13 @@ package com.demo.config;
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
 import com.demo.constant.FormatConstant;
+import com.demo.interceptor.RouteInterceptor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.StandardCharsets;
@@ -23,9 +26,11 @@ import java.util.List;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-
 @Configuration
+@AllArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final RouteInterceptor routeInterceptor;
 
     /**
      * 重写消息转换器
@@ -41,6 +46,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
         converter.setDefaultCharset(StandardCharsets.UTF_8);
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
         converters.add(0, converter);
+    }
+
+    /**
+     * 路由拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(routeInterceptor) // 路由拦截器
+                .addPathPatterns("/**") // 拦截所有路径
+                .excludePathPatterns("/") // 排除首页
+                .excludePathPatterns("/error") // 排除404
+                .excludePathPatterns("/favicon.ico") // 排除图标
+        ;
     }
 
     /**

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.RouteMapper">
+
+  <sql id="col">
+    id,path,name,seq,parent_id
+  </sql>
+
+  <insert id="insert" parameterType="RouteVo">
+    INSERT
+    route(
+    <include refid="col"/>
+    )VALUES(
+    #{id},#{path},#{name},#{seq},#{parentId}
+    )
+  </insert>
+
+  <update id="update" parameterType="RouteVo">
+    UPDATE route
+    <set>
+      <if test="path != null">
+        path =# {path},
+      </if>
+      <if test="name != null">
+        name =# {name},
+      </if>
+      <if test="seq != null">
+        seq =# {seq},
+      </if>
+      <if test="parentId != null">
+        parent_id =# {parentId},
+      </if>
+    </set>
+    WHERE
+    id =# {id}
+  </update>
+
+  <delete id="deleteByIdList" parameterType="Long">
+    DELETE
+    FROM
+    route
+    WHERE
+    id IN
+    <foreach collection="list" open="(" close=")" separator="," item="id">
+      #{id}
+    </foreach>
+  </delete>
+
+  <select id="findById" parameterType="Long" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+    WHERE
+    id =# {id}
+  </select>
+
+  <select id="findByParentId" parameterType="Long" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+    WHERE
+    parent_id =# {parentId}
+    ORDER BY
+    seq
+  </select>
+
+  <select id="findAll" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+  </select>
+
+  <select id="findByRoleId" parameterType="Long" resultType="RouteVo">
+    SELECT
+    r.id,
+    r.path,
+    r.name,
+    r.seq,
+    r.parent_id
+    FROM
+    route r
+    INNER JOIN role_route rr ON r.id = rr.route_id
+    WHERE
+    rr.role_id =# {roleId}
+  </select>
+
+  <select id="findIdByRoleId" parameterType="Long" resultType="Long">
+    SELECT
+    r.id
+    FROM
+    route r
+    INNER JOIN role_route rr ON r.id = rr.route_id
+    WHERE
+    rr.role_id =# {roleId}
+  </select>
+
+</mapper>

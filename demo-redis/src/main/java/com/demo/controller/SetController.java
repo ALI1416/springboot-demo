@@ -160,7 +160,7 @@ public class SetController {
     /**
      * <h3>是否存在多个元素</h3>
      * 存在元素a/b/c
-     * POST /set/sIsMultiMember?key=a&value=a&value=b&value=d<br>
+     * POST /set/sIsMultiMemberArray?key=a&value=a&value=b&value=d<br>
      * {"a":true,"b":true,"d":false}
      */
     @PostMapping("sIsMultiMemberArray")
