@@ -150,21 +150,9 @@ public class RoleController extends ControllerBase {
      */
     @PostMapping("refreshRole")
     public Result refreshRole(@RequestBody EntityBase role) {
-        routeInterceptor.deleteRouteRole(role.getId());
         List<Long> ids =
                 userService.findByRoleId(role.getId()).stream().map(UserVo::getId).collect(Collectors.toList());
-        routeInterceptor.deleteRouteUser(ids);
-        return Result.o();
-    }
-
-    /**
-     * 刷新全部
-     */
-    @PostMapping("refresh")
-    public Result refresh() {
-        routeInterceptor.deleteRouteRole();
-        routeInterceptor.deleteRouteUser();
-        return Result.o();
+        return Result.o(routeInterceptor.deleteRouteRole(role.getId()) + routeInterceptor.deleteRouteUser(ids));
     }
 
 }

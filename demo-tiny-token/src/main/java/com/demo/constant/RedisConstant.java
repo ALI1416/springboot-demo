@@ -13,11 +13,11 @@ package com.demo.constant;
 public class RedisConstant {
 
     /**
-     * 路由前缀{@value}
+     * 路由-前缀{@value}
      */
     public static final String ROUTE_PREFIX = "route:";
     /**
-     * 路由-不拦截{@value}
+     * 路由-所有"不拦截路径"{@value}
      */
     public static final String ROUTE_NOT_INTERCEPT = ROUTE_PREFIX + "not-intercept";
     /**
@@ -25,7 +25,7 @@ public class RedisConstant {
      */
     public static final String ROUTE_MATCHER = ROUTE_PREFIX + "matcher";
     /**
-     * 路由-所有"不可匹配路径"{@value}
+     * 路由-所有"直接路径"{@value}
      */
     public static final String ROUTE_DIRECT = ROUTE_PREFIX + "direct";
     /**
@@ -41,11 +41,11 @@ public class RedisConstant {
      */
     public static final String ROUTE_MATCHER_SUFFIX = ":matcher";
     /**
-     * 路由-"不可匹配路径"后缀{@value}
+     * 路由-"直接路径"后缀{@value}
      */
     public static final String ROUTE_DIRECT_SUFFIX = ":direct";
     /**
-     * 路由失效时间(秒){@value}
+     * 路由-失效时间(秒){@value}
      */
     public static final Integer ROUTE_EXPIRE = 2 * 60 * 60;
 

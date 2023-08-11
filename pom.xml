@@ -32,7 +32,6 @@
     <module>demo-mongodb</module>
     <module>demo-rabbitmq</module>
     <module>demo-mqtt</module>
-    <module>demo-sa-token</module>
     <module>demo-socket</module>
     <module>demo-config</module>
     <module>demo-mail</module>
@@ -149,14 +148,6 @@
     <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
     <pagehelper-spring-boot-starter.version>1.4.7</pagehelper-spring-boot-starter.version>
 
-    <!--SaToken权限认证-->
-    <!--cn.dev33:sa-token-spring-boot-starter-->
-    <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-spring-boot-starter -->
-    <!--SaToken整合Redis(使用jackson序列化)-->
-    <!--cn.dev33:sa-token-dao-redis-jackson-->
-    <!-- https://mvnrepository.com/artifact/cn.dev33/sa-token-dao-redis-jackson -->
-    <sa-token.version>1.34.0</sa-token.version>
-
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
     <!-- https://mvnrepository.com/artifact/cn.404z/id-spring-boot-autoconfigure -->
@@ -272,18 +263,6 @@
         <groupId>com.github.pagehelper</groupId>
         <artifactId>pagehelper-spring-boot-starter</artifactId>
         <version>${pagehelper-spring-boot-starter.version}</version>
-      </dependency>
-      <!--SaToken权限认证-->
-      <dependency>
-        <groupId>cn.dev33</groupId>
-        <artifactId>sa-token-spring-boot-starter</artifactId>
-        <version>${sa-token.version}</version>
-      </dependency>
-      <!--SaToken整合Redis(使用jackson序列化)-->
-      <dependency>
-        <groupId>cn.dev33</groupId>
-        <artifactId>sa-token-dao-redis-jackson</artifactId>
-        <version>${sa-token.version}</version>
       </dependency>
       <!--雪花ID生成器-->
       <dependency>

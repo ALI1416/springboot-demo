@@ -76,8 +76,7 @@ public class RouteNotInterceptController extends ControllerBase {
      */
     @PostMapping("refresh")
     public Result refresh() {
-        routeInterceptor.deleteRouteNotIntercept();
-        return Result.o();
+        return Result.o(routeInterceptor.deleteRouteNotIntercept());
     }
 
 }

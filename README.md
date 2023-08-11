@@ -79,15 +79,6 @@ SpringBoot示例
   - FastJson
   - Redis
   - 雪花ID生成器
-- **`demo-sa-token`** : SaToken权限认证
-  - SpringBoot Web
-  - FastJson
-  - Redis
-  - SaToken权限认证
-  - MySQL
-  - MyBatis
-  - 雪花ID生成器
-  - HuTool工具包
 - **`demo-socket`** : WebSocket
   - SpringBoot Web
   - SpringBoot WebSocket
@@ -155,10 +146,6 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/org.mybatis.spring.boot/mybatis-spring-boot-starter?label=Maven%20Central)
     - `PageHelper分页排序查询` : `com.github.pagehelper:pagehelper-spring-boot-starter`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.github.pagehelper/pagehelper-spring-boot-starter?label=Maven%20Central)
-    - `SaToken权限认证` : `cn.dev33:sa-token-spring-boot-starter`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.dev33/sa-token-spring-boot-starter?label=Maven%20Central)
-    - `SaToken整合Redis(使用jackson序列化)` : `cn.dev33:sa-token-dao-redis-jackson`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.dev33/sa-token-dao-redis-jackson?label=Maven%20Central)
     - `雪花ID生成器` : `cn.404z:id-spring-boot-autoconfigure`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/id-spring-boot-autoconfigure?label=Maven%20Central)
     - `IP地址转区域` : `cn.404z:ip2region-spring-boot-autoconfigure`  

@@ -139,7 +139,7 @@ public class RouteService {
             route.setMatcherPath(matcherPath);
             return route;
         }
-        route.setMatcherPath((List<String>) redisTemp.get(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX));
+        route.setMatcherPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
         route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
         return route;
     }

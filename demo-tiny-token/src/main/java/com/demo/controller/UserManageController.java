@@ -93,8 +93,7 @@ public class UserManageController extends ControllerBase {
         if (isNull(user.getId())) {
             return paramIsError();
         }
-        routeInterceptor.deleteRouteUser(user.getId());
-        return Result.o();
+        return Result.o(routeInterceptor.deleteRouteUser(user.getId()));
     }
 
 }

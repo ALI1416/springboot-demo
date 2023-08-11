@@ -111,7 +111,6 @@ INSERT INTO `route` VALUES (30006, 'findByUserId', '查询，通过UserId', 5, 2
 INSERT INTO `route` VALUES (30007, 'findByCreateId', '查询，通过CreateId', 6, 20000);
 INSERT INTO `route` VALUES (30008, 'copy', '复制该节点', 7, 20000);
 INSERT INTO `route` VALUES (30009, 'refreshRole', '刷新，通过RoleId', 8, 20000);
-INSERT INTO `route` VALUES (30010, 'refresh', '刷新全部', 9, 20000);
 INSERT INTO `route` VALUES (40000, 'route', '路由', 3, 0);
 INSERT INTO `route` VALUES (40001, 'insert', '新增', 0, 40000);
 INSERT INTO `route` VALUES (40002, 'findList', '查询列表', 1, 40000);

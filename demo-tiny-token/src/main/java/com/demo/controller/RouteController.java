@@ -128,9 +128,7 @@ public class RouteController extends ControllerBase {
      */
     @PostMapping("refresh")
     public Result refresh() {
-        routeInterceptor.deleteRoute();
-        routeInterceptor.deleteRouteUser();
-        return Result.o();
+        return Result.o(routeInterceptor.deleteRoute());
     }
 
 }
