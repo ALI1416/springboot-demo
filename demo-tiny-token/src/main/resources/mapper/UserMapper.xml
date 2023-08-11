@@ -19,27 +19,27 @@
     UPDATE user
     <set>
       <if test="account != null">
-        account =# {account},
+        account = #{account},
       </if>
       <if test="pwd != null">
-        pwd =# {pwd},
+        pwd = #{pwd},
       </if>
       <if test="name != null">
-        name =# {name},
+        name = #{name},
       </if>
     </set>
     WHERE
-    id =# {id}
+    id = #{id}
   </update>
 
   <select id="existUniqueKey" parameterType="UserVo" resultType="Boolean">
     SELECT
     IFNULL((SELECT true FROM user WHERE
     <if test="id != null">
-      id =# {id}
+      id = #{id}
     </if>
     <if test="account != null">
-      account =# {account}
+      account = #{account}
     </if>
     ),false)
   </select>
@@ -51,10 +51,10 @@
     user
     WHERE
     <if test="id != null">
-      id =# {id}
+      id = #{id}
     </if>
     <if test="account != null">
-      account =# {account}
+      account = #{account}
     </if>
   </select>
 
@@ -69,7 +69,7 @@
     USER u
     INNER JOIN user_role ur ON ur.user_id = u.id
     WHERE
-    ur.role_id =# {id}
+    ur.role_id = #{id}
   </select>
 
   <select id="findAll" resultType="UserVo">

@@ -8,13 +8,10 @@ spring:
     password: root
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 192.168.160.8
     port: 6379
-    password:
+    password: k8s6666
     timeout: 10s
-
-sa-token:
-  is-log: true
 
 logging:
   level:

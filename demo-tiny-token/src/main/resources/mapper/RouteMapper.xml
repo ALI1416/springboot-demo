@@ -19,20 +19,20 @@
     UPDATE route
     <set>
       <if test="path != null">
-        path =# {path},
+        path = #{path},
       </if>
       <if test="name != null">
-        name =# {name},
+        name = #{name},
       </if>
       <if test="seq != null">
-        seq =# {seq},
+        seq = #{seq},
       </if>
       <if test="parentId != null">
-        parent_id =# {parentId},
+        parent_id = #{parentId},
       </if>
     </set>
     WHERE
-    id =# {id}
+    id = #{id}
   </update>
 
   <delete id="deleteByIdList" parameterType="Long">
@@ -52,7 +52,7 @@
     FROM
     route
     WHERE
-    id =# {id}
+    id = #{id}
   </select>
 
   <select id="findByParentId" parameterType="Long" resultType="RouteVo">
@@ -61,7 +61,7 @@
     FROM
     route
     WHERE
-    parent_id =# {parentId}
+    parent_id = #{parentId}
     ORDER BY
     seq
   </select>
@@ -84,7 +84,7 @@
     route r
     INNER JOIN role_route rr ON r.id = rr.route_id
     WHERE
-    rr.role_id =# {roleId}
+    rr.role_id = #{roleId}
   </select>
 
   <select id="findIdByRoleId" parameterType="Long" resultType="Long">
@@ -94,7 +94,7 @@
     route r
     INNER JOIN role_route rr ON r.id = rr.route_id
     WHERE
-    rr.role_id =# {roleId}
+    rr.role_id = #{roleId}
   </select>
 
 </mapper>

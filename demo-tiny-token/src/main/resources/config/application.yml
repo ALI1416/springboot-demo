@@ -27,10 +27,10 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
-sa-token:
-  is-print: false
-  is-share: false
+tiny-token:
+  prefix: tinytoken
+  timeout: 2592000
 
 logging:
   file:
-    name: /log/demo-sa-token.log
+    name: /log/demo-tiny-token.log

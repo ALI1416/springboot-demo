@@ -47,7 +47,7 @@ public class RoleController extends ControllerBase {
     private final RouteInterceptor routeInterceptor;
 
     /**
-     * 插入
+     * 新增
      */
     @PostMapping("insert")
     public Result insert(@RequestBody RoleVo role) {

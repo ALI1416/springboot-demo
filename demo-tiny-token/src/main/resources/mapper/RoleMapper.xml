@@ -19,14 +19,14 @@
     UPDATE role
     <set>
       <if test="name != null">
-        name =# {name},
+        name = #{name},
       </if>
       <if test="seq != null">
-        seq =# {seq},
+        seq = #{seq},
       </if>
     </set>
     WHERE
-    id =# {id}
+    id = #{id}
   </update>
 
   <delete id="delete" parameterType="Long">
@@ -34,7 +34,7 @@
     FROM
     role
     WHERE
-    id =# {id}
+    id = #{id}
   </delete>
 
   <select id="findAll" resultType="RoleVo">
@@ -50,7 +50,7 @@
     FROM
     role
     WHERE
-    create_id =# {id}
+    create_id = #{id}
   </select>
 
   <select id="findByUserId" parameterType="Long" resultType="RoleVo">
@@ -63,7 +63,7 @@
     role r
     INNER JOIN user_role ur ON ur.role_id = r.id
     WHERE
-    ur.user_id =# {userId}
+    ur.user_id = #{userId}
   </select>
 
   <select id="findIdByUserId" parameterType="Long" resultType="Long">
@@ -73,7 +73,7 @@
     role r
     INNER JOIN user_role ur ON ur.role_id = r.id
     WHERE
-    ur.user_id =# {userId}
+    ur.user_id = #{userId}
   </select>
 
 </mapper>

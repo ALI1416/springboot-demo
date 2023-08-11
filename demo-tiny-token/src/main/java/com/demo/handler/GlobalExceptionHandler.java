@@ -1,6 +1,7 @@
 package com.demo.handler;
 
 import com.demo.constant.ResultCodeEnum;
+import com.demo.entity.pojo.GlobalException;
 import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -86,6 +87,17 @@ public class GlobalExceptionHandler {
     })
     public Result paramErrorHandler() {
         return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
+    }
+
+    /**
+     * 全局异常
+     *
+     * @see GlobalException
+     */
+    @Order(1)
+    @ExceptionHandler(GlobalException.class)
+    public Result globalExceptionHandler(GlobalException e) {
+        return Result.e(e.getResultCodeEnum(), e.getMsg());
     }
 
     /**

@@ -21,7 +21,7 @@
     FROM
     user_role
     WHERE
-    user_id =# {userId}
+    user_id = #{userId}
   </delete>
 
   <delete id="deleteByRoleId">
@@ -29,7 +29,7 @@
     FROM
     user_role
     WHERE
-    role_id =# {roleId}
+    role_id = #{roleId}
   </delete>
 
 </mapper>

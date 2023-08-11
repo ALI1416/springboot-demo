@@ -34,7 +34,7 @@ public class UserManageController extends ControllerBase {
     private final RouteInterceptor routeInterceptor;
 
     /**
-     * 插入
+     * 新增用户
      */
     @PostMapping("insert")
     public Result insert(@RequestBody UserVo user) {

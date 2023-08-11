@@ -7,7 +7,6 @@ import com.demo.constant.ResultCodeEnum;
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
-import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
@@ -101,8 +100,8 @@ public class UserController extends ControllerBase {
     /**
      * 修改个人信息(除密码)
      */
-    @PostMapping("updateInfo")
-    public Result updateInfo(@RequestBody UserVo user) {
+    @PostMapping("update")
+    public Result update(@RequestBody UserVo user) {
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
             return Result.e(ResultCodeEnum.ACCOUNT_EXIST);
         }
@@ -112,19 +111,19 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 获取角色和路由
-     */
-    @PostMapping("findRoleAndRoute")
-    public Result findRoleAndRoute() {
-        return Result.o(roleService.findRoleAndRouteByUserId(t4s.getId()));
-    }
-
-    /**
      * 获取路由
      */
     @PostMapping("findRoute")
     public Result findRoute() {
         return Result.o(routeService.findByUserId(t4s.getId()));
+    }
+
+    /**
+     * 获取角色和路由
+     */
+    @PostMapping("findRoleAndRoute")
+    public Result findRoleAndRoute() {
+        return Result.o(roleService.findRoleAndRouteByUserId(t4s.getId()));
     }
 
 }

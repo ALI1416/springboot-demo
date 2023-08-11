@@ -31,7 +31,7 @@ public class RouteController extends ControllerBase {
     private final RouteInterceptor routeInterceptor;
 
     /**
-     * 插入
+     * 新增
      */
     @PostMapping("insert")
     public Result insert(@RequestBody RouteVo route) {
@@ -66,7 +66,7 @@ public class RouteController extends ControllerBase {
     }
 
     /**
-     * 删除(deleteChildren是否删除子节点)
+     * 删除
      */
     @PostMapping("delete")
     public Result delete(@RequestBody RouteVo route) {
@@ -108,7 +108,7 @@ public class RouteController extends ControllerBase {
     }
 
     /**
-     * TODO 移动该节点到其他节点(moveId)下
+     * TODO 移动该节点
      */
     @PostMapping("move")
     public Result move() {

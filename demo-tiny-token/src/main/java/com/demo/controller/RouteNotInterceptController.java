@@ -31,15 +31,7 @@ public class RouteNotInterceptController extends ControllerBase {
     private final RouteInterceptor routeInterceptor;
 
     /**
-     * 查询所有
-     */
-    @PostMapping("findAll")
-    public Result findAll() {
-        return Result.o(routeNotInterceptService.findAll());
-    }
-
-    /**
-     * 插入
+     * 新增
      */
     @PostMapping("insert")
     public Result insert(@RequestBody RouteNotInterceptVo routeNotIntercept) {
@@ -69,6 +61,14 @@ public class RouteNotInterceptController extends ControllerBase {
             return paramIsError();
         }
         return Result.o(routeNotInterceptService.update(routeNotIntercept));
+    }
+
+    /**
+     * 查询所有
+     */
+    @PostMapping("findAll")
+    public Result findAll() {
+        return Result.o(routeNotInterceptService.findAll());
     }
 
     /**

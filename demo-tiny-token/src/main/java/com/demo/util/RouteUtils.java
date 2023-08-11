@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * <h1>RouteUtils</h1>
+ * <h1>路由工具类</h1>
  *
  * <p>
  * createDate 2021/11/26 09:44:04
@@ -21,11 +21,15 @@ import java.util.stream.Collectors;
  **/
 public class RouteUtils {
 
+    private RouteUtils() {
+    }
+
     /**
      * 列表转树
      *
      * @param routeList 路由表
-     * @return 树；如果不存在id=0的根节点，返回new RouteVo()
+     * @return 树<br>
+     * 不存在id=0的根节点，返回空对象
      */
     public static RouteVo list2Tree(List<RouteVo> routeList) {
         // 拷贝原始数据
@@ -73,7 +77,7 @@ public class RouteUtils {
      * 树转展开列表
      *
      * @param root 树
-     * @return 列表
+     * @return 展开列表
      */
     public static RouteVo tree2ExpandedList(RouteVo root) {
         // 创建新的路由表
@@ -96,8 +100,14 @@ public class RouteUtils {
             }
         }
         // 排序
-        route.setMatcher(route.getMatcher().stream().sorted(Comparator.comparing(RouteVo::getSeq)).sorted(Comparator.comparing(RouteVo::getParentId)).collect(Collectors.toList()));
-        route.setDirect(route.getDirect().stream().sorted(Comparator.comparing(RouteVo::getSeq)).sorted(Comparator.comparing(RouteVo::getParentId)).collect(Collectors.toList()));
+        route.setMatcher(route.getMatcher().stream() //
+                .sorted(Comparator.comparing(RouteVo::getSeq)) //
+                .sorted(Comparator.comparing(RouteVo::getParentId)) //
+                .collect(Collectors.toList()));
+        route.setDirect(route.getDirect().stream() //
+                .sorted(Comparator.comparing(RouteVo::getSeq)) //
+                .sorted(Comparator.comparing(RouteVo::getParentId)) //
+                .collect(Collectors.toList()));
         return route;
     }
 
@@ -137,23 +147,23 @@ public class RouteUtils {
     /**
      * 深度拷贝
      *
-     * @param src T
-     * @return T
+     * @param <T>    任意类型
+     * @param object 对象
+     * @return 新对象
      */
-    @SuppressWarnings("unchecked")
-    private static <T> T deepCopy(T src) {
-        T dest = null;
+    private static <T> T deepCopy(T object) {
+        T newObject = null;
         try {
-            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(byteOut);
-            out.writeObject(src);
-            ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
-            ObjectInputStream in = new ObjectInputStream(byteIn);
-            dest = (T) in.readObject();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(object);
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            newObject = (T) objectInputStream.readObject();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return dest;
+        return newObject;
     }
 
 }

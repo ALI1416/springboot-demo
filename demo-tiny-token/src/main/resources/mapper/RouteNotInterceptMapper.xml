@@ -21,24 +21,24 @@
     FROM
     route_not_intercept
     WHERE
-    id =# {id}
+    id = #{id}
   </delete>
 
   <update id="update" parameterType="RouteNotInterceptVo">
     UPDATE route_not_intercept
     <set>
       <if test="path != null">
-        path =# {path},
+        path = #{path},
       </if>
       <if test="name != null">
-        name =# {name},
+        name = #{name},
       </if>
       <if test="seq != null">
-        seq =# {seq},
+        seq = #{seq},
       </if>
     </set>
     WHERE
-    id =# {id}
+    id = #{id}
   </update>
 
   <select id="findAll" resultType="RouteNotInterceptVo">
