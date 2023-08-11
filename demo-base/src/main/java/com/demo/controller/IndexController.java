@@ -1,6 +1,8 @@
 package com.demo.controller;
 
+import com.demo.constant.ResultEnum;
 import com.demo.entity.po.User;
+import com.demo.entity.pojo.GlobalException;
 import com.demo.entity.pojo.Result;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +59,7 @@ public class IndexController {
      * 结果 {"code":120,"msg":"请求参数错误","ok":false}
      */
     @GetMapping("intTest")
-    public Result intTest(int n) {
+    public Result<Integer> intTest(int n) {
         return Result.o(n);
     }
 
@@ -76,7 +78,7 @@ public class IndexController {
      * 结果 {"code":0,"data":"😊","msg":"成功","ok":true}
      */
     @GetMapping("stringTest")
-    public Result stringTest(String s) {
+    public Result<String> stringTest(String s) {
         return Result.o(s);
     }
 
@@ -93,7 +95,7 @@ public class IndexController {
      * 结果 {"code":103,"msg":"请求参数错误","ok":false}
      */
     @GetMapping("dateTest")
-    public Result dateTest(Date d) {
+    public Result<Date> dateTest(Date d) {
         return Result.o(d);
     }
 
@@ -110,7 +112,7 @@ public class IndexController {
      * 结果 {"code":110,"msg":"请求参数错误","ok":false}
      */
     @GetMapping("userTest")
-    public Result userTest(User u) {
+    public Result<User> userTest(User u) {
         return Result.o(u);
     }
 
@@ -135,7 +137,7 @@ public class IndexController {
      * 结果 {"code":120,"msg":"请求参数错误","ok":false}
      */
     @PostMapping("userTest2")
-    public Result userTest2(@RequestBody User u) {
+    public Result<User> userTest2(@RequestBody User u) {
         return Result.o(u);
     }
 
@@ -145,7 +147,7 @@ public class IndexController {
      * 结果 {"code":0,"data":"1536","msg":"成功","ok":true}
      */
     @GetMapping("fileTest")
-    public Result fileTest(MultipartFile file) {
+    public Result<Long> fileTest(MultipartFile file) {
         return Result.o(file.getSize());
     }
 
@@ -155,7 +157,7 @@ public class IndexController {
      * 结果 {"code":0,"data":"2","msg":"成功","ok":true}
      */
     @GetMapping("filesTest")
-    public Result filesTest(MultipartFile[] files) {
+    public Result<Integer> filesTest(MultipartFile[] files) {
         return Result.o(files.length);
     }
 
@@ -168,7 +170,7 @@ public class IndexController {
      * 结果 {"code":100,"data":"RuntimeException","msg":"系统内部错误","ok":false}
      */
     @GetMapping("runtimeException")
-    public Result runtimeException(int n) {
+    public Result<Integer> runtimeException(int n) {
         return Result.o(100 / n);
     }
 
@@ -181,7 +183,7 @@ public class IndexController {
      * 结果 {"code":100,"data":"IOException","msg":"系统内部错误","ok":false}
      */
     @GetMapping("ioException")
-    public Result ioException(String path) throws IOException {
+    public Result<Boolean> ioException(String path) throws IOException {
         return Result.o(new File(path).createNewFile());
     }
 
@@ -194,9 +196,9 @@ public class IndexController {
      * 结果 {"code":100,"data":"Exception","msg":"系统内部错误","ok":false}
      */
     @GetMapping("exception")
-    public Result exception(boolean enable) throws Exception {
+    public Result<Boolean> exception(boolean enable) {
         if (enable) {
-            throw new Exception("异常");
+            throw new GlobalException(ResultEnum.SYSTEM_INNER_ERROR);
         }
         return Result.o(false);
     }

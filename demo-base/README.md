@@ -17,23 +17,24 @@
 ### src.main.java.com.demo
 
 - **`base`** : 基类文件夹
-  - `ToStringBase` : ToString格式化基类
+  - `ToStringBase` : ToString格式
 - **`config`** : 配置文件夹
-  - `TomcatConfig` : Tomcat配置类
-  - `WebMvcConfig` : WebMvc配置类
-- **`constant`** : 常数文件夹
-  - `FormatConstant` : 格式常量类
-  - `ResultCodeEnum` : 返回结果状态枚举类
+  - `TomcatConfig` : Tomcat配置
+  - `WebMvcConfig` : WebMvc配置
+- **`constant`** : 常量文件夹
+  - `FormatConstant` : 格式常量
+  - `ResultEnum` : 统一返回状态枚举
 - **`controller`** : 控制层文件夹
   - `IndexController` : 首页
 - **`entity`** : 实体层文件夹
   - **`po`** : 数据库实体层
     - `User` : 用户
   - **`pojo`** : 普通实体层
-    - `Result` : 返回结果实体类
+    - `GlobalException` : 全局异常
+    - `Result` : 统一返回实体
 - **`handler`** : 处理层文件夹
-  - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
-  - `PageNotFoundExceptionHandler` : 404异常处理类
+  - `GlobalExceptionHandler` : 全局异常处理(404异常除外)
+  - `PageNotFoundExceptionHandler` : 404异常处理
 - `DemoBaseApp` : 启动类
 
 ### src.main.resources

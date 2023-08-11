@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.JSONWriter;
 
 /**
- * <h1>格式常量类</h1>
+ * <h1>格式常量</h1>
  *
  * <p>
  * createDate 2023/03/03 16:15:43
