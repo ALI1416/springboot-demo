@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>统一返回实体</h1>
+ * <h1>统一返回</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -47,7 +47,7 @@ public class Result<T> extends ToStringBase {
     /**
      * 构造函数
      *
-     * @param resultEnum 统一返回状态枚
+     * @param resultEnum 统一返回状态枚举
      * @param data       数据
      */
     public Result(ResultEnum resultEnum, T data) {
@@ -107,7 +107,7 @@ public class Result<T> extends ToStringBase {
     /**
      * 错误
      *
-     * @param resultEnum 统一返回状态枚
+     * @param resultEnum 统一返回状态枚举
      */
     public static Result e(ResultEnum resultEnum) {
         return new Result(resultEnum, null);
@@ -116,7 +116,7 @@ public class Result<T> extends ToStringBase {
     /**
      * 错误
      *
-     * @param resultEnum 统一返回状态枚
+     * @param resultEnum 统一返回状态枚举
      * @param data       数据
      */
     public static <T> Result<T> e(ResultEnum resultEnum, T data) {
@@ -126,7 +126,7 @@ public class Result<T> extends ToStringBase {
     /**
      * 错误
      *
-     * @param resultEnum 统一返回状态枚
+     * @param resultEnum 统一返回状态枚举
      * @param msg        状态信息
      * @param data       数据
      */

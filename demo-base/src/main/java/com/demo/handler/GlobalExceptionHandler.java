@@ -29,8 +29,8 @@ import java.io.IOException;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
@@ -57,21 +57,16 @@ public class GlobalExceptionHandler {
 
     /**
      * <h2>参数异常</h2>
-     * <h3>Params</h3>
-     * --{@linkplain IllegalStateException IllegalStateException}：拆箱类型为null错误<br>
-     * --{@linkplain MethodArgumentTypeMismatchException MethodArgumentTypeMismatchException}：参数类型错误<br>
-     * --{@linkplain BindException BindException}：对象的属性类型错误<br>
-     * <h3>Body</h3>
-     * --raw<br>
-     * ----JSON<br>
-     * ------{@linkplain HttpMessageNotReadableException HttpMessageNotReadableException}：为null、不是JSON格式、参数类型错误<br>
-     * ----XML<br>
-     * ----HTML<br>
-     * ----Text<br>
-     * --form-data<br>
-     * ----等同于Params
-     * --x-www-form-urlencoded<br>
-     * --binary<br>
+     * <h3>params、form-data、x-www-form-urlencoded</h3>
+     * <ul>
+     * <li>{@link IllegalStateException} 拆箱类型为null错误</li>
+     * <li>{@link MethodArgumentTypeMismatchException} 参数类型错误</li>
+     * <li>{@link BindException} 对象的属性类型错误</li>
+     * </ul>
+     * <h3>JSON</h3>
+     * <ul>
+     * <li>{@link HttpMessageNotReadableException} 为null、不是JSON格式、参数类型错误</li>
+     * </ul>
      *
      * @see IllegalStateException
      * @see MethodArgumentTypeMismatchException

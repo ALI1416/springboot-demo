@@ -7,7 +7,7 @@
   <version>1.0.0</version>
 
   <name>demo-base</name>
-  <description>基础框架</description>
+  <description>基框架</description>
 
   <parent>
     <groupId>com.demo</groupId>

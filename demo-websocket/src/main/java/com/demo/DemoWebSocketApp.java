@@ -29,10 +29,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.0
  **/
 @SpringBootApplication
-public class DemoTinyTokenStarterApp {
+public class DemoWebSocketApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoTinyTokenStarterApp.class, args);
+        SpringApplication.run(DemoWebSocketApp.class, args);
     }
 
 }

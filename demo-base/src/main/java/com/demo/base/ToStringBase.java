@@ -6,7 +6,7 @@ import com.demo.constant.FormatConstant;
 import java.io.Serializable;
 
 /**
- * <h1>ToString格式</h1>
+ * <h1>ToString基类</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11

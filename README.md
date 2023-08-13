@@ -10,7 +10,7 @@ SpringBoot示例
 
 ## 目录结构
 
-- **`demo-base`** : 基础框架
+- **`demo-base`** : 基框架
   - SpringBoot Web
   - FastJson
 - **`demo-config`** : 配置
@@ -31,6 +31,10 @@ SpringBoot示例
   - SpringBoot Web
   - FastJson
   - JustAuth第三方登录
+- **`demo-knife4j`** : Knife4j
+  - SpringBoot Web
+  - FastJson
+  - Knife4j
 - **`demo-mail`** : 邮件
   - SpringBoot Web
   - FastJson
@@ -66,7 +70,6 @@ SpringBoot示例
   - PageHelper分页排序查询
   - IP解析
   - 雪花ID生成器
-  - IP地址转区域
   - HuTool工具包
 - **`demo-rabbitmq`** : RabbitMQ
   - SpringBoot Web
@@ -79,24 +82,30 @@ SpringBoot示例
   - FastJson
   - Redis
   - 雪花ID生成器
-- **`demo-socket`** : WebSocket
+- **`demo-tiny-token`** : 轻量级权限认证SpringBoot启动器
   - SpringBoot Web
-  - SpringBoot WebSocket
   - FastJson
+  - Redis
+  - 轻量级权限认证SpringBoot启动器
+  - MySQL
+  - MyBatis
+  - 雪花ID生成器
+  - HuTool工具包
 - **`demo-util`** : 工具
   - SpringBoot Web
   - FastJson
   - 雪花ID生成器
   - IP地址转区域
   - 手机号码转区域
+  - 二维码生成器
   - HuTool工具包
   - Tika
   - Ansj分词
   - 二维码
-- **`demo-knife4j`** : Knife4j
+- **`demo-websocket`** : WebSocket
   - SpringBoot Web
+  - SpringBoot WebSocket
   - FastJson
-  - Knife4j
 - `.gitignore` : git忽略
 - `LICENSE` : 许可证
 - `pom.xml` : 项目父pom
@@ -134,6 +143,12 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-redis?label=Maven%20Central)
     - `RabbitMQ(与服务器版本号不对应，不需一致)` : `org.springframework.boot:spring-boot-starter-amqp`  
       ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-amqp?label=Maven%20Central)
+    - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-boot-starter-integration`  
+      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-integration?label=Maven%20Central)
+    - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-stream`  
+      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-stream?label=Maven%20Central)
+    - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-mqtt`  
+      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-mqtt?label=Maven%20Central)
     - `实体层注解(与IDE安装的版本号对应，不需一致)` : `org.projectlombok:lombok`  
       ![Maven Central](https://img.shields.io/maven-central/v/org.projectlombok/lombok?label=Maven%20Central)
   - 父pom版本号需要修改 :
@@ -152,12 +167,10 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/ip2region-spring-boot-autoconfigure?label=Maven%20Central)
     - `手机号码区域` : `cn.404z:phone2region-spring-boot-autoconfigure`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
-    - `二维码生成器Java版` : `cn.404z:qrcode-encoder`  
+    - `二维码生成器` : `cn.404z:qrcode-encoder`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/qrcode-encoder?label=Maven%20Central)
     - `轻量级权限认证SpringBoot启动器` : `cn.404z:tiny-token-spring-boot-starter`  
       ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-token-spring-boot-starter?label=Maven%20Central)
-    - `FastJson` : `com.alibaba:fastjson`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/fastjson?label=Maven%20Central)
     - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2?label=Maven%20Central)
     - `FastJson Extension Spring5` : `com.alibaba.fastjson2:fastjson2-extension-spring5`  
@@ -172,20 +185,21 @@ SpringBoot示例
       ![Maven Central](https://img.shields.io/maven-central/v/cn.hutool/hutool-all?label=Maven%20Central)
     - `JustAuth第三方登录` : `me.zhyd.oauth:JustAuth`  
       ![Maven Central](https://img.shields.io/maven-central/v/me.zhyd.oauth/JustAuth?label=Maven%20Central)
-    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-parsers`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-parsers?label=Maven%20Central)
+    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-core`  
+      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-core?label=Maven%20Central)
+    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-parsers-standard-package`  
+      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-parsers-standard-package?label=Maven%20Central)
+    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-langdetect-tika`  
+      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-langdetect-tika?label=Maven%20Central)
     - `Ansj分词` : `org.ansj:ansj_seg`  
       ![Maven Central](https://img.shields.io/maven-central/v/org.ansj/ansj_seg?label=Maven%20Central)
     - `二维码` : `com.google.zxing:core`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
     - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
       ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
-- `dependencyManagement` : 依赖管理，不用写版本号
+- `dependencies` : 全局依赖
+- `dependencyManagement` : 依赖管理
 - `profiles` : 配置
-  - `profile.id:install` : 打包配置
-    - `activation.activeByDefault:true` : 默认配置
-    - `build.plugins.plugin.configuration` : 插件配置，编译插件
-      - `source`和`target` : 指定java版本
 
 ## 关于
 

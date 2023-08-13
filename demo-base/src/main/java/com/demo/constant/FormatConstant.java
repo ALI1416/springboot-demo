@@ -15,6 +15,9 @@ import com.alibaba.fastjson2.JSONWriter;
  **/
 public class FormatConstant {
 
+    private FormatConstant() {
+    }
+
     /**
      * 日期
      */
