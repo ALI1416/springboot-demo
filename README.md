@@ -8,7 +8,7 @@
 
 SpringBoot示例
 
-## 目录结构
+## 项目
 
 - **`demo-base`** : 基框架
   - SpringBoot Web
@@ -106,100 +106,89 @@ SpringBoot示例
   - SpringBoot Web
   - SpringBoot WebSocket
   - FastJson
-- `.gitignore` : git忽略
-- `LICENSE` : 许可证
-- `pom.xml` : 项目父pom
-- `README.md` : 自述文件
 
-### pom.xml
+### 版本号
 
-- `parent` : `SpringBoot Parent` : `org.springframework.boot:spring-boot-starter-parent`  
+- 父依赖 :
+  - `SpringBoot Parent` : `org.springframework.boot:spring-boot-starter-parent`  
   ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-parent?label=Maven%20Central)
-- `modules` : 模块，新增时添加`module`子标签
-- `properties` : 属性
-  - `java.version` : 指定java版本，最低1.8
-  - `maven.compiler.source`和`maven.compiler.target` : 打包成jar时指定java版本
-  - `maven.compiler.encoding`、`project.build.sourceEncoding`和`project.reporting.outputEncoding` : 项目编码
-  - 继承父pom版本号 :
-    - `SpringBoot Web` : `org.springframework.boot:spring-boot-starter-web`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-web?label=Maven%20Central)
-    - `邮件` : `org.springframework.boot:spring-boot-starter-mail`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-mail?label=Maven%20Central)
-    - `热部署` : `org.springframework.boot:spring-boot-devtools`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-devtools?label=Maven%20Central)
-    - `配置` : `org.springframework.boot:spring-boot-configuration-processor`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-configuration-processor?label=Maven%20Central)
-    - `测试` : `org.springframework.boot:spring-boot-starter-test`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-test?label=Maven%20Central)
-    - `SpringBoot整合Maven插件` : `org.springframework.boot:spring-boot-maven-plugin`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-maven-plugin?label=Maven%20Central)
-    - `Maven打包插件` : `org.apache.maven.plugins:maven-compiler-plugin`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven.plugins/maven-compiler-plugin?label=Maven%20Central)
-    - `MySQL(与服务器版本号对应，不需一致)` : `mysql:mysql-connector-java`  
-      ![Maven Central](https://img.shields.io/maven-central/v/mysql/mysql-connector-java?label=Maven%20Central)
-    - `MongoDB(与服务器版本号对应，不需一致)` : `org.springframework.boot:spring-boot-starter-data-mongodb`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-mongodb?label=Maven%20Central)
-    - `Redis(与服务器版本号不对应，不需一致)` : `org.springframework.boot:spring-boot-starter-data-redis`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-redis?label=Maven%20Central)
-    - `RabbitMQ(与服务器版本号不对应，不需一致)` : `org.springframework.boot:spring-boot-starter-amqp`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-amqp?label=Maven%20Central)
-    - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-boot-starter-integration`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-integration?label=Maven%20Central)
-    - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-stream`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-stream?label=Maven%20Central)
-    - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-mqtt`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-mqtt?label=Maven%20Central)
-    - `实体层注解(与IDE安装的版本号对应，不需一致)` : `org.projectlombok:lombok`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.projectlombok/lombok?label=Maven%20Central)
-  - 父pom版本号需要修改 :
-    - `ElasticSearch(与服务器版本号对应，需要一致)` : `org.springframework.boot:spring-boot-starter-data-elasticsearch`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-elasticsearch?label=Maven%20Central)
-  - 父pom不含依赖 :
-    - `Minio(与服务器版本号不对应，不需一致)` : `io.minio:minio`  
-      ![Maven Central](https://img.shields.io/maven-central/v/io.minio/minio?label=Maven%20Central)
-    - `MyBatis` : `org.mybatis.spring.boot:mybatis-spring-boot-starter`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.mybatis.spring.boot/mybatis-spring-boot-starter?label=Maven%20Central)
-    - `PageHelper分页排序查询` : `com.github.pagehelper:pagehelper-spring-boot-starter`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.github.pagehelper/pagehelper-spring-boot-starter?label=Maven%20Central)
-    - `雪花ID生成器` : `cn.404z:id-spring-boot-autoconfigure`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/id-spring-boot-autoconfigure?label=Maven%20Central)
-    - `IP地址转区域` : `cn.404z:ip2region-spring-boot-autoconfigure`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/ip2region-spring-boot-autoconfigure?label=Maven%20Central)
-    - `手机号码区域` : `cn.404z:phone2region-spring-boot-autoconfigure`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
-    - `二维码生成器` : `cn.404z:qrcode-encoder`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/qrcode-encoder?label=Maven%20Central)
-    - `轻量级权限认证SpringBoot启动器` : `cn.404z:tiny-token-spring-boot-starter`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-token-spring-boot-starter?label=Maven%20Central)
-    - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2?label=Maven%20Central)
-    - `FastJson Extension Spring5` : `com.alibaba.fastjson2:fastjson2-extension-spring5`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2-extension-spring5?label=Maven%20Central)
-    - `EasyExcel` : `com.alibaba:easyexcel`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/easyexcel?label=Maven%20Central)
-    - `Protocol Buffers` : `com.google.protobuf:protobuf-java`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.google.protobuf/protobuf-java?label=Maven%20Central)
-    - `Protocol Buffers Util` : `com.google.protobuf:protobuf-java-util`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.google.protobuf/protobuf-java-util?label=Maven%20Central)
-    - `HuTool工具包` : `cn.hutool:hutool-all`  
-      ![Maven Central](https://img.shields.io/maven-central/v/cn.hutool/hutool-all?label=Maven%20Central)
-    - `JustAuth第三方登录` : `me.zhyd.oauth:JustAuth`  
-      ![Maven Central](https://img.shields.io/maven-central/v/me.zhyd.oauth/JustAuth?label=Maven%20Central)
-    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-core`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-core?label=Maven%20Central)
-    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-parsers-standard-package`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-parsers-standard-package?label=Maven%20Central)
-    - `Tika语言、编码、类型检测` : `org.apache.tika:tika-langdetect-tika`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-langdetect-tika?label=Maven%20Central)
-    - `Ansj分词` : `org.ansj:ansj_seg`  
-      ![Maven Central](https://img.shields.io/maven-central/v/org.ansj/ansj_seg?label=Maven%20Central)
-    - `二维码` : `com.google.zxing:core`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
-    - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
-      ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
-- `dependencies` : 全局依赖
-- `dependencyManagement` : 依赖管理
-- `profiles` : 配置
+- 继承父依赖 :
+  - `SpringBoot Web` : `org.springframework.boot:spring-boot-starter-web`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-web?label=Maven%20Central)
+  - `邮件` : `org.springframework.boot:spring-boot-starter-mail`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-mail?label=Maven%20Central)
+  - `热部署` : `org.springframework.boot:spring-boot-devtools`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-devtools?label=Maven%20Central)
+  - `配置` : `org.springframework.boot:spring-boot-configuration-processor`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-configuration-processor?label=Maven%20Central)
+  - `测试` : `org.springframework.boot:spring-boot-starter-test`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-test?label=Maven%20Central)
+  - `SpringBoot整合Maven插件` : `org.springframework.boot:spring-boot-maven-plugin`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-maven-plugin?label=Maven%20Central)
+  - `Maven打包插件` : `org.apache.maven.plugins:maven-compiler-plugin`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.apache.maven.plugins/maven-compiler-plugin?label=Maven%20Central)
+  - `MySQL(与服务器版本号对应，不需一致)` : `mysql:mysql-connector-java`  
+    ![Maven Central](https://img.shields.io/maven-central/v/mysql/mysql-connector-java?label=Maven%20Central)
+  - `MongoDB(与服务器版本号对应，不需一致)` : `org.springframework.boot:spring-boot-starter-data-mongodb`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-mongodb?label=Maven%20Central)
+  - `Redis(与服务器版本号不对应，不需一致)` : `org.springframework.boot:spring-boot-starter-data-redis`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-redis?label=Maven%20Central)
+  - `RabbitMQ(与服务器版本号不对应，不需一致)` : `org.springframework.boot:spring-boot-starter-amqp`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-amqp?label=Maven%20Central)
+  - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-boot-starter-integration`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-integration?label=Maven%20Central)
+  - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-stream`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-stream?label=Maven%20Central)
+  - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-mqtt`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-mqtt?label=Maven%20Central)
+  - `实体层注解(与IDE安装的版本号对应，不需一致)` : `org.projectlombok:lombok`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.projectlombok/lombok?label=Maven%20Central)
+- 需要修改父依赖版本号 :
+  - `ElasticSearch(与服务器版本号对应，需要一致)` : `org.springframework.boot:spring-boot-starter-data-elasticsearch`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-elasticsearch?label=Maven%20Central)
+- 父依赖不含 :
+  - `Minio(与服务器版本号不对应，不需一致)` : `io.minio:minio`  
+    ![Maven Central](https://img.shields.io/maven-central/v/io.minio/minio?label=Maven%20Central)
+  - `MyBatis` : `org.mybatis.spring.boot:mybatis-spring-boot-starter`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.mybatis.spring.boot/mybatis-spring-boot-starter?label=Maven%20Central)
+  - `PageHelper分页排序查询` : `com.github.pagehelper:pagehelper-spring-boot-starter`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.github.pagehelper/pagehelper-spring-boot-starter?label=Maven%20Central)
+  - `雪花ID生成器` : `cn.404z:id-spring-boot-autoconfigure`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/id-spring-boot-autoconfigure?label=Maven%20Central)
+  - `IP地址转区域` : `cn.404z:ip2region-spring-boot-autoconfigure`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/ip2region-spring-boot-autoconfigure?label=Maven%20Central)
+  - `手机号码区域` : `cn.404z:phone2region-spring-boot-autoconfigure`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
+  - `二维码生成器` : `cn.404z:qrcode-encoder`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/qrcode-encoder?label=Maven%20Central)
+  - `轻量级权限认证SpringBoot启动器` : `cn.404z:tiny-token-spring-boot-starter`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-token-spring-boot-starter?label=Maven%20Central)
+  - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2?label=Maven%20Central)
+  - `FastJson Extension Spring5` : `com.alibaba.fastjson2:fastjson2-extension-spring5`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2-extension-spring5?label=Maven%20Central)
+  - `EasyExcel` : `com.alibaba:easyexcel`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/easyexcel?label=Maven%20Central)
+  - `Protocol Buffers` : `com.google.protobuf:protobuf-java`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.google.protobuf/protobuf-java?label=Maven%20Central)
+  - `Protocol Buffers Util` : `com.google.protobuf:protobuf-java-util`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.google.protobuf/protobuf-java-util?label=Maven%20Central)
+  - `HuTool工具包` : `cn.hutool:hutool-all`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.hutool/hutool-all?label=Maven%20Central)
+  - `JustAuth第三方登录` : `me.zhyd.oauth:JustAuth`  
+    ![Maven Central](https://img.shields.io/maven-central/v/me.zhyd.oauth/JustAuth?label=Maven%20Central)
+  - `Tika语言、编码、类型检测` : `org.apache.tika:tika-core`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-core?label=Maven%20Central)
+  - `Tika语言、编码、类型检测` : `org.apache.tika:tika-parsers-standard-package`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-parsers-standard-package?label=Maven%20Central)
+  - `Tika语言、编码、类型检测` : `org.apache.tika:tika-langdetect-tika`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.apache.tika/tika-langdetect-tika?label=Maven%20Central)
+  - `Ansj分词` : `org.ansj:ansj_seg`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.ansj/ansj_seg?label=Maven%20Central)
+  - `二维码` : `com.google.zxing:core`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
+  - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
 
 ## 关于
 

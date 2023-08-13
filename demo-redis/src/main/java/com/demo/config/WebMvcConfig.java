@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * <h1>WebMvc配置类</h1>
+ * <h1>WebMvc配置</h1>
  *
  * <p>
  * createDate 2023/03/03 13:13:13
@@ -27,7 +27,7 @@ import java.util.List;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
-     * 重写消息转换器
+     * 消息转换器
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {

@@ -9,7 +9,7 @@ import org.springframework.lang.NonNull;
 import java.io.IOException;
 
 /**
- * <h1>@PropertySource注解，转换yml文件成properties文件</h1>
+ * <h1>yml格式转换成properties格式</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -21,8 +21,7 @@ import java.io.IOException;
 public class PropertySourceLoadYamlFactory implements PropertySourceFactory {
 
     /**
-     * 重写createPropertySource方法<br>
-     * 转换yml文件成properties文件
+     * yml格式转换成properties格式
      */
     @NonNull
     @Override

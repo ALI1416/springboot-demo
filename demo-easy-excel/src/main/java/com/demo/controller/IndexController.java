@@ -67,7 +67,7 @@ public class IndexController {
      * 导入
      */
     @PostMapping("importExcel")
-    public Result importExcel(MultipartFile file) {
+    public Result<List<UserExcel>> importExcel(MultipartFile file) {
         List<UserExcel> importList = new ArrayList<>();
         EeUtils.upload(file, UserExcel.class, importList);
         log.info(JSON.toJSONString(importList));

@@ -1,72 +1,64 @@
 # demo-mail
 
-## 目录结构
-
-- **`src.main.java`** : 项目代码
-- **`src.main.resources`** : 项目资源文件
-- **`src.test.java`** : 测试代码
-- `pom.xml` : 项目pom
-- `README.md` : 自述文件
-
-### pom.xml
-
-- `parent` : 父pom : `com.demo:springboot-demo`
-- `dependencies` : 依赖
-- `build` : 构建插件
-
-### src.main.java.com.demo
+## 代码
 
 - **`base`** : 基类文件夹
-  - `ToStringBase` : ToString格式化基类
+  - `ToStringBase` : ToString基类
 - **`config`** : 配置文件夹
-  - `TomcatConfig` : Tomcat配置类
-  - `WebMvcConfig` : WebMvc配置类
-- **`constant`** : 常数文件夹
-  - `FormatConstant` : 格式常量类
-  - `ResultCodeEnum` : 返回结果状态枚举类
+  - `TomcatConfig` : Tomcat配置
+  - `WebMvcConfig` : WebMvc配置
+- **`constant`** : 常量文件夹
+  - `FormatConstant` : 格式常量
+  - `ResultEnum` : 统一返回状态枚举
 - **`controller`** : 控制层文件夹
   - `IndexController` : 首页
 - **`entity`** : 实体层文件夹
-  - **`po`** : 数据库实体层
+  - **`po`** : 数据库实体层文件夹
     - `User` : 用户
-  - **`pojo`** : 普通实体层
-    - `Result` : 返回结果实体类
+  - **`pojo`** : 普通实体层文件夹
+    - `GlobalException` : 全局异常
+    - `Result` : 统一返回
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
   - `PageNotFoundExceptionHandler` : 404异常处理类
 - `DemoMailApp` : 启动类
 
-### src.main.resources
+## 资源
 
-- **`config`** : 配置文件
+- **`config`** : 配置文件夹
   - `application.yml` : 总配置
   - `application-dev.yml` : 开发环境配置
   - `application-prd.yml` : 生产环境配置
   - `application-qas.yml` : 测试环境配置
-- **`static`** : 静态文件
+- **`static`** : 静态资源文件夹
   - `favicon.ico` : 图标
-- `404z.cn.jks` : ssl证书
+- `404z.cn.jks` : SSL证书
 - `banner.txt` : 横幅
 
-#### application.yml
+## 测试
 
-- `spring.profiles.active` : 使用的配置文件后缀
+- `AppTest` : SpringBoot测试
+- `MainTest` : 普通测试
+
+## application.yml
+
+- `spring.profiles.active` : 使用哪个配置
 - `spring.servlet.multipart` : 传输文件
   - `max-file-size` : 最大文件大小
   - `max-request-size` : 最大请求大小
 - `server.compression.enable` : 是否启用响应压缩
-- `server.servlet.content-path` : 前缀(例如/api)
+- `server.servlet.content-path` : 前缀(例如`/api`)
 - `server.port` : 端口号
-- `server.ssl` : ssl证书
-  - `key-store` : 路径(例如classpath:404z.cn.jks)
+- `server.ssl` : SSL证书
+  - `key-store` : 路径(例如`classpath:404z.cn.jks`)
   - `key-store-password` : 密码
   - `key-store-type` : 类型
-- `logging.file.name` : 日志文件(可带路径)
+- `logging.file.name` : 日志文件名称(可带路径)
 
-#### application-xxx.yml
+## application-xxx.yml
 
-- `spring.devtools.restart.enabled` : 启用热部署
-- `logging.level.root` : 记录日志等级，值如下
+- `spring.devtools.restart.enabled` : 是否启用热部署
+- `logging.level.root` : 日志级别，例如
   - `trace` : 跟踪
   - `debug` : 调试
   - `info` : 信息
@@ -74,8 +66,3 @@
   - `error` : 错误
   - `fatal` : 致命
   - `off` : 关闭
-
-### src.test.java.com.demo
-
-- `AppTest` : SpringBoot测试
-- `MainTest` : 普通测试

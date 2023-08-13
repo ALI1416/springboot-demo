@@ -44,7 +44,6 @@
   </modules>
 
   <properties>
-    <!--基配置-->
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -53,7 +52,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!---->
-    <!--继承父pom版本号-->
+    <!--继承父依赖-->
     <!--SpringBoot Web-->
     <!--org.springframework.boot:spring-boot-starter-web-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
@@ -121,7 +120,7 @@
 
 
     <!---->
-    <!--父pom版本号需要修改-->
+    <!--需要修改父依赖版本号-->
     <!--ElasticSearch(与服务器版本号对应，需要一致)-->
     <!--org.springframework.boot:spring-boot-starter-data-elasticsearch-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-elasticsearch -->
@@ -129,7 +128,7 @@
 
 
     <!---->
-    <!--父pom不含依赖-->
+    <!--父依赖不含-->
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
     <!-- https://mvnrepository.com/artifact/io.minio/minio -->

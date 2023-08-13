@@ -1,6 +1,6 @@
 package com.demo.handler;
 
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.GlobalException;
 import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.io.IOException;
 
 /**
- * <h1>全局异常处理类(404异常除外)</h1>
+ * <h1>全局异常处理(404异常除外)</h1>
  *
  * <p>
  * 捕获处理所有未被捕获的异常(404异常除外)
@@ -29,8 +29,8 @@ import java.io.IOException;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     @Order(1)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result requestMethodNotSupportedHandler() {
-        return Result.e(ResultCodeEnum.REQUEST_METHOD_NOT_SUPPORTED);
+        return Result.e(ResultEnum.REQUEST_METHOD_NOT_SUPPORTED);
     }
 
     /**
@@ -52,26 +52,21 @@ public class GlobalExceptionHandler {
     @Order(1)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public Result mediaTypeNotSupportedHandler() {
-        return Result.e(ResultCodeEnum.MEDIA_TYPE_NOT_SUPPORTED);
+        return Result.e(ResultEnum.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
     /**
      * <h2>参数异常</h2>
-     * <h3>Params</h3>
-     * --{@linkplain IllegalStateException IllegalStateException}：拆箱类型为null错误<br>
-     * --{@linkplain MethodArgumentTypeMismatchException MethodArgumentTypeMismatchException}：参数类型错误<br>
-     * --{@linkplain BindException BindException}：对象的属性类型错误<br>
-     * <h3>Body</h3>
-     * --raw<br>
-     * ----JSON<br>
-     * ------{@linkplain HttpMessageNotReadableException HttpMessageNotReadableException}：为null、不是JSON格式、参数类型错误<br>
-     * ----XML<br>
-     * ----HTML<br>
-     * ----Text<br>
-     * --form-data<br>
-     * ----等同于Params
-     * --x-www-form-urlencoded<br>
-     * --binary<br>
+     * <h3>params、form-data、x-www-form-urlencoded</h3>
+     * <ul>
+     * <li>{@link IllegalStateException} 拆箱类型为null错误</li>
+     * <li>{@link MethodArgumentTypeMismatchException} 参数类型错误</li>
+     * <li>{@link BindException} 对象的属性类型错误</li>
+     * </ul>
+     * <h3>JSON</h3>
+     * <ul>
+     * <li>{@link HttpMessageNotReadableException} 为null、不是JSON格式、参数类型错误</li>
+     * </ul>
      *
      * @see IllegalStateException
      * @see MethodArgumentTypeMismatchException
@@ -86,7 +81,7 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class //
     })
     public Result paramErrorHandler() {
-        return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
+        return Result.e(ResultEnum.PARAM_IS_ERROR);
     }
 
     /**
@@ -97,7 +92,7 @@ public class GlobalExceptionHandler {
     @Order(1)
     @ExceptionHandler(GlobalException.class)
     public Result globalExceptionHandler(GlobalException e) {
-        return Result.e(e.getResultCodeEnum(), e.getMsg());
+        return Result.e(e.getResultEnum(), e.getMsg());
     }
 
     /**
@@ -109,7 +104,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public Result runtimeExceptionHandler(RuntimeException e) {
         log.error("RuntimeException", e);
-        return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "RuntimeException");
+        return Result.e(ResultEnum.SYSTEM_INNER_ERROR, "RuntimeException");
     }
 
     /**
@@ -121,7 +116,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public Result ioExceptionHandler(IOException e) {
         log.error("IOException", e);
-        return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "IOException");
+        return Result.e(ResultEnum.SYSTEM_INNER_ERROR, "IOException");
     }
 
     /**
@@ -133,7 +128,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e) {
         log.error("Exception", e);
-        return Result.e(ResultCodeEnum.SYSTEM_INNER_ERROR, "Exception");
+        return Result.e(ResultEnum.SYSTEM_INNER_ERROR, "Exception");
     }
 
 }

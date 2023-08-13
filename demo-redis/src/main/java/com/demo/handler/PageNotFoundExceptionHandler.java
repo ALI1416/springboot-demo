@@ -1,13 +1,13 @@
 package com.demo.handler;
 
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <h1>404异常处理类</h1>
+ * <h1>404异常处理</h1>
  *
  * <p>
  * createDate 2021/09/10 14:37:57
@@ -24,7 +24,7 @@ public class PageNotFoundExceptionHandler implements ErrorController {
      */
     @RequestMapping("error")
     public Result error() {
-        return Result.e(ResultCodeEnum.PAGE_NOT_FOUND);
+        return Result.e(ResultEnum.PAGE_NOT_FOUND);
     }
 
 }

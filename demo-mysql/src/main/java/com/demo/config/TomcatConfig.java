@@ -6,12 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * <h1>Tomcat配置类</h1>
+ * <h1>Tomcat配置</h1>
  *
- * <p>
- * 特性1(默认关闭)：http(80)协议切换到https(443)协议<br>
- * 特性2(默认开启)：请求地址和参数允许接收`^\|[]{}字符
- * </p>
+ * <p>特性1(默认关闭)：http(80)协议切换到https(443)协议</p>
+ * <p>特性2(默认开启)：请求地址和参数允许接收`^\|[]{}字符</p>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -32,12 +30,12 @@ public class TomcatConfig {
         // TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory() {
         //     @Override
         //     protected void postProcessContext(Context context) {
-        //         SecurityConstraint securityConstraint = new SecurityConstraint();
-        //         securityConstraint.setUserConstraint("CONFIDENTIAL");
+        //         SecurityConstraint constraint = new SecurityConstraint();
+        //         constraint.setUserConstraint("CONFIDENTIAL");
         //         SecurityCollection collection = new SecurityCollection();
         //         collection.addPattern("/*");
-        //         securityConstraint.addCollection(collection);
-        //         context.addConstraint(securityConstraint);
+        //         constraint.addCollection(collection);
+        //         context.addConstraint(constraint);
         //     }
         // };
         // Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");

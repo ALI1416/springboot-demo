@@ -1,13 +1,12 @@
 package com.demo.entity.pojo;
 
 import com.demo.base.ToStringBase;
-import com.demo.constant.ResultCodeEnum;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.demo.constant.ResultEnum;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>返回结果实体类</h1>
+ * <h1>统一返回</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -18,115 +17,121 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-@Schema(description = "返回结果实体类")
-public class Result extends ToStringBase {
+public class Result<T> extends ToStringBase {
 
     /**
      * 是否成功(状态码为0时成功)
      */
-    @Schema(description = "是否成功")
     private boolean ok;
     /**
      * 状态码
+     *
+     * @see ResultEnum
      */
-    @Schema(description = "状态码")
     private int code;
     /**
      * 状态信息
      */
-    @Schema(description = "状态信息")
     private String msg;
     /**
      * 数据
      */
-    @Schema(description = "数据")
-    private Object data;
+    private T data;
 
+    /**
+     * 构造函数
+     */
     public Result() {
-
     }
 
-    public Result(ResultCodeEnum resultCodeEnum, Object data) {
-        this.code = resultCodeEnum.getCode();
-        this.msg = resultCodeEnum.getMsg();
+    /**
+     * 构造函数
+     *
+     * @param resultEnum 统一返回状态枚举
+     * @param data       数据
+     */
+    public Result(ResultEnum resultEnum, T data) {
+        this.code = resultEnum.getCode();
+        this.msg = resultEnum.getMsg();
         this.data = data;
-        this.ok = (this.code == ResultCodeEnum.OK.getCode());
+        this.ok = (this.code == ResultEnum.OK.getCode());
     }
 
-    public Result(int code, String msg, Object data) {
+    /**
+     * 构造函数
+     *
+     * @param code 状态码
+     * @param msg  状态信息
+     * @param data 数据
+     */
+    public Result(int code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
-        this.ok = (this.code == ResultCodeEnum.OK.getCode());
+        this.ok = (this.code == ResultEnum.OK.getCode());
     }
 
     /**
-     * <h1>成功</h1>
-     * <p>不携带数据</p>
+     * 成功
      */
     public static Result o() {
-        return new Result(ResultCodeEnum.OK, null);
+        return new Result(ResultEnum.OK, null);
     }
 
     /**
-     * <h1>成功</h1>
+     * 成功
      *
      * @param data 数据
      */
-    public static Result o(Object data) {
-        return new Result(ResultCodeEnum.OK, data);
+    public static <T> Result<T> o(T data) {
+        return new Result<>(ResultEnum.OK, data);
     }
 
     /**
-     * <h1>成功</h1>
+     * 成功
      *
-     * @param msg  指定状态信息
+     * @param msg  状态信息
      * @param data 数据
      */
-    public static Result o(String msg, Object data) {
-        return new Result(ResultCodeEnum.OK.getCode(), msg, data);
+    public static <T> Result<T> o(String msg, T data) {
+        return new Result<>(ResultEnum.OK.getCode(), msg, data);
     }
 
     /**
-     * <h1>错误</h1>
-     * <p>未知错误，不携带数据</p>
+     * 未知错误
      */
     public static Result e() {
-        return new Result(ResultCodeEnum.ERROR, null);
+        return new Result(ResultEnum.ERROR, null);
     }
 
     /**
-     * <h1>错误</h1>
-     * <p>不携带数据</p>
+     * 错误
      *
-     * @param resultCodeEnum 返回结果状态枚举类
-     * @see ResultCodeEnum
+     * @param resultEnum 统一返回状态枚举
      */
-    public static Result e(ResultCodeEnum resultCodeEnum) {
-        return new Result(resultCodeEnum, null);
+    public static Result e(ResultEnum resultEnum) {
+        return new Result(resultEnum, null);
     }
 
     /**
-     * <h1>错误</h1>
+     * 错误
      *
-     * @param resultCodeEnum 返回结果状态枚举类
-     * @param data           数据
-     * @see ResultCodeEnum
+     * @param resultEnum 统一返回状态枚举
+     * @param data       数据
      */
-    public static Result e(ResultCodeEnum resultCodeEnum, Object data) {
-        return new Result(resultCodeEnum, data);
+    public static <T> Result<T> e(ResultEnum resultEnum, T data) {
+        return new Result<>(resultEnum, data);
     }
 
     /**
-     * <h1>错误</h1>
+     * 错误
      *
-     * @param resultCodeEnum 返回结果状态枚举类
-     * @param msg            指定状态信息
-     * @param data           数据
-     * @see ResultCodeEnum
+     * @param resultEnum 统一返回状态枚举
+     * @param msg        状态信息
+     * @param data       数据
      */
-    public static Result e(ResultCodeEnum resultCodeEnum, String msg, Object data) {
-        return new Result(resultCodeEnum.getCode(), msg, data);
+    public static <T> Result<T> e(ResultEnum resultEnum, String msg, T data) {
+        return new Result<>(resultEnum.getCode(), msg, data);
     }
 
 }

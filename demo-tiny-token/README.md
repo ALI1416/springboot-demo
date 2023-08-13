@@ -17,7 +17,7 @@
 ### src.main.java.com.demo
 
 - **`base`** : 基类文件夹
-  - `ToStringBase` : ToString格式化基类
+  - `ToStringBase` : ToString基类
   - `DaoBase` : Dao层基类
   - `EntityBase` : 实体层基类
   - `ServiceBase` : 服务层基类
@@ -25,9 +25,9 @@
 - **`config`** : 配置文件夹
   - `RedisConfig` : Redis配置类
   - `TomcatConfig` : Tomcat配置类
-  - `WebMvcConfig` : WebMvc配置类
+  - `WebMvcConfig` : WebMvc配置
 - **`constant`** : 常数文件夹
-  - `FormatConstant` : 格式常量类
+  - `FormatConstant` : 格式常量
   - `ResultCodeEnum` : 返回结果状态枚举类
   - `Constant` : 常量
   - `RedisConstant` : Redis常量
