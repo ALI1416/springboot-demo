@@ -26,13 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "首页")
 public class IndexController {
 
+    // knife4j文档 http://localhost:8080/doc.html
+    // swagger文档 http://localhost:8080/swagger-ui/index.html
+
     /**
      * <h3>int测试</h3>
      */
     @GetMapping("intTest")
     @Operation(summary = "int测试", description = "描述<br>换行")
     @Parameter(name = "n", description = "数字")
-    public Result intTest(int n) {
+    public Result<Integer> intTest(int n) {
         return Result.o(n);
     }
 
@@ -44,7 +47,7 @@ public class IndexController {
     @Parameter(name = "u", hidden = true)
     @Parameter(name = "account", description = "账号")
     @Parameter(name = "year", description = "年", required = true, example = "2000")
-    public Result userTest(User u) {
+    public Result<User> userTest(User u) {
         return Result.o(u);
     }
 
@@ -53,7 +56,7 @@ public class IndexController {
      */
     @PostMapping("userTest2")
     @Operation(summary = "user测试2")
-    public Result userTest2(@RequestBody User u) {
+    public Result<User> userTest2(@RequestBody User u) {
         return Result.o(u);
     }
 
@@ -62,11 +65,11 @@ public class IndexController {
      */
     @PostMapping("userTest3")
     @Operation(summary = "user测试3")
-    public User userTest3(@RequestBody User u) {
+    public Result<User> userTest3(@RequestBody User u) {
         SubUser subUser = new SubUser();
         subUser.setPwd("pwd");
         u.setSubUser(subUser);
-        return u;
+        return Result.o(u);
     }
 
     /**
@@ -74,11 +77,11 @@ public class IndexController {
      */
     @PostMapping("userTest4")
     @Operation(summary = "user测试4")
-    public User userTest4(@RequestBody User u) {
+    public Result<User> userTest4(@RequestBody User u) {
         UserImpl userImpl = new UserImpl();
         userImpl.setPwd2("pwd2");
         u.setUserInterface(userImpl);
-        return u;
+        return Result.o(u);
     }
 
 }

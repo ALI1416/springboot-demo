@@ -3,8 +3,10 @@ package com.demo.controller;
 import com.demo.base.ControllerBase;
 import com.demo.entity.po.UserBak;
 import com.demo.entity.pojo.Result;
+import com.demo.entity.pojo.ResultBatch;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.UserService;
+import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +39,7 @@ public class UserController extends ControllerBase {
      * @return ok:id,e:0
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody UserVo user) {
+    public Result<Long> insert(@RequestBody UserVo user) {
         return Result.o(userService.insert(user));
     }
 
@@ -48,7 +50,7 @@ public class UserController extends ControllerBase {
      * @return 是否成功
      */
     @PostMapping("/batchInsert")
-    public Result batchInsert(@RequestBody List<UserVo> users) {
+    public Result<Boolean> batchInsert(@RequestBody List<UserVo> users) {
         return Result.o(userService.batchInsert(users));
     }
 
@@ -59,7 +61,7 @@ public class UserController extends ControllerBase {
      * @return ResultBatch UserVo
      */
     @PostMapping("/batchInsertDetail")
-    public Result batchInsertDetail(@RequestBody List<UserVo> users) {
+    public Result<ResultBatch<UserVo>> batchInsertDetail(@RequestBody List<UserVo> users) {
         return Result.o(userService.batchInsertDetail(users));
     }
 
@@ -70,7 +72,7 @@ public class UserController extends ControllerBase {
      * @return 是否成功
      */
     @PostMapping("/update")
-    public Result update(@RequestBody UserVo user) {
+    public Result<Boolean> update(@RequestBody UserVo user) {
         return Result.o(userService.update(user));
     }
 
@@ -81,7 +83,7 @@ public class UserController extends ControllerBase {
      * @return 是否成功
      */
     @PostMapping("/delete")
-    public Result delete(@RequestBody UserVo user) {
+    public Result<Boolean> delete(@RequestBody UserVo user) {
         return Result.o(userService.delete(user));
     }
 
@@ -92,7 +94,7 @@ public class UserController extends ControllerBase {
      * @return 是否成功
      */
     @PostMapping("/restore")
-    public Result restore(@RequestBody UserVo user) {
+    public Result<Boolean> restore(@RequestBody UserVo user) {
         return Result.o(userService.restore(user));
     }
 
@@ -103,7 +105,7 @@ public class UserController extends ControllerBase {
      * @return 是否存在
      */
     @PostMapping("/existId")
-    public Result existId(long id) {
+    public Result<Boolean> existId(long id) {
         return Result.o(userService.existId(id));
     }
 
@@ -114,7 +116,7 @@ public class UserController extends ControllerBase {
      * @return 是否存在
      */
     @PostMapping("/existAccount")
-    public Result existAccount(String account) {
+    public Result<Boolean> existAccount(String account) {
         return Result.o(userService.existAccount(account));
     }
 
@@ -125,7 +127,7 @@ public class UserController extends ControllerBase {
      * @return UserVo
      */
     @PostMapping("/findById")
-    public Result findById(long id) {
+    public Result<UserVo> findById(long id) {
         return Result.o(userService.findById(id));
     }
 
@@ -136,7 +138,7 @@ public class UserController extends ControllerBase {
      * @return PageInfo UserVo
      */
     @PostMapping("/findByAccount")
-    public Result findByAccount(String account) {
+    public Result<UserVo> findByAccount(String account) {
         return Result.o(userService.findByAccount(account));
     }
 
@@ -147,7 +149,7 @@ public class UserController extends ControllerBase {
      * @return PageInfo UserVo
      */
     @PostMapping("/findExact")
-    public Result findExact(@RequestBody UserVo user) {
+    public Result<PageInfo<UserVo>> findExact(@RequestBody UserVo user) {
         return Result.o(userService.findExact(user));
     }
 
@@ -158,7 +160,7 @@ public class UserController extends ControllerBase {
      * @return PageInfo UserVo
      */
     @PostMapping("/find")
-    public Result find(@RequestBody UserVo user) {
+    public Result<PageInfo<UserVo>> find(@RequestBody UserVo user) {
         return Result.o(userService.find(user));
     }
 
@@ -169,7 +171,7 @@ public class UserController extends ControllerBase {
      * @return PageInfo UserBak
      */
     @PostMapping("/findBak")
-    public Result find(@RequestBody UserBak user) {
+    public Result<PageInfo<UserBak>> find(@RequestBody UserBak user) {
         return Result.o(userService.findBak(user));
     }
 

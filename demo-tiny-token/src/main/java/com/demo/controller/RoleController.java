@@ -4,7 +4,7 @@ import cn.z.id.Id;
 import cn.z.tinytoken.T4s;
 import com.demo.base.ControllerBase;
 import com.demo.base.EntityBase;
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
@@ -50,7 +50,7 @@ public class RoleController extends ControllerBase {
      * 新增
      */
     @PostMapping("insert")
-    public Result insert(@RequestBody RoleVo role) {
+    public Result<Long> insert(@RequestBody RoleVo role) {
         if (existNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
@@ -62,7 +62,7 @@ public class RoleController extends ControllerBase {
      * 更新
      */
     @PostMapping("update")
-    public Result update(@RequestBody RoleVo role) {
+    public Result<Boolean> update(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
@@ -73,7 +73,7 @@ public class RoleController extends ControllerBase {
      * 删除
      */
     @PostMapping("delete")
-    public Result delete(@RequestBody EntityBase role) {
+    public Result<Boolean> delete(@RequestBody EntityBase role) {
         if (isNull(role.getId())) {
             return paramIsError();
         }
@@ -84,7 +84,7 @@ public class RoleController extends ControllerBase {
      * 修改路由
      */
     @PostMapping("updateRouteIdList")
-    public Result updateRouteIdList(@RequestBody RoleVo role) {
+    public Result<Boolean> updateRouteIdList(@RequestBody RoleVo role) {
         Long roleId = role.getId();
         List<Long> routeIds = role.getRouteIds();
         if (existNull(roleId, routeIds) || routeIds.isEmpty()) {
@@ -95,11 +95,11 @@ public class RoleController extends ControllerBase {
         if (userId != 0) {
             // 只能管理自己创建的角色
             if (!roleService.findByCreateId(userId).stream().map(RoleVo::getId).collect(Collectors.toList()).contains(userId)) {
-                return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
+                return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
             }
             // 只能管理自己有权限的路由
             if (!routeService.findChildrenIdByUserId(userId).containsAll(routeIds)) {
-                return Result.e(ResultCodeEnum.INSUFFICIENT_PERMISSION);
+                return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
             }
         }
         List<RoleRouteVo> roleRoutes = new ArrayList<>();
@@ -117,7 +117,7 @@ public class RoleController extends ControllerBase {
      * 查询所有
      */
     @PostMapping("findAll")
-    public Result findAll() {
+    public Result<List<RoleVo>> findAll() {
         return Result.o(roleService.findAll());
     }
 
@@ -125,7 +125,7 @@ public class RoleController extends ControllerBase {
      * 查询，通过UserId
      */
     @PostMapping("findByUserId")
-    public Result findByUserId(@RequestBody EntityBase route) {
+    public Result<List<RoleVo>> findByUserId(@RequestBody EntityBase route) {
         return Result.o(roleService.findByUserId(route.getId()));
     }
 
@@ -133,7 +133,7 @@ public class RoleController extends ControllerBase {
      * 查询，通过CreateId
      */
     @PostMapping("findByCreateId")
-    public Result findByCreateId(@RequestBody EntityBase route) {
+    public Result<List<RoleVo>> findByCreateId(@RequestBody EntityBase route) {
         return Result.o(roleService.findByCreateId(route.getId()));
     }
 
@@ -149,7 +149,7 @@ public class RoleController extends ControllerBase {
      * 刷新，通过RoleId
      */
     @PostMapping("refreshRole")
-    public Result refreshRole(@RequestBody EntityBase role) {
+    public Result<Long> refreshRole(@RequestBody EntityBase role) {
         List<Long> ids =
                 userService.findByRoleId(role.getId()).stream().map(UserVo::getId).collect(Collectors.toList());
         return Result.o(routeInterceptor.deleteRouteRole(role.getId()) + routeInterceptor.deleteRouteUser(ids));

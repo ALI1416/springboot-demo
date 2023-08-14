@@ -2,7 +2,7 @@ package com.demo.controller;
 
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
-import com.demo.template.RedisTemp;
+import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -225,7 +225,7 @@ public class StringController {
      * 不存在 true
      */
     @PostMapping("setIfAbsent")
-    public Result setIfAbsent(String key, String value) {
+    public Result<Boolean> setIfAbsent(String key, String value) {
         return Result.o(redisTemp.setIfAbsent(key, value));
     }
 
@@ -236,7 +236,7 @@ public class StringController {
      * 不存在 true
      */
     @PostMapping("setIfAbsentExpire")
-    public Result setIfAbsent(String key, String value, long timeout) {
+    public Result<Boolean> setIfAbsent(String key, String value, long timeout) {
         return Result.o(redisTemp.setIfAbsent(key, value, timeout));
     }
 
@@ -247,7 +247,7 @@ public class StringController {
      * 不存在 false
      */
     @PostMapping("setIfPresent")
-    public Result setIfPresent(String key, String value) {
+    public Result<Boolean> setIfPresent(String key, String value) {
         return Result.o(redisTemp.setIfPresent(key, value));
     }
 
@@ -258,7 +258,7 @@ public class StringController {
      * 不存在 false
      */
     @PostMapping("setIfPresentExpire")
-    public Result setIfPresent(String key, String value, long timeout) {
+    public Result<Boolean> setIfPresent(String key, String value, long timeout) {
         return Result.o(redisTemp.setIfPresent(key, value, timeout));
     }
 
@@ -282,7 +282,7 @@ public class StringController {
      * 存在1个以上 false
      */
     @PostMapping("multiSetIfAbsent")
-    public Result multiSetIfAbsent(@RequestBody Map<String, Object> map) {
+    public Result<Boolean> multiSetIfAbsent(@RequestBody Map<String, Object> map) {
         return Result.o(redisTemp.setMultiIfAbsent(map));
     }
 
@@ -293,7 +293,7 @@ public class StringController {
      * 不存在a null
      */
     @PostMapping("get")
-    public Result get(String key) {
+    public Result<Object> get(String key) {
         return Result.o(redisTemp.get(key));
     }
 
@@ -306,7 +306,7 @@ public class StringController {
      * 返回null
      */
     @PostMapping("getAndDelete")
-    public Result getAndDelete(String key) {
+    public Result<Object> getAndDelete(String key) {
         return Result.o(redisTemp.getAndDelete(key));
     }
 
@@ -319,7 +319,7 @@ public class StringController {
      * 返回null 无新增
      */
     @PostMapping("getAndExpire")
-    public Result getAndExpire(String key, long timeout) {
+    public Result<Object> getAndExpire(String key, long timeout) {
         return Result.o(redisTemp.getAndExpire(key, timeout));
     }
 
@@ -332,7 +332,7 @@ public class StringController {
      * 返回null 无新增
      */
     @PostMapping("getAndPersist")
-    public Result getAndPersist(String key) {
+    public Result<Object> getAndPersist(String key) {
         return Result.o(redisTemp.getAndPersist(key));
     }
 
@@ -343,7 +343,7 @@ public class StringController {
      * 不存在a null 值被修改
      */
     @PostMapping("getAndSet")
-    public Result getAndSet(String key, String value) {
+    public Result<Object> getAndSet(String key, String value) {
         return Result.o(redisTemp.getAndSet(key, value));
     }
 
@@ -354,7 +354,7 @@ public class StringController {
      * 存在a/b ["aaa","bbb",null]
      */
     @PostMapping("multiGetList")
-    public Result multiGet(@RequestBody List<String> keys) {
+    public Result<List<Object>> multiGet(@RequestBody List<String> keys) {
         return Result.o(redisTemp.getMulti(keys));
     }
 
@@ -364,7 +364,7 @@ public class StringController {
      * 存在a/b ["aaa","bbb",null]
      */
     @PostMapping("multiGetArray")
-    public Result multiGet(String[] keys) {
+    public Result<List<Object>> multiGet(String[] keys) {
         return Result.o(redisTemp.getMulti(keys));
     }
 
@@ -375,7 +375,7 @@ public class StringController {
      * 不存在键 返回1，值改变为1
      */
     @PostMapping("increment1")
-    public Result increment(String key) {
+    public Result<Long> increment(String key) {
         return Result.o(redisTemp.increment(key));
     }
 
@@ -386,7 +386,7 @@ public class StringController {
      * 不存在键 返回2，值改变为2
      */
     @PostMapping("increment")
-    public Result increment(String key, long delta) {
+    public Result<Long> increment(String key, long delta) {
         return Result.o(redisTemp.increment(key, delta));
     }
 
@@ -397,7 +397,7 @@ public class StringController {
      * 不存在键 返回1.2，值改变为1.2
      */
     @PostMapping("incrementD")
-    public Result incrementD(String key, double delta) {
+    public Result<Double> incrementD(String key, double delta) {
         return Result.o(redisTemp.increment(key, delta));
     }
 
@@ -408,7 +408,7 @@ public class StringController {
      * 不存在键 返回-1，值改变为-1
      */
     @PostMapping("decrement1")
-    public Result decrement(String key) {
+    public Result<Long> decrement(String key) {
         return Result.o(redisTemp.decrement(key));
     }
 
@@ -419,7 +419,7 @@ public class StringController {
      * 不存在键 返回-2，值改变为-2
      */
     @PostMapping("decrement")
-    public Result decrement(String key, long delta) {
+    public Result<Long> decrement(String key, long delta) {
         return Result.o(redisTemp.decrement(key, delta));
     }
 
@@ -430,7 +430,7 @@ public class StringController {
      * 不存在键 返回-1.2，值改变为-1.2
      */
     @PostMapping("decrementD")
-    public Result decrementD(String key, double delta) {
+    public Result<Double> decrementD(String key, double delta) {
         return Result.o(redisTemp.decrement(key, delta));
     }
 
@@ -441,7 +441,7 @@ public class StringController {
      * 不存在键 返回2，值改变为45
      */
     @PostMapping("append")
-    public Result append(String key, String value) {
+    public Result<Integer> append(String key, String value) {
         return Result.o(redisTemp.append(key, value));
     }
 
@@ -452,7 +452,7 @@ public class StringController {
      * 不存在键 返回空字符串
      */
     @PostMapping("get2")
-    public Result get2(String key, long start, long end) {
+    public Result<String> get2(String key, long start, long end) {
         return Result.o(redisTemp.get(key, start, end));
     }
 
@@ -475,7 +475,7 @@ public class StringController {
      * 不存在键 返回0
      */
     @PostMapping("size")
-    public Result size(String key) {
+    public Result<Long> size(String key) {
         return Result.o(redisTemp.size(key));
     }
 
@@ -486,7 +486,7 @@ public class StringController {
      * 不存在键 返回false 值改变为(0b00000010)
      */
     @PostMapping("setBit")
-    public Result setBit(String key, long offset, boolean value) {
+    public Result<Boolean> setBit(String key, long offset, boolean value) {
         return Result.o(redisTemp.setBit(key, offset, value));
     }
 
@@ -497,7 +497,7 @@ public class StringController {
      * 不存在键 返回false
      */
     @PostMapping("getBit")
-    public Result getBit(String key, long offset) {
+    public Result<Boolean> getBit(String key, long offset) {
         return Result.o(redisTemp.getBit(key, offset));
     }
 
@@ -508,7 +508,7 @@ public class StringController {
      * 不存在键 返回[0]
      */
     @PostMapping("bitField")
-    public Result bitField(String key, long offset) {
+    public Result<List<Long>> bitField(String key, long offset) {
         BitFieldSubCommands.BitFieldGet bitFieldSubCommand = BitFieldSubCommands.BitFieldGet.create(BitFieldSubCommands.BitFieldType.INT_8, BitFieldSubCommands.Offset.offset(offset));
         BitFieldSubCommands subCommands = BitFieldSubCommands.create(bitFieldSubCommand);
         return Result.o(redisTemp.bitField(key, subCommands));

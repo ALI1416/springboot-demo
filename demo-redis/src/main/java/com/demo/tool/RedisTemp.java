@@ -1,4 +1,4 @@
-package com.demo.template;
+package com.demo.tool;
 
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.DataType;

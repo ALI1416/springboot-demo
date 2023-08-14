@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * <h1>路由不拦截Controller</h1>
  *
@@ -34,7 +36,7 @@ public class RouteNotInterceptController extends ControllerBase {
      * 新增
      */
     @PostMapping("insert")
-    public Result insert(@RequestBody RouteNotInterceptVo routeNotIntercept) {
+    public Result<Long> insert(@RequestBody RouteNotInterceptVo routeNotIntercept) {
         if (existNull(routeNotIntercept.getPages(), routeNotIntercept.getName(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
@@ -45,7 +47,7 @@ public class RouteNotInterceptController extends ControllerBase {
      * 删除
      */
     @PostMapping("delete")
-    public Result delete(@RequestBody EntityBase routeNotIntercept) {
+    public Result<Boolean> delete(@RequestBody EntityBase routeNotIntercept) {
         if (isNull(routeNotIntercept.getId())) {
             return paramIsError();
         }
@@ -56,7 +58,7 @@ public class RouteNotInterceptController extends ControllerBase {
      * 更新
      */
     @PostMapping("update")
-    public Result update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
+    public Result<Boolean> update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
         if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
@@ -67,7 +69,7 @@ public class RouteNotInterceptController extends ControllerBase {
      * 查询所有
      */
     @PostMapping("findAll")
-    public Result findAll() {
+    public Result<List<RouteNotInterceptVo>> findAll() {
         return Result.o(routeNotInterceptService.findAll());
     }
 
@@ -75,7 +77,7 @@ public class RouteNotInterceptController extends ControllerBase {
      * 刷新
      */
     @PostMapping("refresh")
-    public Result refresh() {
+    public Result<Boolean> refresh() {
         return Result.o(routeInterceptor.deleteRouteNotIntercept());
     }
 

@@ -38,7 +38,7 @@ public class IndexController {
      * true
      */
     @PostMapping("/createIndex")
-    public Result createIndex(String index) {
+    public Result<Boolean> createIndex(String index) {
         String mapping = "{\n" + //
                 "  \"properties\": {\n" + //
                 "    \"account\": {\n" + // 字段名
@@ -58,7 +58,7 @@ public class IndexController {
      * true
      */
     @PostMapping("/existIndex")
-    public Result existIndex(String index) {
+    public Result<Boolean> existIndex(String index) {
         boolean ok = EsUtils.existIndex(index);
         return Result.o(ok);
     }
@@ -68,7 +68,7 @@ public class IndexController {
      * http://localhost:8080/deleteIndex?index=aa
      */
     @PostMapping("/deleteIndex")
-    public Result deleteIndex(String index) {
+    public Result<Boolean> deleteIndex(String index) {
         boolean ok = EsUtils.deleteIndex(index);
         return Result.o(ok);
     }
@@ -113,7 +113,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/addDocument")
-    public Result addDocument(String index, @RequestBody User user) {
+    public Result<IndexResponse> addDocument(String index, @RequestBody User user) {
         IndexResponse ok = EsUtils.addDocument(index, user);
         return Result.o(ok);
     }
@@ -158,7 +158,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/addDocument2")
-    public Result addDocument2(String index, String id, @RequestBody User user) {
+    public Result<IndexResponse> addDocument2(String index, String id, @RequestBody User user) {
         IndexResponse ok = EsUtils.addDocument(index, id, user);
         return Result.o(ok);
     }
@@ -169,7 +169,7 @@ public class IndexController {
      * true
      */
     @PostMapping("/existDocument")
-    public Result existDocument(String index, String id) {
+    public Result<Boolean> existDocument(String index, String id) {
         boolean ok = EsUtils.existDocument(index, id);
         return Result.o(ok);
     }
@@ -212,7 +212,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/getDocument")
-    public Result getDocument(String index, String id) {
+    public Result<GetResponse> getDocument(String index, String id) {
         GetResponse ok = EsUtils.getDocument(index, id);
         return Result.o(ok);
     }
@@ -257,7 +257,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/updateDocument")
-    public Result updateDocument(String index, String id, @RequestBody User user) {
+    public Result<UpdateResponse> updateDocument(String index, String id, @RequestBody User user) {
         UpdateResponse ok = EsUtils.updateDocument(index, id, user);
         return Result.o(ok);
     }
@@ -299,7 +299,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/deleteDocument")
-    public Result deleteDocument(String index, String id) {
+    public Result<DeleteResponse> deleteDocument(String index, String id) {
         DeleteResponse ok = EsUtils.deleteDocument(index, id);
         return Result.o(ok);
     }
@@ -323,7 +323,7 @@ public class IndexController {
      * true
      */
     @PostMapping("/addDocumentBulk")
-    public Result addDocumentBulk(String index, @RequestBody List<User> objects) {
+    public Result<Boolean> addDocumentBulk(String index, @RequestBody List<User> objects) {
         boolean ok = EsUtils.addDocumentBulk(index, objects);
         return Result.o(ok);
     }
@@ -344,7 +344,7 @@ public class IndexController {
      * true
      */
     @PostMapping("/addDocumentBulk2")
-    public Result addDocumentBulk2(String index, @RequestBody Map<String, User> objects) {
+    public Result<Boolean> addDocumentBulk2(String index, @RequestBody Map<String, User> objects) {
         boolean ok = EsUtils.addDocumentBulk(index, objects);
         return Result.o(ok);
     }
@@ -371,7 +371,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/search")
-    public Result search(String index, String value) {
+    public Result<List<Map<String, Object>>> search(String index, String value) {
         String field = "account";
         QueryBuilder queryBuilder = QueryBuilders.matchQuery(field, value);
         HighlightBuilder highlightBuilder = new HighlightBuilder().field(field)// 匹配字段
@@ -733,7 +733,7 @@ public class IndexController {
      * }
      */
     @PostMapping("/analyze")
-    public Result analyze(String analyzer, String text) {
+    public Result<AnalyzeResponse> analyze(String analyzer, String text) {
         AnalyzeResponse ok = EsUtils.analyze(analyzer, text);
         return Result.o(ok);
     }

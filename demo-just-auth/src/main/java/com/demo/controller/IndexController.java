@@ -52,8 +52,8 @@ public class IndexController {
      */
     @GetMapping("thirdLogin/qq/callback")
     @ResponseBody
-    public AuthResponse<?> callback(AuthCallback callback) {
-        AuthResponse<?> response = request.login(callback);
+    public AuthResponse callback(AuthCallback callback) {
+        AuthResponse response = request.login(callback);
         log.info(JSON.toJSONString(response));
         return response;
     }

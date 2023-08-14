@@ -3,7 +3,7 @@ package com.demo.controller;
 import cn.z.tinytoken.T4s;
 import com.demo.base.ControllerBase;
 import com.demo.base.EntityBase;
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
 import com.demo.interceptor.RouteInterceptor;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <h1>用户管理Controller</h1>
@@ -37,17 +39,17 @@ public class UserManageController extends ControllerBase {
      * 新增用户
      */
     @PostMapping("insert")
-    public Result insert(@RequestBody UserVo user) {
+    public Result<Long> insert(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
             return paramIsError();
         }
         user.setCreateId(t4s.getId());
         if (userService.existAccount(user.getAccount())) {
-            return Result.e(ResultCodeEnum.ACCOUNT_EXIST);
+            return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
         long id = userService.register(user);
         if (id == 0L) {
-            return Result.e(ResultCodeEnum.REGISTER_FAIL);
+            return Result.e(ResultEnum.REGISTER_FAIL);
         }
         return Result.o(id);
     }
@@ -56,12 +58,12 @@ public class UserManageController extends ControllerBase {
      * 修改用户信息
      */
     @PostMapping("update")
-    public Result update(@RequestBody UserVo user) {
+    public Result<Boolean> update(@RequestBody UserVo user) {
         if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd())) {
             return paramIsError();
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
-            return Result.e(ResultCodeEnum.ACCOUNT_EXIST);
+            return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
         return Result.o(userService.update(user));
     }
@@ -70,7 +72,7 @@ public class UserManageController extends ControllerBase {
      * 查询全部用户
      */
     @PostMapping("findAll")
-    public Result findAll() {
+    public Result<List<UserVo>> findAll() {
         return Result.o(userService.findAll());
     }
 
@@ -78,7 +80,7 @@ public class UserManageController extends ControllerBase {
      * 修改用户的角色
      */
     @PostMapping("updateRole")
-    public Result updateRole(@RequestBody UserVo user) {
+    public Result<Boolean> updateRole(@RequestBody UserVo user) {
         if (existNull(user.getId(), user.getRoleIds()) || user.getRoleIds().isEmpty()) {
             return paramIsError();
         }
@@ -89,7 +91,7 @@ public class UserManageController extends ControllerBase {
      * 刷新角色，通过UserId
      */
     @PostMapping("refreshRole")
-    public Result refreshRole(@RequestBody EntityBase user) {
+    public Result<Long> refreshRole(@RequestBody EntityBase user) {
         if (isNull(user.getId())) {
             return paramIsError();
         }

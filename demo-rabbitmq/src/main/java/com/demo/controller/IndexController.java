@@ -126,7 +126,7 @@ public class IndexController {
      * POST /proto
      */
     @PostMapping("proto")
-    public Result proto() {
+    public Result<byte[]> proto() {
         // 创建PersonProto.Person对象
         PersonProto.Person person = PersonProto.Person.newBuilder()//
                 .setName("ali")//
@@ -152,7 +152,7 @@ public class IndexController {
      * POST /proto2
      */
     @PostMapping("proto2")
-    public Result proto2() {
+    public Result<byte[]> proto2() {
         // 创建Person对象
         Person person = new Person();
         person.setName("ali");

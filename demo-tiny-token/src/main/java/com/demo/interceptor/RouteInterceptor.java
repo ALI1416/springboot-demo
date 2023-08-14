@@ -2,7 +2,7 @@ package com.demo.interceptor;
 
 import cn.z.tinytoken.T4s;
 import com.demo.constant.RedisConstant;
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.po.RouteNotIntercept;
 import com.demo.entity.pojo.GlobalException;
 import com.demo.entity.vo.RouteNotInterceptVo;
@@ -10,7 +10,7 @@ import com.demo.entity.vo.RouteVo;
 import com.demo.service.RoleService;
 import com.demo.service.RouteNotInterceptService;
 import com.demo.service.RouteService;
-import com.demo.template.RedisTemp;
+import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -69,7 +69,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         Long id = t4s.getId();
         // 抛出"未登录异常"
         if (id == null) {
-            throw new GlobalException(ResultCodeEnum.NOT_LOGIN);
+            throw new GlobalException(ResultEnum.NOT_LOGIN);
         }
         // 是"root"用户
         if (id == 0L) {
@@ -84,7 +84,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             return true;
         }
         // 抛出"无权限异常"
-        throw new GlobalException(ResultCodeEnum.NOT_PERMISSION, "ID[" + id + "],URL[" + url + "]");
+        throw new GlobalException(ResultEnum.NOT_PERMISSION, "ID[" + id + "],URL[" + url + "]");
     }
 
     /**

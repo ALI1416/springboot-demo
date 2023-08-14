@@ -5,8 +5,10 @@ import com.demo.entity.mongo.UserMongo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserMongoVo;
 import com.demo.service.UserMongoService;
+import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +41,7 @@ public class UserMongoController {
      * 再次插入 返回 false
      */
     @PostMapping("/insert")
-    public Result insert(@RequestBody UserMongoVo userMongo) {
+    public Result<Boolean> insert(@RequestBody UserMongoVo userMongo) {
         userMongo.setDate(Clock.timestamp());
         return Result.o(userMongoService.insert(userMongo));
     }
@@ -55,7 +57,7 @@ public class UserMongoController {
      * 返回 false 只插入了id=4<br>
      */
     @PostMapping("/insertList")
-    public Result insertList(@RequestBody List<UserMongo> userMongoList) {
+    public Result<Boolean> insertList(@RequestBody List<UserMongo> userMongoList) {
         return Result.o(userMongoService.insertList(userMongoList));
     }
 
@@ -90,7 +92,7 @@ public class UserMongoController {
      * id=1存在true不存在false
      */
     @PostMapping("/existsById")
-    public Result existsById(Long id) {
+    public Result<Boolean> existsById(Long id) {
         return Result.o(userMongoService.existsById(id));
     }
 
@@ -101,7 +103,7 @@ public class UserMongoController {
      * name=a存在true不存在false
      */
     @PostMapping("/exists")
-    public Result exists(@RequestBody UserMongo userMongo) {
+    public Result<Boolean> exists(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.exists(example));
     }
@@ -112,7 +114,7 @@ public class UserMongoController {
      * 返回记录总数
      */
     @PostMapping("/countAll")
-    public Result countAll() {
+    public Result<Long> countAll() {
         return Result.o(userMongoService.countAll());
     }
 
@@ -123,7 +125,7 @@ public class UserMongoController {
      * name=a的记录总数
      */
     @PostMapping("/count")
-    public Result count(@RequestBody UserMongo userMongo) {
+    public Result<Long> count(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.count(example));
     }
@@ -186,7 +188,7 @@ public class UserMongoController {
      * 存在:实体;不存在:null
      */
     @PostMapping("/findById")
-    public Result findById(Long id) {
+    public Result<UserMongo> findById(Long id) {
         return Result.o(userMongoService.findById(id));
     }
 
@@ -197,7 +199,7 @@ public class UserMongoController {
      * 存在:实体;不存在:null
      */
     @PostMapping("/findOne")
-    public Result findOne(@RequestBody UserMongo userMongo) {
+    public Result<UserMongo> findOne(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.findOne(example));
     }
@@ -209,7 +211,7 @@ public class UserMongoController {
      * 存在:[实体];不存在:[]
      */
     @PostMapping("/findListById")
-    public Result findListById(@RequestBody List<Long> ids) {
+    public Result<List<UserMongo>> findListById(@RequestBody List<Long> ids) {
         return Result.o(userMongoService.findListById(ids));
     }
 
@@ -219,7 +221,7 @@ public class UserMongoController {
      * [实体]
      */
     @PostMapping("/findAll")
-    public Result findAll() {
+    public Result<List<UserMongo>> findAll() {
         return Result.o(userMongoService.findAll());
     }
 
@@ -229,7 +231,7 @@ public class UserMongoController {
      * 根据name倒叙的[实体]
      */
     @PostMapping("/findListSort")
-    public Result findList(String field) {
+    public Result<List<UserMongo>> findList(String field) {
         Sort sort = Sort.by(Sort.Order.desc(field));
         return Result.o(userMongoService.findList(sort));
     }
@@ -241,7 +243,7 @@ public class UserMongoController {
      * name=a的[实体]
      */
     @PostMapping("/findListExample")
-    public Result findList(@RequestBody UserMongo userMongo) {
+    public Result<List<UserMongo>> findList(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.findList(example));
     }
@@ -253,7 +255,7 @@ public class UserMongoController {
      * name=a并且按照id倒序的[实体]
      */
     @PostMapping("/findListExampleSort")
-    public Result findList(@RequestBody UserMongo userMongo, String field) {
+    public Result<List<UserMongo>> findList(@RequestBody UserMongo userMongo, String field) {
         Example<UserMongo> example = Example.of(userMongo);
         Sort sort = Sort.by(Sort.Order.desc(field));
         return Result.o(userMongoService.findList(example, sort));
@@ -265,7 +267,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findListPage")
-    public Result findList(int page, int size) {
+    public Result<Page<UserMongo>> findList(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return Result.o(userMongoService.findList(pageRequest));
     }
@@ -277,7 +279,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findPage")
-    public Result findPage(@RequestBody UserMongoVo userMongo) {
+    public Result<Page<UserMongo>> findPage(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage(userMongo));
     }
 
@@ -289,7 +291,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findPage2")
-    public Result findPage2(@RequestBody UserMongoVo userMongo) {
+    public Result<Page<UserMongo>> findPage2(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage2(userMongo));
     }
 
@@ -300,7 +302,7 @@ public class UserMongoController {
      * List
      */
     @PostMapping("/findSort")
-    public Result findSort(@RequestBody UserMongoVo userMongo) {
+    public Result<List<UserMongo>> findSort(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort(userMongo));
     }
 
@@ -311,7 +313,7 @@ public class UserMongoController {
      * List
      */
     @PostMapping("/findSort2")
-    public Result findSort2(@RequestBody UserMongoVo userMongo) {
+    public Result<List<UserMongo>> findSort2(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort2(userMongo));
     }
 
@@ -322,7 +324,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findListExamplePage")
-    public Result findList(@RequestBody UserMongo userMongo, int page, int size) {
+    public Result<Page<UserMongo>> findList(@RequestBody UserMongo userMongo, int page, int size) {
         Example<UserMongo> example = Example.of(userMongo);
         PageRequest pageRequest = PageRequest.of(page, size);
         return Result.o(userMongoService.findList(example, pageRequest));
@@ -334,7 +336,7 @@ public class UserMongoController {
      * Page
      */
     @PostMapping("/findByName")
-    public Result findByName(String name, int page, int size) {
+    public Result<Page<UserMongo>> findByName(String name, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return Result.o(userMongoService.findByName(name, pageRequest));
     }
@@ -345,7 +347,7 @@ public class UserMongoController {
      * UpdateResult
      */
     @PostMapping("/addFollowers")
-    public Result addFollowers(Long id) {
+    public Result<UpdateResult> addFollowers(Long id) {
         return Result.o(userMongoService.addFollowers(id));
     }
 

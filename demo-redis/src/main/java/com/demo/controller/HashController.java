@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.template.RedisTemp;
+import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <h1>哈希操作</h1>
@@ -35,7 +36,7 @@ public class HashController {
      * 存在项a/b/c 返回0
      */
     @PostMapping("hDelete")
-    public Result hDelete(String key, String item) {
+    public Result<Long> hDelete(String key, String item) {
         return Result.o(redisTemp.hDelete(key, item));
     }
 
@@ -46,7 +47,7 @@ public class HashController {
      * 存在项a/b/c 返回0
      */
     @PostMapping("hDeleteArray")
-    public Result hDelete(String key, String[] items) {
+    public Result<Long> hDelete(String key, String[] items) {
         return Result.o(redisTemp.hDeleteMulti(key, items));
     }
 
@@ -58,7 +59,7 @@ public class HashController {
      * 存在项a/b/c 返回0
      */
     @PostMapping("hDeleteList")
-    public Result hDelete(String key, @RequestBody List<String> items) {
+    public Result<Long> hDelete(String key, @RequestBody List<String> items) {
         return Result.o(redisTemp.hDeleteMulti(key, items));
     }
 
@@ -69,7 +70,7 @@ public class HashController {
      * 不存在key a或item a1 返回false
      */
     @PostMapping("hHasKey")
-    public Result hHasKey(String key, String item) {
+    public Result<Boolean> hHasKey(String key, String item) {
         return Result.o(redisTemp.hExists(key, item));
     }
 
@@ -80,7 +81,7 @@ public class HashController {
      * 不存在key a或item a1 返回null
      */
     @PostMapping("hGet")
-    public Result hGet(String key, String item) {
+    public Result<Object> hGet(String key, String item) {
         return Result.o(redisTemp.hGet(key, item));
     }
 
@@ -90,7 +91,7 @@ public class HashController {
      * 存在项a1/a2/a3值为111/222/333 返回[111,222,null]
      */
     @PostMapping("hMultiGetArray")
-    public Result hMultiGet(String key, String[] items) {
+    public Result<List<Object>> hMultiGet(String key, String[] items) {
         return Result.o(redisTemp.hGetMulti(key, items));
     }
 
@@ -101,7 +102,7 @@ public class HashController {
      * 存在项a1/a2/a3值为111/222/333 返回[111,222,null]
      */
     @PostMapping("hMultiGetList")
-    public Result hMultiGet(String key, @RequestBody List<String> items) {
+    public Result<List<Object>> hMultiGet(String key, @RequestBody List<String> items) {
         return Result.o(redisTemp.hGetMulti(key, items));
     }
 
@@ -112,7 +113,7 @@ public class HashController {
      * 不存在键或项 返回1，值改变为1
      */
     @PostMapping("hIncrement1")
-    public Result hIncrement(String key, String item) {
+    public Result<Long> hIncrement(String key, String item) {
         return Result.o(redisTemp.hIncrement(key, item));
     }
 
@@ -123,7 +124,7 @@ public class HashController {
      * 不存在键或项 返回2，值改变为2
      */
     @PostMapping("hIncrement")
-    public Result hIncrement(String key, String item, long delta) {
+    public Result<Long> hIncrement(String key, String item, long delta) {
         return Result.o(redisTemp.hIncrement(key, item, delta));
     }
 
@@ -134,7 +135,7 @@ public class HashController {
      * 不存在键或项 返回1.2，值改变为1.2
      */
     @PostMapping("hIncrementD")
-    public Result hIncrementD(String key, String item, double delta) {
+    public Result<Double> hIncrementD(String key, String item, double delta) {
         return Result.o(redisTemp.hIncrement(key, item, delta));
     }
 
@@ -145,7 +146,7 @@ public class HashController {
      * 不存在键或项 返回-1，值改变为-1
      */
     @PostMapping("hDecrement1")
-    public Result hDecrement(String key, String item) {
+    public Result<Long> hDecrement(String key, String item) {
         return Result.o(redisTemp.hDecrement(key, item));
     }
 
@@ -156,7 +157,7 @@ public class HashController {
      * 不存在键或项 返回-2，值改变为-2
      */
     @PostMapping("hDecrement")
-    public Result hDecrement(String key, String item, long delta) {
+    public Result<Long> hDecrement(String key, String item, long delta) {
         return Result.o(redisTemp.hDecrement(key, item, delta));
     }
 
@@ -167,7 +168,7 @@ public class HashController {
      * 不存在键或项 返回-1.2，值改变为-1.2
      */
     @PostMapping("hDecrementD")
-    public Result hDecrementD(String key, String item, double delta) {
+    public Result<Double> hDecrementD(String key, String item, double delta) {
         return Result.o(redisTemp.hDecrement(key, item, delta));
     }
 
@@ -178,7 +179,7 @@ public class HashController {
      * 不存在键 null
      */
     @PostMapping("hRandomItem")
-    public Result hRandomItem(String key) {
+    public Result<String> hRandomItem(String key) {
         return Result.o(redisTemp.hRandomItem(key));
     }
 
@@ -189,7 +190,7 @@ public class HashController {
      * 不存在键 null
      */
     @PostMapping("hRandomMap")
-    public Result hRandomMap(String key) {
+    public Result<Map.Entry<Object, Object>> hRandomMap(String key) {
         return Result.o(redisTemp.hRandomMap(key));
     }
 
@@ -200,7 +201,7 @@ public class HashController {
      * 不存在键 []
      */
     @PostMapping("hRandomItem2")
-    public Result hRandomItem2(String key, long count) {
+    public Result<List<Object>> hRandomItem2(String key, long count) {
         return Result.o(redisTemp.hRandomItem(key, count));
     }
 
@@ -211,7 +212,7 @@ public class HashController {
      * 不存在键 报错
      */
     @PostMapping("hRandomMap2")
-    public Result hRandomMap2(String key, long count) {
+    public Result<Map<Object, Object>> hRandomMap2(String key, long count) {
         return Result.o(redisTemp.hRandomMap(key, count));
     }
 
@@ -222,7 +223,7 @@ public class HashController {
      * 不存在键 返回0
      */
     @PostMapping("hLengthOfValue")
-    public Result hLengthOfValue(String key, String item) {
+    public Result<Long> hLengthOfValue(String key, String item) {
         return Result.o(redisTemp.hLengthOfValue(key, item));
     }
 
@@ -233,7 +234,7 @@ public class HashController {
      * 不存在键 返回0
      */
     @PostMapping("hSize")
-    public Result hSize(String key) {
+    public Result<Long> hSize(String key) {
         return Result.o(redisTemp.hSize(key));
     }
 
@@ -267,7 +268,7 @@ public class HashController {
      * 不存在key a或item a1 返回true
      */
     @PostMapping("hPutIfAbsent")
-    public Result hPutIfAbsent(String key, String item, String value) {
+    public Result<Boolean> hPutIfAbsent(String key, String item, String value) {
         return Result.o(redisTemp.hPutIfAbsent(key, item, value));
     }
 
@@ -277,7 +278,7 @@ public class HashController {
      * 存在项a1/a2/a3值为111/222/333 返回["a1","a2","a3"]
      */
     @PostMapping("hGetAllItem")
-    public Result hGetAllItem(String key) {
+    public Result<Set<Object>> hGetAllItem(String key) {
         return Result.o(redisTemp.hGetAllItem(key));
     }
 
@@ -287,7 +288,7 @@ public class HashController {
      * 存在项a1/a2/a3值为111/222/333 返回[111,222,333]
      */
     @PostMapping("hGetAllValue")
-    public Result hGetAllValue(String key) {
+    public Result<List<Object>> hGetAllValue(String key) {
         return Result.o(redisTemp.hGetAllValue(key));
     }
 
@@ -297,7 +298,7 @@ public class HashController {
      * 存在项a1/a2/a3值为111/222/333 返回{"a":"111","b":"222","c":"333"}
      */
     @PostMapping("hGetAllItemAndValue")
-    public Result hGetAllItemAndValue(String key) {
+    public Result<Map<Object, Object>> hGetAllItemAndValue(String key) {
         return Result.o(redisTemp.hGetAllItemAndValue(key));
     }
 
@@ -314,7 +315,7 @@ public class HashController {
      * POST /hScan?key=a&match=\[* 转义匹配匹配1个指定字符[[] 9]
      */
     @PostMapping("hScan")
-    public Result hScan(String key, String match) {
+    public Result<Map<String, Object>> hScan(String key, String match) {
         return Result.o(redisTemp.hScan(key, match));
     }
 

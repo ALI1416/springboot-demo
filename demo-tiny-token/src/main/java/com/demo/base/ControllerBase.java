@@ -1,6 +1,6 @@
 package com.demo.base;
 
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 
 /**
@@ -19,7 +19,7 @@ public class ControllerBase {
      * 请求参数错误
      */
     public static Result paramIsError() {
-        return Result.e(ResultCodeEnum.PARAM_IS_ERROR);
+        return Result.e(ResultEnum.PARAM_IS_ERROR);
     }
 
     /**

@@ -1,8 +1,9 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.template.RedisTemp;
+import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
+import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.SortParameters;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>通用操作</h1>
@@ -41,7 +43,7 @@ public class IndexController {
      * true key b 值改变为123
      */
     @PostMapping("copy")
-    public Result copy(String sourceKey, String targetKey, boolean replace) {
+    public Result<Boolean> copy(String sourceKey, String targetKey, boolean replace) {
         return Result.o(redisTemp.copy(sourceKey, targetKey, replace));
     }
 
@@ -52,7 +54,7 @@ public class IndexController {
      * 不存在 false
      */
     @PostMapping("exists")
-    public Result exists(String key) {
+    public Result<Boolean> exists(String key) {
         return Result.o(redisTemp.exists(key));
     }
 
@@ -66,7 +68,7 @@ public class IndexController {
      * body JSON ["d"] 0
      */
     @PostMapping("existsCount")
-    public Result existsCount(@RequestBody List<String> keys) {
+    public Result<Long> existsCount(@RequestBody List<String> keys) {
         return Result.o(redisTemp.existsCount(keys));
     }
 
@@ -79,7 +81,7 @@ public class IndexController {
      * POST /existsCount2?keys=d 0
      */
     @PostMapping("existsCount2")
-    public Result existsCount(String[] keys) {
+    public Result<Long> existsCount(String[] keys) {
         return Result.o(redisTemp.existsCount(keys));
     }
 
@@ -90,7 +92,7 @@ public class IndexController {
      * 不存在 false
      */
     @PostMapping("delete")
-    public Result delete(String key) {
+    public Result<Boolean> delete(String key) {
         return Result.o(redisTemp.delete(key));
     }
 
@@ -104,7 +106,7 @@ public class IndexController {
      * body JSON ["d","e"] 0
      */
     @PostMapping("deleteList")
-    public Result delete(@RequestBody List<String> keys) {
+    public Result<Long> delete(@RequestBody List<String> keys) {
         return Result.o(redisTemp.deleteMulti(keys));
     }
 
@@ -117,7 +119,7 @@ public class IndexController {
      * POST /deleteArray?keys=d&keys=e 0
      */
     @PostMapping("deleteArray")
-    public Result delete(String[] keys) {
+    public Result<Long> delete(String[] keys) {
         return Result.o(redisTemp.deleteMulti(keys));
     }
 
@@ -129,7 +131,7 @@ public class IndexController {
      * 还有23秒过期 23
      */
     @PostMapping("getExpire")
-    public Result getExpire(String key) {
+    public Result<Long> getExpire(String key) {
         return Result.o(redisTemp.getExpire(key));
     }
 
@@ -139,7 +141,7 @@ public class IndexController {
      * 字符串"abc" [0, 5, 34, 97, 98, 99, 34, 9, 0, 1, -3, -98, 28, 120, -86, 35, 37]
      */
     @PostMapping("dump")
-    public Result dump(String key) {
+    public Result<byte[]> dump(String key) {
         return Result.o(redisTemp.dump(key));
     }
 
@@ -168,7 +170,7 @@ public class IndexController {
      * ["d","3","1","0"]
      */
     @PostMapping("sort")
-    public Result sort(String key, boolean asc) {
+    public Result<List<Object>> sort(String key, boolean asc) {
         SortQuery<String> query = SortQueryBuilder.sort(key).alphabetical(true).order(asc ? SortParameters.Order.ASC : SortParameters.Order.DESC).build();
         return Result.o(redisTemp.sort(query));
     }
@@ -180,7 +182,7 @@ public class IndexController {
      * 不过期/不存在 false
      */
     @PostMapping("persist")
-    public Result persist(String key) {
+    public Result<Boolean> persist(String key) {
         return Result.o(redisTemp.persist(key));
     }
 
@@ -194,7 +196,7 @@ public class IndexController {
      * 被删除
      */
     @PostMapping("expire")
-    public Result expire(String key, long timeout) {
+    public Result<Boolean> expire(String key, long timeout) {
         return Result.o(redisTemp.expire(key, timeout));
     }
 
@@ -204,7 +206,7 @@ public class IndexController {
      * 在2022/01/01 00:00:00时失效
      */
     @PostMapping("expireAt")
-    public Result expireAt(String key, Date timeout) {
+    public Result<Boolean> expireAt(String key, Date timeout) {
         return Result.o(redisTemp.expireAt(key, timeout));
     }
 
@@ -215,7 +217,7 @@ public class IndexController {
      * 不存在 false
      */
     @PostMapping("unlink")
-    public Result unlink(String key) {
+    public Result<Boolean> unlink(String key) {
         return Result.o(redisTemp.unlink(key));
     }
 
@@ -229,7 +231,7 @@ public class IndexController {
      * body JSON ["d","e"] 0
      */
     @PostMapping("unlinkList")
-    public Result unlink(List<String> keys) {
+    public Result<Long> unlink(List<String> keys) {
         return Result.o(redisTemp.unlinkMulti(keys));
     }
 
@@ -242,7 +244,7 @@ public class IndexController {
      * POST /unlinkArray?keys=d&keys=e 0
      */
     @PostMapping("unlinkArray")
-    public Result unlink(String[] keys) {
+    public Result<Long> unlink(String[] keys) {
         return Result.o(redisTemp.unlinkMulti(keys));
     }
 
@@ -257,7 +259,7 @@ public class IndexController {
      * 不存在 NONE
      */
     @PostMapping("type")
-    public Result type(String key) {
+    public Result<DataType> type(String key) {
         return Result.o(redisTemp.type(key));
     }
 
@@ -274,7 +276,7 @@ public class IndexController {
      * POST /keys?pattern=\[* 转义匹配匹配1个指定字符[[]]
      */
     @PostMapping("keys")
-    public Result keys(String pattern) {
+    public Result<Set<String>> keys(String pattern) {
         return Result.o(redisTemp.keys(pattern));
     }
 
@@ -285,7 +287,7 @@ public class IndexController {
      * 不存在任何键 null
      */
     @PostMapping("randomKey")
-    public Result randomKey() {
+    public Result<String> randomKey() {
         return Result.o(redisTemp.randomKey());
     }
 
@@ -310,7 +312,7 @@ public class IndexController {
      * 不存在a false
      */
     @PostMapping("renameIfAbsent")
-    public Result renameIfAbsent(String oldKey, String newKey) {
+    public Result<Boolean> renameIfAbsent(String oldKey, String newKey) {
         return Result.o(redisTemp.renameIfAbsent(oldKey, newKey));
     }
 
@@ -321,7 +323,7 @@ public class IndexController {
      * 不存在a或db1 false
      */
     @PostMapping("move")
-    public Result move(String key, int dbIndex) {
+    public Result<Boolean> move(String key, int dbIndex) {
         return Result.o(redisTemp.move(key, dbIndex));
     }
 
@@ -338,7 +340,7 @@ public class IndexController {
      * POST /scan?match=\[* 转义匹配匹配1个指定字符[[]]
      */
     @GetMapping("scan")
-    public Result scan(String match) {
+    public Result<List<String>> scan(String match) {
         return Result.o(redisTemp.scan(match));
     }
 

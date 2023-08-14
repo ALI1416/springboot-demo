@@ -48,9 +48,8 @@ public class MongoDbConfig {
      */
     @Bean
     public MongoCustomConversions customConversions() {
-        return MongoCustomConversions.create(mongoConverterConfigurationAdapter -> {
-            mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter());
-        });
+        return MongoCustomConversions.create(mongoConverterConfigurationAdapter -> //
+                mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter()));
     }
 
     /**

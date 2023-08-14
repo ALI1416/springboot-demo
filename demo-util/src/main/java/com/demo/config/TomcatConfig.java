@@ -1,6 +1,5 @@
 package com.demo.config;
 
-import org.apache.catalina.connector.Connector;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +46,7 @@ public class TomcatConfig {
 
         /*特性2(默认开启)：请求地址和参数允许接收`^\|[]{}字符*/
         TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-        factory.addConnectorCustomizers((Connector connectorCustomize) -> {
+        factory.addConnectorCustomizers(connectorCustomize -> {
             connectorCustomize.setProperty("relaxedPathChars", "`^\\|[]{}");
             connectorCustomize.setProperty("relaxedQueryChars", "`^\\|[]{}");
         });

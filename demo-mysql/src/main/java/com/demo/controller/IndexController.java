@@ -1,6 +1,6 @@
 package com.demo.controller;
 
-import com.demo.constant.ResultCodeEnum;
+import com.demo.constant.ResultEnum;
 import com.demo.entity.po.LoginLogTest;
 import com.demo.entity.pojo.Result;
 import com.demo.service.LoginLogTestService;
@@ -33,12 +33,12 @@ public class IndexController {
      * @return LoginLogTest
      */
     @GetMapping(value = {"", "/", "index"})
-    public Result index() {
+    public Result<LoginLogTest> index() {
         LoginLogTest loginLogTest = new LoginLogTest(request);
         if (loginLogTestService.insert(loginLogTest)) {
             return Result.o(loginLogTest);
         } else {
-            return Result.e(ResultCodeEnum.ERROR, loginLogTest);
+            return Result.e(ResultEnum.ERROR, loginLogTest);
         }
     }
 

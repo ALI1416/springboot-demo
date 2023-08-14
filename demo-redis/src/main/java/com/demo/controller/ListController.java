@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.template.RedisTemp;
+import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +38,7 @@ public class ListController {
      * POST /list/lGet?key=b&index=0 返回null
      */
     @PostMapping("lGet")
-    public Result lGet(String key, long index) {
+    public Result<Object> lGet(String key, long index) {
         return Result.o(redisTemp.lGet(key, index));
     }
 
@@ -49,7 +49,7 @@ public class ListController {
      * POST /list/lGetFirst?key=b 返回null
      */
     @PostMapping("lGetFirst")
-    public Result lGetFirst(String key) {
+    public Result<Object> lGetFirst(String key) {
         return Result.o(redisTemp.lGetFirst(key));
     }
 
@@ -60,7 +60,7 @@ public class ListController {
      * POST /list/lGetFirst?key=b 返回null
      */
     @PostMapping("lGetLast")
-    public Result lGetLast(String key) {
+    public Result<Object> lGetLast(String key) {
         return Result.o(redisTemp.lGetLast(key));
     }
 
@@ -73,7 +73,7 @@ public class ListController {
      * POST /list/lGetList?key=b&start=1&end=2 返回[]
      */
     @PostMapping("lGetList")
-    public Result lGetList(String key, long start, long end) {
+    public Result<List<Object>> lGetList(String key, long start, long end) {
         return Result.o(redisTemp.lGetMulti(key, start, end));
     }
 
@@ -84,7 +84,7 @@ public class ListController {
      * POST /list/lGetAll?key=b 返回[]
      */
     @PostMapping("lGetAll")
-    public Result lGetAll(String key) {
+    public Result<List<Object>> lGetAll(String key) {
         return Result.o(redisTemp.lGetAll(key));
     }
 
@@ -109,7 +109,7 @@ public class ListController {
      * 存在值 [111,222,333,444,555] 5<br>
      */
     @PostMapping("lSize")
-    public Result lSize(String key) {
+    public Result<Long> lSize(String key) {
         return Result.o(redisTemp.lSize(key));
     }
 
@@ -125,7 +125,7 @@ public class ListController {
      * 返回 1
      */
     @PostMapping("lLeftPush")
-    public Result lLeftPush(String key, String value) {
+    public Result<Long> lLeftPush(String key, String value) {
         return Result.o(redisTemp.lLeftPush(key, value));
     }
 
@@ -137,7 +137,7 @@ public class ListController {
      * 返回 8
      */
     @PostMapping("lLeftPushAllArray")
-    public Result lLeftPushAll(String key, String[] value) {
+    public Result<Long> lLeftPushAll(String key, String[] value) {
         return Result.o(redisTemp.lLeftPushMulti(key, value));
     }
 
@@ -150,7 +150,7 @@ public class ListController {
      * 返回 8
      */
     @PostMapping("lLeftPushAllList")
-    public Result lLeftPushAll(String key, @RequestBody List<Object> value) {
+    public Result<Long> lLeftPushAll(String key, @RequestBody List<Object> value) {
         return Result.o(redisTemp.lLeftPushMulti(key, value));
     }
 
@@ -165,7 +165,7 @@ public class ListController {
      * 返回 0
      */
     @PostMapping("lLeftPushIfPresent")
-    public Result lLeftPushIfPresent(String key, String value) {
+    public Result<Long> lLeftPushIfPresent(String key, String value) {
         return Result.o(redisTemp.lLeftPushIfPresent(key, value));
     }
 
@@ -180,7 +180,7 @@ public class ListController {
      * 返回 -1
      */
     @PostMapping("lLeftPushOfValue")
-    public Result lLeftPush(String key, int pivot, String value) {
+    public Result<Long> lLeftPush(String key, int pivot, String value) {
         return Result.o(redisTemp.lInsertLeft(key, pivot, value));
     }
 
@@ -192,7 +192,7 @@ public class ListController {
      * 返回 6
      */
     @PostMapping("lRightPush")
-    public Result lRightPush(String key, String value) {
+    public Result<Long> lRightPush(String key, String value) {
         return Result.o(redisTemp.lRightPush(key, value));
     }
 
@@ -204,7 +204,7 @@ public class ListController {
      * 返回 8
      */
     @PostMapping("lRightPushAllArray")
-    public Result lRightPushAll(String key, String[] value) {
+    public Result<Long> lRightPushAll(String key, String[] value) {
         return Result.o(redisTemp.lRightPushMulti(key, value));
     }
 
@@ -217,7 +217,7 @@ public class ListController {
      * 返回 8
      */
     @PostMapping("lRightPushAllList")
-    public Result lRightPushAll(String key, @RequestBody List<Object> value) {
+    public Result<Long> lRightPushAll(String key, @RequestBody List<Object> value) {
         return Result.o(redisTemp.lRightPushMulti(key, value));
     }
 
@@ -229,7 +229,7 @@ public class ListController {
      * 返回 6
      */
     @PostMapping("lRightPushIfPresent")
-    public Result lRightPushIfPresent(String key, String value) {
+    public Result<Long> lRightPushIfPresent(String key, String value) {
         return Result.o(redisTemp.lRightPushIfPresent(key, value));
     }
 
@@ -244,7 +244,7 @@ public class ListController {
      * 返回 -1
      */
     @PostMapping("lRightPushOfValue")
-    public Result lRightPush(String key, int pivot, String value) {
+    public Result<Long> lRightPush(String key, int pivot, String value) {
         return Result.o(redisTemp.lInsertRight(key, pivot, value));
     }
 
@@ -289,7 +289,7 @@ public class ListController {
      * 返回 0
      */
     @PostMapping("lRemove")
-    public Result lRemove(String key, long count, int value) {
+    public Result<Long> lRemove(String key, long count, int value) {
         return Result.o(redisTemp.lDelete(key, count, value));
     }
 
@@ -301,7 +301,7 @@ public class ListController {
      * 返回 1
      */
     @PostMapping("lRemoveLeft")
-    public Result lRemoveLeft(String key, int value) {
+    public Result<Long> lRemoveLeft(String key, int value) {
         return Result.o(redisTemp.lDeleteLeft(key, value));
     }
 
@@ -313,7 +313,7 @@ public class ListController {
      * 返回 1
      */
     @PostMapping("lRemoveRight")
-    public Result lRemoveLast(String key, int value) {
+    public Result<Long> lRemoveLast(String key, int value) {
         return Result.o(redisTemp.lDeleteRight(key, value));
     }
 
@@ -325,7 +325,7 @@ public class ListController {
      * 返回 3<br>
      */
     @PostMapping("lRemoveAll")
-    public Result lRemoveAll(String key, int value) {
+    public Result<Long> lRemoveAll(String key, int value) {
         return Result.o(redisTemp.lDeleteAll(key, value));
     }
 
@@ -338,7 +338,7 @@ public class ListController {
      * 返回 null<br>
      */
     @PostMapping("lIndexOf")
-    public Result lIndexOf(String key, String value) {
+    public Result<Long> lIndexOf(String key, String value) {
         return Result.o(redisTemp.lIndexOfFirst(key, value));
     }
 
@@ -351,7 +351,7 @@ public class ListController {
      * 返回 null<br>
      */
     @PostMapping("lLastIndexOf")
-    public Result lLastIndexOf(String key, String value) {
+    public Result<Long> lLastIndexOf(String key, String value) {
         return Result.o(redisTemp.lIndexOfLast(key, value));
     }
 
@@ -365,7 +365,7 @@ public class ListController {
      * 返回 null
      */
     @PostMapping("lLeftPop")
-    public Result lLeftPop(String key) {
+    public Result<Object> lLeftPop(String key) {
         return Result.o(redisTemp.lLeftPop(key));
     }
 
@@ -375,7 +375,7 @@ public class ListController {
      * POST /list/lLeftPopSecond?key=a&timeout=20<br>
      */
     @PostMapping("lLeftPopSecond")
-    public Result lLeftPop(String key, long timeout) {
+    public Result<Object> lLeftPop(String key, long timeout) {
         return Result.o(redisTemp.lLeftPop(key, timeout));
     }
 
@@ -387,7 +387,7 @@ public class ListController {
      * 返回 555
      */
     @PostMapping("lRightPop")
-    public Result lRightPop(String key) {
+    public Result<Object> lRightPop(String key) {
         return Result.o(redisTemp.lRightPop(key));
     }
 
@@ -397,7 +397,7 @@ public class ListController {
      * POST /list/lRightPopSecond?key=a&timeout=20<br>
      */
     @PostMapping("lRightPopSecond")
-    public Result lRightPop(String key, long timeout) {
+    public Result<Object> lRightPop(String key, long timeout) {
         return Result.o(redisTemp.lRightPop(key, timeout));
     }
 
@@ -411,7 +411,7 @@ public class ListController {
      * 返回 333
      */
     @PostMapping("lRightPopAndLeftPush")
-    public Result lRightPopAndLeftPush(String sourceKey, String destinationKey) {
+    public Result<Object> lRightPopAndLeftPush(String sourceKey, String destinationKey) {
         return Result.o(redisTemp.lRightPopAndLeftPush(sourceKey, destinationKey));
     }
 
@@ -421,7 +421,7 @@ public class ListController {
      * POST /list/lRightPopAndLeftPushSecond?sourceKey=a&destinationKey=b&timeout=5<br>
      */
     @PostMapping("lRightPopAndLeftPushSecond")
-    public Result lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
+    public Result<Object> lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
         return Result.o(redisTemp.lRightPopAndLeftPush(sourceKey, destinationKey, timeout));
     }
 
@@ -435,7 +435,7 @@ public class ListController {
      * 返回 333
      */
     @PostMapping("lMove")
-    public Result lMove(String sourceKey, String destinationKey) {
+    public Result<Object> lMove(String sourceKey, String destinationKey) {
         return Result.o(redisTemp.lMove(sourceKey, false, destinationKey, false));
     }
 
@@ -445,7 +445,7 @@ public class ListController {
      * POST /list/lMove2?sourceKey=a&destinationKey=b&timeout=5<br>
      */
     @PostMapping("lMove2")
-    public Result lMove2(String sourceKey, String destinationKey, long timeout) {
+    public Result<Object> lMove2(String sourceKey, String destinationKey, long timeout) {
         return Result.o(redisTemp.lMove(sourceKey, false, destinationKey, false, timeout));
     }
 
