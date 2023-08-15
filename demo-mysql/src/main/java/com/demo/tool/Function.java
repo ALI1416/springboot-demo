@@ -7,7 +7,7 @@ package com.demo.tool;
  * createDate 2020/11/28 20:25:11
  * </p>
  *
- * @author ALI[1416978277@qq.com]
+ * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
 @FunctionalInterface

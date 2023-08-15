@@ -21,7 +21,7 @@ public class User extends ToStringBase {
     /**
      * 用户名
      */
-    private String user;
+    private String username;
     /**
      * 消息
      */

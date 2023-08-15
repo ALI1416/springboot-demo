@@ -1,7 +1,8 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.util.MailUtils;
+import com.demo.tool.MailTemp;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,14 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0.0
  **/
 @RestController
+@AllArgsConstructor
 public class IndexController {
+
+    private final MailTemp mailTemp;
 
     /**
      * 普通邮件
      */
     @GetMapping("text")
     public Result index() {
-        MailUtils.sendMail("1416978277@qq.com", "主题", "内容");
+        mailTemp.sendMail("1416978277@qq.com", "主题", "内容");
         return Result.o();
     }
 
@@ -32,7 +36,7 @@ public class IndexController {
      */
     @GetMapping("html")
     public Result html() {
-        MailUtils.sendMailHtml("1416978277@qq.com", "主题Html", "<h1>内容Html</h1>");
+        mailTemp.sendMailHtmlSync("1416978277@qq.com", "主题HTML", "<h1>内容HTML</h1>");
         return Result.o();
     }
 

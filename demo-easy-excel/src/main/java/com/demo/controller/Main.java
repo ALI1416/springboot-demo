@@ -2,7 +2,7 @@ package com.demo.controller;
 
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.excel.UserExcel;
-import com.demo.util.EeUtils;
+import com.demo.util.EasyExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         // 导出模板
-        EeUtils.write("E:/模板.xlsx", UserExcel.class, null);
+        EasyExcelUtils.write("E:/模板.xlsx", null, UserExcel.class);
         // 导出内容
         List<UserExcel> exportList = new ArrayList<>();
         UserExcel u1 = new UserExcel();
@@ -40,10 +40,10 @@ public class Main {
         u2.setGender("女");
         u2.setYear(2000);
         exportList.add(u2);
-        EeUtils.write("E:/导出.xlsx", UserExcel.class, exportList);
+        EasyExcelUtils.write("E:/导出.xlsx", exportList, UserExcel.class);
         // 导入内容
         List<UserExcel> importList = new ArrayList<>();
-        EeUtils.read("E:/导出.xlsx", UserExcel.class, importList);
+        EasyExcelUtils.read("E:/导出.xlsx", importList, UserExcel.class);
         log.info(JSON.toJSONString(importList));
     }
 

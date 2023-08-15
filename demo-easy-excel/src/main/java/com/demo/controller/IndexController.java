@@ -3,7 +3,7 @@ package com.demo.controller;
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.excel.UserExcel;
 import com.demo.entity.pojo.Result;
-import com.demo.util.EeUtils;
+import com.demo.util.EasyExcelUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,15 +36,15 @@ public class IndexController {
      * 模板
      */
     @GetMapping("template")
-    public void template() {
-        EeUtils.download(response, "模板", UserExcel.class, null);
+    public void template() throws Exception {
+        EasyExcelUtils.download(response, "模板", null, UserExcel.class);
     }
 
     /**
      * 导出
      */
     @GetMapping("exportExcel")
-    public void exportExcel() {
+    public void exportExcel() throws Exception {
         List<UserExcel> exportList = new ArrayList<>();
         UserExcel u1 = new UserExcel();
         u1.setAccount("account");
@@ -60,16 +60,16 @@ public class IndexController {
         u2.setGender("女");
         u2.setYear(2000);
         exportList.add(u2);
-        EeUtils.download(response, "导出", UserExcel.class, exportList);
+        EasyExcelUtils.download(response, "导出", exportList, UserExcel.class);
     }
 
     /**
      * 导入
      */
     @PostMapping("importExcel")
-    public Result<List<UserExcel>> importExcel(MultipartFile file) {
+    public Result<List<UserExcel>> importExcel(MultipartFile file) throws Exception {
         List<UserExcel> importList = new ArrayList<>();
-        EeUtils.upload(file, UserExcel.class, importList);
+        EasyExcelUtils.upload(file, importList, UserExcel.class);
         log.info(JSON.toJSONString(importList));
         return Result.o(importList);
     }

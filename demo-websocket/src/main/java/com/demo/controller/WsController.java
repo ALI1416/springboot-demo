@@ -1,13 +1,13 @@
 package com.demo.controller;
 
 import com.demo.entity.po.User;
+import com.demo.tool.WebSocketTemp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,7 +30,7 @@ import java.security.Principal;
 @Slf4j
 public class WsController {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final WebSocketTemp webSocketTemp;
 
     /**
      * 广播模式
@@ -51,11 +51,11 @@ public class WsController {
     @MessageMapping("/broadcast2")
     public void broadcast2(@RequestBody User user, Principal principal) {
         log.info("broadcast2:接收到用户[{}]发来的广播消息[{}]", principal.getName(), user.getMsg());
-        simpMessagingTemplate.convertAndSend("/topic/broadcast2", user.getMsg());
+        webSocketTemp.send("/topic/broadcast2", user.getMsg());
     }
 
     /**
-     * 订阅模式
+     * 订阅模式<br>
      * 用户发送请求，服务器直接返回数据，与HTTP类似，只不过这个是异步的
      */
     @SubscribeMapping("/subscribe/{user}")
@@ -71,8 +71,8 @@ public class WsController {
     // @SendToUser表示要将消息发送给指定的用户，会自动在消息目的地前补上"/user"前缀
     @SendToUser("/queue/one")
     public void sendToUser(@RequestBody User user, Principal principal) {
-        simpMessagingTemplate.convertAndSendToUser(user.getUser(), "/queue/one", user.getMsg());
-        log.info("sendToUser:接收到用户[{}]发给用户[{}]的消息[{}]", principal.getName(), user.getUser(), user.getMsg());
+        webSocketTemp.send("/queue/one", user.getUsername(), user.getMsg());
+        log.info("sendToUser:接收到用户[{}]发给用户[{}]的消息[{}]", principal.getName(), user.getUsername(), user.getMsg());
     }
 
     /**

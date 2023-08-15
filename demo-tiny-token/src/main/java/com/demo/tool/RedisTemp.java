@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <h1>Redis工具类</h1>
+ * <h1>Redis模板</h1>
  *
  * <p>
  * createDate 2020/12/04 15:57:36
@@ -25,9 +25,20 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisTemp {
 
+    /**
+     * 秒
+     */
     private static final TimeUnit SECONDS = TimeUnit.SECONDS;
+    /**
+     * Redis模板
+     */
     private final RedisTemplate<String, Object> redisTemplate;
 
+    /**
+     * 构造函数(自动注入)
+     *
+     * @param redisTemplate RedisTemplate
+     */
     public RedisTemp(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }

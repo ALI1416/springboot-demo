@@ -16,7 +16,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import java.util.List;
 
 /**
- * <h1>WebSocket配置类</h1>
+ * <h1>WebSocket配置</h1>
  *
  * <p>
  * createDate 2021/12/16 10:05:53
@@ -55,18 +55,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+            public Message preSend(Message message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (accessor == null) {
                     return null;
                 }
                 // 首次连接设置用户名
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    List<String> user = accessor.getNativeHeader("user");
-                    if (user == null) {
+                    List<String> username = accessor.getNativeHeader("username");
+                    if (username == null) {
                         return null;
                     }
-                    accessor.setUser(() -> user.get(0));
+                    accessor.setUser(() -> username.get(0));
                     return message;
                 }
                 return message;

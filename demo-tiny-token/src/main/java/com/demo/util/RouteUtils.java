@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * <h1>路由工具类</h1>
+ * <h1>路由工具</h1>
  *
  * <p>
  * createDate 2021/11/26 09:44:04

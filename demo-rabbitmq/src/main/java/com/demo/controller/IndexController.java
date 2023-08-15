@@ -6,10 +6,10 @@ import com.demo.entity.po.Car;
 import com.demo.entity.po.Person;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.proto.PersonProto;
+import com.demo.tool.RabbitTemp;
 import com.google.protobuf.util.JsonFormat;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -31,17 +31,17 @@ import java.util.Map;
 @AllArgsConstructor
 public class IndexController {
 
-    private final RabbitTemplate rabbitTemplate;
+    private final RabbitTemp rabbitTemp;
 
     /**
      * <h3>Hello World模型，点对点模型</h3>
      * POST /hello<br>
      * 控制台打印 RabbitService.receiver收到消息：hello:2021-11-24 10:39:55.584
      */
-    @PostMapping("hello")
+    @GetMapping("hello")
     public Result hello() {
         // 队列名称，对象
-        rabbitTemplate.convertAndSend("hello", "hello:" + Clock.timestamp());
+        rabbitTemp.send("hello", "hello:" + Clock.timestamp());
         return Result.o();
     }
 
@@ -53,10 +53,10 @@ public class IndexController {
      * RabbitService2.receiver2收到消息：work.1:2021-11-24 10:39:55.584<br>
      * 等。平均分配
      */
-    @PostMapping("work")
+    @GetMapping("work")
     public Result work() {
         for (int i = 0; i < 10; i++) {
-            rabbitTemplate.convertAndSend("work", "work." + i + ":" + Clock.timestamp());
+            rabbitTemp.send("work", "work." + i + ":" + Clock.timestamp());
         }
         return Result.o();
     }
@@ -68,10 +68,10 @@ public class IndexController {
      * RabbitService2.receiver3收到消息：fanout:2021-11-24 10:39:55.584<br>
      * RabbitService2.receiver4收到消息：fanout:2021-11-24 10:39:55.584
      */
-    @PostMapping("fanout")
+    @GetMapping("fanout")
     public Result fanout() {
         // 交换机名称，路由key(广播不需要)，对象
-        rabbitTemplate.convertAndSend("fanout", "", "fanout:" + Clock.timestamp());
+        rabbitTemp.send("fanout", "", "fanout:" + Clock.timestamp());
         return Result.o();
     }
 
@@ -86,9 +86,9 @@ public class IndexController {
      * POST /direct?key=debug<br>
      * 控制台打印 RabbitService2.receiver5收到消息：direct.debug:2021-11-24 10:39:55.584
      */
-    @PostMapping("direct")
+    @GetMapping("direct")
     public Result direct(String key) {
-        rabbitTemplate.convertAndSend("direct", key, "direct." + key + ":" + Clock.timestamp());
+        rabbitTemp.send("direct", key, "direct." + key + ":" + Clock.timestamp());
         return Result.o();
     }
 
@@ -115,9 +115,9 @@ public class IndexController {
      * POST /topic?key=root.user.admin<br>
      * 控制台打印 RabbitService2.receiver7收到消息：topic.root.user.admin:2021-11-24 10:39:55.584<br>
      */
-    @PostMapping("topic")
+    @GetMapping("topic")
     public Result topic(String key) {
-        rabbitTemplate.convertAndSend("topic", key, "topic." + key + ":" + Clock.timestamp());
+        rabbitTemp.send("topic", key, "topic." + key + ":" + Clock.timestamp());
         return Result.o();
     }
 
@@ -125,7 +125,7 @@ public class IndexController {
      * <h3>protobuf</h3>
      * POST /proto
      */
-    @PostMapping("proto")
+    @GetMapping("proto")
     public Result<byte[]> proto() {
         // 创建PersonProto.Person对象
         PersonProto.Person person = PersonProto.Person.newBuilder()//
@@ -143,7 +143,7 @@ public class IndexController {
         // 编码成bytes
         byte[] bytes = person.toByteArray();
         // rabbit发送
-        rabbitTemplate.convertAndSend("proto", bytes);
+        rabbitTemp.send("proto", bytes);
         return Result.o(bytes);
     }
 
@@ -151,7 +151,7 @@ public class IndexController {
      * <h3>protobuf2</h3>
      * POST /proto2
      */
-    @PostMapping("proto2")
+    @GetMapping("proto2")
     public Result<byte[]> proto2() {
         // 创建Person对象
         Person person = new Person();
@@ -179,7 +179,7 @@ public class IndexController {
         // 编码成bytes
         byte[] bytes = builder.build().toByteArray();
         // rabbit发送
-        rabbitTemplate.convertAndSend("proto2", bytes);
+        rabbitTemp.send("proto2", bytes);
         return Result.o(bytes);
     }
 
