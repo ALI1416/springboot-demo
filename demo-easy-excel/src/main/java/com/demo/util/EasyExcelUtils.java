@@ -45,7 +45,7 @@ public class EasyExcelUtils {
      * @param data  提供的数据
      * @param clazz T.class
      */
-    public static <T> void write(String path, List<T> data, Class clazz) {
+    public static <T> void write(String path, List<T> data, Class<T> clazz) {
         EasyExcelFactory.write(path, clazz).registerWriteHandler(style1()).sheet("工作表1").doWrite(data);
     }
 
@@ -57,7 +57,7 @@ public class EasyExcelUtils {
      * @param data  导出的数据
      * @param clazz T.class
      */
-    public static <T> void read(String path, List<T> data, Class clazz) {
+    public static <T> void read(String path, List<T> data, Class<T> clazz) {
         ReadListener<T> listener = new ReadListener<>();
         EasyExcelFactory.read(path, clazz, listener).sheet().doRead();
         data.addAll(listener.getList());
@@ -72,7 +72,7 @@ public class EasyExcelUtils {
      * @param data     提供的数据
      * @param clazz    T.class
      */
-    public static <T> void download(HttpServletResponse response, String name, List<T> data, Class clazz) throws IOException {
+    public static <T> void download(HttpServletResponse response, String name, List<T> data, Class<T> clazz) throws IOException {
         name = URLEncoder.encode(name + LocalDateTime.now().format(DATETIME_FORMAT), "UTF-8").replace("\\+", "%20");
         response.setContentType("application/octet-stream;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment;filename*=utf-8''" + name + ".xlsx");
@@ -87,7 +87,7 @@ public class EasyExcelUtils {
      * @param data  导出的数据
      * @param clazz T.class
      */
-    public static <T> void upload(MultipartFile file, List<T> data, Class clazz) throws IOException {
+    public static <T> void upload(MultipartFile file, List<T> data, Class<T> clazz) throws IOException {
         ReadListener<T> listener = new ReadListener<>();
         EasyExcelFactory.read(file.getInputStream(), clazz, listener).sheet().doRead();
         data.addAll(listener.getList());

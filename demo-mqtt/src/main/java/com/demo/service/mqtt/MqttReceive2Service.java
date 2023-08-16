@@ -14,6 +14,8 @@ import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
+import java.util.UUID;
+
 /**
  * <h1>接收</h1>
  *
@@ -34,11 +36,11 @@ public class MqttReceive2Service {
     /**
      * 名称
      */
-    private static final String NAME = "service_receive2";
+    private static final String NAME = "receive2";
     /**
      * 客户端id
      */
-    private static final String CLIENT_ID = "client_" + NAME;
+    private static final String CLIENT_ID = UUID.randomUUID().toString();
     /**
      * 主题
      */
@@ -63,7 +65,7 @@ public class MqttReceive2Service {
     /**
      * 入站属性
      */
-    @Bean("receiveMethod_" + NAME)
+    @Bean("receive_" + NAME)
     public MessageProducer receive() {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(CLIENT_ID,
                 mqttConfig.mqttPahoClientFactory(), TOPIC);
@@ -81,9 +83,9 @@ public class MqttReceive2Service {
     /**
      * 入站消息
      */
-    @Bean("handlerMethod_" + NAME)
+    @Bean("message_" + NAME)
     @ServiceActivator(inputChannel = NAME)
-    public MessageHandler handler() {
+    public MessageHandler message() {
         return message -> log.info("payload:{},topic:{},qos:{}", //
                 message.getPayload(), //
                 message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC), //

@@ -12,6 +12,8 @@ import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
+import java.util.UUID;
+
 /**
  * <h1>发送</h1>
  *
@@ -32,11 +34,11 @@ public class MqttSend2Service {
     /**
      * 名称
      */
-    public static final String NAME = "service_send2";
+    public static final String NAME = "send2";
     /**
      * 客户端id
      */
-    private static final String CLIENT_ID = "client_" + NAME;
+    private static final String CLIENT_ID = UUID.randomUUID().toString();
     /**
      * 默认主题
      */
@@ -57,7 +59,7 @@ public class MqttSend2Service {
     /**
      * 出站属性
      */
-    @Bean("sendMethod_" + NAME)
+    @Bean("send_" + NAME)
     @ServiceActivator(inputChannel = NAME)
     public MessageHandler send() {
         MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler(CLIENT_ID,

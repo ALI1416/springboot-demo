@@ -3,6 +3,13 @@ spring:
     restart:
       enabled: true
 
+mqtt:
+  uri: tcp://127.0.0.1:1883
+  connection-timeout: 30
+  keep-alive-interval: 60
+  clean-session: false
+  automatic-reconnect: true
+
 logging:
   level:
     root: info
