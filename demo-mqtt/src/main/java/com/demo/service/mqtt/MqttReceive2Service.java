@@ -1,6 +1,6 @@
 package com.demo.service.mqtt;
 
-import com.demo.config.MqttConfig;
+import com.demo.tool.MqttTemp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -8,16 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.core.MessageProducer;
-import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
-import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
 
-import java.util.UUID;
-
 /**
- * <h1>接收</h1>
+ * <h1>接收服务2</h1>
  *
  * <p>
  * createDate 2022/07/01 11:26:48
@@ -31,16 +27,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MqttReceive2Service {
 
-    private final MqttConfig mqttConfig;
+    private final MqttTemp mqttTemp;
 
     /**
      * 名称
      */
-    private static final String NAME = "receive2";
-    /**
-     * 客户端id
-     */
-    private static final String CLIENT_ID = UUID.randomUUID().toString();
+    private static final String NAME = "mqtt_receive2";
     /**
      * 主题
      */
@@ -49,10 +41,6 @@ public class MqttReceive2Service {
      * QoS
      */
     private static final int[] QOS = {0};
-    /**
-     * 完成超时时长(毫秒)[默认:30000]
-     */
-    private static final int TIMEOUT = 5000;
 
     /**
      * 入站通道
@@ -65,31 +53,22 @@ public class MqttReceive2Service {
     /**
      * 入站属性
      */
-    @Bean("receive_" + NAME)
+    @Bean(NAME + "_receive")
     public MessageProducer receive() {
-        MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(CLIENT_ID,
-                mqttConfig.mqttPahoClientFactory(), TOPIC);
-        adapter.setCompletionTimeout(TIMEOUT);
-        // 消息转换器
-        DefaultPahoMessageConverter defaultPahoMessageConverter = new DefaultPahoMessageConverter();
-        // 按字节接收消息
-        // defaultPahoMessageConverter.setPayloadAsBytes(true);
-        adapter.setConverter(defaultPahoMessageConverter);
-        adapter.setQos(QOS);
-        adapter.setOutputChannel(inputChannel());
-        return adapter;
+        return mqttTemp.receiveMessage(TOPIC, QOS, inputChannel());
     }
 
     /**
      * 入站消息
      */
-    @Bean("message_" + NAME)
+    @Bean(NAME + "_message")
     @ServiceActivator(inputChannel = NAME)
     public MessageHandler message() {
-        return message -> log.info("payload:{},topic:{},qos:{}", //
-                message.getPayload(), //
+        return message -> log.info("topic:{},qos:{},data:{}", //
                 message.getHeaders().get(MqttHeaders.RECEIVED_TOPIC), //
-                message.getHeaders().get(MqttHeaders.RECEIVED_QOS));
+                message.getHeaders().get(MqttHeaders.RECEIVED_QOS), //
+                message.getPayload() //
+        );
     }
 
 }

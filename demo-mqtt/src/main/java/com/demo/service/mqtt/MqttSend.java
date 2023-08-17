@@ -1,6 +1,6 @@
 package com.demo.service.mqtt;
 
-import com.demo.config.MqttConfig;
+import com.demo.tool.MqttTemp;
 import org.springframework.integration.annotation.MessagingGateway;
 
 /**
@@ -14,6 +14,6 @@ import org.springframework.integration.annotation.MessagingGateway;
  * @since 1.0.0
  **/
 @MessagingGateway(defaultRequestChannel = MqttSendService.NAME)
-public interface MqttSend extends MqttConfig.DefaultSend {
+public interface MqttSend extends MqttTemp.DefaultSend {
 
 }

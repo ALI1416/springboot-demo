@@ -1,10 +1,10 @@
 package com.demo.service.mqtt;
 
-import com.demo.config.MqttConfig;
+import com.demo.tool.MqttTemp;
 import org.springframework.integration.annotation.MessagingGateway;
 
 /**
- * <h1>发送接口</h1>
+ * <h1>发送接口2</h1>
  *
  * <p>
  * createDate 2022/07/01 14:51:25
@@ -14,6 +14,6 @@ import org.springframework.integration.annotation.MessagingGateway;
  * @since 1.0.0
  **/
 @MessagingGateway(defaultRequestChannel = MqttSend2Service.NAME)
-public interface MqttSend2 extends MqttConfig.DefaultSend {
+public interface MqttSend2 extends MqttTemp.DefaultSend {
 
 }
