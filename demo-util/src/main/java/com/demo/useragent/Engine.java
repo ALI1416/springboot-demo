@@ -1,5 +1,7 @@
 package com.demo.useragent;
 
+import java.util.regex.Pattern;
+
 /**
  * <h1>引擎</h1>
  *
@@ -14,13 +16,13 @@ public enum Engine {
 
     TRIDENT("Trident", "trident"),
     WEBKIT("Webkit", "webkit"),
-    CHROME("谷歌", "chrome"),
-    OPERA("欧朋", "opera"),
+    CHROME("Chrome", "chrome"),
+    OPERA("Opera", "opera"),
     PRESTO("Presto", "presto"),
     GECKO("Gecko", "gecko"),
     KHTML("KHTML", "khtml"),
     KONQUEROR("Konqueror", "konqueror"),
-    MIDP("MIDP", "MIDP"),
+    MIDP("MIDP", "midp"),
     ;
 
     /**
@@ -30,27 +32,27 @@ public enum Engine {
     /**
      * 匹配规则
      */
-    private final String regex;
+    private final Pattern regex;
     /**
      * 版本号匹配规则
      */
-    private final String versionRegex;
+    private final Pattern versionRegex;
 
     Engine(String name, String regex) {
         this.name = name;
-        this.regex = regex;
-        this.versionRegex = regex + "[/\\- ]([\\d\\w.\\-]+)";
+        this.regex = Pattern.compile(regex);
+        this.versionRegex = Pattern.compile(regex + "[/\\- ]([\\w.\\-]+)");
     }
 
     public String getName() {
         return name;
     }
 
-    public String getRegex() {
+    public Pattern getRegex() {
         return regex;
     }
 
-    public String getVersionRegex() {
+    public Pattern getVersionRegex() {
         return versionRegex;
     }
 

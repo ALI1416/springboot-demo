@@ -1,5 +1,7 @@
 package com.demo.useragent;
 
+import java.util.regex.Pattern;
+
 /**
  * <h1>浏览器</h1>
  *
@@ -12,39 +14,40 @@ package com.demo.useragent;
  **/
 public enum Browser {
 
-    WX_WORK("企业微信", "wxwork", "wxwork\\/([\\d\\w\\.\\-]+)", false),
-    WE_CHAT("微信", "MicroMessenger", "MicroMessenger[\\/ ]([\\d\\w\\.\\-]+)", true),
-    WE_CHAT_APP("微信小程序", "miniProgram", "miniProgram[\\/ ]([\\d\\w\\.\\-]+)", true),
-    QQ("QQ", "MQQBrowser", "MQQBrowser\\/([\\d\\w\\.\\-]+)", false),
-    DING_TALK("钉钉", "dingtalk-win", "DingTalk\\(([\\d\\w\\.\\-]+)\\)", false),
-    DING_TALK_MOBILE("钉钉移动端", "DingTalk", "AliApp\\(DingTalk\\/([\\d\\w\\.\\-]+)\\)", true),
-    ALIPAY("支付宝", "AlipayClient", "AliApp\\(AP\\/([\\d\\w\\.\\-]+)\\)", false),
-    TAO_BAO("淘宝", "taobao", "AliApp\\(TB\\/([\\d\\w\\.\\-]+)\\)", false),
-    UC("UC", "UC?Browser", "UC?Browser\\/([\\d\\w\\.\\-]+)", false),
-    XIAO_MI("小米", "MiuiBrowser|mibrowser", "MiuiBrowser\\/([\\d\\w\\.\\-]+)", false),
-    QUARK("夸克", "Quark", "Quark[\\/ ]([\\d\\w\\.\\-]+)", false),
-    LENOVO("联想", "SLBrowser", "SLBrowser/([\\d\\w\\.\\-]+)", false),
-    EDGE("Edge", "Edge|Edg", "(?:edge|Edg|EdgA)\\/([\\d\\w\\.\\-]+)", false),
-    CHROME("谷歌", "chrome|(iphone.*crios.*safari)", "(?:Chrome|CriOS)\\/([\\d\\w\\.\\-]+)", false),
-    FIREFOX("火狐", "firefox", "Firefox[\\/ ]([\\d\\w\\.\\-]+)", false),
-    IE_MOBILE("IE移动端", "iemobile", "IEMobile[\\/ ]([\\d\\w\\.\\-]+)", true),
-    ANDROID("安卓", "android", "version\\/([\\d\\w\\.\\-]+)", true),
-    SAFARI("苹果", "safari", "version\\/([\\d\\w\\.\\-]+)", false),
-    OPERA("欧朋", "opera", "Opera[\\/ ]([\\d\\w\\.\\-]+)", false),
-    KONQUEROR("konqueror", "konqueror", "Thunderbird[\\/ ]([\\d\\w\\.\\-]+)", false),
-    PS3("PS3", "playstation 3", "([\\d\\w\\.\\-]+)\\)\\s*$", false),
-    PSP("PSP", "playstation portable", "([\\d\\w\\.\\-]+)\\)?\\s*$", true),
-    LOTUS_NOTES("Lotus Notes", "lotus.notes", "Lotus-Notes\\/([\\w.]+)", false),
-    THUNDERBIRD("Thunderbird", "thunderbird", "Thunderbird[\\/ ]([\\d\\w\\.\\-]+)", false),
-    NETSCAPE("网景", "netscape", "Netscape[\\/ ]([\\d\\w\\.\\-]+)", false),
-    SEA_MONKEY("Sea Monkey", "seamonkey", "Seamonkey[\\/ ]([\\d\\w\\.\\-]+)", false),
-    OUTLOOK("Outlook", "microsoft.outlook", "Outlook[\\/ ]([\\d\\w\\.\\-]+)", false),
-    EVOLUTION("evolution", "evolution", "Evolution[\\/ ]([\\d\\w\\.\\-]+)", false),
-    IE("IE", "msie", "msie ([\\d\\w\\.\\-]+)", false),
-    IE11("IE11", "rv:11", "rv:([\\d\\w\\.\\-]+)", false),
-    YAMMER("Yammer", "AdobeAir", "([\\d\\w\\.\\-]+)\\/Yammer", false),
-    YAMMER_MOBILE("Yammer移动端", "Yammer[\\s]+([\\d\\w\\.\\-]+)", "Yammer[\\s]+([\\d\\w\\.\\-]+)", true),
-    BLACK_BERRY("黑莓", "BlackBerry", "BlackBerry[\\d]+\\/([\\d\\w\\.\\-]+", false),
+    WE_CHAT_WORK("WeChat Work", "wxwork", "wxwork/([\\w.\\-]+)", false),
+    WE_CHAT("WeChat", "micromessenger", "micromessenger/([\\w.\\-]+)", true),
+    WE_CHAT_APP("WeChat App", "miniprogram", "miniprogram/([\\w.\\-]+)", true),
+    QQ("QQ", "mqqbrowser", "mqqbrowser/([\\w.\\-]+)", false),
+    DING_TALK("DingTalk", "dingtalk-win", "dingtalk\\(([\\w.\\-]+)\\)", false),
+    DING_TALK_MOBILE("DingTalk Mobile", "dingtalk", "aliapp\\(dingtalk/([\\w.\\-]+)\\)", true),
+    ALIPAY("Alipay", "alipayclient", "aliapp\\(ap/([\\w.\\-]+)\\)", true),
+    TAO_BAO("TaoBao", "taobao", "aliapp\\(tb/([\\w.\\-]+)\\)", true),
+    BAI_DU("BaiDu", "baidubrowser", "baidubrowser/([\\w.\\-]+)", false),
+    UC("UC", "ubrowser", "ubrowser/([\\w.\\-]+)", false),
+    XIAO_MI("XiaoMi", "miuibrowser", "miuibrowser/([\\w.\\-]+)", false),
+    QUARK("Quark", "quark", "quark/([\\w.\\-]+)", false),
+    LENOVO("Lenovo", "slbrowser", "slbrowser/([\\w.\\-]+)", false),
+    EDGE("Edge", "(edge|edg)", "(edge|edg)/([\\w.\\-]+)", false),
+    CHROME("Chrome", "(chrome|crios)", "(chrome|crios)/([\\w.\\-]+)", false),
+    FIREFOX("Firefox", "firefox", "firefox/([\\w.\\-]+)", false),
+    IE_MOBILE("IE Mobile", "iemobile", "iemobile/([\\w.\\-]+)", true),
+    ANDROID("Android", "android", "version/([\\w.\\-]+)", true),
+    SAFARI("Safari", "safari", "version/([\\w.\\-]+)", false),
+    OPERA("Opera", "opera", "opera/([\\w.\\-]+)", false),
+    KONQUEROR("Konqueror", "konqueror", "konqueror/([\\w.\\-]+)", false),
+    PS3("PS3", "playstation 3", "([\\w.\\-]+)\\)", false),
+    PSP("PSP", "playstation portable", "([\\w.\\-]+)\\)", true),
+    LOTUS("Lotus", "lotus.notes", "lotus-notes/([\\w.]+)", false),
+    THUNDERBIRD("Thunderbird", "thunderbird", "thunderbird/([\\w.\\-]+)", false),
+    NETSCAPE("Netscape", "netscape", "netscape/([\\w.\\-]+)", false),
+    SEA_MONKEY("SeaMonkey", "seamonkey", "seamonkey/([\\w.\\-]+)", false),
+    OUTLOOK("Outlook", "microsoft.outlook", "outlook/([\\w.\\-]+)", false),
+    EVOLUTION("Evolution", "evolution", "evolution/([\\w.\\-]+)", false),
+    IE("IE", "msie", "msie ([\\w.\\-]+)", false),
+    IE11("IE 11", "rv:11", "rv:([\\w.\\-]+)", false),
+    YAMMER("Yammer", "adobeair", "([\\w.\\-]+)/yammer", false),
+    YAMMER_MOBILE("Yammer Mobile", "yammer ([\\w.\\-]+)", "yammer ([\\w.\\-]+)", true),
+    BLACK_BERRY("BlackBerry", "blackberry", "blackberry\\d+/([\\w.\\-]+)", false),
     ;
 
     /**
@@ -54,11 +57,11 @@ public enum Browser {
     /**
      * 匹配规则
      */
-    private final String regex;
+    private final Pattern regex;
     /**
      * 版本号匹配规则
      */
-    private final String versionRegex;
+    private final Pattern versionRegex;
     /**
      * 是移动端
      */
@@ -66,8 +69,8 @@ public enum Browser {
 
     Browser(String name, String regex, String versionRegex, boolean mobile) {
         this.name = name;
-        this.regex = regex;
-        this.versionRegex = versionRegex;
+        this.regex = Pattern.compile(regex);
+        this.versionRegex = Pattern.compile(versionRegex);
         this.mobile = mobile;
     }
 
@@ -75,11 +78,11 @@ public enum Browser {
         return name;
     }
 
-    public String getRegex() {
+    public Pattern getRegex() {
         return regex;
     }
 
-    public String getVersionRegex() {
+    public Pattern getVersionRegex() {
         return versionRegex;
     }
 

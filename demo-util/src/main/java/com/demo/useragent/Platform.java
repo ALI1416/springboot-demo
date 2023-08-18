@@ -1,5 +1,7 @@
 package com.demo.useragent;
 
+import java.util.regex.Pattern;
+
 /**
  * <h1>平台</h1>
  *
@@ -12,6 +14,21 @@ package com.demo.useragent;
  **/
 public enum Platform {
 
+    IPHONE("iPhone", "iphone", true),
+    IPOD("iPod", "ipod", true),
+    IPAD("iPad", "ipad", true),
+    ANDROID("Android", "android", true),
+    GOOGLE_TV("GoogleTV", "googletv", true),
+    HTC_FLYER("HTC Flyer", "htc_flyer", true),
+    XIAO_MI("XiaoMi", "(xiaomi|mi)", true),
+    SYMBIAN("Symbian", "symbian", true),
+    BLACK_BERRY("Blackberry", "blackberry", true),
+    WINDOWS_PHONE("Windows Phone", "windows (ce|phone|mobile)", true),
+    WINDOWS("Windows", "windows", false),
+    MAC("Mac", "(macintosh|darwin)", false),
+    LINUX("Linux", "linux", false),
+    WII("Wii", "wii", false),
+    PLAYSTATION("Playstation", "playstation", false),
     ;
 
     /**
@@ -21,20 +38,15 @@ public enum Platform {
     /**
      * 匹配规则
      */
-    private final String regex;
-    /**
-     * 版本号匹配规则
-     */
-    private final String versionRegex;
+    private final Pattern regex;
     /**
      * 是移动端
      */
     private final boolean mobile;
 
-    Platform(String name, String regex, String versionRegex, boolean mobile) {
+    Platform(String name, String regex, boolean mobile) {
         this.name = name;
-        this.regex = regex;
-        this.versionRegex = versionRegex;
+        this.regex = Pattern.compile(regex);
         this.mobile = mobile;
     }
 
@@ -42,12 +54,8 @@ public enum Platform {
         return name;
     }
 
-    public String getRegex() {
+    public Pattern getRegex() {
         return regex;
-    }
-
-    public String getVersionRegex() {
-        return versionRegex;
     }
 
     public boolean isMobile() {
