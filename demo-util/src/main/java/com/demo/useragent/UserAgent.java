@@ -1,5 +1,7 @@
 package com.demo.useragent;
 
+import java.util.regex.Matcher;
+
 /**
  * <h1>UserAgent</h1>
  *
@@ -21,10 +23,6 @@ public class UserAgent {
      */
     private String engineVersion;
     /**
-     * 引擎
-     */
-    private String engineMajorVersion;
-    /**
      * 浏览器
      */
     private String browser;
@@ -33,10 +31,6 @@ public class UserAgent {
      */
     private String browserVersion;
     /**
-     * 浏览器
-     */
-    private String browserMajorVersion;
-    /**
      * 操作系统
      */
     private String os;
@@ -44,10 +38,6 @@ public class UserAgent {
      * 操作系统
      */
     private String osVersion;
-    /**
-     * 操作系统
-     */
-    private String osMajorVersion;
     /**
      * 平台
      */
@@ -73,14 +63,6 @@ public class UserAgent {
         this.engineVersion = engineVersion;
     }
 
-    public String getEngineMajorVersion() {
-        return engineMajorVersion;
-    }
-
-    public void setEngineMajorVersion(String engineMajorVersion) {
-        this.engineMajorVersion = engineMajorVersion;
-    }
-
     public String getBrowser() {
         return browser;
     }
@@ -97,14 +79,6 @@ public class UserAgent {
         this.browserVersion = browserVersion;
     }
 
-    public String getBrowserMajorVersion() {
-        return browserMajorVersion;
-    }
-
-    public void setBrowserMajorVersion(String browserMajorVersion) {
-        this.browserMajorVersion = browserMajorVersion;
-    }
-
     public String getOs() {
         return os;
     }
@@ -119,14 +93,6 @@ public class UserAgent {
 
     public void setOsVersion(String osVersion) {
         this.osVersion = osVersion;
-    }
-
-    public String getOsMajorVersion() {
-        return osMajorVersion;
-    }
-
-    public void setOsMajorVersion(String osMajorVersion) {
-        this.osMajorVersion = osMajorVersion;
     }
 
     public String getPlatform() {
@@ -150,16 +116,89 @@ public class UserAgent {
         return "UserAgent{" +
                 "engine='" + engine + '\'' +
                 ", engineVersion='" + engineVersion + '\'' +
-                ", engineMajorVersion='" + engineMajorVersion + '\'' +
                 ", browser='" + browser + '\'' +
                 ", browserVersion='" + browserVersion + '\'' +
-                ", browserMajorVersion='" + browserMajorVersion + '\'' +
                 ", os='" + os + '\'' +
                 ", osVersion='" + osVersion + '\'' +
-                ", osMajorVersion='" + osMajorVersion + '\'' +
                 ", platform='" + platform + '\'' +
                 ", mobile=" + mobile +
                 '}';
+    }
+
+    /**
+     * 解析
+     *
+     * @param userAgentString UserAgent字符串
+     * @return UserAgent
+     */
+    public static UserAgent parse(String userAgentString) {
+        userAgentString = userAgentString.toLowerCase();
+        UserAgent userAgent = new UserAgent();
+        // 引擎
+        String engineType = "";
+        String engineVersion = "";
+        for (Engine engine : Engine.values()) {
+            Matcher matcher = engine.getRegex().matcher(userAgentString);
+            if (matcher.find()) {
+                engineType = engine.getName();
+                Matcher matcherVersion = engine.getVersionRegex().matcher(userAgentString);
+                if (matcherVersion.find()) {
+                    engineVersion = matcherVersion.group(matcherVersion.groupCount());
+                }
+                break;
+            }
+        }
+        userAgent.setEngine(engineType);
+        userAgent.setEngineVersion(engineVersion);
+        // 浏览器
+        String browserType = "";
+        String browserVersion = "";
+        boolean browserIsMobile = false;
+        for (Browser browser : Browser.values()) {
+            Matcher matcher = browser.getRegex().matcher(userAgentString);
+            if (matcher.find()) {
+                browserType = browser.getName();
+                Matcher matcherVersion = browser.getVersionRegex().matcher(userAgentString);
+                if (matcherVersion.find()) {
+                    browserVersion = matcherVersion.group(matcherVersion.groupCount());
+                }
+                browserIsMobile = browser.isMobile();
+                break;
+            }
+        }
+        userAgent.setBrowser(browserType);
+        userAgent.setBrowserVersion(browserVersion);
+        // 操作系统
+        String osType = "";
+        String osVersion = "";
+        for (Os os : Os.values()) {
+            Matcher matcher = os.getRegex().matcher(userAgentString);
+            if (matcher.find()) {
+                osType = os.getName();
+                Matcher matcherVersion = os.getVersionRegex().matcher(userAgentString);
+                if (matcherVersion.find()) {
+                    osVersion = matcherVersion.group(matcherVersion.groupCount());
+                }
+                break;
+            }
+        }
+        userAgent.setOs(osType);
+        userAgent.setOsVersion(osVersion);
+        // 平台
+        String platformType = "";
+        boolean platformIsMobile = false;
+        for (Platform platform : Platform.values()) {
+            Matcher matcher = platform.getRegex().matcher(userAgentString);
+            if (matcher.find()) {
+                platformType = platform.getName();
+                platformIsMobile = platform.isMobile();
+                break;
+            }
+        }
+        userAgent.setPlatform(platformType);
+        // 是移动端
+        userAgent.setMobile(browserIsMobile || platformIsMobile);
+        return userAgent;
     }
 
 }
