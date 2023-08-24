@@ -137,10 +137,10 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-amqp?label=Maven%20Central)
   - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-boot-starter-integration`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-integration?label=Maven%20Central)
-  - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-stream`  
-    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-stream?label=Maven%20Central)
-  - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-integration-mqtt`  
-    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-integration-mqtt?label=Maven%20Central)
+  - `MQTT(无法修改版本号)` : `org.springframework.integration:spring-integration-stream`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.integration/spring-integration-stream?label=Maven%20Central)
+  - `MQTT(无法修改版本号)` : `org.springframework.integration:spring-integration-mqtt`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.integration/spring-integration-mqtt?label=Maven%20Central)
   - `实体层注解(与IDE安装的版本号对应，不需一致)` : `org.projectlombok:lombok`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.projectlombok/lombok?label=Maven%20Central)
 - 需要修改父依赖版本号 :
