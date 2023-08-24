@@ -21,10 +21,22 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        bCrypt();
         // base62Utils();
         // stringUtils();
-        timestampUtils();
+        // timestampUtils();
         // digitTimestampUtils();
+    }
+
+    private static void bCrypt() {
+        log.info("---------- BCrypt ----------");
+        String password = "123456";
+        String salt = BCrypt.generateSalt();
+        log.info("salt:" + salt);
+        String encode = BCrypt.encode(password, salt);
+        log.info("encode:" + encode);
+        boolean check = BCrypt.check(password, encode);
+        log.info("check:" + check);
     }
 
     private static void base62Utils() {

@@ -63,7 +63,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 // 首次连接设置用户名
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     List<String> username = accessor.getNativeHeader("username");
-                    if (username == null) {
+                    if (username == null || username.isEmpty()) {
                         return null;
                     }
                     accessor.setUser(() -> username.get(0));
