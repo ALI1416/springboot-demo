@@ -17,10 +17,6 @@ SpringBoot示例
   - SpringBoot Web
   - FastJson
   - 配置
-- **`demo-easy-excel`** : EasyExcel
-  - SpringBoot Web
-  - FastJson
-  - EasyExcel
 - **`demo-elastic-search`** : ElasticSearch
   - SpringBoot Web
   - FastJson
@@ -94,6 +90,7 @@ SpringBoot示例
 - **`demo-util`** : 工具
   - SpringBoot Web
   - FastJson
+  - EasyExcel
   - 雪花ID生成器
   - IP地址转区域
   - 手机号码转区域

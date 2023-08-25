@@ -1,18 +1,17 @@
-package com.demo.controller;
+package com.demo.util.easyexcel;
 
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.excel.UserExcel;
-import com.demo.util.EasyExcelUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>EasyExcel</h1>
+ * <h1>Main</h1>
  *
  * <p>
- * createDate 2022/02/22 17:37:24
+ * createDate 2023/08/25 10:12:56
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]

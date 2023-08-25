@@ -31,7 +31,7 @@ public class Main {
     private static void bCrypt() {
         log.info("---------- BCrypt ----------");
         String password = "123456";
-        String salt = BCrypt.generateSalt();
+        String salt = BCrypt.salt();
         log.info("salt:" + salt);
         String encode = BCrypt.encode(password, salt);
         log.info("encode:" + encode);

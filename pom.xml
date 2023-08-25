@@ -25,7 +25,6 @@
   <modules>
     <module>demo-base</module>
     <module>demo-config</module>
-    <module>demo-easy-excel</module>
     <module>demo-elastic-search</module>
     <module>demo-just-auth</module>
     <module>demo-java-advanced</module>

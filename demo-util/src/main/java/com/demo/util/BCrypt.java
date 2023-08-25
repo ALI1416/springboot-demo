@@ -40,35 +40,295 @@ public class BCrypt {
      */
     private static final int BLOWFISH_COST = 16;
 
+    private BCrypt() {
+    }
+
     /**
-     * Sub Keys
+     * 生成盐(代价因子{@value DEFAULT_COST})
+     *
+     * @return 盐
      */
-    private int[] p;
+    public static String salt() {
+        return salt(DEFAULT_COST);
+    }
+
     /**
-     * Substitution Boxes
+     * 生成盐
+     *
+     * @param cost 代价因子
+     * @return 盐
      */
-    private int[] s;
+    public static String salt(int cost) {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[BCRYPT_SALT_LEN];
+        random.nextBytes(salt);
+        StringBuilder sb = new StringBuilder();
+        sb.append("$2a$");
+        if (cost < 10) {
+            sb.append("0");
+        }
+        sb.append(cost);
+        sb.append("$");
+        sb.append(encodeBase64(salt, BCRYPT_SALT_LEN));
+        return sb.toString();
+    }
+
+    /**
+     * 生成密文(随机盐[代价因子{@value DEFAULT_COST}])
+     *
+     * @param plaintext 明文
+     * @return 密文
+     */
+    public static String encode(String plaintext) {
+        return encode(plaintext, salt(DEFAULT_COST));
+    }
+
+    /**
+     * 生成密文(随机盐)
+     *
+     * @param plaintext 明文
+     * @param cost      代价因子
+     * @return 密文
+     */
+    public static String encode(String plaintext, int cost) {
+        return encode(plaintext, salt(cost));
+    }
+
+    /**
+     * 生成密文
+     *
+     * @param plaintext 明文
+     * @param salt      盐
+     * @return 密文
+     */
+    public static String encode(String plaintext, String salt) {
+        if (salt.charAt(0) != '$' || salt.charAt(1) != '2') {
+            throw new IllegalArgumentException("盐salt不合法！");
+        }
+        int saltOffset;
+        char version = (char) 0;
+        if (salt.charAt(2) == '$') {
+            saltOffset = 3;
+        } else {
+            version = salt.charAt(2);
+            if (version != 'a' || salt.charAt(3) != '$') {
+                throw new IllegalArgumentException("盐salt不合法！");
+            }
+            saltOffset = 4;
+        }
+        if (salt.charAt(saltOffset + 2) > '$') {
+            throw new IllegalArgumentException("代价因子cost不合法！");
+        }
+        int cost = Integer.parseInt(salt.substring(saltOffset, saltOffset + 2));
+        if (cost < MIN_COST || cost > MAX_COST) {
+            throw new IllegalArgumentException("代价因子cost " + cost + " 不合法！应为 [" + MIN_COST + "," + MAX_COST + "]");
+        }
+        byte[] saltBytes = decodeBase64(salt.substring(saltOffset + 3, saltOffset + 25), BCRYPT_SALT_LEN);
+        byte[] plaintextBytes = (plaintext + (version == 'a' ? "\000" : "")).getBytes(StandardCharsets.UTF_8);
+        byte[] ciphertextBytes = cryptRaw(plaintextBytes, saltBytes, cost);
+        StringBuilder sb = new StringBuilder();
+        sb.append("$2");
+        if (version == 'a') {
+            sb.append(version);
+        }
+        sb.append("$");
+        if (cost < 10) {
+            sb.append("0");
+        }
+        sb.append(cost);
+        sb.append("$");
+        sb.append(encodeBase64(saltBytes, saltBytes.length));
+        sb.append(encodeBase64(ciphertextBytes, BF_CRYPT_CIPHERTEXT.length * 4 - 1));
+        return sb.toString();
+    }
+
+    /**
+     * 校验明文是否正确
+     *
+     * @param plaintext  明文
+     * @param ciphertext 密文
+     * @return 是否正确
+     */
+    public static boolean check(String plaintext, String ciphertext) {
+        byte[] plaintextEncodedBytes = encode(plaintext, ciphertext).getBytes(StandardCharsets.UTF_8);
+        byte[] ciphertextBytes = ciphertext.getBytes(StandardCharsets.UTF_8);
+        if (ciphertextBytes.length != plaintextEncodedBytes.length) {
+            return false;
+        }
+        byte data = 0;
+        for (int i = 0; i < plaintextEncodedBytes.length; i++) {
+            data |= ciphertextBytes[i] ^ plaintextEncodedBytes[i];
+        }
+        return data == 0;
+    }
+
+    /**
+     * 加密原始数据
+     *
+     * @param plaintext 明文
+     * @param salt      盐
+     * @param cost      代价因子
+     * @return 密文
+     */
+    public static byte[] cryptRaw(byte[] plaintext, byte[] salt, int cost) {
+        if (cost < 4 || cost > 30) {
+            throw new IllegalArgumentException("代价因子cost " + cost + " 不合法！应为 [" + MIN_COST + "," + MAX_COST + "]");
+        }
+        if (salt.length != BCRYPT_SALT_LEN) {
+            throw new IllegalArgumentException("盐salt不合法！");
+        }
+        byte[] data;
+        int rounds = 1 << cost;
+        int[] bf = BF_CRYPT_CIPHERTEXT.clone();
+        int[] p = P_ORIGIN.clone();
+        int[] s = S_ORIGIN.clone();
+        int bfLen = bf.length;
+        enhancedKey(p, s, salt, plaintext);
+        for (int i = 0; i != rounds; i++) {
+            key(p, s, plaintext);
+            key(p, s, salt);
+        }
+        for (int i = 0; i < 64; i++) {
+            for (int j = 0; j < (bfLen >> 1); j++) {
+                encipher(p, s, bf, j << 1);
+            }
+        }
+        data = new byte[bfLen * 4];
+        for (int i = 0, j = 0; i < bfLen; i++) {
+            data[j++] = (byte) ((bf[i] >> 24) & 0xff);
+            data[j++] = (byte) ((bf[i] >> 16) & 0xff);
+            data[j++] = (byte) ((bf[i] >> 8) & 0xff);
+            data[j++] = (byte) (bf[i] & 0xff);
+        }
+        return data;
+    }
+
+    /**
+     * 设置增强密钥
+     *
+     * @param p    Sub Keys
+     * @param s    Substitution Boxes
+     * @param data 盐
+     * @param key  密码
+     */
+    private static void enhancedKey(int[] p, int[] s, byte[] data, byte[] key) {
+        int[] dataOffsetPointer = {0};
+        int[] keyOffsetPointer = {0};
+        int[] lr = {0, 0};
+        int pLen = p.length;
+        int sLen = s.length;
+        for (int i = 0; i < pLen; i++) {
+            p[i] = p[i] ^ stream2word(key, keyOffsetPointer);
+        }
+        for (int i = 0; i < pLen; i += 2) {
+            lr[0] ^= stream2word(data, dataOffsetPointer);
+            lr[1] ^= stream2word(data, dataOffsetPointer);
+            encipher(p, s, lr, 0);
+            p[i] = lr[0];
+            p[i + 1] = lr[1];
+        }
+        for (int i = 0; i < sLen; i += 2) {
+            lr[0] ^= stream2word(data, dataOffsetPointer);
+            lr[1] ^= stream2word(data, dataOffsetPointer);
+            encipher(p, s, lr, 0);
+            s[i] = lr[0];
+            s[i + 1] = lr[1];
+        }
+    }
+
+    /**
+     * 设置密钥
+     *
+     * @param p   Sub Keys
+     * @param s   Substitution Boxes
+     * @param key 密钥
+     */
+    private static void key(int[] p, int[] s, byte[] key) {
+        int[] keyOffsetPointer = {0};
+        int[] lr = {0, 0};
+        int pLen = p.length;
+        int sLen = s.length;
+        for (int i = 0; i < pLen; i++) {
+            p[i] = p[i] ^ stream2word(key, keyOffsetPointer);
+        }
+        for (int i = 0; i < pLen; i += 2) {
+            encipher(p, s, lr, 0);
+            p[i] = lr[0];
+            p[i + 1] = lr[1];
+        }
+        for (int i = 0; i < sLen; i += 2) {
+            encipher(p, s, lr, 0);
+            s[i] = lr[0];
+            s[i + 1] = lr[1];
+        }
+    }
+
+    /**
+     * 将1个64bit编码转为2个32bit编码
+     *
+     * @param p      Sub Keys
+     * @param s      Substitution Boxes
+     * @param data   数据
+     * @param offset 位置
+     */
+    private static void encipher(int[] p, int[] s, int[] data, int offset) {
+        int left = data[offset];
+        int right = data[offset + 1];
+        left ^= p[0];
+        int n;
+        for (int i = 0; i < BLOWFISH_COST - 1; ) {
+            // 左
+            n = s[(left >> 24) & 0xff];
+            n += s[0x100 | ((left >> 16) & 0xff)];
+            n ^= s[0x200 | ((left >> 8) & 0xff)];
+            n += s[0x300 | (left & 0xff)];
+            right ^= n ^ p[++i];
+            // 右
+            n = s[(right >> 24) & 0xff];
+            n += s[0x100 | ((right >> 16) & 0xff)];
+            n ^= s[0x200 | ((right >> 8) & 0xff)];
+            n += s[0x300 | (right & 0xff)];
+            left ^= n ^ p[++i];
+        }
+        data[offset] = right ^ p[BLOWFISH_COST + 1];
+        data[offset + 1] = left;
+    }
+
+    /**
+     * 提取关键信息
+     *
+     * @param data          数据
+     * @param offsetPointer 偏移指针
+     * @return 关键信息
+     */
+    private static int stream2word(byte[] data, int[] offsetPointer) {
+        int offset = offsetPointer[0];
+        int word = 0;
+        for (int i = 0; i < 4; i++) {
+            word = (word << 8) | (data[offset] & 0xff);
+            offset = (offset + 1) % data.length;
+        }
+        offsetPointer[0] = offset;
+        return word;
+    }
 
     /**
      * 编码Base64
      *
-     * @param data 数据
-     * @param len  数据长度
+     * @param data   数据
+     * @param length 数据长度
      * @return Base64字符串
      */
-    private static String encodeBase64(byte[] data, int len) throws IllegalArgumentException {
-        if (len < 1 || len > data.length) {
-            throw new IllegalArgumentException("数据长度len " + len + " 不合法！应为 [1," + data.length + "]");
-        }
+    private static String encodeBase64(byte[] data, int length) {
         int offset = 0;
         int c1;
         int c2;
         StringBuilder sb = new StringBuilder();
-        while (offset < len) {
+        while (offset < length) {
             c1 = data[offset++] & 0xff;
             sb.append(BASE64_CODE[(c1 >> 2) & 0x3f]);
             c1 = (c1 & 0x03) << 4;
-            if (offset >= len) {
+            if (offset >= length) {
                 sb.append(BASE64_CODE[c1 & 0x3f]);
                 break;
             }
@@ -76,7 +336,7 @@ public class BCrypt {
             c1 |= (c2 >> 4) & 0x0f;
             sb.append(BASE64_CODE[c1 & 0x3f]);
             c1 = (c2 & 0x0f) << 2;
-            if (offset >= len) {
+            if (offset >= length) {
                 sb.append(BASE64_CODE[c1 & 0x3f]);
                 break;
             }
@@ -91,17 +351,14 @@ public class BCrypt {
     /**
      * 解码Base64
      *
-     * @param str Base64字符串
-     * @param len 数据长度
+     * @param string Base64字符串
+     * @param length 数据长度
      * @return byte[]
      */
-    private static byte[] decodeBase64(String str, int len) throws IllegalArgumentException {
-        if (len < 1) {
-            throw new IllegalArgumentException("数据长度len " + len + " 不合法！应为 [1,)");
-        }
+    private static byte[] decodeBase64(String string, int length) {
         byte[] data;
         StringBuilder sb = new StringBuilder();
-        int strLen = str.length();
+        int strLen = string.length();
         int strOffset = 0;
         int dataOffset = 0;
         byte c;
@@ -109,29 +366,29 @@ public class BCrypt {
         byte c2;
         byte c3;
         byte c4;
-        while (strOffset < strLen - 1 && dataOffset < len) {
-            c1 = char64(str.charAt(strOffset++));
-            c2 = char64(str.charAt(strOffset++));
+        while (strOffset < strLen - 1 && dataOffset < length) {
+            c1 = char64(string.charAt(strOffset++));
+            c2 = char64(string.charAt(strOffset++));
             if (c1 == -1 || c2 == -1) {
                 break;
             }
             c = (byte) (c1 << 2);
             c |= (c2 & 0x30) >> 4;
             sb.append((char) c);
-            if (++dataOffset >= len || strOffset >= strLen) {
+            if (++dataOffset >= length || strOffset >= strLen) {
                 break;
             }
-            c3 = char64(str.charAt(strOffset++));
+            c3 = char64(string.charAt(strOffset++));
             if (c3 == -1) {
                 break;
             }
             c = (byte) ((c2 & 0x0f) << 4);
             c |= (c3 & 0x3c) >> 2;
             sb.append((char) c);
-            if (++dataOffset >= len || strOffset >= strLen) {
+            if (++dataOffset >= length || strOffset >= strLen) {
                 break;
             }
-            c4 = char64(str.charAt(strOffset++));
+            c4 = char64(string.charAt(strOffset++));
             c = (byte) ((c3 & 0x03) << 6);
             c |= c4;
             sb.append((char) c);
@@ -158,258 +415,45 @@ public class BCrypt {
     }
 
     /**
-     * 将64bit编码转为2个32bit编码
-     *
-     * @param lr     数据
-     * @param offset 位置
+     * 字符串OrpheanBeholderScryDoubt的UTF8
      */
-    private void encipher(int[] lr, int offset) {
-        int left = lr[offset];
-        int right = lr[offset + 1];
-        left ^= p[0];
-        int n;
-        for (int i = 0; i < BLOWFISH_COST - 1; ) {
-            // 左
-            n = s[(left >> 24) & 0xff];
-            n += s[0x100 | ((left >> 16) & 0xff)];
-            n ^= s[0x200 | ((left >> 8) & 0xff)];
-            n += s[0x300 | (left & 0xff)];
-            right ^= n ^ p[++i];
-            // 右
-            n = s[(right >> 24) & 0xff];
-            n += s[0x100 | ((right >> 16) & 0xff)];
-            n ^= s[0x200 | ((right >> 8) & 0xff)];
-            n += s[0x300 | (right & 0xff)];
-            left ^= n ^ p[++i];
-        }
-        lr[offset] = right ^ p[BLOWFISH_COST + 1];
-        lr[offset + 1] = left;
-    }
-
+    private static final int[] BF_CRYPT_CIPHERTEXT = {
+            0x4f727068, 0x65616e42, 0x65686f6c, 0x64657253, 0x63727944, 0x6f756274
+    };
     /**
-     * 提取关键信息
-     *
-     * @param data          数据
-     * @param offsetPointer 偏移指针
-     * @return 下一个
+     * Base64编码表
      */
-    private static int stream2word(byte[] data, int[] offsetPointer) {
-        int offset = offsetPointer[0];
-        int word = 0;
-        for (int i = 0; i < 4; i++) {
-            word = (word << 8) | (data[offset] & 0xff);
-            offset = (offset + 1) % data.length;
-        }
-        offsetPointer[0] = offset;
-        return word;
-    }
-
+    private static final char[] BASE64_CODE = {
+            '.', '/', 'A', 'B', 'C', 'D', 'E', 'F',
+            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+            'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+            'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+            'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+            'u', 'v', 'w', 'x', 'y', 'z', '0', '1',
+            '2', '3', '4', '5', '6', '7', '8', '9'
+    };
     /**
-     * 初始化key
+     * Base64解码表
      */
-    private void initKey() {
-        p = P_ORIGIN.clone();
-        s = S_ORIGIN.clone();
-    }
-
-    /**
-     * 设置密钥
-     *
-     * @param key 密钥
-     */
-    private void key(byte[] key) {
-        int[] keyOffsetPointer = {0};
-        int[] lr = {0, 0};
-        int pLen = p.length;
-        int sLen = s.length;
-        for (int i = 0; i < pLen; i++) {
-            p[i] = p[i] ^ stream2word(key, keyOffsetPointer);
-        }
-        for (int i = 0; i < pLen; i += 2) {
-            encipher(lr, 0);
-            p[i] = lr[0];
-            p[i + 1] = lr[1];
-        }
-        for (int i = 0; i < sLen; i += 2) {
-            encipher(lr, 0);
-            s[i] = lr[0];
-            s[i + 1] = lr[1];
-        }
-    }
-
-    /**
-     * 设置增强密钥
-     *
-     * @param data 盐
-     * @param key  密码
-     */
-    private void enhancedKeySchedule(byte[] data, byte[] key) {
-        int[] dataOffsetPointer = {0};
-        int[] keyOffsetPointer = {0};
-        int[] lr = {0, 0};
-        int pLen = p.length;
-        int sLen = s.length;
-        for (int i = 0; i < pLen; i++) {
-            p[i] = p[i] ^ stream2word(key, keyOffsetPointer);
-        }
-        for (int i = 0; i < pLen; i += 2) {
-            lr[0] ^= stream2word(data, dataOffsetPointer);
-            lr[1] ^= stream2word(data, dataOffsetPointer);
-            encipher(lr, 0);
-            p[i] = lr[0];
-            p[i + 1] = lr[1];
-        }
-        for (int i = 0; i < sLen; i += 2) {
-            lr[0] ^= stream2word(data, dataOffsetPointer);
-            lr[1] ^= stream2word(data, dataOffsetPointer);
-            encipher(lr, 0);
-            s[i] = lr[0];
-            s[i + 1] = lr[1];
-        }
-    }
-
-    /**
-     * 加密原始数据
-     *
-     * @param plaintext         明文
-     * @param salt              盐
-     * @param cost              代价因子
-     * @param bfCryptCiphertext BF_CRYPT_CIPHERTEXT
-     * @return 密文
-     */
-    public byte[] cryptRaw(byte[] plaintext, byte[] salt, int cost, int[] bfCryptCiphertext) {
-        if (cost < 4 || cost > 30) {
-            throw new IllegalArgumentException("代价因子cost " + cost + " 不合法！应为 [" + MIN_COST + "," + MAX_COST + "]");
-        }
-        if (salt.length != BCRYPT_SALT_LEN) {
-            throw new IllegalArgumentException("盐salt不合法！");
-        }
-        byte[] data;
-        int rounds = 1 << cost;
-        int cLen = bfCryptCiphertext.length;
-        initKey();
-        enhancedKeySchedule(salt, plaintext);
-        for (int i = 0; i != rounds; i++) {
-            key(plaintext);
-            key(salt);
-        }
-        for (int i = 0; i < 64; i++) {
-            for (int j = 0; j < (cLen >> 1); j++) {
-                encipher(bfCryptCiphertext, j << 1);
-            }
-        }
-        data = new byte[cLen * 4];
-        for (int i = 0, j = 0; i < cLen; i++) {
-            data[j++] = (byte) ((bfCryptCiphertext[i] >> 24) & 0xff);
-            data[j++] = (byte) ((bfCryptCiphertext[i] >> 16) & 0xff);
-            data[j++] = (byte) ((bfCryptCiphertext[i] >> 8) & 0xff);
-            data[j++] = (byte) (bfCryptCiphertext[i] & 0xff);
-        }
-        return data;
-    }
-
-    /**
-     * 生成密文
-     *
-     * @param plaintext 明文
-     * @param salt      盐
-     * @return 密文
-     */
-    public static String encode(String plaintext, String salt) {
-        if (salt.charAt(0) != '$' || salt.charAt(1) != '2') {
-            throw new IllegalArgumentException("盐salt不合法！");
-        }
-        int saltOffset;
-        char version = (char) 0;
-        if (salt.charAt(2) == '$') {
-            saltOffset = 3;
-        } else {
-            version = salt.charAt(2);
-            if (version != 'a' || salt.charAt(3) != '$') {
-                throw new IllegalArgumentException("盐salt不合法！");
-            }
-            saltOffset = 4;
-        }
-        if (salt.charAt(saltOffset + 2) > '$') {
-            throw new IllegalArgumentException("代价因子cost不合法");
-        }
-        int cost = Integer.parseInt(salt.substring(saltOffset, saltOffset + 2));
-        if (cost < MIN_COST || cost > MAX_COST) {
-            throw new IllegalArgumentException("代价因子cost " + cost + " 不合法！应为 [" + MIN_COST + "," + MAX_COST + "]");
-        }
-        byte[] saltBytes = decodeBase64(salt.substring(saltOffset + 3, saltOffset + 25), BCRYPT_SALT_LEN);
-        byte[] plaintextBytes = (plaintext + (version == 'a' ? "\000" : "")).getBytes(StandardCharsets.UTF_8);
-        BCrypt bCrypt = new BCrypt();
-        byte[] ciphertextBytes = bCrypt.cryptRaw(plaintextBytes, saltBytes, cost, BF_CRYPT_CIPHERTEXT.clone());
-        StringBuilder sb = new StringBuilder();
-        sb.append("$2");
-        if (version == 'a') {
-            sb.append(version);
-        }
-        sb.append("$");
-        if (cost < 10) {
-            sb.append("0");
-        }
-        sb.append(cost);
-        sb.append("$");
-        sb.append(encodeBase64(saltBytes, saltBytes.length));
-        sb.append(encodeBase64(ciphertextBytes, BF_CRYPT_CIPHERTEXT.length * 4 - 1));
-        return sb.toString();
-    }
-
-    /**
-     * 生成盐(代价因子{@value DEFAULT_COST})
-     *
-     * @return 盐
-     */
-    public static String generateSalt() {
-        return generateSalt(DEFAULT_COST);
-    }
-
-    /**
-     * 生成盐
-     *
-     * @param cost 代价因子
-     * @return 盐
-     */
-    public static String generateSalt(int cost) {
-        if (cost < MIN_COST || cost > MAX_COST) {
-            throw new IllegalArgumentException("代价因子cost " + cost + " 不合法！应为 [" + MIN_COST + "," + MAX_COST + "]");
-        }
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[BCRYPT_SALT_LEN];
-        random.nextBytes(salt);
-        StringBuilder sb = new StringBuilder();
-        sb.append("$2a$");
-        if (cost < 10) {
-            sb.append("0");
-        }
-        sb.append(cost);
-        sb.append("$");
-        sb.append(encodeBase64(salt, BCRYPT_SALT_LEN));
-        return sb.toString();
-    }
-
-    /**
-     * 校验明文是否正确
-     *
-     * @param plaintext  明文
-     * @param ciphertext 密文
-     * @return 是否正确
-     */
-    public static boolean check(String plaintext, String ciphertext) {
-        byte[] plaintextEncodedBytes = encode(plaintext, ciphertext).getBytes(StandardCharsets.UTF_8);
-        byte[] ciphertextBytes = ciphertext.getBytes(StandardCharsets.UTF_8);
-        if (ciphertextBytes.length != plaintextEncodedBytes.length) {
-            return false;
-        }
-        byte data = 0;
-        for (int i = 0; i < plaintextEncodedBytes.length; i++) {
-            data |= ciphertextBytes[i] ^ plaintextEncodedBytes[i];
-        }
-        return data == 0;
-    }
-
+    private static final byte[] BASE64_DECODE = {
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1, -1, 0, 1,
+            54, 55, 56, 57, 58, 59, 60, 61,
+            62, 63, -1, -1, -1, -1, -1, -1,
+            -1, 2, 3, 4, 5, 6, 7, 8,
+            9, 10, 11, 12, 13, 14, 15, 16,
+            17, 18, 19, 20, 21, 22, 23, 24,
+            25, 26, 27, -1, -1, -1, -1, -1,
+            -1, 28, 29, 30, 31, 32, 33, 34,
+            35, 36, 37, 38, 39, 40, 41, 42,
+            43, 44, 45, 46, 47, 48, 49, 50,
+            51, 52, 53, -1, -1, -1, -1, -1
+    };
     /**
      * Sub Keys
      */
@@ -550,46 +594,6 @@ public class BCrypt {
             0x53113ec0, 0x1640e3d3, 0x38abbd60, 0x2547adf0, 0xba38209c, 0xf746ce76, 0x77afa1c5, 0x20756060,
             0x85cbfe4e, 0x8ae88dd8, 0x7aaaf9b0, 0x4cf9aa7e, 0x1948c25c, 0x02fb8a8c, 0x01c36ae4, 0xd6ebe1f9,
             0x90d4f869, 0xa65cdea0, 0x3f09252d, 0xc208e69f, 0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6
-    };
-    /**
-     * 字符串OrpheanBeholderScryDoubt的UTF8
-     */
-    private static final int[] BF_CRYPT_CIPHERTEXT = {
-            0x4f727068, 0x65616e42, 0x65686f6c, 0x64657253, 0x63727944, 0x6f756274
-    };
-    /**
-     * Base64编码表
-     */
-    private static final char[] BASE64_CODE = {
-            '.', '/', 'A', 'B', 'C', 'D', 'E', 'F',
-            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-            'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
-            'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-            'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-            'u', 'v', 'w', 'x', 'y', 'z', '0', '1',
-            '2', '3', '4', '5', '6', '7', '8', '9'
-    };
-    /**
-     * Base64解码表
-     */
-    private static final byte[] BASE64_DECODE = {
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1, -1, 0, 1,
-            54, 55, 56, 57, 58, 59, 60, 61,
-            62, 63, -1, -1, -1, -1, -1, -1,
-            -1, 2, 3, 4, 5, 6, 7, 8,
-            9, 10, 11, 12, 13, 14, 15, 16,
-            17, 18, 19, 20, 21, 22, 23, 24,
-            25, 26, 27, -1, -1, -1, -1, -1,
-            -1, 28, 29, 30, 31, 32, 33, 34,
-            35, 36, 37, 38, 39, 40, 41, 42,
-            43, 44, 45, 46, 47, 48, 49, 50,
-            51, 52, 53, -1, -1, -1, -1, -1
     };
 
 }

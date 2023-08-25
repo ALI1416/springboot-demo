@@ -1,13 +1,13 @@
-package com.demo.controller;
+package com.demo.util.easyexcel;
 
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.excel.UserExcel;
 import com.demo.entity.pojo.Result;
-import com.demo.util.EasyExcelUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>首页</h1>
+ * <h1>EasyExcelController</h1>
  *
  * <p>
- * createDate 2021/09/09 10:35:04
+ * createDate 2023/08/25 10:14:03
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
@@ -28,12 +28,14 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @Slf4j
-public class IndexController {
+@RequestMapping("easyExcel")
+public class EasyExcelController {
 
     private final HttpServletResponse response;
 
     /**
-     * 模板
+     * 模板<br>
+     * http://localhost:8080/easyExcel/template
      */
     @GetMapping("template")
     public void template() throws Exception {
@@ -41,7 +43,8 @@ public class IndexController {
     }
 
     /**
-     * 导出
+     * 导出<br>
+     * http://localhost:8080/easyExcel/exportExcel
      */
     @GetMapping("exportExcel")
     public void exportExcel() throws Exception {
@@ -64,7 +67,8 @@ public class IndexController {
     }
 
     /**
-     * 导入
+     * 导入<br>
+     * http://localhost:8080/easyExcel/importExcel
      */
     @PostMapping("importExcel")
     public Result<List<UserExcel>> importExcel(MultipartFile file) throws Exception {

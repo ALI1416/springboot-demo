@@ -1,9 +1,11 @@
 package com.demo.util.id;
 
 import cn.z.id.Id;
+import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <h1>Id</h1>
@@ -15,15 +17,20 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Controller
+@RestController
 @Slf4j
+@RequestMapping("id")
 public class IdController {
 
-    @GetMapping("/id")
-    public Long id() {
+    /**
+     * 获取<br>
+     * http://localhost:8080/id/get
+     */
+    @GetMapping("/get")
+    public Result<Long> get() {
         long id = Id.next();
         log.info(Long.toString(id));
-        return id;
+        return Result.o(id);
     }
 
 }

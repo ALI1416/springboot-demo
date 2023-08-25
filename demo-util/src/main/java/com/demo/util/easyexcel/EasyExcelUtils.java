@@ -1,4 +1,4 @@
-package com.demo.util;
+package com.demo.util.easyexcel;
 
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.context.AnalysisContext;
