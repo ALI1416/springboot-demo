@@ -7,10 +7,10 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 
 /**
- * <h1>IP解析</h1>
+ * <h1>IP地址转区域</h1>
  *
  * <p>
- * 文件地址为：https://cdn.jsdelivr.net/gh/ali1416/ip2region@3.0.0/data/ip2region.zdb
+ * 文件地址为：https://www.404z.cn/files/ip2region/v3.0.0/data/ip2region.zdb
  * </p>
  *
  * <p>

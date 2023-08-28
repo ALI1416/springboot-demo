@@ -17,7 +17,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * <h1>二维码</h1>
+ * <h1>二维码生成器</h1>
  *
  * <p>
  * createDate 2023/05/09 09:26:59

@@ -21,33 +21,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        bCrypt();
-        // base62Utils();
         // stringUtils();
         // timestampUtils();
         // digitTimestampUtils();
-    }
-
-    private static void bCrypt() {
-        log.info("---------- BCrypt ----------");
-        String password = "123456";
-        String salt = BCrypt.salt();
-        log.info("salt:" + salt);
-        String encode = BCrypt.encode(password, salt);
-        log.info("encode:" + encode);
-        boolean check = BCrypt.check(password, encode);
-        log.info("check:" + check);
-    }
-
-    private static void base62Utils() {
-        log.info("---------- base62Utils ----------");
-        long n = 1234567890123456789L;
-        String encoder = Base62Utils.encoder(n);
-        log.info("encoder:" + encoder);
-        log.info("decoder:" + Base62Utils.decoder(encoder));
-        String encoder2 = Base62Utils.encoder2(n);
-        log.info("encoder2:" + encoder2);
-        log.info("decoder2:" + Base62Utils.decoder2(encoder));
     }
 
     private static void stringUtils() {

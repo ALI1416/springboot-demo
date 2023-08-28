@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <h1>Id</h1>
+ * <h1>高性能雪花ID生成器Controller</h1>
  *
  * <p>
  * createDate 2022/03/25 09:46:21

@@ -35,7 +35,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws") // 前缀
-                .setAllowedOriginPatterns("*"); // 启用跨域
+                .setAllowedOriginPatterns("*") // 启用跨域
+        ;
     }
 
     /**
@@ -45,7 +46,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app") // 客户端--->服务端
                 .setUserDestinationPrefix("/user/") // 客户端<--->客户端
-                .enableSimpleBroker("/topic", "/queue"); // 服务端--->客户端(广播、队列)
+                .enableSimpleBroker("/topic", "/queue") // 服务端--->客户端(广播、队列)
+        ;
     }
 
     /**
@@ -55,7 +57,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
-            public Message preSend(Message message, MessageChannel channel) {
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (accessor == null) {
                     return null;

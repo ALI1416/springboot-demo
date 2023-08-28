@@ -5,8 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 
 /**
- * <h1>Phone2Region</h1>
+ * <h1>手机号码转区域Controller</h1>
  *
+ * <p>
+ * 文件地址为：https://www.404z.cn/files/phone2region/v2.0.0/data/phone2region.zdb
+ * </p>
+
  * <p>
  * createDate 2023/04/06 15:37:22
  * </p>

@@ -5,7 +5,7 @@ import cn.z.id.Id;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <h1>雪花ID</h1>
+ * <h1>高性能雪花ID生成器</h1>
  *
  * <p>
  * createDate 2022/03/04 10:31:06

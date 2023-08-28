@@ -2,12 +2,15 @@ package com.demo.util.tika;
 
 import org.apache.tika.Tika;
 import org.apache.tika.detect.AutoDetectReader;
+import org.apache.tika.exception.TikaException;
 import org.apache.tika.langdetect.tika.LanguageIdentifier;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.SAXException;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
@@ -23,19 +26,17 @@ import java.nio.charset.Charset;
  **/
 public class TikaUtils {
 
+    private TikaUtils() {
+    }
+
     /**
      * 获取媒体类型
      *
      * @param filepath 文件路径
      * @return 媒体类型
      */
-    public static String mediaType(String filepath) {
-        try {
-            return mediaType(new FileInputStream(filepath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String mediaType(String filepath) throws IOException {
+        return mediaType(new FileInputStream(filepath));
     }
 
     /**
@@ -44,14 +45,8 @@ public class TikaUtils {
      * @param inputStream 输入流
      * @return 媒体类型
      */
-    public static String mediaType(InputStream inputStream) {
-        Tika tika = new Tika();
-        try {
-            return tika.detect(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String mediaType(InputStream inputStream) throws IOException {
+        return new Tika().detect(inputStream);
     }
 
     /**
@@ -60,13 +55,8 @@ public class TikaUtils {
      * @param filepath 文件路径
      * @return 文本内容
      */
-    public static String textContent(String filepath) {
-        try {
-            return textContent(new FileInputStream(filepath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String textContent(String filepath) throws IOException, TikaException {
+        return textContent(new FileInputStream(filepath));
     }
 
     /**
@@ -75,14 +65,8 @@ public class TikaUtils {
      * @param inputStream 输入流
      * @return 文本内容
      */
-    public static String textContent(InputStream inputStream) {
-        Tika tika = new Tika();
-        try {
-            return tika.parseToString(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String textContent(InputStream inputStream) throws IOException, TikaException {
+        return new Tika().parseToString(inputStream);
     }
 
     /**
@@ -91,13 +75,8 @@ public class TikaUtils {
      * @param filepath 文件路径
      * @return Metadata
      */
-    public static Metadata metadata(String filepath) {
-        try {
-            return metadata(new FileInputStream(filepath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Metadata metadata(String filepath) throws IOException, TikaException, SAXException {
+        return metadata(new FileInputStream(filepath));
     }
 
     /**
@@ -106,14 +85,9 @@ public class TikaUtils {
      * @param inputStream 输入流
      * @return Metadata
      */
-    public static Metadata metadata(InputStream inputStream) {
-        AutoDetectParser parser = new AutoDetectParser();
+    public static Metadata metadata(InputStream inputStream) throws IOException, TikaException, SAXException {
         Metadata metadata = new Metadata();
-        try {
-            parser.parse(inputStream, new BodyContentHandler(), metadata);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new AutoDetectParser().parse(inputStream, new BodyContentHandler(), metadata);
         return metadata;
     }
 
@@ -123,13 +97,8 @@ public class TikaUtils {
      * @param filepath 文件路径
      * @return 编码
      */
-    public static Charset contentEncoding(String filepath) {
-        try {
-            return contentEncoding(new FileInputStream(filepath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Charset contentEncoding(String filepath) throws IOException, TikaException {
+        return contentEncoding(new FileInputStream(filepath));
     }
 
     /**
@@ -138,13 +107,8 @@ public class TikaUtils {
      * @param inputStream 输入流
      * @return 编码
      */
-    public static Charset contentEncoding(InputStream inputStream) {
-        try {
-            return new AutoDetectReader(inputStream).getCharset();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Charset contentEncoding(InputStream inputStream) throws IOException, TikaException {
+        return new AutoDetectReader(inputStream).getCharset();
     }
 
     /**

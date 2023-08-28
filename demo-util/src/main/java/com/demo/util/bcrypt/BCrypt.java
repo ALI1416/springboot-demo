@@ -1,4 +1,4 @@
-package com.demo.util;
+package com.demo.util.bcrypt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;

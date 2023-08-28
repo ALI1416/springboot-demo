@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.SortedSet;
 
 /**
- * <h1>tika</h1>
+ * <h1>Tika</h1>
  *
  * <p>
  * createDate 2022/03/11 11:29:13
@@ -23,7 +23,7 @@ public class Main {
 
     private static final String FILENAME = "D:\\Desktop\\1.txt";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         log.info("---------- 媒体类型 ----------");
         log.info(TikaUtils.mediaType(FILENAME));
         log.info("---------- 文本内容 ----------");
@@ -37,6 +37,7 @@ public class Main {
         log.info(TikaUtils.contentEncoding(FILENAME).name());
         log.info("---------- 语言检测 ----------");
         log.info(TikaUtils.language("Constructs a language identifier based on a String of text content"));
+        log.info("---------- MIME ----------");
         mime();
     }
 
@@ -44,7 +45,6 @@ public class Main {
      * MIME
      */
     private static void mime() {
-        log.info("---------- MIME ----------");
         // MIME
         String mime = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         MediaType type = MediaType.parse(mime);

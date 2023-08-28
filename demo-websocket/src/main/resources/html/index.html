@@ -111,7 +111,7 @@
   function connectCallback() {
     connectStatus(true)
     // 广播
-    stomp.subscribe('/topic/broadcast', function (res) {
+    stomp.subscribe('/topic/broadcastMqtt', function (res) {
       broadcastMsg.value = res.body + '\n' + broadcastMsg.value
     })
     // 广播2
