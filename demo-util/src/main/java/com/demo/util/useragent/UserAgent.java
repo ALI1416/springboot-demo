@@ -6,6 +6,10 @@ import java.util.regex.Matcher;
  * <h1>UserAgent</h1>
  *
  * <p>
+ * 根据<a href="https://github.com/dromara/hutool">dromara/hutool</a>重构
+ * </p>
+ *
+ * <p>
  * createDate 2023/08/18 17:44:59
  * </p>
  *

@@ -7,7 +7,7 @@ import java.security.SecureRandom;
  * <h1>BCrypt加密算法</h1>
  *
  * <p>
- * 根据<a href="https://github.com/jeremyh/jBCrypt">jBCrypt</a>重构
+ * 根据<a href="https://github.com/jeremyh/jBCrypt">jeremyh/jBCrypt</a>重构
  * </p>
  *
  * <p>
