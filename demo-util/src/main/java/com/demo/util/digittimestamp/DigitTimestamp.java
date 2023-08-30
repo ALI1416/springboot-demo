@@ -1,18 +1,72 @@
-package com.demo.util;
+package com.demo.util.digittimestamp;
 
 import java.util.Calendar;
 
 /**
- * <h1>数字时间戳工具</h1>
+ * <h1>数字时间戳</h1>
  *
  * <p>
- * 例如时间戳为2020/11/13 15:40:26.123<br>
- * 转为数字时间戳是20201113154026123
+ * 数字时间戳格式：<code>yyyyMMddHHmmssSSS</code>即<code>xxxx年xx月xx日xx时xx分xx秒xxx毫秒</code><br>
+ * 例如时间：<code>2020年11月13日15时40分26秒123毫秒</code>，数字时间戳：<code>20201113154026123</code>
  * </p>
  *
- * <p>
- * 数字时间戳格式为yyyyMMddHHmmssSSS(xxxx年xx月xx日xx时xx分xx秒xxx毫秒)
- * </p>
+ * <h2>Calendar常量代码</h2>
+ * <table>
+ * <tr>
+ * <th>字段
+ * <th>解释
+ * <tr>
+ * <td>ERA
+ * <td>世纪
+ * <tr>
+ * <td>YEAR
+ * <td>年
+ * <tr>
+ * <td>MONTH
+ * <td>月(一月为0,二月为1,...十二月为11)
+ * <tr>
+ * <td>DATE/DAY_OF_MONTH
+ * <td>日
+ * <tr>
+ * <td>AM_PM
+ * <td>上午/下午
+ * <tr>
+ * <td>HOUR
+ * <td>12小时制
+ * <tr>
+ * <td>HOUR_OF_DAY
+ * <td>24小时制
+ * <tr>
+ * <td>MINUTE
+ * <td>分钟
+ * <tr>
+ * <td>SECOND
+ * <td>秒
+ * <tr>
+ * <td>MILLISECOND
+ * <td>毫秒
+ * <tr>
+ * <td>WEEK_OF_YEAR
+ * <td>一年中的第几周
+ * <tr>
+ * <td>WEEK_OF_MONTH
+ * <td>一月中的第几周
+ * <tr>
+ * <td>DAY_OF_YEAR
+ * <td>一年中的第几天
+ * <tr>
+ * <td>DAY_OF_WEEK
+ * <td>周几(周日为1,周一为2,...周六为7)
+ * <tr>
+ * <td>DAY_OF_WEEK_IN_MONTH
+ * <td>当前月份内一周中的第几天
+ * <tr>
+ * <td>ZONE_OFFSET
+ * <td>时区
+ * <tr>
+ * <td>DST_OFFSET
+ * <td>夏令时
+ * </table>
  *
  * <p>
  * createDate 2020/11/13 15:40:26
@@ -21,7 +75,10 @@ import java.util.Calendar;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  */
-public class DigitTimestampUtils {
+public class DigitTimestamp {
+
+    /* ==================== 常量 ==================== */
+    // region 常量
 
     /**
      * 时间戳1天的间隔={@value}毫秒
@@ -31,6 +88,69 @@ public class DigitTimestampUtils {
      * 数字时间戳1天的间隔={@value}单位
      */
     public static final long DIGIT_INTERVAL_DAY = 235959999;
+
+    // endregion
+
+    private DigitTimestamp() {
+    }
+
+    /* ==================== 数字时间戳-时间戳 ==================== */
+    // region 数字时间戳-时间戳
+
+    /**
+     * 获取当前时间戳<br>
+     * 请使用{@link System#currentTimeMillis()}
+     *
+     * @return 时间戳
+     */
+    @Deprecated
+    public static long getTimestamp() {
+        return System.currentTimeMillis();
+    }
+
+    /**
+     * 获取指定数字时间戳0时0分0秒0毫秒的时间戳
+     *
+     * @param digitTimestamp 指定数字时间戳
+     * @return 时间戳
+     */
+    public static long getTimestampStart(long digitTimestamp) {
+        return getTimestamp(digitTimestamp, true, -1, 0);
+    }
+
+    /**
+     * 获取指定数字时间戳+偏移日0时0分0秒0毫秒的时间戳
+     *
+     * @param digitTimestamp 指定数字时间戳
+     * @param dayOffset      相对于指定数字时间戳的偏移日
+     * @return 时间戳
+     */
+    public static long getTimestampStart(long digitTimestamp, int dayOffset) {
+        return getTimestamp(digitTimestamp, true, Calendar.DAY_OF_YEAR, dayOffset);
+    }
+
+    /**
+     * 获取指定数字时间戳23时59分59秒999毫秒的时间戳<br>
+     * 如果已经调用过{@link #getTimestampStart(long)}，请保存变量并+{@link #INTERVAL_DAY}，这样速度更快
+     *
+     * @param digitTimestamp 指定数字时间戳
+     * @return 时间戳
+     */
+    public static long getTimestampEnd(long digitTimestamp) {
+        return getTimestamp(digitTimestamp, false, -1, 0);
+    }
+
+    /**
+     * 获取指定数字时间戳+偏移日23时59分59秒999毫秒的时间戳<br>
+     * 如果已经调用过{@link #getTimestampStart(long, int)}，请保存变量并+{@link #INTERVAL_DAY}，这样速度更快
+     *
+     * @param digitTimestamp 指定数字时间戳
+     * @param dayOffset      相对于指定数字时间戳的偏移日
+     * @return 时间戳
+     */
+    public static long getTimestampEnd(long digitTimestamp, int dayOffset) {
+        return getTimestamp(digitTimestamp, false, Calendar.DAY_OF_YEAR, dayOffset);
+    }
 
     /**
      * 获取指定数字时间戳的(指定偏移字段、偏移大小)的(开始/结束/当前)时间戳
@@ -79,48 +199,112 @@ public class DigitTimestampUtils {
         return calendar.getTimeInMillis();
     }
 
+    // endregion
+
+    /* ==================== 时间戳-数字时间戳 ==================== */
+    // region 时间戳-数字时间戳
+
     /**
-     * 获取指定数字时间戳0时0分0秒0毫秒的时间戳
+     * 获取当前数字时间戳
      *
-     * @param timestamp 指定数字时间戳
-     * @return 时间戳
+     * @return 数字时间戳
      */
-    public static long getTimestampStart(long timestamp) {
-        return getTimestamp(timestamp, true, -1, 0);
+    public static long getDigitTimestamp() {
+        return getDigitTimestamp(-1, null, -1, 0);
     }
 
     /**
-     * 获取指定数字时间戳+偏移天0时0分0秒0毫秒的时间戳
+     * 获取指定时间戳的数字时间戳
      *
-     * @param timestamp 指定数字时间戳
-     * @param dayOffset 相对于指定数字时间戳的偏移天
-     * @return 时间戳
+     * @param timestamp 指定时间戳
+     * @return 数字时间戳
      */
-    public static long getTimestampStart(long timestamp, int dayOffset) {
-        return getTimestamp(timestamp, true, Calendar.DAY_OF_YEAR, dayOffset);
+    public static long getDigitTimestamp(long timestamp) {
+        return getDigitTimestamp(timestamp, null, -1, 0);
     }
 
     /**
-     * 获取指定数字时间戳23时59分59秒999毫秒的时间戳<br>
-     * 如果已经调用过getTimestampStart，请保存变量并+INTERVAL_DAY来替代getTimestampEnd，这样速度更快
+     * 获取当前时间戳0时0分0秒0毫秒的数字时间戳
      *
-     * @param timestamp 指定数字时间戳
-     * @return 时间戳
+     * @return 数字时间戳
      */
-    public static long getTimestampEnd(long timestamp) {
-        return getTimestamp(timestamp, false, -1, 0);
+    public static long getDigitTimestampStart() {
+        return getDigitTimestamp(-1, true, -1, 0);
     }
 
     /**
-     * 获取指定数字时间戳+偏移天23时59分59秒999毫秒的时间戳<br>
-     * 如果已经调用过getTimestampStart，请保存变量并+INTERVAL_DAY来替代getTimestampEnd，这样速度更快
+     * 获取指定时间戳0时0分0秒0毫秒的数字时间戳
      *
-     * @param timestamp 指定数字时间戳
-     * @param dayOffset 相对于指定数字时间戳的偏移天
-     * @return 时间戳
+     * @param timestamp 指定时间戳
+     * @return 数字时间戳
      */
-    public static long getTimestampEnd(long timestamp, int dayOffset) {
-        return getTimestamp(timestamp, false, Calendar.DAY_OF_YEAR, dayOffset);
+    public static long getDigitTimestampStart(long timestamp) {
+        return getDigitTimestamp(timestamp, true, -1, 0);
+    }
+
+    /**
+     * 获取当前时间戳+偏移日0时0分0秒0毫秒的数字时间戳
+     *
+     * @param dayOffset 相对于当前时间戳的偏移日
+     * @return 数字时间戳
+     */
+    public static long getDigitTimestampStart(int dayOffset) {
+        return getDigitTimestamp(-1, true, Calendar.DAY_OF_YEAR, dayOffset);
+    }
+
+    /**
+     * 获取指定时间戳+偏移日0时0分0秒0毫秒的数字时间戳
+     *
+     * @param timestamp 指定时间戳
+     * @param dayOffset 相对于指定时间戳的偏移日
+     * @return 数字时间戳
+     */
+    public static long getDigitTimestampStart(long timestamp, int dayOffset) {
+        return getDigitTimestamp(timestamp, true, Calendar.DAY_OF_YEAR, dayOffset);
+    }
+
+    /**
+     * 获取当前时间戳23时59分59秒999毫秒的数字时间戳<br>
+     * 如果已经调用过{@link #getDigitTimestampStart()}，请保存变量并+{@link #DIGIT_INTERVAL_DAY}，这样速度更快
+     *
+     * @return 数字时间戳
+     */
+    public static long getDigitTimestampEnd() {
+        return getDigitTimestamp(-1, false, -1, 0);
+    }
+
+    /**
+     * 获取指定时间戳23时59分59秒999毫秒的数字时间戳<br>
+     * 如果已经调用过{@link #getDigitTimestampStart(long)}，请保存变量并+{@link #DIGIT_INTERVAL_DAY}，这样速度更快
+     *
+     * @param timestamp 指定时间戳
+     * @return 数字时间戳
+     */
+    public static long getDigitTimestampEnd(long timestamp) {
+        return getDigitTimestamp(timestamp, false, -1, 0);
+    }
+
+    /**
+     * 获取当前时间戳+偏移日23时59分59秒999毫秒的数字时间戳<br>
+     * 如果已经调用过{@link #getDigitTimestampStart(int)}，请保存变量并+{@link #DIGIT_INTERVAL_DAY}，这样速度更快
+     *
+     * @param dayOffset 相对于当前时间戳的偏移日
+     * @return 数字时间戳
+     */
+    public static long getDigitTimestampEnd(int dayOffset) {
+        return getDigitTimestamp(-1, false, Calendar.DAY_OF_YEAR, dayOffset);
+    }
+
+    /**
+     * 获取指定时间戳+偏移日23时59分59秒999毫秒的数字时间戳<br>
+     * 如果已经调用过{@link #getDigitTimestampStart(long, int)}，请保存变量并+{@link #DIGIT_INTERVAL_DAY}，这样速度更快
+     *
+     * @param timestamp 指定时间戳
+     * @param dayOffset 相对于指定时间戳的偏移日
+     * @return 数字时间戳
+     */
+    public static long getDigitTimestampEnd(long timestamp, int dayOffset) {
+        return getDigitTimestamp(timestamp, false, Calendar.DAY_OF_YEAR, dayOffset);
     }
 
     /**
@@ -171,113 +355,25 @@ public class DigitTimestampUtils {
         );
     }
 
-    /**
-     * 获取当前数字时间戳
-     *
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestamp() {
-        return getDigitTimestamp(-1, null, -1, 0);
-    }
+    // endregion
+
+    /* ==================== 工具 ==================== */
+    // region 工具
 
     /**
-     * 获取当前数字时间戳0时0分0秒0毫秒的时间戳
-     *
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampStart() {
-        return getDigitTimestamp(-1, true, -1, 0);
-    }
-
-    /**
-     * 获取指定时间戳0时0分0秒0毫秒的时间戳
-     *
-     * @param timestamp 指定时间戳
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampStart(long timestamp) {
-        return getDigitTimestamp(timestamp, true, -1, 0);
-    }
-
-    /**
-     * 获取当前数字时间戳+偏移天0时0分0秒0毫秒的时间戳
-     *
-     * @param dayOffset 相对于当前时间戳的偏移天
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampStart(int dayOffset) {
-        return getDigitTimestamp(-1, true, Calendar.DAY_OF_YEAR, dayOffset);
-    }
-
-    /**
-     * 获取指定时间戳+偏移天0时0分0秒0毫秒的时间戳
-     *
-     * @param timestamp 指定时间戳
-     * @param dayOffset 相对于指定时间戳的偏移天
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampStart(long timestamp, int dayOffset) {
-        return getDigitTimestamp(timestamp, true, Calendar.DAY_OF_YEAR, dayOffset);
-    }
-
-    /**
-     * 获取当前数字时间戳23时59分59秒999毫秒的时间戳<br>
-     * 如果已经调用过getDigitTimestampStart，请保存变量并+DIGIT_INTERVAL_DAY来替代getDigitTimestampEnd，这样速度更快
-     *
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampEnd() {
-        return getDigitTimestamp(-1, false, -1, 0);
-    }
-
-    /**
-     * 获取指定时间戳23时59分59秒999毫秒的时间戳<br>
-     * 如果已经调用过getDigitTimestampStart，请保存变量并+DIGIT_INTERVAL_DAY来替代getDigitTimestampEnd，这样速度更快
-     *
-     * @param timestamp 指定时间戳
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampEnd(long timestamp) {
-        return getDigitTimestamp(timestamp, false, -1, 0);
-    }
-
-    /**
-     * 获取当前数字时间戳+偏移天23时59分59秒999毫秒的时间戳<br>
-     * 如果已经调用过getDigitTimestampStart，请保存变量并+DIGIT_INTERVAL_DAY来替代getDigitTimestampEnd，这样速度更快
-     *
-     * @param dayOffset 相对于当前时间戳的偏移天
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampEnd(int dayOffset) {
-        return getDigitTimestamp(-1, false, Calendar.DAY_OF_YEAR, dayOffset);
-    }
-
-    /**
-     * 获取指定时间戳+偏移天23时59分59秒999毫秒的时间戳<br>
-     * 如果已经调用过getDigitTimestampStart，请保存变量并+DIGIT_INTERVAL_DAY来替代getDigitTimestampEnd，这样速度更快
-     *
-     * @param timestamp 指定时间戳
-     * @param dayOffset 相对于指定时间戳的偏移天
-     * @return 数字时间戳
-     */
-    public static long getDigitTimestampEnd(long timestamp, int dayOffset) {
-        return getDigitTimestamp(timestamp, false, Calendar.DAY_OF_YEAR, dayOffset);
-    }
-
-    /**
-     * 补全缺损的数字时间戳<br>
+     * 填充缺损的数字时间戳<br>
      * 需要保证长度为4-17位
      *
      * @param timestamp 缺损数字时间戳
      * @return 成功返回17位数字时间戳，失败返回传入参数
      */
     public static long complement(long timestamp) {
-        int len = 0;
+        int length = 0;
         // 计算长度
         for (long i = timestamp; i > 0; i /= 10) {
-            len++;
+            length++;
         }
-        switch (len) {
+        switch (length) {
             case 4: {
                 // 年(补充为xxxx年01月01日00时00分00秒000毫秒)
                 return timestamp * 10000000000000L + 101000000000L;
@@ -342,7 +438,7 @@ public class DigitTimestampUtils {
     }
 
     /**
-     * 补全缺损的数字时间戳<br>
+     * 填充缺损的数字时间戳<br>
      * 需要保证长度为4-17位
      *
      * @param timestamp 缺损数字时间戳
@@ -412,5 +508,7 @@ public class DigitTimestampUtils {
             }
         }
     }
+
+    // endregion
 
 }

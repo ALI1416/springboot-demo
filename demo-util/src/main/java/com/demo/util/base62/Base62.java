@@ -19,6 +19,9 @@ import java.nio.charset.StandardCharsets;
  **/
 public class Base62 {
 
+    /* ==================== 常量 ==================== */
+    // region 常量
+
     /**
      * GMP风格字母表
      */
@@ -44,8 +47,13 @@ public class Base62 {
      */
     public static final byte[] INVERTED_LOOKUP = lookup(INVERTED_ALPHABET);
 
+    // endregion
+
     private Base62() {
     }
+
+    /* ==================== 编码数字类型 ==================== */
+    // region 编码数字类型
 
     /**
      * 编码int型数字(GMP风格)
@@ -132,6 +140,11 @@ public class Base62 {
         }
         return sb.reverse().toString();
     }
+
+    // endregion
+
+    /* ==================== 编码字符串和byte[]类型 ==================== */
+    // region 编码字符串和byte[]类型
 
     /**
      * 编码为Base62字符串(GMP风格)
@@ -250,6 +263,11 @@ public class Base62 {
         return data;
     }
 
+    // endregion
+
+    /* ==================== 解码数字类型 ==================== */
+    // region 解码数字类型
+
     /**
      * 解码int型数字(GMP风格)
      *
@@ -335,6 +353,11 @@ public class Base62 {
         }
         return number;
     }
+
+    // endregion
+
+    /* ==================== 解码字符串和byte[]类型 ==================== */
+    // region 解码字符串和byte[]类型
 
     /**
      * 解码为字符串(GMP风格)
@@ -428,6 +451,11 @@ public class Base62 {
         return convert(data, 62, 256);
     }
 
+    // endregion
+
+    /* ==================== 工具 ==================== */
+    // region 工具
+
     /**
      * 是合法的Base62数据
      *
@@ -520,6 +548,11 @@ public class Base62 {
         return lookup;
     }
 
+    // endregion
+
+    /* ==================== 私有 ==================== */
+    // region 私有
+
     /**
      * 负数
      */
@@ -580,5 +613,7 @@ public class Base62 {
             throw new IllegalArgumentException(EMPTY_BYTES);
         }
     }
+
+    // endregion
 
 }
