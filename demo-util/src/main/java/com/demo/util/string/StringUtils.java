@@ -20,31 +20,31 @@ public class StringUtils {
     // region 常量
 
     /**
-     * 数字:{@value}
+     * 数字{@value}
      */
     public static final String NUMBER = "0123456789";
     /**
-     * 大写字母:{@value}
+     * 大写字母{@value}
      */
     public static final String UPPER_LETTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     /**
-     * 小写字母:{@value}
+     * 小写字母{@value}
      */
     public static final String LOWER_LETTER = "abcdefghijklmnopqrstuvwxyz";
     /**
-     * 全部字母:{@value}
+     * 全部字母{@value}
      */
     public static final String ALL_LETTER = UPPER_LETTER + LOWER_LETTER;
     /**
-     * 数字+大写字母:{@value}
+     * 数字+大写字母{@value}
      */
     public static final String NUMBER_UPPER_LETTER = NUMBER + UPPER_LETTER;
     /**
-     * 数字+小写字母:{@value}
+     * 数字+小写字母{@value}
      */
     public static final String NUMBER_LOWER_LETTER = NUMBER + LOWER_LETTER;
     /**
-     * 数字+全部字母:{@value}
+     * 数字+全部字母{@value}
      */
     public static final String NUMBER_ALL_LETTER = NUMBER + ALL_LETTER;
 
@@ -158,7 +158,7 @@ public class StringUtils {
      * @param length 长度
      * @return 指定长度随机数字字符串
      */
-    public static String getRandomNum(int length) {
+    public static String getRandomNumber(int length) {
         return getRandom(NUMBER, length);
     }
 
@@ -173,7 +173,6 @@ public class StringUtils {
      */
     public static String getMask(String string, String mask, int start, int end) {
         StringBuilder sb = new StringBuilder(string);
-        // 字符串长度
         int length = sb.length();
         if (length <= start + end) {
             // 字符串长度<=首部保留长度+尾部保留长度
