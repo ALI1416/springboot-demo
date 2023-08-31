@@ -21,7 +21,7 @@ import java.util.SortedSet;
 @Slf4j
 public class Main {
 
-    private static final String FILENAME = "D:\\Desktop\\1.txt";
+    private static final String FILENAME = "E:\\Desktop\\1.txt";
 
     public static void main(String[] args) throws Exception {
         log.info("---------- 媒体类型 ----------");
