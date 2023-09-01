@@ -1,17 +1,16 @@
-package com.demo.util.pojo.minio;
+package com.demo.tool.entity.minio;
 
 import com.demo.base.ToStringBase;
-import com.demo.util.MinioUtils;
+import com.demo.tool.MinioTemp;
 import io.minio.Result;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * <h1>对象</h1>
@@ -47,7 +46,7 @@ public class Item extends ToStringBase {
     /**
      * 文件大小(字节)
      */
-    private Long size;
+    private long size;
     /**
      * 储存种类
      */
@@ -55,7 +54,7 @@ public class Item extends ToStringBase {
     /**
      * 是最新的
      */
-    private Boolean isLatest;
+    private boolean isLatest;
     /**
      * 版本Id
      */
@@ -67,10 +66,9 @@ public class Item extends ToStringBase {
     /**
      * 是目录
      */
-    private Boolean isDir;
+    private boolean isDir;
 
     public Item() {
-
     }
 
     public Item(io.minio.messages.Item item) {
@@ -82,27 +80,31 @@ public class Item extends ToStringBase {
         this.versionId = item.versionId();
         this.userMetadata = item.userMetadata();
         this.isDir = item.isDir();
-        if (Boolean.FALSE.equals(this.isDir)) {
-            this.lastModifiedDate = MinioUtils.zonedDateTime2Timestamp(item.lastModified());
+        if (!item.isDir()) {
+            this.lastModifiedDate = MinioTemp.zonedDateTime2Timestamp(item.lastModified());
+        }
+        if (item.owner() != null) {
             this.owner = new Owner(item.owner());
         }
     }
 
     /**
-     * Item转Bean
+     * io.minio.messages.Item转Item
      *
-     * @param items Iterable&lt;Result&lt;Item>>
-     * @return List&lt;Item>
+     * @param itemList Iterable Result io.minio.messages.Item
+     * @return List Item
      */
-    public static List<Item> getList(Iterable<Result<io.minio.messages.Item>> items) {
-        return StreamSupport.stream(items.spliterator(), true).map(item -> {
+    public static List<Item> toList(Iterable<Result<io.minio.messages.Item>> itemList) {
+        List<Item> list = new ArrayList<>();
+        for (Result<io.minio.messages.Item> result : itemList) {
             try {
-                return new Item(item.get());
+                list.add(new Item(result.get()));
             } catch (Exception e) {
-                log.error("Result<Item>转Item失败", e);
-                return new Item();
+                log.info("io.minio.messages.Item转Item", e);
+                list.add(new Item());
             }
-        }).collect(Collectors.toList());
+        }
+        return list;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.demo.config;
 
+import com.demo.autoconfigure.MinioProperties;
 import io.minio.MinioClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,12 +18,32 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MinioConfig {
 
+    /**
+     * Minio配置属性
+     */
+    private final MinioProperties minioProperties;
+
+    /**
+     * 静态注入(自动注入)
+     *
+     * @param minioProperties MinioProperties
+     */
+    public MinioConfig(MinioProperties minioProperties) {
+        this.minioProperties = minioProperties;
+    }
+
+    /**
+     * MinioClient
+     */
     @Bean
     public MinioClient minioClient() {
-        return MinioClient.builder() //
-                .endpoint("http://127.0.0.1:9000/") // 地址
-                .credentials("minioadmin", "minioadmin") // 账号和密码
-                .build();
+        MinioClient.Builder builder = MinioClient.builder()
+                .endpoint(minioProperties.getUri())
+                .credentials(minioProperties.getUsername(), minioProperties.getPassword());
+        if (minioProperties.getRegion() != null) {
+            builder.region(minioProperties.getRegion());
+        }
+        return builder.build();
     }
 
 }

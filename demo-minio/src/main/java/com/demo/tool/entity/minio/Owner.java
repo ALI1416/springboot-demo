@@ -1,4 +1,4 @@
-package com.demo.util.pojo.minio;
+package com.demo.tool.entity.minio;
 
 import com.demo.base.ToStringBase;
 import lombok.Getter;
@@ -28,7 +28,6 @@ public class Owner extends ToStringBase {
     private String name;
 
     public Owner() {
-
     }
 
     public Owner(io.minio.messages.Owner owner) {

@@ -1,8 +1,9 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.util.MinioUtils;
-import com.demo.util.pojo.minio.*;
+import com.demo.tool.MinioTemp;
+import com.demo.tool.entity.minio.*;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +26,11 @@ import java.util.Map;
  * @since 1.0.0
  **/
 @RestController
+@AllArgsConstructor
 @Slf4j
 public class IndexController {
+
+    private final MinioTemp minioTemp;
 
     /**
      * 所有储存桶
@@ -34,7 +38,7 @@ public class IndexController {
      */
     @GetMapping("bucketAll")
     public Result<List<Bucket>> bucketAll() {
-        return Result.o(MinioUtils.bucketAll());
+        return Result.o(minioTemp.bucketAll());
     }
 
     /**
@@ -43,7 +47,7 @@ public class IndexController {
      */
     @GetMapping("bucketExist")
     public Result<Boolean> existBucket(String bucket) {
-        return Result.o(MinioUtils.bucketExist(bucket));
+        return Result.o(minioTemp.bucketExist(bucket));
     }
 
     /**
@@ -52,7 +56,7 @@ public class IndexController {
      */
     @GetMapping("bucketCreate")
     public Result<Boolean> createBucket(String bucket) {
-        return Result.o(MinioUtils.bucketCreate(bucket));
+        return Result.o(minioTemp.bucketCreate(bucket));
     }
 
     /**
@@ -61,7 +65,7 @@ public class IndexController {
      */
     @GetMapping("bucketDelete")
     public Result<Boolean> bucketDelete(String bucket) {
-        return Result.o(MinioUtils.bucketDelete(bucket));
+        return Result.o(minioTemp.bucketDelete(bucket));
     }
 
     /**
@@ -70,7 +74,7 @@ public class IndexController {
      */
     @GetMapping("bucketTagGet")
     public Result<Map<String, String>> bucketTagGet(String bucket) {
-        return Result.o(MinioUtils.bucketTagGet(bucket));
+        return Result.o(minioTemp.bucketTagGet(bucket));
     }
 
     /**
@@ -82,7 +86,7 @@ public class IndexController {
         Map<String, String> tags = new HashMap<>(2);
         tags.put("a", "aa");
         tags.put("b", "bb");
-        return Result.o(MinioUtils.bucketTagSet(bucket, tags));
+        return Result.o(minioTemp.bucketTagSet(bucket, tags));
     }
 
     /**
@@ -91,7 +95,7 @@ public class IndexController {
      */
     @GetMapping("bucketTagDelete")
     public Result<Boolean> bucketTagDelete(String bucket) {
-        return Result.o(MinioUtils.bucketTagDelete(bucket));
+        return Result.o(minioTemp.bucketTagDelete(bucket));
     }
 
     /**
@@ -100,7 +104,7 @@ public class IndexController {
      */
     @GetMapping("objectAll")
     public Result<List<Item>> objectAll(String bucket) {
-        return Result.o(MinioUtils.objectAll(bucket));
+        return Result.o(minioTemp.objectAll(bucket));
     }
 
     /**
@@ -109,7 +113,7 @@ public class IndexController {
      */
     @GetMapping("objectAll2")
     public Result<List<Item>> objectAll(String bucket, String path) {
-        return Result.o(MinioUtils.objectAll(bucket, path));
+        return Result.o(minioTemp.objectAll(bucket, path));
     }
 
     /**
@@ -118,7 +122,7 @@ public class IndexController {
      */
     @GetMapping("objectStat")
     public Result<StatObjectResponse> objectStat(String bucket, String path) {
-        return Result.o(MinioUtils.objectStat(bucket, path));
+        return Result.o(minioTemp.objectStat(bucket, path));
     }
 
     /**
@@ -127,12 +131,13 @@ public class IndexController {
      */
     @GetMapping("objectGet")
     public void objectGet(String bucket, String path, HttpServletResponse response) {
-        GetObjectResponse getObjectResponse = MinioUtils.objectGet(bucket, path);
+        GetObjectResponse getObjectResponse = minioTemp.objectGet(bucket, path);
         log.info(getObjectResponse.getResponse().toString());
         try {
-            MinioUtils.inputStream2HttpServletResponse(getObjectResponse.getFile(), response,
-                    getObjectResponse.getResponse().getHeaders().get("Content-Type"),
-                    getObjectResponse.getResponse().getName());
+            minioTemp.inputStream2HttpServletResponse(getObjectResponse.getFile(), response,
+                    getObjectResponse.getResponse().getName(),
+                    getObjectResponse.getResponse().getHeaders().get("Content-Type")
+                    );
         } catch (Exception e) {
             log.info("InputStream转HttpServletResponse失败", e);
         }
@@ -144,7 +149,7 @@ public class IndexController {
      */
     @GetMapping("objectDownload2")
     public void objectDownload(String bucket, String path, HttpServletResponse response, String fileName) {
-        MinioUtils.objectDownload(bucket, path, response, fileName);
+        minioTemp.objectDownload(bucket, path, response, fileName);
     }
 
     /**
@@ -153,7 +158,7 @@ public class IndexController {
      */
     @GetMapping("objectDownload")
     public void objectDownload(String bucket, String path, HttpServletResponse response) {
-        MinioUtils.objectDownload(bucket, path, response);
+        minioTemp.objectDownload(bucket, path, response);
     }
 
     /**
@@ -162,7 +167,7 @@ public class IndexController {
      */
     @GetMapping("objectDownloadLocal")
     public void objectDownloadLocal(String bucket, String path, String fileName) {
-        MinioUtils.objectDownloadLocal(bucket, path, fileName);
+        minioTemp.objectDownloadLocal(bucket, path, fileName);
     }
 
     /**
@@ -171,7 +176,7 @@ public class IndexController {
      */
     @GetMapping("objectCopy")
     public Result<ObjectWriteResponse> objectCopy(String bucket, String path, String newBucket, String newPath) {
-        return Result.o(MinioUtils.objectCopy(bucket, path, newBucket, newPath));
+        return Result.o(minioTemp.objectCopy(bucket, path, newBucket, newPath));
     }
 
     /**
@@ -180,7 +185,7 @@ public class IndexController {
      */
     @GetMapping("objectCopy2")
     public Result<ObjectWriteResponse> objectCopy(String bucket, String path, String newPath) {
-        return Result.o(MinioUtils.objectCopy(bucket, path, newPath));
+        return Result.o(minioTemp.objectCopy(bucket, path, newPath));
     }
 
     /**
@@ -189,7 +194,7 @@ public class IndexController {
      */
     @GetMapping("objectCompose")
     public Result<ObjectWriteResponse> objectCompose(String bucket, String[] paths, String newPath) {
-        return Result.o(MinioUtils.objectCompose(bucket, Arrays.asList(paths), newPath));
+        return Result.o(minioTemp.objectCompose(bucket, Arrays.asList(paths), newPath));
     }
 
     /**
@@ -198,7 +203,7 @@ public class IndexController {
      */
     @GetMapping("objectDelete")
     public Result<Boolean> objectDelete(String bucket, String path) {
-        return Result.o(MinioUtils.objectDelete(bucket, path));
+        return Result.o(minioTemp.objectDelete(bucket, path));
     }
 
     /**
@@ -207,7 +212,7 @@ public class IndexController {
      */
     @GetMapping("objectDelete2")
     public Result<List<DeleteError>> objectDelete(String bucket, String[] paths) {
-        return Result.o(MinioUtils.objectDelete(bucket, Arrays.asList(paths)));
+        return Result.o(minioTemp.objectDelete(bucket, Arrays.asList(paths)));
     }
 
     /**
@@ -216,7 +221,7 @@ public class IndexController {
      */
     @GetMapping("objectUpload")
     public Result<ObjectWriteResponse> objectUpload(String bucket, String path, MultipartFile file) {
-        return Result.o(MinioUtils.objectUpload(bucket, path, file));
+        return Result.o(minioTemp.objectUpload(bucket, path, file));
     }
 
     /**
@@ -225,7 +230,7 @@ public class IndexController {
      */
     @GetMapping("objectUpload2")
     public Result<ObjectWriteResponse> objectUpload(String bucket, String path, MultipartFile[] files) {
-        return Result.o(MinioUtils.objectUpload(bucket, path, files));
+        return Result.o(minioTemp.objectUpload(bucket, path, files));
     }
 
     /**
@@ -234,7 +239,7 @@ public class IndexController {
      */
     @GetMapping("folderCreate")
     public Result<ObjectWriteResponse> folderCreate(String bucket, String path) {
-        return Result.o(MinioUtils.folderCreate(bucket, path));
+        return Result.o(minioTemp.folderCreate(bucket, path));
     }
 
     /**
@@ -243,7 +248,7 @@ public class IndexController {
      */
     @GetMapping("objectUploadLocal")
     public Result<ObjectWriteResponse> objectUploadLocal(String bucket, String path, String localPath) {
-        return Result.o(MinioUtils.objectUploadLocal(bucket, path, localPath));
+        return Result.o(minioTemp.objectUploadLocal(bucket, path, localPath));
     }
 
     /**
@@ -252,7 +257,7 @@ public class IndexController {
      */
     @GetMapping("objectTagGet")
     public Result<Map<String, String>> objectTagGet(String bucket, String path) {
-        return Result.o(MinioUtils.objectTagGet(bucket, path));
+        return Result.o(minioTemp.objectTagGet(bucket, path));
     }
 
     /**
@@ -264,7 +269,7 @@ public class IndexController {
         Map<String, String> tags = new HashMap<>(2);
         tags.put("a", "aa");
         tags.put("b", "bb");
-        return Result.o(MinioUtils.objectTagSet(bucket, path, tags));
+        return Result.o(minioTemp.objectTagSet(bucket, path, tags));
     }
 
     /**
@@ -273,7 +278,7 @@ public class IndexController {
      */
     @GetMapping("objectTagDelete")
     public Result<Boolean> objectTagDelete(String bucket, String path) {
-        return Result.o(MinioUtils.objectTagDelete(bucket, path));
+        return Result.o(minioTemp.objectTagDelete(bucket, path));
     }
 
     /**
@@ -282,7 +287,7 @@ public class IndexController {
      */
     @GetMapping("urlDelete")
     public Result<String> urlDelete(String bucket, String path, int expiry) {
-        return Result.o(MinioUtils.urlDelete(bucket, path, expiry));
+        return Result.o(minioTemp.urlDelete(bucket, path, expiry));
     }
 
     /**
@@ -293,7 +298,7 @@ public class IndexController {
     public Result<String> urlUpdate(String bucket, String path, int expiry) {
         Map<String, String> queryParams = new HashMap<>(1);
         queryParams.put("response-content-type", "application/json");
-        return Result.o(MinioUtils.urlUpdate(bucket, path, expiry, queryParams));
+        return Result.o(minioTemp.urlUpdate(bucket, path, expiry, queryParams));
     }
 
     /**
@@ -302,7 +307,7 @@ public class IndexController {
      */
     @GetMapping("urlDownload")
     public Result<String> urlDownload(String bucket, String path, int expiry) {
-        return Result.o(MinioUtils.urlDownload(bucket, path, expiry));
+        return Result.o(minioTemp.urlDownload(bucket, path, expiry));
     }
 
 }

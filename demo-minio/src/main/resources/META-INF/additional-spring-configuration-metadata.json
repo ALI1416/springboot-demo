@@ -1,0 +1,31 @@
+{
+  "properties": [
+    {
+      "name": "minio.uri",
+      "type": "java.lang.String",
+      "description": "URI.",
+      "sourceType": "com.demo.autoconfigure.MinioProperties",
+      "defaultValue": "http://127.0.0.1:9000"
+    },
+    {
+      "name": "minio.username",
+      "type": "java.lang.String",
+      "description": "用户名.",
+      "sourceType": "com.demo.autoconfigure.MinioProperties",
+      "defaultValue": "minioadmin"
+    },
+    {
+      "name": "minio.password",
+      "type": "java.lang.String",
+      "description": "密码.",
+      "sourceType": "com.demo.autoconfigure.MinioProperties",
+      "defaultValue": "minioadmin"
+    },
+    {
+      "name": "minio.region",
+      "type": "java.lang.String",
+      "description": "区域.",
+      "sourceType": "com.demo.autoconfigure.MinioProperties"
+    }
+  ]
+}

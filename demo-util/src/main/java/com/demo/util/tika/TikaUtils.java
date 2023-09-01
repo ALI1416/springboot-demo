@@ -18,12 +18,6 @@ import java.nio.charset.Charset;
  * <h1>Tika工具</h1>
  *
  * <p>
- * 需要安装<code>FFmpeg</code><br>
- * 官网 https://ffmpeg.org/download.html <br>
- * Windows版 https://www.gyan.dev/ffmpeg/builds/#release-builds
- * </p>
- *
- * <p>
  * createDate 2022/04/11 17:27:37
  * </p>
  *

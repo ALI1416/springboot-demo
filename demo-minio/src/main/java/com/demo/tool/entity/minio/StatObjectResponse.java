@@ -1,6 +1,6 @@
-package com.demo.util.pojo.minio;
+package com.demo.tool.entity.minio;
 
-import com.demo.util.MinioUtils;
+import com.demo.tool.MinioTemp;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -69,13 +69,13 @@ public class StatObjectResponse extends GenericResponse {
         super(statObjectResponse);
         this.eTag = statObjectResponse.etag();
         this.size = statObjectResponse.size();
-        this.lastModifiedDate = MinioUtils.zonedDateTime2Timestamp(statObjectResponse.lastModified());
+        this.lastModifiedDate = MinioTemp.zonedDateTime2Timestamp(statObjectResponse.lastModified());
         if (statObjectResponse.retentionMode() != null) {
             this.retentionMode = statObjectResponse.retentionMode().name();
         }
         if (statObjectResponse.retentionRetainUntilDate() != null) {
             this.retentionRetainUntilDate =
-                    MinioUtils.zonedDateTime2Timestamp(statObjectResponse.retentionRetainUntilDate());
+                    MinioTemp.zonedDateTime2Timestamp(statObjectResponse.retentionRetainUntilDate());
         }
         this.legalHold = statObjectResponse.legalHold().status();
         this.deleteMarker = statObjectResponse.deleteMarker();

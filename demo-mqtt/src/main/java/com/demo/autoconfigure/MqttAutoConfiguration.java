@@ -74,12 +74,6 @@ public class MqttAutoConfiguration {
         } else {
             msg += Arrays.toString(mqttProperties.getUri()) + " ";
         }
-        if (mqttProperties.getUsername() != null) {
-            msg += "用户名USERNAME " + mqttProperties.getUsername() + " ";
-        }
-        if (mqttProperties.getPassword() != null) {
-            msg += "密码PASSWORD " + mqttProperties.getPassword() + " ";
-        }
         msg += "，连接超时时间CONNECTION_TIMEOUT ";
         if (mqttProperties.getConnectionTimeout() == null) {
             mqttProperties.setConnectionTimeout(DEFAULT_CONNECTION_TIMEOUT);

@@ -3,6 +3,11 @@ spring:
     restart:
       enabled: true
 
+minio:
+  uri: http://127.0.0.1:9000
+  username: minioadmin
+  password: minioadmin
+
 logging:
   level:
     root: info

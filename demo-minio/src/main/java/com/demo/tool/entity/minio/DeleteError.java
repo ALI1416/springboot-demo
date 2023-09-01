@@ -1,4 +1,4 @@
-package com.demo.util.pojo.minio;
+package com.demo.tool.entity.minio;
 
 import io.minio.Result;
 import lombok.extern.slf4j.Slf4j;

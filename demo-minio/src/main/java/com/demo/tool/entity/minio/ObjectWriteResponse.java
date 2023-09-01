@@ -1,4 +1,4 @@
-package com.demo.util.pojo.minio;
+package com.demo.tool.entity.minio;
 
 import lombok.Getter;
 import lombok.Setter;
