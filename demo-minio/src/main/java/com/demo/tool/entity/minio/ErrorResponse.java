@@ -1,11 +1,7 @@
 package com.demo.tool.entity.minio;
 
-import com.demo.base.ToStringBase;
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * <h1>错误返回</h1>
+ * <h1>错误结果</h1>
  *
  * <p>
  * createDate 2022/04/01 17:32:52
@@ -14,9 +10,7 @@ import lombok.Setter;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Getter
-@Setter
-public class ErrorResponse extends ToStringBase {
+public class ErrorResponse {
 
     /**
      * 错误码
@@ -48,7 +42,6 @@ public class ErrorResponse extends ToStringBase {
     private String hostId;
 
     public ErrorResponse() {
-
     }
 
     public ErrorResponse(io.minio.messages.ErrorResponse errorResponse) {
@@ -59,6 +52,75 @@ public class ErrorResponse extends ToStringBase {
         this.resource = errorResponse.resource();
         this.requestId = errorResponse.requestId();
         this.hostId = errorResponse.hostId();
+    }
+
+    public String getCode() {
+        return this.code;
+    }
+
+    public String getMessage() {
+        return this.message;
+    }
+
+    public String getBucket() {
+        return this.bucket;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getResource() {
+        return this.resource;
+    }
+
+    public String getRequestId() {
+        return this.requestId;
+    }
+
+    public String getHostId() {
+        return this.hostId;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorResponse{" +
+                "code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", bucket='" + bucket + '\'' +
+                ", name='" + name + '\'' +
+                ", resource='" + resource + '\'' +
+                ", requestId='" + requestId + '\'' +
+                ", hostId='" + hostId + '\'' +
+                '}';
     }
 
 }

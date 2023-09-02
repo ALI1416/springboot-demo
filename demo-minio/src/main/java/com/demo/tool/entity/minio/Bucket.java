@@ -27,6 +27,28 @@ public class Bucket {
      */
     private Timestamp createDate;
 
+    public Bucket() {
+    }
+
+    public Bucket(io.minio.messages.Bucket bucket) {
+        this.name = bucket.name();
+        this.createDate = MinioTemp.zonedDateTime2Timestamp(bucket.creationDate());
+    }
+
+    /**
+     * io.minio.messages.Bucket转Bucket
+     *
+     * @param bucketList List io.minio.messages.Bucket
+     * @return List Bucket
+     */
+    public static List<Bucket> toList(List<io.minio.messages.Bucket> bucketList) {
+        List<Bucket> list = new ArrayList<>();
+        for (io.minio.messages.Bucket bucket : bucketList) {
+            list.add(new Bucket(bucket));
+        }
+        return list;
+    }
+
     public String getName() {
         return name;
     }
@@ -49,28 +71,6 @@ public class Bucket {
                 "name='" + name + '\'' +
                 ", createDate=" + createDate +
                 '}';
-    }
-
-    public Bucket() {
-    }
-
-    public Bucket(io.minio.messages.Bucket bucket) {
-        this.name = bucket.name();
-        this.createDate = MinioTemp.zonedDateTime2Timestamp(bucket.creationDate());
-    }
-
-    /**
-     * io.minio.messages.Bucket转Bucket
-     *
-     * @param bucketList List io.minio.messages.Bucket
-     * @return List Bucket
-     */
-    public static List<Bucket> toList(List<io.minio.messages.Bucket> bucketList) {
-        List<Bucket> list = new ArrayList<>();
-        for (io.minio.messages.Bucket bucket : bucketList) {
-            list.add(new Bucket(bucket));
-        }
-        return list;
     }
 
 }

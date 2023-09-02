@@ -1,14 +1,10 @@
 package com.demo.tool.entity.minio;
 
 
-import com.demo.base.ToStringBase;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.FilterInputStream;
 
 /**
- * <h1>获取对象返回</h1>
+ * <h1>获取对象结果</h1>
  *
  * <p>
  * createDate 2022/03/31 16:02:57
@@ -17,9 +13,7 @@ import java.io.FilterInputStream;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Getter
-@Setter
-public class GetObjectResponse extends ToStringBase {
+public class GetObjectResponse {
 
     /**
      * 通用返回
@@ -31,13 +25,35 @@ public class GetObjectResponse extends ToStringBase {
     private FilterInputStream file;
 
     public GetObjectResponse() {
-
     }
 
     public GetObjectResponse(io.minio.GetObjectResponse getObjectResponse) {
-        this.response = new GenericResponse(getObjectResponse.headers(), getObjectResponse.bucket(),
-                getObjectResponse.region(), getObjectResponse.object());
+        this.response = new GenericResponse(getObjectResponse.headers(), getObjectResponse.bucket(), getObjectResponse.region(), getObjectResponse.object());
         this.file = getObjectResponse;
+    }
+
+    public GenericResponse getResponse() {
+        return this.response;
+    }
+
+    public FilterInputStream getFile() {
+        return this.file;
+    }
+
+    public void setResponse(GenericResponse response) {
+        this.response = response;
+    }
+
+    public void setFile(FilterInputStream file) {
+        this.file = file;
+    }
+
+    @Override
+    public String toString() {
+        return "GetObjectResponse{" +
+                "response=" + response +
+                ", file=" + file +
+                '}';
     }
 
 }

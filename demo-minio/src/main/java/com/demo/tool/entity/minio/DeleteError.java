@@ -1,14 +1,14 @@
 package com.demo.tool.entity.minio;
 
 import io.minio.Result;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
- * <h1>删除错误</h1>
+ * <h1>删除错误结果</h1>
  *
  * <p>
  * createDate 2022/04/01 17:38:58
@@ -17,8 +17,9 @@ import java.util.stream.StreamSupport;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Slf4j
 public class DeleteError extends ErrorResponse {
+
+    private static final Logger log = LoggerFactory.getLogger(DeleteError.class);
 
     public DeleteError() {
     }
@@ -28,20 +29,21 @@ public class DeleteError extends ErrorResponse {
     }
 
     /**
-     * DeleteError转Bean
+     * io.minio.messages.DeleteError转DeleteError
      *
-     * @param deleteErrors Iterable&lt;Result&lt;DeleteError>>
-     * @return List&lt;DeleteError>
+     * @param deleteErrorList Iterable Result io.minio.messages.DeleteError
+     * @return List DeleteError
      */
-    public static List<DeleteError> getList(Iterable<Result<io.minio.messages.DeleteError>> deleteErrors) {
-        return StreamSupport.stream(deleteErrors.spliterator(), true).map(deleteError -> {
+    public static List<DeleteError> toList(Iterable<Result<io.minio.messages.DeleteError>> deleteErrorList) {
+        List<DeleteError> list = new ArrayList<>();
+        for (Result<io.minio.messages.DeleteError> deleteError : deleteErrorList) {
             try {
-                return new DeleteError(deleteError.get());
+                list.add(new DeleteError(deleteError.get()));
             } catch (Exception e) {
-                log.error("Result<DeleteError>转DeleteError失败", e);
-                return new DeleteError();
+                log.error("[io.minio.messages.DeleteError转DeleteError]异常！", e);
             }
-        }).collect(Collectors.toList());
+        }
+        return list;
     }
 
 }

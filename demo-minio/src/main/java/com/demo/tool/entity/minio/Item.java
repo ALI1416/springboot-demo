@@ -1,11 +1,9 @@
 package com.demo.tool.entity.minio;
 
-import com.demo.base.ToStringBase;
 import com.demo.tool.MinioTemp;
 import io.minio.Result;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * <h1>对象</h1>
+ * <h1>项</h1>
  *
  * <p>
  * createDate 2022/03/28 16:24:35
@@ -22,15 +20,14 @@ import java.util.Map;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Getter
-@Setter
-@Slf4j
-public class Item extends ToStringBase {
+public class Item {
+
+    private static final Logger log = LoggerFactory.getLogger(Item.class);
 
     /**
      * ETag
      */
-    private String eTag;
+    private String etag;
     /**
      * 名称
      */
@@ -72,20 +69,22 @@ public class Item extends ToStringBase {
     }
 
     public Item(io.minio.messages.Item item) {
-        this.eTag = item.etag();
+        if (item.etag() != null) {
+            this.etag = item.etag().substring(1, item.etag().length() - 1);
+        }
         this.name = item.objectName();
-        this.size = item.size();
-        this.storageClass = item.storageClass();
-        this.isLatest = item.isLatest();
-        this.versionId = item.versionId();
-        this.userMetadata = item.userMetadata();
-        this.isDir = item.isDir();
         if (!item.isDir()) {
             this.lastModifiedDate = MinioTemp.zonedDateTime2Timestamp(item.lastModified());
         }
         if (item.owner() != null) {
             this.owner = new Owner(item.owner());
         }
+        this.size = item.size();
+        this.storageClass = item.storageClass();
+        this.isLatest = item.isLatest();
+        this.versionId = item.versionId();
+        this.userMetadata = item.userMetadata();
+        this.isDir = item.isDir();
     }
 
     /**
@@ -96,15 +95,110 @@ public class Item extends ToStringBase {
      */
     public static List<Item> toList(Iterable<Result<io.minio.messages.Item>> itemList) {
         List<Item> list = new ArrayList<>();
-        for (Result<io.minio.messages.Item> result : itemList) {
+        for (Result<io.minio.messages.Item> item : itemList) {
             try {
-                list.add(new Item(result.get()));
+                list.add(new Item(item.get()));
             } catch (Exception e) {
-                log.info("io.minio.messages.Item转Item", e);
-                list.add(new Item());
+                log.error("[io.minio.messages.Item转Item]异常！", e);
             }
         }
         return list;
+    }
+
+    public String getEtag() {
+        return this.etag;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Timestamp getLastModifiedDate() {
+        return this.lastModifiedDate;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public long getSize() {
+        return this.size;
+    }
+
+    public String getStorageClass() {
+        return this.storageClass;
+    }
+
+    public boolean isLatest() {
+        return this.isLatest;
+    }
+
+    public String getVersionId() {
+        return this.versionId;
+    }
+
+    public Map<String, String> getUserMetadata() {
+        return this.userMetadata;
+    }
+
+    public boolean isDir() {
+        return this.isDir;
+    }
+
+    public void setEtag(String etag) {
+        this.etag = etag;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLastModifiedDate(Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public void setStorageClass(String storageClass) {
+        this.storageClass = storageClass;
+    }
+
+    public void setLatest(boolean isLatest) {
+        this.isLatest = isLatest;
+    }
+
+    public void setVersionId(String versionId) {
+        this.versionId = versionId;
+    }
+
+    public void setUserMetadata(Map<String, String> userMetadata) {
+        this.userMetadata = userMetadata;
+    }
+
+    public void setDir(boolean isDir) {
+        this.isDir = isDir;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "etag='" + etag + '\'' +
+                ", name='" + name + '\'' +
+                ", lastModifiedDate=" + lastModifiedDate +
+                ", owner=" + owner +
+                ", size=" + size +
+                ", storageClass='" + storageClass + '\'' +
+                ", isLatest=" + isLatest +
+                ", versionId='" + versionId + '\'' +
+                ", userMetadata=" + userMetadata +
+                ", isDir=" + isDir +
+                '}';
     }
 
 }

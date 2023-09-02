@@ -1,10 +1,7 @@
 package com.demo.tool.entity.minio;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * <h1>对象写入返回</h1>
+ * <h1>对象写入结果</h1>
  *
  * <p>
  * createDate 2022/04/01 11:24:43
@@ -13,8 +10,6 @@ import lombok.Setter;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Getter
-@Setter
 public class ObjectWriteResponse extends GenericResponse {
 
     /**
@@ -27,13 +22,36 @@ public class ObjectWriteResponse extends GenericResponse {
     private String versionId;
 
     public ObjectWriteResponse() {
-
     }
 
     public ObjectWriteResponse(io.minio.ObjectWriteResponse objectWriteResponse) {
         super(objectWriteResponse);
-        this.etag = objectWriteResponse.etag();
+        this.etag = objectWriteResponse.etag().substring(1, objectWriteResponse.etag().length() - 1);
         this.versionId = objectWriteResponse.versionId();
+    }
+
+    public String getEtag() {
+        return this.etag;
+    }
+
+    public String getVersionId() {
+        return this.versionId;
+    }
+
+    public void setEtag(String etag) {
+        this.etag = etag;
+    }
+
+    public void setVersionId(String versionId) {
+        this.versionId = versionId;
+    }
+
+    @Override
+    public String toString() {
+        return "ObjectWriteResponse{" +
+                "etag='" + etag + '\'' +
+                ", versionId='" + versionId + '\'' +
+                '}';
     }
 
 }

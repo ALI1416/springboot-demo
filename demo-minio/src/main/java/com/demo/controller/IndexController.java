@@ -100,7 +100,7 @@ public class IndexController {
 
     /**
      * 所有对象(根目录)
-     * http://localhost:8080/objectAll?bucket=asiatrip
+     * http://localhost:8080/objectAll?bucket=test
      */
     @GetMapping("objectAll")
     public Result<List<Item>> objectAll(String bucket) {
@@ -109,7 +109,7 @@ public class IndexController {
 
     /**
      * 所有对象
-     * http://localhost:8080/objectAll2?bucket=asiatrip&path=folder
+     * http://localhost:8080/objectAll2?bucket=test&path=folder
      */
     @GetMapping("objectAll2")
     public Result<List<Item>> objectAll(String bucket, String path) {
@@ -118,43 +118,49 @@ public class IndexController {
 
     /**
      * 对象状态
-     * http://localhost:8080/objectStat?bucket=asiatrip&path=putty.exe
+     * http://localhost:8080/objectStat?bucket=test&path=README.md
      */
     @GetMapping("objectStat")
     public Result<StatObjectResponse> objectStat(String bucket, String path) {
-        return Result.o(minioTemp.objectStat(bucket, path));
+        return Result.o(minioTemp.objectStatus(bucket, path));
     }
 
     /**
      * 获取对象
-     * http://localhost:8080/objectGet?bucket=asiatrip&path=putty.exe
+     * http://localhost:8080/objectGet?bucket=test&path=README.md
      */
     @GetMapping("objectGet")
     public void objectGet(String bucket, String path, HttpServletResponse response) {
         GetObjectResponse getObjectResponse = minioTemp.objectGet(bucket, path);
-        log.info(getObjectResponse.getResponse().toString());
-        try {
-            minioTemp.inputStream2HttpServletResponse(getObjectResponse.getFile(), response,
-                    getObjectResponse.getResponse().getName(),
-                    getObjectResponse.getResponse().getHeaders().get("Content-Type")
+        if (getObjectResponse != null) {
+            log.info(getObjectResponse.toString());
+            if (getObjectResponse.getFile() != null) {
+                try {
+                    MinioTemp.inputStream2HttpServletResponse(
+                            getObjectResponse.getFile(),
+                            response,
+                            getObjectResponse.getResponse().getName(),
+                            getObjectResponse.getResponse().getHeaders().get("Content-Type")
                     );
-        } catch (Exception e) {
-            log.info("InputStream转HttpServletResponse失败", e);
+                } catch (Exception e) {
+                    log.info("[InputStream转HttpServletResponse]异常！", e);
+                }
+            }
         }
     }
 
     /**
      * 获取对象并下载
-     * http://localhost:8080/objectDownload2?bucket=asiatrip&path=putty.exe&fileName=a.exe
+     * http://localhost:8080/objectDownload2?bucket=test&path=README.md&name=1.md
      */
     @GetMapping("objectDownload2")
-    public void objectDownload(String bucket, String path, HttpServletResponse response, String fileName) {
-        minioTemp.objectDownload(bucket, path, response, fileName);
+    public void objectDownload(String bucket, String path, HttpServletResponse response, String name) {
+        minioTemp.objectDownload(bucket, path, response, name);
     }
 
     /**
      * 获取对象并下载
-     * http://localhost:8080/objectDownload?bucket=asiatrip&path=putty.exe
+     * http://localhost:8080/objectDownload?bucket=test&path=README.md
      */
     @GetMapping("objectDownload")
     public void objectDownload(String bucket, String path, HttpServletResponse response) {
@@ -163,7 +169,7 @@ public class IndexController {
 
     /**
      * 下载对象到本地
-     * http://localhost:8080/objectDownloadLocal?bucket=asiatrip&path=putty.exe&fileName=/a.exe
+     * http://localhost:8080/objectDownloadLocal?bucket=test&path=README.md&fileName=/1.md
      */
     @GetMapping("objectDownloadLocal")
     public void objectDownloadLocal(String bucket, String path, String fileName) {
@@ -172,7 +178,7 @@ public class IndexController {
 
     /**
      * 复制对象
-     * http://localhost:8080/objectCopy?bucket=asiatrip&path=putty.exe&newBucket=test&newPath=putty.exe
+     * http://localhost:8080/objectCopy?bucket=test&path=README.md&newBucket=test2&newPath=1.md
      */
     @GetMapping("objectCopy")
     public Result<ObjectWriteResponse> objectCopy(String bucket, String path, String newBucket, String newPath) {
@@ -181,7 +187,7 @@ public class IndexController {
 
     /**
      * 复制对象
-     * http://localhost:8080/objectCopy2?bucket=asiatrip&path=putty.exe&newPath=a.exe
+     * http://localhost:8080/objectCopy2?bucket=test&path=README.md&newPath=1.md
      */
     @GetMapping("objectCopy2")
     public Result<ObjectWriteResponse> objectCopy(String bucket, String path, String newPath) {
@@ -190,7 +196,7 @@ public class IndexController {
 
     /**
      * 合并分片对象
-     * http://localhost:8080/objectCompose?bucket=asiatrip&paths=a.txt&paths=b.txt&paths=c.txt&newPath=0.txt
+     * http://localhost:8080/objectCompose?bucket=test&paths=minio.exe&paths=mc.exe&newPath=1.dat
      */
     @GetMapping("objectCompose")
     public Result<ObjectWriteResponse> objectCompose(String bucket, String[] paths, String newPath) {
@@ -199,7 +205,7 @@ public class IndexController {
 
     /**
      * 删除对象
-     * http://localhost:8080/objectDelete?bucket=asiatrip&path=a.txt
+     * http://localhost:8080/objectDelete?bucket=test&path=a.txt
      */
     @GetMapping("objectDelete")
     public Result<Boolean> objectDelete(String bucket, String path) {
@@ -208,7 +214,7 @@ public class IndexController {
 
     /**
      * 删除对象
-     * http://localhost:8080/objectDelete2?bucket=asiatrip&paths=a.txt&paths=b.txt&paths=
+     * http://localhost:8080/objectDelete2?bucket=test&paths=a.txt&paths=b.txt
      */
     @GetMapping("objectDelete2")
     public Result<List<DeleteError>> objectDelete(String bucket, String[] paths) {
@@ -217,7 +223,7 @@ public class IndexController {
 
     /**
      * 上传对象
-     * http://localhost:8080/objectUpload?bucket=asiatrip&path=aa/
+     * http://localhost:8080/objectUpload?bucket=test&path=folder
      */
     @GetMapping("objectUpload")
     public Result<ObjectWriteResponse> objectUpload(String bucket, String path, MultipartFile file) {
@@ -226,7 +232,7 @@ public class IndexController {
 
     /**
      * 上传对象
-     * http://localhost:8080/objectUpload2?bucket=asiatrip&path=aa/
+     * http://localhost:8080/objectUpload2?bucket=test&path=folder
      */
     @GetMapping("objectUpload2")
     public Result<ObjectWriteResponse> objectUpload(String bucket, String path, MultipartFile[] files) {
@@ -235,7 +241,7 @@ public class IndexController {
 
     /**
      * 创建文件夹
-     * http://localhost:8080/folderCreate?bucket=asiatrip&path=ab/
+     * http://localhost:8080/folderCreate?bucket=test&path=ab
      */
     @GetMapping("folderCreate")
     public Result<ObjectWriteResponse> folderCreate(String bucket, String path) {
@@ -244,7 +250,7 @@ public class IndexController {
 
     /**
      * 从本地上传对象
-     * http://localhost:8080/objectUploadLocal?bucket=asiatrip&path=ab/&localPath=D:\Pictures\头像壁纸\苹果ISO11壁纸.JPG
+     * http://localhost:8080/objectUploadLocal?bucket=test&path=ab&localPath=E:\Pictures\头像壁纸\苹果ISO11壁纸.JPG
      */
     @GetMapping("objectUploadLocal")
     public Result<ObjectWriteResponse> objectUploadLocal(String bucket, String path, String localPath) {
@@ -253,7 +259,7 @@ public class IndexController {
 
     /**
      * 获取对象的标签
-     * http://localhost:8080/objectTagGet?bucket=asiatrip&path=a.txt
+     * http://localhost:8080/objectTagGet?bucket=test&path=a.txt
      */
     @GetMapping("objectTagGet")
     public Result<Map<String, String>> objectTagGet(String bucket, String path) {
@@ -262,7 +268,7 @@ public class IndexController {
 
     /**
      * 设置对象的标签
-     * http://localhost:8080/objectTagSet?bucket=asiatrip&path=a.txt
+     * http://localhost:8080/objectTagSet?bucket=test&path=a.txt
      */
     @GetMapping("objectTagSet")
     public Result<Boolean> objectTagSet(String bucket, String path) {
@@ -274,7 +280,7 @@ public class IndexController {
 
     /**
      * 删除对象的全部标签
-     * http://localhost:8080/objectTagDelete?bucket=asiatrip&path=a.txt
+     * http://localhost:8080/objectTagDelete?bucket=test&path=a.txt
      */
     @GetMapping("objectTagDelete")
     public Result<Boolean> objectTagDelete(String bucket, String path) {
@@ -282,8 +288,8 @@ public class IndexController {
     }
 
     /**
-     * 通过访问URL删除对象
-     * http://localhost:8080/urlDelete?bucket=asiatrip&path=a.txt&expiry=600
+     * 获取删除对象的URL
+     * http://localhost:8080/urlDelete?bucket=test&path=a.txt&expiry=600
      */
     @GetMapping("urlDelete")
     public Result<String> urlDelete(String bucket, String path, int expiry) {
@@ -291,8 +297,8 @@ public class IndexController {
     }
 
     /**
-     * 通过访问URL修改对象
-     * http://localhost:8080/urlUpdate?bucket=asiatrip&path=a.txt&expiry=600
+     * 获取修改对象的URL
+     * http://localhost:8080/urlUpdate?bucket=test&path=a.txt&expiry=600
      */
     @GetMapping("urlUpdate")
     public Result<String> urlUpdate(String bucket, String path, int expiry) {
@@ -302,8 +308,8 @@ public class IndexController {
     }
 
     /**
-     * 通过访问URL下载对象
-     * http://localhost:8080/urlDownload?bucket=asiatrip&path=a.txt&expiry=600
+     * 获取下载对象的URL
+     * http://localhost:8080/urlDownload?bucket=test&path=a.txt&expiry=600
      */
     @GetMapping("urlDownload")
     public Result<String> urlDownload(String bucket, String path, int expiry) {
