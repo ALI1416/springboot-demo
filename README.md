@@ -103,6 +103,11 @@ SpringBoot示例
   - SpringBoot Web
   - SpringBoot WebSocket
   - FastJson
+- **`demo-xxl-job`** : xxl-job
+  - SpringBoot Web
+  - FastJson
+  - MySQL
+  - xxl-job
 
 ### 版本号
 
@@ -186,6 +191,8 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
   - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
     ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
+  - `xxl-job` : `com.xuxueli:xxl-job-core`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-job-core?label=Maven%20Central)
 
 ## 关于
 

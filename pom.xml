@@ -40,6 +40,7 @@
     <module>demo-tiny-token</module>
     <module>demo-util</module>
     <module>demo-websocket</module>
+    <module>demo-xxl-job</module>
   </modules>
 
   <properties>
@@ -212,7 +213,7 @@
     <!--Ansj分词-->
     <!--org.ansj:ansj_seg-->
     <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
-    <ansj_seg.version>5.1.6</ansj_seg.version>
+    <ansj.version>5.1.6</ansj.version>
 
     <!--二维码-->
     <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
@@ -221,6 +222,10 @@
     <!--Knife4j-->
     <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter -->
     <knife4j.version>4.3.0</knife4j.version>
+
+    <!--xxl-job-->
+    <!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
+    <xxl-job.version>2.4.0</xxl-job.version>
   </properties>
 
   <dependencies>
@@ -364,7 +369,7 @@
       <dependency>
         <groupId>org.ansj</groupId>
         <artifactId>ansj_seg</artifactId>
-        <version>${ansj_seg.version}</version>
+        <version>${ansj.version}</version>
       </dependency>
       <!--二维码-->
       <dependency>
@@ -377,6 +382,12 @@
         <groupId>com.github.xiaoymin</groupId>
         <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
         <version>${knife4j.version}</version>
+      </dependency>
+      <!--xxl-job-->
+      <dependency>
+        <groupId>com.xuxueli</groupId>
+        <artifactId>xxl-job-core</artifactId>
+        <version>${xxl-job.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
