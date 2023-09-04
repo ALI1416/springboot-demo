@@ -7,7 +7,8 @@ import com.demo.tool.entity.minio.*;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.DeleteObject;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,10 +33,10 @@ import java.util.*;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Slf4j
 @Component
 public class MinioTemp {
 
+    private static final Logger log = LoggerFactory.getLogger(MinioTemp.class);
     private final MinioClient minioClient;
 
     /**

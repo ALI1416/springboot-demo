@@ -20,6 +20,7 @@ SpringBoot示例
 - **`demo-elastic-search`** : ElasticSearch
   - SpringBoot Web
   - FastJson
+  - JakartaJson
   - ElasticSearch
 - **`demo-java-advanced`** : Java进阶
   - HuTool工具包
@@ -137,18 +138,19 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-redis?label=Maven%20Central)
   - `RabbitMQ(与服务器版本号不对应，不需一致)` : `org.springframework.boot:spring-boot-starter-amqp`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-amqp?label=Maven%20Central)
-  - `MQTT(无法修改版本号)` : `org.springframework.boot:spring-boot-starter-integration`  
+  - `spring-boot-starter-integration` : `org.springframework.boot:spring-boot-starter-integration`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-integration?label=Maven%20Central)
-  - `MQTT(无法修改版本号)` : `org.springframework.integration:spring-integration-stream`  
+  - `spring-integration-stream` : `org.springframework.integration:spring-integration-stream`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.integration/spring-integration-stream?label=Maven%20Central)
   - `MQTT(无法修改版本号)` : `org.springframework.integration:spring-integration-mqtt`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.integration/spring-integration-mqtt?label=Maven%20Central)
   - `实体层注解(与IDE安装的版本号对应，不需一致)` : `org.projectlombok:lombok`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.projectlombok/lombok?label=Maven%20Central)
-- 需要修改父依赖版本号 :
-  - `ElasticSearch(与服务器版本号对应，需要一致)` : `org.springframework.boot:spring-boot-starter-data-elasticsearch`  
-    ![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-data-elasticsearch?label=Maven%20Central)
 - 父依赖不含 :
+  - `ElasticSearch(与服务器版本号对应，需要一致)` : `co.elastic.clients:elasticsearch-java`  
+    ![Maven Central](https://img.shields.io/maven-central/v/co.elastic.clients/elasticsearch-java?label=Maven%20Central)
+  - `JakartaJson` : `jakarta.json:jakarta.json-api`  
+    ![Maven Central](https://img.shields.io/maven-central/v/jakarta.json/jakarta.json-api?label=Maven%20Central)
   - `Minio(与服务器版本号不对应，不需一致)` : `io.minio:minio`  
     ![Maven Central](https://img.shields.io/maven-central/v/io.minio/minio?label=Maven%20Central)
   - `MyBatis` : `org.mybatis.spring.boot:mybatis-spring-boot-starter`  

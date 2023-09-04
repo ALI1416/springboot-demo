@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "elasticsearch.uri",
+      "type": "java.lang.String",
+      "description": "URI.",
+      "sourceType": "com.demo.autoconfigure.ElasticSearchProperties",
+      "defaultValue": "http://127.0.0.1:9200"
+    },
+    {
+      "name": "elasticsearch.username",
+      "type": "java.lang.String",
+      "description": "用户名.",
+      "sourceType": "com.demo.autoconfigure.ElasticSearchProperties"
+    },
+    {
+      "name": "elasticsearch.password",
+      "type": "java.lang.String",
+      "description": "密码.",
+      "sourceType": "com.demo.autoconfigure.ElasticSearchProperties"
+    }
+  ]
+}
