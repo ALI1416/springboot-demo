@@ -61,22 +61,22 @@ public class StatObjectResponse extends GenericResponse {
     public StatObjectResponse() {
     }
 
-    public StatObjectResponse(io.minio.StatObjectResponse statObjectResponse) {
-        super(statObjectResponse);
-        this.etag = statObjectResponse.etag();
-        this.size = statObjectResponse.size();
-        this.lastModifiedDate = MinioTemp.zonedDateTime2Timestamp(statObjectResponse.lastModified());
-        if (statObjectResponse.retentionMode() != null) {
-            this.retentionMode = statObjectResponse.retentionMode().name();
+    public StatObjectResponse(io.minio.StatObjectResponse response) {
+        super(response);
+        this.etag = response.etag();
+        this.size = response.size();
+        this.lastModifiedDate = MinioTemp.zonedDateTime2Timestamp(response.lastModified());
+        if (response.retentionMode() != null) {
+            this.retentionMode = response.retentionMode().name();
         }
-        if (statObjectResponse.retentionRetainUntilDate() != null) {
-            this.retentionRetainUntilDate = MinioTemp.zonedDateTime2Timestamp(statObjectResponse.retentionRetainUntilDate());
+        if (response.retentionRetainUntilDate() != null) {
+            this.retentionRetainUntilDate = MinioTemp.zonedDateTime2Timestamp(response.retentionRetainUntilDate());
         }
-        this.legalHold = statObjectResponse.legalHold().status();
-        this.deleteMarker = statObjectResponse.deleteMarker();
-        this.userMetadata = statObjectResponse.userMetadata();
-        this.versionId = statObjectResponse.versionId();
-        this.contentType = statObjectResponse.contentType();
+        this.legalHold = response.legalHold().status();
+        this.deleteMarker = response.deleteMarker();
+        this.userMetadata = response.userMetadata();
+        this.versionId = response.versionId();
+        this.contentType = response.contentType();
     }
 
     public String getEtag() {

@@ -10,6 +10,10 @@ package com.demo.tool.entity.elasticsearch;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class IndexResponse extends WriteResponseBase{
+public class IndexResponse extends WriteResponseBase {
+
+    public IndexResponse(co.elastic.clients.elasticsearch.core.IndexResponse response) {
+        super(response);
+    }
 
 }

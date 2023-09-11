@@ -24,10 +24,10 @@ public class ObjectWriteResponse extends GenericResponse {
     public ObjectWriteResponse() {
     }
 
-    public ObjectWriteResponse(io.minio.ObjectWriteResponse objectWriteResponse) {
-        super(objectWriteResponse);
-        this.etag = objectWriteResponse.etag().substring(1, objectWriteResponse.etag().length() - 1);
-        this.versionId = objectWriteResponse.versionId();
+    public ObjectWriteResponse(io.minio.ObjectWriteResponse response) {
+        super(response);
+        this.etag = response.etag().substring(1, response.etag().length() - 1);
+        this.versionId = response.versionId();
     }
 
     public String getEtag() {

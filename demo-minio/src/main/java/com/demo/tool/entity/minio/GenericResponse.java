@@ -34,18 +34,18 @@ public class GenericResponse {
     public GenericResponse() {
     }
 
-    public GenericResponse(io.minio.GenericResponse genericResponse) {
-        this.headers = genericResponse.headers();
-        this.bucket = genericResponse.bucket();
-        this.region = genericResponse.region();
-        this.name = genericResponse.object();
+    public GenericResponse(io.minio.GenericResponse response) {
+        this.headers = response.headers();
+        this.bucket = response.bucket();
+        this.region = response.region();
+        this.name = response.object();
     }
 
-    public GenericResponse(Headers headers, String bucket, String region, String name) {
-        this.headers = headers;
-        this.bucket = bucket;
-        this.region = region;
-        this.name = name;
+    public GenericResponse(io.minio.GetObjectResponse response) {
+        this.headers = response.headers();
+        this.bucket = response.bucket();
+        this.region = response.region();
+        this.name = response.object();
     }
 
     public Headers getHeaders() {

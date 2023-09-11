@@ -24,19 +24,19 @@ public class DeleteError extends ErrorResponse {
     public DeleteError() {
     }
 
-    public DeleteError(io.minio.messages.DeleteError deleteError) {
-        super(deleteError);
+    public DeleteError(io.minio.messages.DeleteError error) {
+        super(error);
     }
 
     /**
      * io.minio.messages.DeleteError转DeleteError
      *
-     * @param deleteErrorList Iterable Result io.minio.messages.DeleteError
+     * @param errorList Iterable Result io.minio.messages.DeleteError
      * @return List DeleteError
      */
-    public static List<DeleteError> toList(Iterable<Result<io.minio.messages.DeleteError>> deleteErrorList) {
+    public static List<DeleteError> toList(Iterable<Result<io.minio.messages.DeleteError>> errorList) {
         List<DeleteError> list = new ArrayList<>();
-        for (Result<io.minio.messages.DeleteError> deleteError : deleteErrorList) {
+        for (Result<io.minio.messages.DeleteError> deleteError : errorList) {
             try {
                 list.add(new DeleteError(deleteError.get()));
             } catch (Exception e) {

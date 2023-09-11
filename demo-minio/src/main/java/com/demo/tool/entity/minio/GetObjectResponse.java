@@ -27,9 +27,9 @@ public class GetObjectResponse {
     public GetObjectResponse() {
     }
 
-    public GetObjectResponse(io.minio.GetObjectResponse getObjectResponse) {
-        this.response = new GenericResponse(getObjectResponse.headers(), getObjectResponse.bucket(), getObjectResponse.region(), getObjectResponse.object());
-        this.file = getObjectResponse;
+    public GetObjectResponse(io.minio.GetObjectResponse response) {
+        this.response = new GenericResponse(response);
+        this.file = response;
     }
 
     public GenericResponse getResponse() {

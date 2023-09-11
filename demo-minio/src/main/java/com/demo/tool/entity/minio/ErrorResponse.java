@@ -44,14 +44,14 @@ public class ErrorResponse {
     public ErrorResponse() {
     }
 
-    public ErrorResponse(io.minio.messages.ErrorResponse errorResponse) {
-        this.code = errorResponse.code();
-        this.message = errorResponse.message();
-        this.bucket = errorResponse.bucketName();
-        this.name = errorResponse.objectName();
-        this.resource = errorResponse.resource();
-        this.requestId = errorResponse.requestId();
-        this.hostId = errorResponse.hostId();
+    public ErrorResponse(io.minio.messages.ErrorResponse response) {
+        this.code = response.code();
+        this.message = response.message();
+        this.bucket = response.bucketName();
+        this.name = response.objectName();
+        this.resource = response.resource();
+        this.requestId = response.requestId();
+        this.hostId = response.hostId();
     }
 
     public String getCode() {
