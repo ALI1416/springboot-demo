@@ -5,11 +5,11 @@ import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Highlight;
 import co.elastic.clients.elasticsearch.indices.AnalyzeRequest;
-import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
 import com.demo.tool.entity.elasticsearch.*;
+import com.demo.tool.entity.elasticsearch.analyze.AnalyzeResponse;
+import com.demo.tool.entity.elasticsearch.search.SearchResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -275,12 +275,14 @@ public class ElasticSearchTemp {
             builder.from((pages - 1) * rows).size(rows);
         }
         try {
-            return elasticSearchClient.search(builder.build(), clazz);
+            return new SearchResponse<>(elasticSearchClient.search(builder.build(), clazz));
         } catch (Exception e) {
             log.error("[搜索]异常！", e);
             return null;
         }
     }
+
+    /* ==================== 分析 ==================== */
 
     /**
      * 分析
@@ -293,7 +295,7 @@ public class ElasticSearchTemp {
         AnalyzeRequest.Builder builder = new AnalyzeRequest.Builder();
         builder.analyzer(analyzer).text(text);
         try {
-            return elasticSearchClient.indices().analyze(builder.build());
+            return new AnalyzeResponse(elasticSearchClient.indices().analyze(builder.build()));
         } catch (Exception e) {
             log.error("[分析]异常！", e);
             return null;
