@@ -33,7 +33,7 @@ public class WebSocketCluster {
     /**
      * 交换机名称
      */
-    private static final String EXCHANGE_NAME = "broadcast";
+    private static final String EXCHANGE_NAME = "WebSocketBroadcast";
 
     private final WebSocketTemp webSocketTemp;
     private final RabbitTemp rabbitTemp;

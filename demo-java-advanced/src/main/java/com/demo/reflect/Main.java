@@ -277,20 +277,16 @@ public class Main {
      * 基本类型
      */
     private static void primitive() {
-        try {
-            log.info("---------- primitive ----------");
-            log.info("void:" + void.class);
-            log.info("boolean:" + boolean.class);
-            log.info("byte:" + byte.class);
-            log.info("char:" + char.class);
-            log.info("int:" + int.class);
-            log.info("short:" + short.class);
-            log.info("long:" + long.class);
-            log.info("float:" + float.class);
-            log.info("double:" + double.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        log.info("---------- primitive ----------");
+        log.info("void:" + void.class);
+        log.info("boolean:" + boolean.class);
+        log.info("byte:" + byte.class);
+        log.info("char:" + char.class);
+        log.info("int:" + int.class);
+        log.info("short:" + short.class);
+        log.info("long:" + long.class);
+        log.info("float:" + float.class);
+        log.info("double:" + double.class);
     }
 
     /**

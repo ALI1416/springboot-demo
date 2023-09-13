@@ -104,6 +104,11 @@ SpringBoot示例
   - SpringBoot Web
   - SpringBoot WebSocket
   - FastJson
+- **`demo-websocket-cluster`** : WebSocket集群
+  - SpringBoot Web
+  - SpringBoot WebSocket
+  - FastJson
+  - RabbitMQ
 - **`demo-xxl-job`** : xxl-job
   - SpringBoot Web
   - FastJson

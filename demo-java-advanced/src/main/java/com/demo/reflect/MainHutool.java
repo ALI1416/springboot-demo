@@ -71,7 +71,7 @@ public class MainHutool {
         try {
             log.info("---------- field ----------");
             Class<?> clazz = Class.forName(CLASS_NAME);
-            log.info("字段列表(Fieid):" + Arrays.toString(ReflectUtil.getFields(clazz)));
+            log.info("字段列表(Field):" + Arrays.toString(ReflectUtil.getFields(clazz)));
         } catch (Exception e) {
             e.printStackTrace();
         }

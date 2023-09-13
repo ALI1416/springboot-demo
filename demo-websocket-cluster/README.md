@@ -21,7 +21,7 @@
 - **`handler`** : 处理层文件夹
   - `GlobalExceptionHandler` : 全局异常处理类(404异常除外)
   - `PageNotFoundExceptionHandler` : 404异常处理类
-- `DemoWebSocketApp` : 启动类
+- `DemoWebSocketClusterApp` : 启动类
 
 ## 资源
 
