@@ -3,6 +3,7 @@ package com.demo.service.rabbit;
 import com.alibaba.fastjson2.JSONObject;
 import com.demo.entity.po.Person;
 import com.demo.entity.proto.PersonProto;
+import com.demo.tool.ThreadPool;
 import com.google.protobuf.util.JsonFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -30,16 +31,19 @@ public class RabbitService2 {
      * RabbitListener可以直接写到方法上<br>
      * 消费者1
      */
-    @RabbitListener(queuesToDeclare = @Queue("work"))
+    @RabbitListener(queuesToDeclare = @Queue(value = "work", autoDelete = "true"))
     public void receiver(String message) {
-        log.info("RabbitService2.receiver收到消息：" + message);
+        ThreadPool.execute(() -> {
+            log.info("RabbitService2.receiver收到消息：" + message);
+            throw new RuntimeException("RabbitService2.receiver");
+        });
     }
 
     /**
      * 工作模型<br>
      * 消费者2
      */
-    @RabbitListener(queuesToDeclare = @Queue("work"))
+    @RabbitListener(queuesToDeclare = @Queue(value = "work", autoDelete = "true"))
     public void receiver2(String message) {
         log.info("RabbitService2.receiver2收到消息：" + message);
     }

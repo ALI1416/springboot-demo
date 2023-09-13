@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>用户</h1>
+ * <h1>WebSocket消息</h1>
  *
  * <p>
  * createDate 2021/09/09 15:41:33
@@ -16,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class User extends ToStringBase {
+public class WsMsg<T> extends ToStringBase {
 
     /**
      * 用户名
@@ -25,6 +25,6 @@ public class User extends ToStringBase {
     /**
      * 消息
      */
-    private String msg;
+    private T msg;
 
 }

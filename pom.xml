@@ -40,6 +40,7 @@
     <module>demo-tiny-token</module>
     <module>demo-util</module>
     <module>demo-websocket</module>
+    <module>demo-websocket-cluster</module>
     <module>demo-xxl-job</module>
   </modules>
 

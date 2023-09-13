@@ -19,4 +19,4 @@ spring:
 
 logging:
   file:
-    name: /log/demo-websocket.log
+    name: /log/demo-websocket-cluster.log
