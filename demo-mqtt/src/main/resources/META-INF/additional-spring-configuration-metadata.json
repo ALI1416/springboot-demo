@@ -2,7 +2,7 @@
   "properties": [
     {
       "name": "mqtt.uri",
-      "type": "java.util.List<java.lang.String>",
+      "type": "java.lang.String",
       "description": "URI.",
       "sourceType": "com.demo.autoconfigure.MqttProperties",
       "defaultValue": "tcp://127.0.0.1:1883"

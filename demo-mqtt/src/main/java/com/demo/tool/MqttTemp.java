@@ -21,7 +21,7 @@ import java.util.UUID;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
+// @Component
 public class MqttTemp {
 
     /**

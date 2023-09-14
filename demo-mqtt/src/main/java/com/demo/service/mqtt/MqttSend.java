@@ -13,7 +13,7 @@ import org.springframework.integration.annotation.MessagingGateway;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@MessagingGateway(defaultRequestChannel = MqttSendService.NAME)
+// @MessagingGateway(defaultRequestChannel = MqttSendService.NAME)
 public interface MqttSend extends MqttTemp.DefaultSend {
 
 }

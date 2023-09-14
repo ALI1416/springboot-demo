@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@RestController
+// @RestController
 @AllArgsConstructor
 public class IndexController {
 

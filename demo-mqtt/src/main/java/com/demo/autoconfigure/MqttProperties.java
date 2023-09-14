@@ -23,7 +23,7 @@ public class MqttProperties {
     /**
      * URI(默认值"tcp://127.0.0.1:1883")
      */
-    private String[] uri;
+    private String uri;
     /**
      * 用户名
      */
@@ -49,11 +49,11 @@ public class MqttProperties {
      */
     private Boolean automaticReconnect;
 
-    public String[] getUri() {
+    public String getUri() {
         return uri;
     }
 
-    public void setUri(String[] uri) {
+    public void setUri(String uri) {
         this.uri = uri;
     }
 

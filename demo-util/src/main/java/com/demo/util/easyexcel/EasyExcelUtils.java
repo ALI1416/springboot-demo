@@ -58,7 +58,7 @@ public class EasyExcelUtils {
      * @param clazz T.class
      */
     public static <T> void read(String path, List<T> data, Class<T> clazz) {
-        ReadListener<T> listener = new ReadListener<>();
+        MyReadListener<T> listener = new MyReadListener<>();
         EasyExcelFactory.read(path, clazz, listener).sheet().doRead();
         data.addAll(listener.getList());
     }
@@ -88,7 +88,7 @@ public class EasyExcelUtils {
      * @param clazz T.class
      */
     public static <T> void upload(MultipartFile file, List<T> data, Class<T> clazz) throws IOException {
-        ReadListener<T> listener = new ReadListener<>();
+        MyReadListener<T> listener = new MyReadListener<>();
         EasyExcelFactory.read(file.getInputStream(), clazz, listener).sheet().doRead();
         data.addAll(listener.getList());
     }
@@ -116,29 +116,29 @@ public class EasyExcelUtils {
         return new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
     }
 
-}
-
-/**
- * 读取数据监听器
- */
-class ReadListener<T> extends AnalysisEventListener<T> {
-
-    private final List<T> list = new ArrayList<>();
-
-    @Override
-    public void invoke(T data, AnalysisContext context) {
-        list.add(data);
-    }
-
-    @Override
-    public void doAfterAllAnalysed(AnalysisContext context) {
-    }
-
     /**
-     * 获取数据
+     * 读取数据监听器
      */
-    public List<T> getList() {
-        return list;
+    public static class MyReadListener<T> extends AnalysisEventListener<T> {
+
+        private final List<T> list = new ArrayList<>();
+
+        @Override
+        public void invoke(T data, AnalysisContext context) {
+            list.add(data);
+        }
+
+        @Override
+        public void doAfterAllAnalysed(AnalysisContext context) {
+        }
+
+        /**
+         * 获取数据
+         */
+        public List<T> getList() {
+            return list;
+        }
+
     }
 
 }

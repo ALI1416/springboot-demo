@@ -152,10 +152,10 @@
    * 改变连接状态显示
    */
   function connectStatus(status) {
+    connectBtn.removeAttribute('disabled')
     broadcastBtn.removeAttribute('disabled')
     if (status) {
       connectBtn.innerText = '断开'
-      connectBtn.removeAttribute('disabled')
       broadcast2Btn.removeAttribute('disabled')
       userBtn.removeAttribute('disabled')
       appBtn.removeAttribute('disabled')

@@ -1,11 +1,12 @@
 package com.demo.config;
 
 import com.demo.autoconfigure.MqttProperties;
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
-import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 
 /**
  * <h1>Mqtt配置</h1>
@@ -17,8 +18,8 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-// @Configuration
-public class MqttConfig {
+@Configuration
+public class MqttConfig2 {
 
     /**
      * Mqtt配置属性
@@ -30,28 +31,28 @@ public class MqttConfig {
      *
      * @param mqttProperties MqttProperties
      */
-    public MqttConfig(MqttProperties mqttProperties) {
+    public MqttConfig2(MqttProperties mqttProperties) {
         this.mqttProperties = mqttProperties;
     }
 
     /**
-     * MqttPahoClientFactory
+     * MqttClient
      */
     @Bean
-    public MqttPahoClientFactory factory() {
-        DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
+    public MqttClient client() throws MqttException {
+        MqttClient client = new MqttClient(mqttProperties.getUri(), "mqtt_" + System.currentTimeMillis(), new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
-        options.setServerURIs(new String[]{mqttProperties.getUri()});
-        options.setUserName(mqttProperties.getUsername());
-        if (mqttProperties.getPassword() != null) {
+        if (mqttProperties.getUsername() != null && mqttProperties.getPassword() != null) {
+            options.setUserName(mqttProperties.getUsername());
             options.setPassword(mqttProperties.getPassword().toCharArray());
         }
         options.setConnectionTimeout(mqttProperties.getConnectionTimeout());
         options.setKeepAliveInterval(mqttProperties.getKeepAliveInterval());
         options.setCleanSession(mqttProperties.getCleanSession());
         options.setAutomaticReconnect(mqttProperties.getAutomaticReconnect());
-        factory.setConnectionOptions(options);
-        return factory;
+        client.setCallback(new MqttCallback(this));
+        client.connect(options);
+        return client;
     }
 
 }

@@ -20,7 +20,7 @@ import org.springframework.messaging.MessageHandler;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Configuration
+// @Configuration
 @Slf4j
 @AllArgsConstructor
 public class MqttSendService {

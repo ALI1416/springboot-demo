@@ -36,6 +36,9 @@
   <label for="automaticReconnectCheckbox">自动重连：</label>
   <input id="automaticReconnectCheckbox" type="checkbox">
   <br>
+  <label for="topicText">订阅主题：</label>
+  <input id="topicText" type="text" value="#">
+  <br>
   <button id="connectBtn">连接</button>
   <h4>连接错误信息：</h4>
   <textarea id="errorMsg" readonly cols="30" rows="3"></textarea>
@@ -46,12 +49,20 @@
   <br>
   <label for="sendMsgText">消息：</label><input id="sendMsgText" type="text">
   <br>
+  <label for="sendQosNumber">QoS：</label>
+  <input id="sendQosNumber" type="number" value="0">
+  <br>
+  <label for="sendRetainCheckbox">保留：</label>
+  <input id="sendRetainCheckbox" type="checkbox">
+  <br>
   <button id="sendBtn" disabled>发送</button>
 </div>
 <div>
   <h3>消息</h3>
-  <textarea id="receiveMsgText" readonly cols="30" rows="3"></textarea>
+  <textarea id="receiveMsgText" readonly cols="30" rows="6"></textarea>
 </div>
+<script>
+</script>
 </body>
 <script>
   const ipText = document.getElementById('ipText')
@@ -62,13 +73,15 @@
   const keepAliveIntervalNumber = document.getElementById('keepAliveIntervalNumber')
   const cleanSessionCheckbox = document.getElementById('cleanSessionCheckbox')
   const automaticReconnectCheckbox = document.getElementById('automaticReconnectCheckbox')
+  const topicText = document.getElementById('topicText')
   const connectBtn = document.getElementById('connectBtn')
   const errorMsg = document.getElementById('errorMsg')
   const sendTopicText = document.getElementById('sendTopicText')
   const sendMsgText = document.getElementById('sendMsgText')
+  const sendQosNumber = document.getElementById('sendQosNumber')
+  const sendRetainCheckbox = document.getElementById('sendRetainCheckbox')
   const sendBtn = document.getElementById('sendBtn')
   const receiveMsgText = document.getElementById('receiveMsgText')
-
   let client
 
   /**
@@ -94,27 +107,22 @@
     const password = passwordText.value
     const connectionTimeout = Number(connectionTimeoutNumber.value)
     const keepAliveInterval = Number(keepAliveIntervalNumber.value)
-    const cleanSession = Boolean(cleanSessionCheckbox.value)
-    const automaticReconnect = Boolean(automaticReconnectCheckbox.value)
-    client = new Paho.Client(ip, port, '/mqtt', '#')
-    client.connect({onSuccess: connectCallback, onFailure: errorCallback})
-    client.onMessageArrived = onMessageArrived
-  }
+    const cleanSession = cleanSessionCheckbox.checked
+    const automaticReconnect = automaticReconnectCheckbox.checked
 
-  /**
-   * 连接成功回调
-   */
-  function connectCallback() {
-    connectStatus(true)
-  }
-
-  /**
-   * 连接错误回调
-   */
-  function errorCallback(e) {
-    connectStatus(false)
-    client = undefined
-    errorMsg.value = e + '\n' + errorMsg.value
+    client = new Paho.Client(ip, port, '/mqtt', 'mqtt_' + new Date().getTime())
+    client.onConnectionLost = onConnectionLostCallback
+    client.onMessageArrived = onMessageArrivedCallback
+    client.connect({
+      userName: username,
+      password: password,
+      timeout: connectionTimeout,
+      keepAliveInterval: keepAliveInterval,
+      cleanSession: cleanSession,
+      reconnect: automaticReconnect,
+      onSuccess: onSuccessCallback,
+      onFailure: onFailureCallback
+    })
   }
 
   /**
@@ -129,20 +137,13 @@
   }
 
   /**
-   * 消息到达
-   */
-  function onMessageArrived(message) {
-    console.log(message)
-  }
-
-  /**
    * 改变连接状态显示
    */
   function connectStatus(status) {
+    connectBtn.removeAttribute('disabled')
     sendBtn.removeAttribute('disabled')
     if (status) {
       connectBtn.innerText = '断开'
-      connectBtn.removeAttribute('disabled')
       sendBtn.removeAttribute('disabled')
     } else {
       connectBtn.innerText = '连接'
@@ -151,12 +152,43 @@
   }
 
   /**
+   * 连接成功回调
+   */
+  function onSuccessCallback() {
+    connectStatus(true)
+    client.subscribe(topicText.value)
+  }
+
+  /**
+   * 连接失败回调
+   */
+  function onFailureCallback(e) {
+    connectStatus(false)
+    client = undefined
+    errorMsg.value = e.errorMessage + '\n' + errorMsg.value
+  }
+
+  /**
+   * 连接丢失回调
+   */
+  function onConnectionLostCallback(res) {
+    errorMsg.value = res.errorMessage + '\n' + errorMsg.value
+  }
+
+  /**
+   * 消息到达回调
+   */
+  function onMessageArrivedCallback(res) {
+    receiveMsgText.value = 'topic:' + res.topic + '\n' + 'retain:' + res.retained + '\n' + 'qos:' + res.qos + '\n' + 'msg:' + res.payloadString + '\n' + '\n' + receiveMsgText.value
+    console.log(res)
+  }
+
+  /**
    * 发送消息
    */
   sendBtn.addEventListener('click', function () {
-    client.send(sendTopicText.value, sendMsgText.value)
+    client.send(sendTopicText.value, sendMsgText.value, Number(sendQosNumber.value), sendRetainCheckbox.checked)
   })
 
 </script>
-
 </html>

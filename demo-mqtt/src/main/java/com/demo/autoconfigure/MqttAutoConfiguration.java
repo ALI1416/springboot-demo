@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 
 /**
  * <h1>Mqtt自动配置</h1>
@@ -69,10 +68,10 @@ public class MqttAutoConfiguration {
     public void init() {
         String msg = "MQTT配置：URI ";
         if (mqttProperties.getUri() == null) {
-            mqttProperties.setUri(new String[]{DEFAULT_URI});
-            msg += "[" + DEFAULT_URI + "] (默认)";
+            mqttProperties.setUri(DEFAULT_URI);
+            msg += DEFAULT_URI + " (默认)";
         } else {
-            msg += Arrays.toString(mqttProperties.getUri()) + " ";
+            msg += mqttProperties.getUri() + " ";
         }
         msg += "，连接超时时间CONNECTION_TIMEOUT ";
         if (mqttProperties.getConnectionTimeout() == null) {

@@ -260,10 +260,10 @@ public class Main {
             log.info("---------- annotation ----------");
             Class<?> clazz = Class.forName(CLASS_NAME);
             log.info("类的注解:" + clazz.getAnnotation(Anno.class));
-            Constructor<?> constructor = clazz.getConstructor();
-            log.info("构造函数的注解:" + constructor.getAnnotation(Anno.class));
             Field field = clazz.getDeclaredField("id");
             log.info("字段的注解:" + field.getAnnotation(Anno.class));
+            Constructor<?> constructor = clazz.getDeclaredConstructor();
+            log.info("构造函数的注解:" + constructor.getAnnotation(Anno.class));
             Method method = clazz.getDeclaredMethod("setId", Long.class);
             log.info("方法的注解:" + method.getAnnotation(Anno.class));
             Parameter parameter = method.getParameters()[0];
