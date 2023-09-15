@@ -3,7 +3,7 @@ package com.demo.autoconfigure;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * <h1>Mqtt配置属性</h1>
+ * <h1>MQTT配置属性</h1>
  *
  * <p>
  * createDate 2023/08/16 14:28:35

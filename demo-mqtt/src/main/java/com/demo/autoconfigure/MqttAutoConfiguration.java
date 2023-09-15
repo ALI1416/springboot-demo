@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 
 /**
- * <h1>Mqtt自动配置</h1>
+ * <h1>MQTT自动配置</h1>
  *
  * <p>
  * createDate 2023/08/16 14:28:48

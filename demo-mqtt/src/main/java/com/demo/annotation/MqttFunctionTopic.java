@@ -1,4 +1,4 @@
-package com.demo.tool;
+package com.demo.annotation;
 
 /**
  * <h1>自定义函数</h1>
@@ -11,11 +11,12 @@ package com.demo.tool;
  * @since 1.0.0
  **/
 @FunctionalInterface
-public interface Function<T> {
+public interface MqttFunctionTopic extends MqttFunction<String, Object> {
 
     /**
      * 执行
      */
-    T run();
+    @Override
+    Object run(String topic);
 
 }

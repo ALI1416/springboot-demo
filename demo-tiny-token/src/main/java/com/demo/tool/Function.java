@@ -15,8 +15,6 @@ public interface Function<T> {
 
     /**
      * 执行
-     *
-     * @return T
      */
     T run();
 

@@ -1,4 +1,4 @@
-package com.demo.tool;
+package com.demo.annotation;
 
 /**
  * <h1>自定义函数</h1>
@@ -10,12 +10,11 @@ package com.demo.tool;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@FunctionalInterface
-public interface Function<T> {
+public interface MqttFunction<K, V> {
 
     /**
      * 执行
      */
-    T run();
+    V run(K object);
 
 }

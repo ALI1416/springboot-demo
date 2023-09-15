@@ -1,84 +1,35 @@
-package com.demo.config;
+package com.demo.tool;
 
-import org.eclipse.paho.client.mqttv3.*;
+import com.demo.config.MqttConfig2;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
 /**
- * <h1>MQTT回调</h1>
+ * <h1>Mqtt模板</h1>
  *
  * <p>
- * createDate 2023/09/14 15:14:11
+ * createDate 2023/09/15 13:56:55
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class MqttCallback implements MqttCallbackExtended {
+@Component
+public class MqttTemp2 {
 
-    private static final Logger log = LoggerFactory.getLogger(MqttCallback.class);
+    private static final Logger log = LoggerFactory.getLogger(MqttTemp2.class);
+    /**
+     * MQTT配置
+     */
     private final MqttConfig2 mqttConfig2;
 
-    public static final String[] topicArray = new String[]{"#"};
-    public static final int[] qosArray = new int[]{0};
-    public static final IMqttMessageListener[] callbackArray = new IMqttMessageListener[]{
-            (topic, message) -> log.info("topic:{},id:{},qos:{},duplicate:{},retained:{},msg:{}", topic, message.getId(), message.getQos(), message.isDuplicate(), message.isRetained(), message)
-    };
-
-    /**
-     * 构造函数
-     *
-     * @param mqttConfig2 MqttConfig
-     */
-    public MqttCallback(MqttConfig2 mqttConfig2) {
+    public MqttTemp2(MqttConfig2 mqttConfig2) {
         this.mqttConfig2 = mqttConfig2;
-    }
-
-    /**
-     * 连接成功
-     *
-     * @param reconnect 重连
-     * @param uri       URI
-     */
-    @Override
-    public void connectComplete(boolean reconnect, String uri) {
-        if (reconnect) {
-            log.info("MQTT重连成功");
-        } else {
-            log.info("MQTT连接成功");
-        }
-        subscribe(topicArray, qosArray, callbackArray);
-    }
-
-    /**
-     * 失去连接
-     *
-     * @param cause Throwable
-     */
-    @Override
-    public void connectionLost(Throwable cause) {
-        log.error("MQTT失去连接", cause);
-    }
-
-    /**
-     * 消息到达
-     *
-     * @param topic   主题
-     * @param message MqttMessage
-     */
-    @Override
-    public void messageArrived(String topic, MqttMessage message) {
-    }
-
-    /**
-     * 消息发送成功
-     *
-     * @param token IMqttDeliveryToken
-     */
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {
     }
 
     /**
