@@ -23,7 +23,7 @@ public @interface Header {
     HeaderEnum value() default HeaderEnum.MSG;
 
     /**
-     * 位置(默认0，仅对{@link HeaderEnum#TOPIC_PART}有效)
+     * 匹配位置(默认0，仅对{@link HeaderEnum#TOPIC_PART}有效)
      */
     int index() default 0;
 

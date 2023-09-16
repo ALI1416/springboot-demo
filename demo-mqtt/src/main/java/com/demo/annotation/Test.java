@@ -49,7 +49,7 @@ public class Test {
         log.info("msg:{},topic:{}", msg, topic);
     }
 
-    // @Subscribe("all")
+    @Subscribe("all")
     public void subscribe(
             @Header(HeaderEnum.ID) int id,
             @Header(HeaderEnum.QOS) int qos,
@@ -61,7 +61,7 @@ public class Test {
         log.info("id:{},qos:{},duplicate:{},retain:{},topic:{},msg:{}", id, qos, duplicate, retain, topic, msg);
     }
 
-    // @Subscribe("part/+/+/+")
+    @Subscribe("part/+/+/+")
     public void subscribe(
             String msg,
             @Header(HeaderEnum.TOPIC_PART) String topicPart0,
@@ -71,7 +71,7 @@ public class Test {
         log.info("msg:{},topicPart0:{},topicPart1:{},topicPart2:{}", msg, topicPart0, topicPart1, topicPart2);
     }
 
-    // @Subscribe("part2/#")
+    @Subscribe("part2/#")
     public void subscribe(
             String msg,
             @Header(HeaderEnum.TOPIC_PART) String[] topicPartArray
@@ -79,7 +79,7 @@ public class Test {
         log.info("msg:{},topicPartArray:{}", msg, topicPartArray);
     }
 
-    // @Subscribe("part3/#")
+    @Subscribe("part3/#")
     public void subscribe(
             String msg,
             @Header(HeaderEnum.TOPIC_PART) int[] topicPartArray
@@ -87,11 +87,11 @@ public class Test {
         log.info("msg:{},topicPartArray:{}", msg, topicPartArray);
     }
 
-    // @Subscribe("part4/+/hash/#")
+    @Subscribe("part4/+/hash/#")
     public void subscribe(
             String msg,
             @Header(HeaderEnum.TOPIC_PART) int topicPart,
-            @Header(HeaderEnum.TOPIC_PART) String[] topicPartArray
+            @Header(value = HeaderEnum.TOPIC_PART, index = 1) String[] topicPartArray
     ) {
         log.info("msg:{},topicPart:{},topicPartArray:{}", msg, topicPart, topicPartArray);
     }

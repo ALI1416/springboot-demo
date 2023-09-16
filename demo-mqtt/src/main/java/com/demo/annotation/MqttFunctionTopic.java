@@ -1,7 +1,7 @@
 package com.demo.annotation;
 
 /**
- * <h1>自定义函数</h1>
+ * <h1>MQTT函数-主题</h1>
  *
  * <p>
  * createDate 2020/11/28 20:25:11
