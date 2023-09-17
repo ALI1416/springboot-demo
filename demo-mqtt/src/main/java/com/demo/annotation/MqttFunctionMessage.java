@@ -13,7 +13,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * @since 1.0.0
  **/
 @FunctionalInterface
-public interface MqttFunctionMsg extends MqttFunction<MqttMessage, Object> {
+public interface MqttFunctionMessage extends MqttFunction<MqttMessage, Object> {
 
     /**
      * 执行

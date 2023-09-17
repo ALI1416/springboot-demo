@@ -1,6 +1,6 @@
-package com.demo.annotation;
+package com.demo.entity.po;
 
-import java.nio.charset.StandardCharsets;
+import com.alibaba.fastjson2.JSON;
 
 /**
  * <h1>MyClass</h1>
@@ -16,8 +16,17 @@ public class MyClass {
 
     private String string;
 
+    public MyClass() {
+    }
+
     public MyClass(byte[] bytes) {
-        this.string = new String(bytes, StandardCharsets.UTF_8);
+        MyClass myClass = JSON.parseObject(bytes, MyClass.class);
+        this.string = myClass.getString();
+    }
+
+    public MyClass(String string) {
+        MyClass myClass = JSON.parseObject(string, MyClass.class);
+        this.string = myClass.getString();
     }
 
     public String getString() {

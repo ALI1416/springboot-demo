@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>MQTT缓存</h1>
+ * <h1>MQTT存储</h1>
  *
  * <p>
  * createDate 2023/09/15 14:16:01
@@ -17,7 +17,7 @@ import java.util.List;
  * @since 1.0.0
  **/
 @Component
-public class MqttCache {
+public class MqttStorage {
 
     /**
      * 主题

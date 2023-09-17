@@ -1,8 +1,7 @@
 package com.demo.controller;
 
 import com.demo.entity.pojo.Result;
-import com.demo.service.mqtt.MqttSend;
-import com.demo.service.mqtt.MqttSend2;
+import com.demo.tool.MqttTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,46 +16,49 @@ import org.springframework.web.bind.annotation.RestController;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-// @RestController
+@RestController
 @AllArgsConstructor
 public class IndexController {
 
-    private final MqttSend mqttSend;
-    private final MqttSend2 mqttSend2;
+    private final MqttTemp mqttTemp;
 
     /**
-     * 默认主题和QoS
+     * http://localhost:8080 <br>
+     * 发送(QoS=0 不保留)
      */
     @GetMapping(value = {"", "/", "index"})
     public Result index() {
-        mqttSend.send("默认主题和QoS");
+        mqttTemp.send("topic", "发送(QoS=0 不保留)");
         return Result.o();
     }
 
     /**
-     * 默认QoS
+     * http://localhost:8080/topic?topic=all <br>
+     * 发送(QoS=0 不保留)
      */
     @GetMapping("topic")
-    public Result qos(String topic) {
-        mqttSend2.send(topic, "默认QoS".getBytes());
+    public Result topic(String topic) {
+        mqttTemp.send(topic, "发送(QoS=0 不保留)");
         return Result.o();
     }
 
     /**
-     * 默认主题
+     * http://localhost:8080/topicAndQos?topic=all&qos=2 <br>
+     * 发送(不保留)
      */
-    @GetMapping("qos")
-    public Result topic(Integer qos) {
-        mqttSend.send(qos, "默认主题".getBytes());
+    @GetMapping("topicAndQos")
+    public Result topicAndQos(String topic, int qos) {
+        mqttTemp.send(topic, "发送(不保留)", qos);
         return Result.o();
     }
 
     /**
+     * http://localhost:8080/topicAndQosAndRetain?topic=all&qos=2&retain=true <br>
      * 发送
      */
-    @GetMapping("send")
-    public Result send(String topic, Integer qos) {
-        mqttSend2.send(topic, qos, "无默认");
+    @GetMapping("topicAndQosAndRetain")
+    public Result topicAndQosAndRetain(String topic, int qos, boolean retain) {
+        mqttTemp.send(topic, "发送", qos, retain);
         return Result.o();
     }
 

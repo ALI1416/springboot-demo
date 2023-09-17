@@ -106,18 +106,6 @@
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp -->
     <!--<rabbit-amqp-client.version></rabbit-amqp-client.version>-->
 
-    <!--spring-boot-starter-integration-->
-    <!--org.springframework.boot:spring-boot-starter-integration-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-integration -->
-
-    <!--spring-integration-stream-->
-    <!--org.springframework.integration:spring-integration-stream-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-stream -->
-
-    <!--MQTT(无法修改版本号)-->
-    <!--org.springframework.integration:spring-integration-mqtt-->
-    <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-mqtt -->
-
     <!--实体层注解(与IDE安装的版本号对应，不需一致)-->
     <!--org.projectlombok:lombok-->
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -128,12 +116,17 @@
     <!--ElasticSearch(与服务器版本号对应，需要一致)-->
     <!--co.elastic.clients:elasticsearch-java-->
     <!-- https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
-    <elasticsearch-java.version>8.9.1</elasticsearch-java.version>
+    <elasticsearch.version>8.9.1</elasticsearch.version>
 
     <!--JakartaJson-->
     <!--jakarta.json:jakarta.json-api-->
     <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
-    <jakarta-json.version>2.1.2</jakarta-json.version>
+    <jakarta.version>2.1.2</jakarta.version>
+
+    <!--MQTT(与服务器版本号不对应，不需一致)-->
+    <!--org.eclipse.paho:org.eclipse.paho.client.mqttv3-->
+    <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
+    <mqtt.version>1.2.5</mqtt.version>
 
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
@@ -144,27 +137,27 @@
     <!--请使用2.x.x版本-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-    <mybatis-spring-boot-starter.version>2.3.1</mybatis-spring-boot-starter.version>
+    <mybatis.version>2.3.1</mybatis.version>
 
     <!--PageHelper分页排序查询-->
     <!--com.github.pagehelper:pagehelper-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
-    <pagehelper-spring-boot-starter.version>1.4.7</pagehelper-spring-boot-starter.version>
+    <pagehelper.version>1.4.7</pagehelper.version>
 
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
     <!-- https://mvnrepository.com/artifact/cn.404z/id-spring-boot-autoconfigure -->
-    <id-spring-boot-autoconfigure.version>2.8.0</id-spring-boot-autoconfigure.version>
+    <id.version>2.8.0</id.version>
 
     <!--IP地址转区域-->
     <!--cn.404z:ip2region-spring-boot-autoconfigure-->
     <!-- https://mvnrepository.com/artifact/cn.404z/ip2region-spring-boot-autoconfigure -->
-    <ip2region-spring-boot-autoconfigure.version>3.1.1</ip2region-spring-boot-autoconfigure.version>
+    <ip2region.version>3.1.1</ip2region.version>
 
     <!--手机号码转区域-->
     <!--cn.404z:phone2region-spring-boot-autoconfigure-->
     <!-- https://mvnrepository.com/artifact/cn.404z/phone2region-spring-boot-autoconfigure -->
-    <phone2region-spring-boot-autoconfigure.version>2.1.1</phone2region-spring-boot-autoconfigure.version>
+    <phone2region.version>2.1.1</phone2region.version>
 
     <!--二维码生成器-->
     <!--cn.404z:qrcode-encoder-->
@@ -200,7 +193,7 @@
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
     <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
-    <hutool-all.version>5.8.21</hutool-all.version>
+    <hutool.version>5.8.21</hutool.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
@@ -270,31 +263,31 @@
       <dependency>
         <groupId>org.mybatis.spring.boot</groupId>
         <artifactId>mybatis-spring-boot-starter</artifactId>
-        <version>${mybatis-spring-boot-starter.version}</version>
+        <version>${mybatis.version}</version>
       </dependency>
       <!--PageHelper分页排序查询-->
       <dependency>
         <groupId>com.github.pagehelper</groupId>
         <artifactId>pagehelper-spring-boot-starter</artifactId>
-        <version>${pagehelper-spring-boot-starter.version}</version>
+        <version>${pagehelper.version}</version>
       </dependency>
       <!--雪花ID生成器-->
       <dependency>
         <groupId>cn.404z</groupId>
         <artifactId>id-spring-boot-autoconfigure</artifactId>
-        <version>${id-spring-boot-autoconfigure.version}</version>
+        <version>${id.version}</version>
       </dependency>
       <!--IP地址转区域-->
       <dependency>
         <groupId>cn.404z</groupId>
         <artifactId>ip2region-spring-boot-autoconfigure</artifactId>
-        <version>${ip2region-spring-boot-autoconfigure.version}</version>
+        <version>${ip2region.version}</version>
       </dependency>
       <!--手机号码转区域-->
       <dependency>
         <groupId>cn.404z</groupId>
         <artifactId>phone2region-spring-boot-autoconfigure</artifactId>
-        <version>${phone2region-spring-boot-autoconfigure.version}</version>
+        <version>${phone2region.version}</version>
       </dependency>
       <!--二维码生成器-->
       <dependency>
@@ -312,13 +305,19 @@
       <dependency>
         <groupId>co.elastic.clients</groupId>
         <artifactId>elasticsearch-java</artifactId>
-        <version>${elasticsearch-java.version}</version>
+        <version>${elasticsearch.version}</version>
       </dependency>
       <!--JakartaJson-->
       <dependency>
         <groupId>jakarta.json</groupId>
         <artifactId>jakarta.json-api</artifactId>
-        <version>${jakarta-json.version}</version>
+        <version>${jakarta.version}</version>
+      </dependency>
+      <!--MQTT-->
+      <dependency>
+        <groupId>org.eclipse.paho</groupId>
+        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+        <version>${mqtt.version}</version>
       </dependency>
       <!--Minio-->
       <dependency>
@@ -360,7 +359,7 @@
       <dependency>
         <groupId>cn.hutool</groupId>
         <artifactId>hutool-all</artifactId>
-        <version>${hutool-all.version}</version>
+        <version>${hutool.version}</version>
       </dependency>
       <!--JustAuth第三方登录-->
       <dependency>
