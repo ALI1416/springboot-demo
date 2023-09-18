@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import cn.z.clock.Clock;
+import cn.z.id.Id;
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.po.Car;
 import com.demo.entity.po.Person;
@@ -34,131 +35,150 @@ public class IndexController {
     private final RabbitTemp rabbitTemp;
 
     /**
-     * <h3>Hello World模型，点对点模型</h3>
-     * POST /hello<br>
-     * 控制台打印 RabbitService.receiver收到消息：hello:2021-11-24 10:39:55.584
+     * <h3>点对点模型</h3>
+     * http://localhost:8080/p2p <br>
+     * 点对点模型 89724233216688128
      */
-    @GetMapping("hello")
-    public Result hello() {
+    @GetMapping("p2p")
+    public Result p2p() {
         // 队列名称，对象
-        rabbitTemp.send("hello", "hello:" + Clock.timestamp());
+        rabbitTemp.send("p2p", Id.next());
         return Result.o();
     }
 
     /**
-     * <h3>Work模型，工作模型</h3>
-     * POST /work<br>
-     * 控制台打印<br>
-     * RabbitService2.receiver收到消息：work.0:2021-11-24 10:39:55.584<br>
-     * RabbitService2.receiver2收到消息：work.1:2021-11-24 10:39:55.584<br>
-     * 等。平均分配
+     * <h3>工作模型</h3>
+     * http://localhost:8080/work <br>
+     * 工作模型消费者2 序号1:89724248195596290<br>
+     * 工作模型消费者1 序号0:89724248195596289<br>
+     * 工作模型消费者2 序号3:89724248195596292<br>
+     * 工作模型消费者2 序号5:89724248195596294<br>
+     * 工作模型消费者2 序号7:89724248195596296<br>
+     * 工作模型消费者2 序号9:89724248195596298<br>
+     * 工作模型消费者1 序号2:89724248195596291<br>
+     * 工作模型消费者1 序号4:89724248195596293<br>
+     * 工作模型消费者1 序号6:89724248195596295<br>
+     * 工作模型消费者1 序号8:89724248195596297
      */
     @GetMapping("work")
     public Result work() {
         for (int i = 0; i < 10; i++) {
-            rabbitTemp.send("work", "work." + i + ":" + Clock.timestamp());
+            rabbitTemp.send("work", "序号" + i + ":" + Id.next());
         }
         return Result.o();
     }
 
     /**
-     * <h3>Fanout模型，广播模型</h3>
-     * POST /work<br>
-     * 控制台打印<br>
-     * RabbitService2.receiver3收到消息：fanout:2021-11-24 10:39:55.584<br>
-     * RabbitService2.receiver4收到消息：fanout:2021-11-24 10:39:55.584
+     * <h3>广播模型</h3>
+     * http://localhost:8080/broadcast <br>
+     * 广播模型消费者1 89724299505565697<br>
+     * 广播模型消费者2 89724299505565697
      */
-    @GetMapping("fanout")
-    public Result fanout() {
+    @GetMapping("broadcast")
+    public Result broadcast() {
         // 交换机名称，路由key(广播不需要)，对象
-        rabbitTemp.send("fanout", "", "fanout:" + Clock.timestamp());
+        rabbitTemp.send("broadcast", "", Id.next());
         return Result.o();
     }
 
     /**
-     * <h3>Direct模型，路由模型</h3>
-     * POST /direct?key=aa<br>
-     * 控制台无打印<br>
-     * POST /direct?key=error<br>
-     * 控制台打印<br>
-     * RabbitService2.receiver6收到消息：direct.error:2021-11-24 10:39:55.584<br>
-     * RabbitService2.receiver5收到消息：direct.error:2021-11-24 10:39:55.584<br>
-     * POST /direct?key=debug<br>
-     * 控制台打印 RabbitService2.receiver5收到消息：direct.debug:2021-11-24 10:39:55.584
+     * <h3>路由模型</h3>
+     * http://localhost:8080/route?key=aa <br>
+     * 无<br>
+     * http://localhost:8080/route?key=error <br>
+     * 路由模型消费者2 error:89724352960921601<br>
+     * 路由模型消费者1 error:89724352960921601<br>
+     * http://localhost:8080/route?key=debug <br>
+     * 路由模型消费者1 debug:89724360485502977
      */
-    @GetMapping("direct")
-    public Result direct(String key) {
-        rabbitTemp.send("direct", key, "direct." + key + ":" + Clock.timestamp());
+    @GetMapping("route")
+    public Result route(String key) {
+        rabbitTemp.send("route", key, key + ":" + Id.next());
         return Result.o();
     }
 
     /**
-     * <h3>Topic模型，动态路由模型</h3>
-     * POST /topic?key=aa<br>
-     * 控制台无打印<br>
-     * POST /topic?key=user<br>
-     * 控制台打印 RabbitService2.receiver7收到消息：topic.user:2021-11-24 10:39:55.584<br>
-     * POST /topic?key=user.root<br>
-     * 控制台无打印<br>
-     * POST /topic?key=admin<br>
-     * 控制台打印 RabbitService2.receiver8收到消息：topic.admin:2021-11-24 10:39:55.584<br>
-     * POST /topic?key=admin.user<br>
-     * 控制台打印 RabbitService2.receiver7收到消息：topic.admin.user:2021-11-24 10:39:55.584<br>
-     * POST /topic?key=admin.user.root<br>
-     * 控制台无打印<br>
-     * POST /topic?key=root<br>
-     * 控制台打印 RabbitService2.receiver7收到消息：topic.root:2021-11-24 10:39:55.584<br>
-     * POST /topic?key=root.user<br>
-     * 控制台打印<br>
-     * RabbitService2.receiver7收到消息：topic.root.user:2021-11-24 10:39:55.584<br>
-     * RabbitService2.receiver8收到消息：topic.root.user:2021-11-24 10:39:55.584<br>
-     * POST /topic?key=root.user.admin<br>
-     * 控制台打印 RabbitService2.receiver7收到消息：topic.root.user.admin:2021-11-24 10:39:55.584<br>
+     * <h3>动态路由模型</h3>
+     * http://localhost:8080/dynamicRoute?key=aa <br>
+     * 无<br>
+     * http://localhost:8080/dynamicRoute?key=user <br>
+     * 动态路由模型消费者1 user:89724645977096192<br>
+     * http://localhost:8080/dynamicRoute?key=user.root <br>
+     * 无<br>
+     * http://localhost:8080/dynamicRoute?key=admin <br>
+     * 动态路由模型消费者2 admin:89724664629166080<br>
+     * http://localhost:8080/dynamicRoute?key=admin.user <br>
+     * 动态路由模型消费者1 admin.user:89724676895408129<br>
+     * http://localhost:8080/dynamicRoute?key=admin.user.root <br>
+     * 无<br>
+     * http://localhost:8080/dynamicRoute?key=root <br>
+     * 动态路由模型消费者1 root:89724693238513664<br>
+     * http://localhost:8080/dynamicRoute?key=root.user <br>
+     * 动态路由模型消费者1 root.user:89724701986783233<br>
+     * 动态路由模型消费者2 root.user:89724701986783233<br>
+     * http://localhost:8080/dynamicRoute?key=root.user.admin <br>
+     * 动态路由模型消费者1 root.user.admin:89724710057672704
      */
-    @GetMapping("topic")
-    public Result topic(String key) {
-        rabbitTemp.send("topic", key, "topic." + key + ":" + Clock.timestamp());
+    @GetMapping("dynamicRoute")
+    public Result dynamicRoute(String key) {
+        rabbitTemp.send("dynamicRoute", key, key + ":" + Id.next());
         return Result.o();
     }
 
     /**
-     * <h3>protobuf</h3>
-     * POST /proto
+     * <h3>ProtocolBuffers1</h3>
+     * http://localhost:8080/protocolBuffers1 <br>
+     * ProtocolBuffers1 {
+     * "name": "ali",
+     * "year": 1998,
+     * "gender": true,
+     * "date": "1695027410957",
+     * "address": "address",
+     * "cars": [{
+     * "name": "Car",
+     * "color": "Red"
+     * }],
+     * "other": {
+     * "描述": "暂无"
+     * }
+     * }
      */
-    @GetMapping("proto")
-    public Result<byte[]> proto() {
+    @GetMapping("protocolBuffers1")
+    public Result protocolBuffers1() {
         // 创建PersonProto.Person对象
-        PersonProto.Person person = PersonProto.Person.newBuilder()//
-                .setName("ali")//
-                .setYear(1998)//
-                .setGender(true)//
-                .setDate(System.currentTimeMillis())//
-                .setAddress("address")//
-                .addCars(0, PersonProto.Car.newBuilder()//
-                        .setName("Car")//
-                        .setColor("Red")//
-                        .build())//
-                .putOther("描述", "暂无")//
+        PersonProto.Person person = PersonProto.Person.newBuilder() //
+                .setName("ali") //
+                .setYear(1998) //
+                .setGender(true) //
+                .setDate(Clock.now()) //
+                .setAddress("address") //
+                .addCars(0, PersonProto.Car.newBuilder() //
+                        .setName("Car") //
+                        .setColor("Red") //
+                        .build() //
+                ) //
+                .putOther("描述", "暂无") //
                 .build();
         // 编码成bytes
         byte[] bytes = person.toByteArray();
         // rabbit发送
-        rabbitTemp.send("proto", bytes);
-        return Result.o(bytes);
+        rabbitTemp.send("protocolBuffers1", bytes);
+        return Result.o();
     }
 
     /**
-     * <h3>protobuf2</h3>
-     * POST /proto2
+     * <h3>ProtocolBuffers2</h3>
+     * http://localhost:8080/protocolBuffers2 <br>
+     * ProtocolBuffers2 {"address":"address","cars":[{"color":"Red","name":"Car"}],"date":"1695027857124","gender":true,"name":"ali","other":{"描述":"暂无"},"year":1998}
      */
-    @GetMapping("proto2")
-    public Result<byte[]> proto2() {
+    @GetMapping("protocolBuffers2")
+    public Result protocolBuffers2() throws Exception {
         // 创建Person对象
         Person person = new Person();
         person.setName("ali");
         person.setYear(1998);
         person.setGender(true);
-        person.setDate(Clock.timestamp());
+        person.setDate(Clock.now());
         person.setAddress("address");
         Car car = new Car();
         car.setName("Car");
@@ -171,16 +191,23 @@ public class IndexController {
         person.setOther(other);
         // 先转换成JSON字符串，再转换成PersonProto.Person.Builder对象
         PersonProto.Person.Builder builder = PersonProto.Person.newBuilder();
-        try {
-            JsonFormat.parser().merge(JSON.toJSONString(person), builder);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JsonFormat.parser().merge(JSON.toJSONString(person), builder);
         // 编码成bytes
         byte[] bytes = builder.build().toByteArray();
         // rabbit发送
-        rabbitTemp.send("proto2", bytes);
-        return Result.o(bytes);
+        rabbitTemp.send("protocolBuffers2", bytes);
+        return Result.o();
+    }
+
+    /**
+     * <h3>死信测试1</h3>
+     * http://localhost:8080/deadLetterTest1?msg=a <br>
+     * http://localhost:8080/deadLetterTest1?msg=ab <br>
+     */
+    @GetMapping("deadLetterTest1")
+    public Result deadLetterTest1(String msg) {
+        rabbitTemp.send("deadLetterTest", "deadLetterTest1", msg);
+        return Result.o();
     }
 
 }

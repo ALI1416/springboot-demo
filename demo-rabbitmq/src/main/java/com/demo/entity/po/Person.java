@@ -4,7 +4,6 @@ import com.demo.base.ToStringBase;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +39,7 @@ public class Person extends ToStringBase {
     /**
      * 日期
      */
-    private Timestamp date;
+    private Long date;
 
     /**
      * 地址

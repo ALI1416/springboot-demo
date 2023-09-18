@@ -3,9 +3,9 @@ package com.demo.service.rabbit;
 import com.alibaba.fastjson2.JSONObject;
 import com.demo.entity.po.Person;
 import com.demo.entity.proto.PersonProto;
-import com.demo.tool.ThreadPool;
 import com.google.protobuf.util.JsonFormat;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -32,11 +32,8 @@ public class RabbitService2 {
      * 消费者1
      */
     @RabbitListener(queuesToDeclare = @Queue(value = "work", autoDelete = "true"))
-    public void receiver(String message) {
-        ThreadPool.execute(() -> {
-            log.info("RabbitService2.receiver收到消息：" + message);
-            throw new RuntimeException("RabbitService2.receiver");
-        });
+    public void work1(String message) {
+        log.info("工作模型消费者1 {}", message);
     }
 
     /**
@@ -44,41 +41,42 @@ public class RabbitService2 {
      * 消费者2
      */
     @RabbitListener(queuesToDeclare = @Queue(value = "work", autoDelete = "true"))
-    public void receiver2(String message) {
-        log.info("RabbitService2.receiver2收到消息：" + message);
+    public void work2(String message) {
+        log.info("工作模型消费者2 {}", message);
     }
 
     /**
      * 广播模型(type为fanout)<br>
      * 消费者1
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue,// 队列名称：临时队列，随机名称
-            exchange = @Exchange(value = "fanout", type = "fanout")// 交换机：value名称，type类型
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue, // 随机名称、自动删除、独占
+            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = "broadcast", autoDelete = "true") // 交换机：type类型，value名称，autoDelete自动删除
     )})
-    public void receiver3(String message) {
-        log.info("RabbitService2.receiver3收到消息：" + message);
+    public void broadcast1(Long id) {
+        log.info("广播模型消费者1 {}", id);
     }
 
     /**
      * 广播模型<br>
      * 消费者2
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue,//
-            exchange = @Exchange(value = "fanout", type = "fanout"))})
-    public void receiver4(String message) {
-        log.info("RabbitService2.receiver4收到消息：" + message);
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
+            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = "broadcast", autoDelete = "true") //
+    )})
+    public void broadcast2(Long id) {
+        log.info("广播模型消费者2 {}", id);
     }
 
     /**
      * 路由模型(type为direct或不写)<br>
      * 消费者1
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue,//
-            exchange = @Exchange(value = "direct", type = "direct"),//
-            key = {"error", "warn", "info", "trace", "debug"}// 可接收的路由key
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
+            exchange = @Exchange(type = ExchangeTypes.DIRECT, value = "route", autoDelete = "true"), // 类型默认为路由模型
+            key = {"error", "warn", "info", "trace", "debug"} // 可接收的路由key
     )})
-    public void receiver5(String message) {
-        log.info("RabbitService2.receiver5收到消息：" + message);
+    public void route1(String message) {
+        log.info("路由模型消费者1 {}", message);
     }
 
     /**
@@ -86,21 +84,23 @@ public class RabbitService2 {
      * 消费者2
      */
     @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
-            exchange = @Exchange(value = "direct"), //
-            key = {"error", "warn"})})
-    public void receiver6(String message) {
-        log.info("RabbitService2.receiver6收到消息：" + message);
+            exchange = @Exchange(value = "route", autoDelete = "true"), //
+            key = {"error", "warn"} //
+    )})
+    public void route2(String message) {
+        log.info("路由模型消费者2 {}", message);
     }
 
     /**
      * 动态路由模型<br>
      * 消费者1
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue, exchange = @Exchange(value = "topic", type = "topic"),
-            key = {"user", "admin.*", "root.#"}// 可接收的路由key，*匹配1个单词，#匹配0及0个以上的单词（中间用.隔开）
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
+            exchange = @Exchange(type = ExchangeTypes.TOPIC, value = "dynamicRoute", autoDelete = "true"),
+            key = {"user", "admin.*", "root.#"} // 可接收的路由key，用.划分层次，*匹配1个层次，#匹配0个及以上层次
     )})
-    public void receiver7(String message) {
-        log.info("RabbitService2.receiver7收到消息：" + message);
+    public void dynamicRoute1(String message) {
+        log.info("动态路由模型消费者1 {}", message);
     }
 
     /**
@@ -108,41 +108,32 @@ public class RabbitService2 {
      * 消费者2
      */
     @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
-            exchange = @Exchange(value = "topic", type = "topic"),//
-            key = {"admin", "root.*"})})
-    public void receiver8(String message) {
-        log.info("RabbitService2.receiver8收到消息：" + message);
+            exchange = @Exchange(type = ExchangeTypes.TOPIC, value = "dynamicRoute", autoDelete = "true"), //
+            key = {"admin", "root.*"} //
+    )})
+    public void dynamicRoute2(String message) {
+        log.info("动态路由模型消费者2 {}", message);
     }
 
     /**
-     * proto<br>
+     * ProtocolBuffers1<br>
      */
-    @RabbitListener(queuesToDeclare = @Queue("proto"))
-    public void receiver9(byte[] bytes) {
+    @RabbitListener(queuesToDeclare = @Queue(value = "protocolBuffers1", autoDelete = "true"))
+    public void protocolBuffers1(byte[] bytes) throws Exception {
         // 解码并转换成JSON字符串
-        String jsonString = "";
-        try {
-            jsonString = JsonFormat.printer().print(PersonProto.Person.parseFrom(bytes));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        log.info("RabbitService2.receiver9收到消息：" + jsonString);
+        String string = JsonFormat.printer().print(PersonProto.Person.parseFrom(bytes));
+        log.info("ProtocolBuffers1 {}", string);
     }
 
     /**
-     * proto2<br>
+     * ProtocolBuffers2<br>
      */
-    @RabbitListener(queuesToDeclare = @Queue("proto2"))
-    public void receiver10(byte[] bytes) {
+    @RabbitListener(queuesToDeclare = @Queue(value = "protocolBuffers2", autoDelete = "true"))
+    public void protocolBuffers2(byte[] bytes) throws Exception {
         // 先解码并转换成JSON字符串，再转换成Person对象
-        Person person = new Person();
-        try {
-            person = JSONObject.parseObject(JsonFormat.printer().print(PersonProto.Person.parseFrom(bytes)),
-                    Person.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        log.info("RabbitService2.receiver10收到消息：" + person);
+        String string = JsonFormat.printer().print(PersonProto.Person.parseFrom(bytes));
+        Person person = JSONObject.parseObject(string, Person.class);
+        log.info("ProtocolBuffers2 {}", person);
     }
 
 }

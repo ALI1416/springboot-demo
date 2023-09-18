@@ -5,7 +5,7 @@ import com.demo.annotation.HeaderEnum;
 import com.demo.annotation.Subscribe;
 import com.demo.entity.po.MyClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
@@ -19,7 +19,7 @@ import java.util.Arrays;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
+@Service
 @Slf4j
 public class MqttService {
 
@@ -88,16 +88,6 @@ public class MqttService {
      */
     @Subscribe("topic")
     public void subscribe(String msg, String topic) {
-        log.info("msg:{},topic:{}", msg, topic);
-    }
-
-    /**
-     * topic:topic<br>
-     * msg:123哈哈<br>
-     * log:msg:123哈哈,topic:topic
-     */
-    @Subscribe("topic")
-    public void subscribe2(String msg, String topic) {
         log.info("msg:{},topic:{}", msg, topic);
     }
 
