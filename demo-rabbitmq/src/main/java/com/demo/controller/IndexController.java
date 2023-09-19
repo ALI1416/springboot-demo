@@ -3,6 +3,8 @@ package com.demo.controller;
 import cn.z.clock.Clock;
 import cn.z.id.Id;
 import com.alibaba.fastjson2.JSON;
+import com.demo.constant.RabbitExchange;
+import com.demo.constant.RabbitQueue;
 import com.demo.entity.po.Car;
 import com.demo.entity.po.Person;
 import com.demo.entity.pojo.Result;
@@ -10,6 +12,7 @@ import com.demo.entity.proto.PersonProto;
 import com.demo.tool.RabbitTemp;
 import com.google.protobuf.util.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +33,7 @@ import java.util.Map;
  **/
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class IndexController {
 
     private final RabbitTemp rabbitTemp;
@@ -41,8 +45,7 @@ public class IndexController {
      */
     @GetMapping("p2p")
     public Result p2p() {
-        // 队列名称，对象
-        rabbitTemp.send("p2p", Id.next());
+        rabbitTemp.send(RabbitQueue.P2P, Id.next());
         return Result.o();
     }
 
@@ -63,7 +66,7 @@ public class IndexController {
     @GetMapping("work")
     public Result work() {
         for (int i = 0; i < 10; i++) {
-            rabbitTemp.send("work", "序号" + i + ":" + Id.next());
+            rabbitTemp.send(RabbitQueue.WORK, "序号" + i + ":" + Id.next());
         }
         return Result.o();
     }
@@ -76,8 +79,7 @@ public class IndexController {
      */
     @GetMapping("broadcast")
     public Result broadcast() {
-        // 交换机名称，路由key(广播不需要)，对象
-        rabbitTemp.send("broadcast", "", Id.next());
+        rabbitTemp.broadcast(RabbitExchange.BROADCAST, Id.next());
         return Result.o();
     }
 
@@ -93,7 +95,7 @@ public class IndexController {
      */
     @GetMapping("route")
     public Result route(String key) {
-        rabbitTemp.send("route", key, key + ":" + Id.next());
+        rabbitTemp.send(RabbitExchange.ROUTE, key, key + ":" + Id.next());
         return Result.o();
     }
 
@@ -121,7 +123,7 @@ public class IndexController {
      */
     @GetMapping("dynamicRoute")
     public Result dynamicRoute(String key) {
-        rabbitTemp.send("dynamicRoute", key, key + ":" + Id.next());
+        rabbitTemp.send(RabbitExchange.DYNAMIC_ROUTE, key, key + ":" + Id.next());
         return Result.o();
     }
 
@@ -162,7 +164,7 @@ public class IndexController {
         // 编码成bytes
         byte[] bytes = person.toByteArray();
         // rabbit发送
-        rabbitTemp.send("protocolBuffers1", bytes);
+        rabbitTemp.send(RabbitQueue.PROTOCOL_BUFFERS1, bytes);
         return Result.o();
     }
 
@@ -195,18 +197,37 @@ public class IndexController {
         // 编码成bytes
         byte[] bytes = builder.build().toByteArray();
         // rabbit发送
-        rabbitTemp.send("protocolBuffers2", bytes);
+        rabbitTemp.send(RabbitQueue.PROTOCOL_BUFFERS2, bytes);
         return Result.o();
     }
 
     /**
-     * <h3>死信测试1</h3>
-     * http://localhost:8080/deadLetterTest1?msg=a <br>
-     * http://localhost:8080/deadLetterTest1?msg=ab <br>
+     * <h3>死信测试</h3>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest1&msg=-1 <br>
+     * 死信测试1 -1<br>
+     * 消息被丢弃(报错，没有指定死信队列)<br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest1&msg=100 <br>
+     * 死信测试1 100<br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest2&msg=-1 <br>
+     * 死信测试2 -1<br>
+     * 进入死信队列(报错)<br>
+     * 死信消息 -1 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=rejected, count=1, exchange=, time=Tue Sep 19 17:32:35 CST 2023, routing-keys=[deadLetterTest2], queue=deadLetterTest2}], x-first-death-reason=rejected, x-first-death-queue=deadLetterTest2}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=1, consumerTag=amq.ctag-fdjeQ8myfJHt79xGM3jI_A, consumerQueue=deadLetter]<br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest3&msg=test&expire=5 <br>
+     * 队列 deadLetterTest3 消息 test 消息过期时间 5 秒<br>
+     * 5秒后进入死信队列(超出消息过期时间)<br>
+     * 死信消息 test 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=expired, original-expiration=5000, count=1, exchange=, time=Tue Sep 19 18:26:46 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=expired, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=2, consumerTag=amq.ctag-_Z7gd1UKV4jO7XAsnMGahQ, consumerQueue=deadLetter]<br>
+     * 队列 deadLetterTest3 消息 test 消息过期时间 15 秒<br>
+     * 10秒后进入死信队列(超出队列消息过期时间)<br>
+     * 死信消息 test 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=expired, original-expiration=15000, count=1, exchange=, time=Tue Sep 19 18:27:32 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=expired, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=3, consumerTag=amq.ctag-_Z7gd1UKV4jO7XAsnMGahQ, consumerQueue=deadLetter]<br>
      */
-    @GetMapping("deadLetterTest1")
-    public Result deadLetterTest1(String msg) {
-        rabbitTemp.send("deadLetterTest", "deadLetterTest1", msg);
+    @GetMapping("deadLetterTest")
+    public Result deadLetterTest(String queue, String msg, Long expire) {
+        if (expire == null) {
+            rabbitTemp.send(queue, msg);
+        } else {
+            log.info("队列 {} 消息 {} 消息过期时间 {} 秒", queue, msg, expire);
+            rabbitTemp.send(queue, msg, (long) expire);
+        }
         return Result.o();
     }
 
