@@ -219,10 +219,22 @@ public class IndexController {
      * 队列 deadLetterTest3 消息 test 消息过期时间 15 秒<br>
      * 10秒后进入死信队列(超出队列消息过期时间)<br>
      * 死信消息 test 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=expired, original-expiration=15000, count=1, exchange=, time=Tue Sep 19 18:27:32 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=expired, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=3, consumerTag=amq.ctag-_Z7gd1UKV4jO7XAsnMGahQ, consumerQueue=deadLetter]<br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest3&msg=a<br>
+     * x6<br>
+     * 第6条进入死信队列(超出最大队列长度)<br>
+     * 死信消息 a 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=maxlen, count=1, exchange=, time=Wed Sep 20 10:41:12 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=maxlen, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=8, consumerTag=amq.ctag-ZVBkGWyAnlFuH-3nNpyixg, consumerQueue=deadLetter]<br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest3&msg=test<br>
+     * x3<br>
+     * 第3条进入死信队列(超出最大总数据长度)<br>
+     * 死信消息 test 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=maxlen, count=1, exchange=, time=Wed Sep 20 11:17:54 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=maxlen, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=5, consumerTag=amq.ctag-AZpDylQKucTRtyvvpuGydA, consumerQueue=deadLetter]<br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest4&msg=-1 <br>
+     * 死信测试4(线程池模拟死信) -1<br>
+     * 死信消息 -1 属性 MessageProperties [headers={}, contentType=application/x-java-serialized-object, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=1, consumerTag=amq.ctag-0ViY3hb_0-FisGaFsgSHTg, consumerQueue=deadLetter]<br>
      */
     @GetMapping("deadLetterTest")
     public Result deadLetterTest(String queue, String msg, Long expire) {
         if (expire == null) {
+            log.info("队列 {} 消息 {}", queue, msg);
             rabbitTemp.send(queue, msg);
         } else {
             log.info("队列 {} 消息 {} 消息过期时间 {} 秒", queue, msg, expire);

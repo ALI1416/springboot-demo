@@ -1,6 +1,8 @@
 package com.demo.service.rabbit;
 
 import com.demo.constant.RabbitQueue;
+import com.demo.tool.RabbitTemp;
+import com.demo.tool.ThreadPool;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -31,6 +33,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class RabbitService3 {
 
+    private final RabbitTemp rabbitTemp;
     private final RabbitTemplate rabbitTemplate;
 
     /**
@@ -66,11 +69,28 @@ public class RabbitService3 {
         Map<String, Object> arguments = new HashMap<>();
         arguments.put("x-message-ttl", 10000); // 队列消息过期时间(单位：毫秒)(ready状态)
         arguments.put("x-max-length", 5); // 最大队列长度(ready状态)
-        arguments.put("x-max-length-bytes", 10); // 最大数据长度(所有ready状态body的总长度)
+        arguments.put("x-max-length-bytes", 10); // 最大总数据长度(所有ready状态body的总长度)
         arguments.put("x-dead-letter-exchange", ""); // 死信交换机
         arguments.put("x-dead-letter-routing-key", RabbitQueue.DEAD_LETTER); // 死信队列
         connection.createChannel(false).queueDeclare(RabbitQueue.DEAD_LETTER_TEST3, true, true, true, arguments);
         connection.close();
+    }
+
+    /**
+     * 死信测试4(线程池模拟死信)
+     */
+    @RabbitListener(queuesToDeclare = @Queue(value = RabbitQueue.DEAD_LETTER_TEST4, autoDelete = "true"))
+    public void deadLetterTest4(Integer delay) {
+        log.info("死信测试4(线程池模拟死信) {}", delay);
+        ThreadPool.execute(() -> {
+            try {
+                Thread.sleep(delay);
+            } catch (Exception e) {
+                // 异常手动发送到死信队列
+                rabbitTemp.send(RabbitQueue.DEAD_LETTER, delay);
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     /**
