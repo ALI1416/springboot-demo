@@ -1,8 +1,8 @@
 package com.demo.service.rabbit;
 
+import cn.z.rabbit.RabbitTemp;
+import cn.z.tool.ThreadPool;
 import com.demo.constant.RabbitQueue;
-import com.demo.tool.RabbitTemp;
-import com.demo.tool.ThreadPool;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;

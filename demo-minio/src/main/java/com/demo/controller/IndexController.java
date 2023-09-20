@@ -1,8 +1,8 @@
 package com.demo.controller;
 
+import cn.z.minio.MinioTemp;
+import cn.z.minio.entity.*;
 import com.demo.entity.pojo.Result;
-import com.demo.tool.MinioTemp;
-import com.demo.tool.entity.minio.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

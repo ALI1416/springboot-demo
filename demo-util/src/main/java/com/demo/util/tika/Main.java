@@ -1,5 +1,6 @@
 package com.demo.util.tika;
 
+import cn.z.util.TikaUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;

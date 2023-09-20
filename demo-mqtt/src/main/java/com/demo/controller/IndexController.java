@@ -1,7 +1,7 @@
 package com.demo.controller;
 
+import cn.z.mqtt.MqttTemp;
 import com.demo.entity.pojo.Result;
-import com.demo.tool.MqttTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

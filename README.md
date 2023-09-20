@@ -58,7 +58,6 @@ SpringBoot示例
   - IP解析
   - 雪花ID生成器
   - IP地址转区域
-  - HuTool工具包
 - **`demo-mysql2`** : MySQL2
   - SpringBoot Web
   - FastJson
@@ -67,7 +66,6 @@ SpringBoot示例
   - PageHelper分页排序查询
   - IP解析
   - 雪花ID生成器
-  - HuTool工具包
 - **`demo-rabbitmq`** : RabbitMQ
   - SpringBoot Web
   - FastJson

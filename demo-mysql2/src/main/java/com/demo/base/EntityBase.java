@@ -98,7 +98,6 @@ public class EntityBase extends ToStringBase {
     private String orderBy;
 
     public EntityBase() {
-
     }
 
     public EntityBase(EntityBase base) {

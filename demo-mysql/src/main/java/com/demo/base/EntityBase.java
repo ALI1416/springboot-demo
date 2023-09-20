@@ -1,10 +1,8 @@
 package com.demo.base;
 
-import cn.hutool.extra.servlet.ServletUtil;
-import cn.hutool.http.useragent.UserAgent;
-import cn.hutool.http.useragent.UserAgentUtil;
 import cn.z.ip2region.Ip2Region;
 import cn.z.ip2region.Region;
+import cn.z.tool.useragent.UserAgent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -96,7 +94,7 @@ public class EntityBase extends ToStringBase {
      */
     private String uaBrowser;
     /**
-     * 浏览器标识-是手机
+     * 浏览器标识-是移动端
      */
     private Integer uaIsMobile;
 
@@ -110,7 +108,7 @@ public class EntityBase extends ToStringBase {
      * @param request HttpServletRequest
      */
     public void setIpInfo(HttpServletRequest request) {
-        String ipString = ServletUtil.getClientIP(request);
+        String ipString = request.getRemoteAddr();
         setIp(ipString);
         try {
             Region region = Ip2Region.parse(ipString);
@@ -141,38 +139,36 @@ public class EntityBase extends ToStringBase {
             setUaIsMobile(0);
         } else {
             setUserAgent(userAgentString);
-            UserAgent userAgentInfo = UserAgentUtil.parse(userAgentString);
-            if (userAgentInfo != null) {
-                // 浏览器标识-操作系统
-                String platformString = userAgentInfo.getPlatform().toString();
-                if (!"Unknown".equals(platformString)) {
-                    String osVersionString = userAgentInfo.getOsVersion();
-                    if (osVersionString != null) {
-                        setUaOs(platformString + " " + osVersionString);
-                    } else {
-                        setUaOs(platformString);
-                    }
+            UserAgent userAgentInfo = UserAgent.parse(userAgentString);
+            // 浏览器标识-操作系统
+            String os = userAgentInfo.getOs();
+            if (os != null) {
+                String osVersion = userAgentInfo.getOsVersion();
+                if (osVersion != null) {
+                    setUaOs(os + " " + osVersion);
                 } else {
-                    setUaOs("");
+                    setUaOs(os);
                 }
-                // 浏览器标识-浏览器
-                String browserString = userAgentInfo.getBrowser().toString();
-                if (!"Unknown".equals(browserString)) {
-                    String versionString = userAgentInfo.getVersion();
-                    if (versionString != null) {
-                        setUaBrowser(browserString + " " + versionString);
-                    } else {
-                        setUaBrowser(browserString);
-                    }
+            } else {
+                setUaOs("");
+            }
+            // 浏览器标识-浏览器
+            String browser = userAgentInfo.getBrowser();
+            if (browser != null) {
+                String browserVersion = userAgentInfo.getBrowserVersion();
+                if (browserVersion != null) {
+                    setUaBrowser(browser + " " + browserVersion);
                 } else {
-                    setUaBrowser("");
+                    setUaBrowser(browser);
                 }
-                // 浏览器标识-是手机
-                if (userAgentInfo.isMobile()) {
-                    setUaIsMobile(1);
-                } else {
-                    setUaIsMobile(0);
-                }
+            } else {
+                setUaBrowser("");
+            }
+            // 浏览器标识-是移动端
+            if (userAgentInfo.isMobile()) {
+                setUaIsMobile(1);
+            } else {
+                setUaIsMobile(0);
             }
         }
     }

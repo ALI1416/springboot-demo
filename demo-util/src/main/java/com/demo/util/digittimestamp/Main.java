@@ -1,5 +1,6 @@
 package com.demo.util.digittimestamp;
 
+import cn.z.tool.DigitTimestamp;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Timestamp;

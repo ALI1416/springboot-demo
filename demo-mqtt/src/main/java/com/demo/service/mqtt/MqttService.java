@@ -1,8 +1,8 @@
 package com.demo.service.mqtt;
 
-import com.demo.annotation.Header;
-import com.demo.annotation.HeaderEnum;
-import com.demo.annotation.Subscribe;
+import cn.z.mqtt.annotation.Header;
+import cn.z.mqtt.annotation.HeaderEnum;
+import cn.z.mqtt.annotation.Subscribe;
 import com.demo.entity.po.MyClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

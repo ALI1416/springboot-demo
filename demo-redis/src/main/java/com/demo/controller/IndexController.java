@@ -1,7 +1,7 @@
 package com.demo.controller;
 
+import cn.z.redis.RedisTemp;
 import com.demo.entity.pojo.Result;
-import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.SortParameters;

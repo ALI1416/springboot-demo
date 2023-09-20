@@ -1,5 +1,6 @@
 package com.demo.util.bcrypt;
 
+import cn.z.tool.BCrypt;
 import lombok.extern.slf4j.Slf4j;
 
 /**

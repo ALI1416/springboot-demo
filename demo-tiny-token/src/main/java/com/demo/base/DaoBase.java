@@ -1,6 +1,6 @@
 package com.demo.base;
 
-import com.demo.tool.Function;
+import cn.z.tool.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 

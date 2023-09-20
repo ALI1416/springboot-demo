@@ -1,7 +1,7 @@
 package com.demo.controller;
 
+import cn.z.websocket.WebSocketTemp;
 import com.demo.entity.po.WsMsg;
-import com.demo.tool.WebSocketTemp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

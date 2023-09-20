@@ -1,5 +1,6 @@
 package com.demo.interceptor;
 
+import cn.z.redis.RedisTemp;
 import cn.z.tinytoken.T4s;
 import com.demo.constant.RedisConstant;
 import com.demo.constant.ResultEnum;
@@ -10,7 +11,6 @@ import com.demo.entity.vo.RouteVo;
 import com.demo.service.RoleService;
 import com.demo.service.RouteNotInterceptService;
 import com.demo.service.RouteService;
-import com.demo.tool.RedisTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;

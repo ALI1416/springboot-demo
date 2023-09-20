@@ -1,8 +1,8 @@
 package com.demo.cluster;
 
+import cn.z.rabbit.RabbitTemp;
+import cn.z.websocket.WebSocketTemp;
 import com.demo.entity.po.WsMsg;
-import com.demo.tool.RabbitTemp;
-import com.demo.tool.WebSocketTemp;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.Exchange;

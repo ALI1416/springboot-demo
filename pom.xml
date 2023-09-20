@@ -23,6 +23,7 @@
   </parent>
 
   <modules>
+    <module>packages</module>
     <module>demo-base</module>
     <module>demo-config</module>
     <module>demo-elastic-search</module>
@@ -228,6 +229,33 @@
     <!--com.xuxueli:xxl-job-core-->
     <!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
     <xxl-job.version>2.4.0</xxl-job.version>
+
+    <!---->
+    <!--项目包-->
+    <!--邮件SpringBoot模板-->
+    <!--cn.404z:mail-spring-boot-temp-->
+    <mail-spring-boot-temp.version>1.0.0</mail-spring-boot-temp.version>
+    <!--RabbitMQ SpringBoot模板-->
+    <!--cn.404z:rabbitmq-spring-boot-temp-->
+    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
+    <!--Redis SpringBoot模板-->
+    <!--cn.404z:redis-spring-boot-temp-->
+    <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
+    <!--WebSocket SpringBoot模板-->
+    <!--cn.404z:websocket-spring-boot-temp-->
+    <websocket-spring-boot-temp.version>1.0.0</websocket-spring-boot-temp.version>
+    <!--Minio SpringBoot启动器-->
+    <!--cn.404z:minio-spring-boot-starter-->
+    <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
+    <!--MQTT SpringBoot启动器-->
+    <!--cn.404z:mqtt-spring-boot-starter-->
+    <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
+    <!--工具-->
+    <!--cn.404z:util-->
+    <util.version>1.0.0</util.version>
+    <!--SpringBoot工具-->
+    <!--cn.404z:util-spring-boot-->
+    <util-spring-boot.version>1.0.0</util-spring-boot.version>
   </properties>
 
   <dependencies>
@@ -409,29 +437,82 @@
         <artifactId>xxl-job-core</artifactId>
         <version>${xxl-job.version}</version>
       </dependency>
+
+      <!--邮件SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mail-spring-boot-temp</artifactId>
+        <version>${mail-spring-boot-temp.version}</version>
+      </dependency>
+      <!--RabbitMQ SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>rabbitmq-spring-boot-temp</artifactId>
+        <version>${rabbitmq-spring-boot-temp.version}</version>
+      </dependency>
+      <!--Redis SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>redis-spring-boot-temp</artifactId>
+        <version>${redis-spring-boot-temp.version}</version>
+      </dependency>
+      <!--WebSocket SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>websocket-spring-boot-temp</artifactId>
+        <version>${websocket-spring-boot-temp.version}</version>
+      </dependency>
+      <!--Minio SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>minio-spring-boot-starter</artifactId>
+        <version>${minio-spring-boot-starter.version}</version>
+      </dependency>
+      <!--MQTT SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mqtt-spring-boot-starter</artifactId>
+        <version>${mqtt-spring-boot-starter.version}</version>
+      </dependency>
+      <!--工具-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>util</artifactId>
+        <version>${util.version}</version>
+      </dependency>
+      <!--SpringBoot工具-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>util-spring-boot</artifactId>
+        <version>${util-spring-boot.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
-  <profiles>
-    <profile>
-      <id>install</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <build>
-        <plugins>
-          <!--指定编译的jdk版本-->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <configuration>
-              <source>${java.version}</source>
-              <target>${java.version}</target>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>

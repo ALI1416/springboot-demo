@@ -1,0 +1,51 @@
+{
+  "properties": [
+    {
+      "name": "mqtt.uri",
+      "type": "java.lang.String",
+      "description": "URI.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
+      "defaultValue": "tcp://127.0.0.1:1883"
+    },
+    {
+      "name": "mqtt.username",
+      "type": "java.lang.String",
+      "description": "用户名.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties"
+    },
+    {
+      "name": "mqtt.password",
+      "type": "java.lang.String",
+      "description": "密码.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties"
+    },
+    {
+      "name": "mqtt.connection-timeout",
+      "type": "java.lang.Integer",
+      "description": "连接超时时间(秒).",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
+      "defaultValue": "30"
+    },
+    {
+      "name": "mqtt.keep-alive-interval",
+      "type": "java.lang.Integer",
+      "description": "保活时间(秒).",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
+      "defaultValue": "60"
+    },
+    {
+      "name": "mqtt.clean-session",
+      "type": "java.lang.Boolean",
+      "description": "清除会话.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "mqtt.automatic-reconnect",
+      "type": "java.lang.Boolean",
+      "description": "自动重连.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
+      "defaultValue": false
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package com.demo.util.ansj;
 
+import cn.z.util.AnsjUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,8 +31,8 @@ public class Main {
                 "～！＠＃＄％＾＆＊（）＿＋｛｝｜：＂＜＞？" + //
                 "　全　角　　　空格　" + // 全角空格
                 "广西壮族自治区桂林市七星区桂林航天工业学院南校区"; // 汉字
-        log.info(AnsjUtils.getAnsj(s1));
-        log.info(AnsjUtils.getAnsj(s2));
+        log.info(AnsjUtils.parse(s1));
+        log.info(AnsjUtils.parse(s2));
     }
 
 }

@@ -1,7 +1,7 @@
 package com.demo.controller;
 
+import cn.z.mail.MailTemp;
 import com.demo.entity.pojo.Result;
-import com.demo.tool.MailTemp;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +23,7 @@ public class IndexController {
     private final MailTemp mailTemp;
 
     /**
+     * http://localhost:8080/text <br>
      * 普通邮件
      */
     @GetMapping("text")
@@ -32,6 +33,7 @@ public class IndexController {
     }
 
     /**
+     * http://localhost:8080/html <br>
      * HTML邮件
      */
     @GetMapping("html")

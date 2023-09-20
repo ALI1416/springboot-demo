@@ -1,5 +1,6 @@
 package com.demo.util.useragent;
 
+import cn.z.tool.useragent.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 
 /**

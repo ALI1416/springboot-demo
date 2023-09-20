@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.z.minio.autoconfigure.MinioAutoConfiguration,\
+cn.z.minio.config.MinioConfig,\
+cn.z.minio.MinioTemp

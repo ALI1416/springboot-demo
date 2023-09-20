@@ -12,6 +12,7 @@ import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
 
 /**
  * <h1>Rabbit消费者服务2</h1>
@@ -23,7 +24,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-// @Service
+@Service
 @Slf4j
 public class RabbitService2 {
 

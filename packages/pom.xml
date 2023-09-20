@@ -1,0 +1,258 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>cn.404z</groupId>
+  <artifactId>packages</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.0</version>
+
+  <name>packages</name>
+  <description>Packages 项目包</description>
+
+  <modules>
+    <module>mail-spring-boot-temp</module>
+    <module>rabbitmq-spring-boot-temp</module>
+    <module>redis-spring-boot-temp</module>
+    <module>websocket-spring-boot-temp</module>
+    <module>minio-spring-boot-starter</module>
+    <module>mqtt-spring-boot-starter</module>
+    <module>util</module>
+    <module>util-spring-boot</module>
+  </modules>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!--Maven编译插件-->
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+    <!--日志-->
+    <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+    <logback.version>1.4.11</logback.version>
+    <!--SpringBoot-->
+    <!--org.springframework.boot:spring-boot-starter-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
+    <springboot.version>2.7.15</springboot.version>
+    <!--Minio-->
+    <!--io.minio:minio-->
+    <!-- https://mvnrepository.com/artifact/io.minio/minio -->
+    <minio.version>8.5.5</minio.version>
+    <!--MQTT-->
+    <!--org.eclipse.paho:org.eclipse.paho.client.mqttv3-->
+    <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
+    <mqtt.version>1.2.5</mqtt.version>
+    <!--EasyExcel-->
+    <!--com.alibaba:easyexcel-->
+    <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
+    <easyexcel.version>3.3.2</easyexcel.version>
+    <!--Tika-->
+    <!--org.apache.tika:tika-core-->
+    <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+    <!--org.apache.tika:tika-parsers-standard-package-->
+    <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parsers-standard-package -->
+    <!--org.apache.tika:tika-langdetect-tika-->
+    <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-langdetect-tika -->
+    <tika.version>2.9.0</tika.version>
+    <!--Ansj分词-->
+    <!--org.ansj:ansj_seg-->
+    <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
+    <ansj.version>5.1.6</ansj.version>
+
+    <!--邮件SpringBoot模板-->
+    <!--cn.404z:mail-spring-boot-temp-->
+    <mail-spring-boot-temp.version>1.0.0</mail-spring-boot-temp.version>
+    <!--RabbitMQ SpringBoot模板-->
+    <!--cn.404z:rabbitmq-spring-boot-temp-->
+    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
+    <!--Redis SpringBoot模板-->
+    <!--cn.404z:redis-spring-boot-temp-->
+    <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
+    <!--WebSocket SpringBoot模板-->
+    <!--cn.404z:websocket-spring-boot-temp-->
+    <websocket-spring-boot-temp.version>1.0.0</websocket-spring-boot-temp.version>
+    <!--Minio SpringBoot启动器-->
+    <!--cn.404z:minio-spring-boot-starter-->
+    <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
+    <!--MQTT SpringBoot启动器-->
+    <!--cn.404z:mqtt-spring-boot-starter-->
+    <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
+    <!--工具-->
+    <!--cn.404z:util-->
+    <util.version>1.0.0</util.version>
+    <!--SpringBoot工具-->
+    <!--cn.404z:util-spring-boot-->
+    <util-spring-boot.version>1.0.0</util-spring-boot.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!--日志-->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+      <!--SpringBoot-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--SpringBoot Web-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--自动装配-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-autoconfigure-processor</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--配置-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-configuration-processor</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--邮件-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--RabbitMQ-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-amqp</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--Redis-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--SpringBoot WebSocket-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-websocket</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--Minio-->
+      <dependency>
+        <groupId>io.minio</groupId>
+        <artifactId>minio</artifactId>
+        <version>${minio.version}</version>
+      </dependency>
+      <!--MQTT-->
+      <dependency>
+        <groupId>org.eclipse.paho</groupId>
+        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+        <version>${mqtt.version}</version>
+      </dependency>
+      <!--EasyExcel-->
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>easyexcel</artifactId>
+        <version>${easyexcel.version}</version>
+      </dependency>
+      <!--Tika-->
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-core</artifactId>
+        <version>${tika.version}</version>
+      </dependency>
+      <!--Tika标准解析-->
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-parsers-standard-package</artifactId>
+        <version>${tika.version}</version>
+      </dependency>
+      <!--Tika语言解析-->
+      <dependency>
+        <groupId>org.apache.tika</groupId>
+        <artifactId>tika-langdetect-tika</artifactId>
+        <version>${tika.version}</version>
+      </dependency>
+      <!--Ansj分词-->
+      <dependency>
+        <groupId>org.ansj</groupId>
+        <artifactId>ansj_seg</artifactId>
+        <version>${ansj.version}</version>
+      </dependency>
+
+      <!--邮件SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mail-spring-boot-temp</artifactId>
+        <version>${mail-spring-boot-temp.version}</version>
+      </dependency>
+      <!--RabbitMQ SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>rabbitmq-spring-boot-temp</artifactId>
+        <version>${rabbitmq-spring-boot-temp.version}</version>
+      </dependency>
+      <!--Redis SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>redis-spring-boot-temp</artifactId>
+        <version>${redis-spring-boot-temp.version}</version>
+      </dependency>
+      <!--WebSocket SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>websocket-spring-boot-temp</artifactId>
+        <version>${websocket-spring-boot-temp.version}</version>
+      </dependency>
+      <!--Minio SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>minio-spring-boot-starter</artifactId>
+        <version>${minio-spring-boot-starter.version}</version>
+      </dependency>
+      <!--MQTT SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mqtt-spring-boot-starter</artifactId>
+        <version>${mqtt-spring-boot-starter.version}</version>
+      </dependency>
+      <!--工具-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>util</artifactId>
+        <version>${util.version}</version>
+      </dependency>
+      <!--SpringBoot工具-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>util-spring-boot</artifactId>
+        <version>${util-spring-boot.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

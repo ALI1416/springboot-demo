@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import cn.z.clock.Clock;
 import cn.z.id.Id;
+import cn.z.rabbit.RabbitTemp;
 import com.alibaba.fastjson2.JSON;
 import com.demo.constant.RabbitExchange;
 import com.demo.constant.RabbitQueue;
@@ -9,7 +10,6 @@ import com.demo.entity.po.Car;
 import com.demo.entity.po.Person;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.proto.PersonProto;
-import com.demo.tool.RabbitTemp;
 import com.google.protobuf.util.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
