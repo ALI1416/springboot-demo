@@ -38,7 +38,7 @@ public class MailTemp {
     private final String username;
 
     /**
-     * 静态注入(自动注入)
+     * 构造函数(自动注入)
      *
      * @param javaMailSender JavaMailSender
      * @param mailProperties MailProperties

@@ -34,7 +34,7 @@ public class ElasticSearchConfig {
     private final ElasticSearchProperties elasticSearchProperties;
 
     /**
-     * 静态注入(自动注入)
+     * 构造函数(自动注入)
      *
      * @param elasticSearchProperties ElasticSearchProperties
      */

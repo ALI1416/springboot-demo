@@ -22,7 +22,7 @@ public class WebSocketTemp {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     /**
-     * 静态注入(自动注入)
+     * 构造函数(自动注入)
      *
      * @param simpMessagingTemplate SimpMessagingTemplate
      */

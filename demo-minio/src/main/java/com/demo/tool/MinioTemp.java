@@ -40,7 +40,7 @@ public class MinioTemp {
     private final MinioClient minioClient;
 
     /**
-     * 静态注入(自动注入)
+     * 构造函数(自动注入)
      *
      * @param minioClient MinioClient
      */
