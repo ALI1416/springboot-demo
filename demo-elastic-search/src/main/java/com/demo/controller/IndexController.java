@@ -1,5 +1,9 @@
 package com.demo.controller;
 
+import cn.z.elasticsearch.ElasticSearchTemp;
+import cn.z.elasticsearch.entity.*;
+import cn.z.elasticsearch.entity.analyze.AnalyzeResponse;
+import cn.z.elasticsearch.entity.search.SearchResponse;
 import co.elastic.clients.elasticsearch._types.mapping.Property;
 import co.elastic.clients.elasticsearch._types.mapping.TextProperty;
 import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
@@ -7,10 +11,6 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.search.Highlight;
 import com.demo.entity.po.Article;
 import com.demo.entity.pojo.Result;
-import com.demo.tool.ElasticSearchTemp;
-import com.demo.tool.entity.elasticsearch.*;
-import com.demo.tool.entity.elasticsearch.analyze.AnalyzeResponse;
-import com.demo.tool.entity.elasticsearch.search.SearchResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

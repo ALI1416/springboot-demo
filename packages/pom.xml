@@ -18,6 +18,7 @@
     <module>websocket-spring-boot-temp</module>
     <module>minio-spring-boot-starter</module>
     <module>mqtt-spring-boot-starter</module>
+    <module>elastic-search-spring-boot-starter</module>
     <module>util</module>
     <module>util-spring-boot</module>
   </modules>
@@ -48,6 +49,14 @@
     <!--org.eclipse.paho:org.eclipse.paho.client.mqttv3-->
     <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
     <mqtt.version>1.2.5</mqtt.version>
+    <!--ElasticSearch-->
+    <!--co.elastic.clients:elasticsearch-java-->
+    <!-- https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
+    <elasticsearch.version>8.9.1</elasticsearch.version>
+    <!--JakartaJson-->
+    <!--jakarta.json:jakarta.json-api-->
+    <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
+    <jakarta.version>2.1.2</jakarta.version>
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
     <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
@@ -83,6 +92,9 @@
     <!--MQTT SpringBoot启动器-->
     <!--cn.404z:mqtt-spring-boot-starter-->
     <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
+    <!--ElasticSearch SpringBoot启动器-->
+    <!--cn.404z:elastic-search-spring-boot-starter-->
+    <elastic-search-spring-boot-starter.version>1.0.0</elastic-search-spring-boot-starter.version>
     <!--工具-->
     <!--cn.404z:util-->
     <util.version>1.0.0</util.version>
@@ -159,6 +171,18 @@
         <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
         <version>${mqtt.version}</version>
       </dependency>
+      <!--ElasticSearch-->
+      <dependency>
+        <groupId>co.elastic.clients</groupId>
+        <artifactId>elasticsearch-java</artifactId>
+        <version>${elasticsearch.version}</version>
+      </dependency>
+      <!--JakartaJson-->
+      <dependency>
+        <groupId>jakarta.json</groupId>
+        <artifactId>jakarta.json-api</artifactId>
+        <version>${jakarta.version}</version>
+      </dependency>
       <!--EasyExcel-->
       <dependency>
         <groupId>com.alibaba</groupId>
@@ -225,6 +249,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>mqtt-spring-boot-starter</artifactId>
         <version>${mqtt-spring-boot-starter.version}</version>
+      </dependency>
+      <!--ElasticSearch SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>elastic-search-spring-boot-starter</artifactId>
+        <version>${elastic-search-spring-boot-starter.version}</version>
       </dependency>
       <!--工具-->
       <dependency>

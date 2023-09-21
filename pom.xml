@@ -250,6 +250,9 @@
     <!--MQTT SpringBoot启动器-->
     <!--cn.404z:mqtt-spring-boot-starter-->
     <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
+    <!--ElasticSearch SpringBoot启动器-->
+    <!--cn.404z:elastic-search-spring-boot-starter-->
+    <elastic-search-spring-boot-starter.version>1.0.0</elastic-search-spring-boot-starter.version>
     <!--工具-->
     <!--cn.404z:util-->
     <util.version>1.0.0</util.version>
@@ -473,6 +476,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>mqtt-spring-boot-starter</artifactId>
         <version>${mqtt-spring-boot-starter.version}</version>
+      </dependency>
+      <!--ElasticSearch SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>elastic-search-spring-boot-starter</artifactId>
+        <version>${elastic-search-spring-boot-starter.version}</version>
       </dependency>
       <!--工具-->
       <dependency>

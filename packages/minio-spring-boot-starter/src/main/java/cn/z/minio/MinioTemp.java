@@ -36,7 +36,13 @@ import java.util.*;
 @Component
 public class MinioTemp {
 
+    /**
+     * 日志实例
+     */
     private static final Logger log = LoggerFactory.getLogger(MinioTemp.class);
+    /**
+     * Minio客户端
+     */
     private final MinioClient minioClient;
 
     /**
