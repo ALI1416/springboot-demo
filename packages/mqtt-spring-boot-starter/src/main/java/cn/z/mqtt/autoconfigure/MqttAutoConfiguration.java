@@ -48,7 +48,7 @@ public class MqttAutoConfiguration {
     private static final Boolean DEFAULT_AUTOMATIC_RECONNECT = false;
 
     /**
-     * MqttProperties
+     * MQTT配置属性
      */
     private final MqttProperties mqttProperties;
 

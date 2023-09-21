@@ -40,7 +40,7 @@ public class MinioAutoConfiguration {
     private static final String DEFAULT_PASSWORD = "minioadmin";
 
     /**
-     * MinioProperties
+     * Minio配置属性
      */
     private final MinioProperties minioProperties;
 

@@ -32,7 +32,7 @@ public class ElasticSearchAutoConfiguration {
     private static final String DEFAULT_URI = "http://127.0.0.1:9200";
 
     /**
-     * ElasticSearchProperties
+     * ElasticSearch配置属性
      */
     private final ElasticSearchProperties elasticSearchProperties;
 
