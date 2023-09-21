@@ -1,0 +1,25 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+
+logging:
+  level:
+    root: info
+  file:
+    name: /log/demo-util.log
+
+id:
+  machine-id: 0
+  machine-bits: 8
+  sequence-bits: 12
+
+ip2region:
+  resource-path: /file/ip2region/ip2region.zdb
+
+phone2region:
+  resource-path: /file/phone2region/phone2region.zdb

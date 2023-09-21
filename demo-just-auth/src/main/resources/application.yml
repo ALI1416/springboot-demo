@@ -1,0 +1,14 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+
+logging:
+  level:
+    root: info
+  file:
+    name: /log/demo-just-auth.log

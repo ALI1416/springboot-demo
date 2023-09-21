@@ -45,7 +45,6 @@ SpringBoot示例
   - FastJson
   - MongoDB
   - 雪花ID生成器
-  - HuTool工具包
 - **`demo-mqtt`** : MQTT
   - SpringBoot Web
   - FastJson
@@ -85,7 +84,6 @@ SpringBoot示例
   - MySQL
   - MyBatis
   - 雪花ID生成器
-  - HuTool工具包
 - **`demo-util`** : 工具
   - SpringBoot Web
   - FastJson

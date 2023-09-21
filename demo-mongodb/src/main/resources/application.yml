@@ -1,0 +1,18 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb://localhost:27017/demo
+
+logging:
+  level:
+    root: info
+  file:
+    name: /log/demo-base.log

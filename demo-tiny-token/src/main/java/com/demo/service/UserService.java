@@ -1,7 +1,7 @@
 package com.demo.service;
 
-import cn.hutool.crypto.digest.BCrypt;
 import cn.z.id.Id;
+import cn.z.tool.BCrypt;
 import com.demo.dao.mysql.UserDao;
 import com.demo.dao.mysql.UserRoleDao;
 import com.demo.entity.vo.UserRoleVo;
@@ -38,7 +38,7 @@ public class UserService {
      */
     @Transactional
     public long register(UserVo user) {
-        user.setPwd(BCrypt.hashpw(user.getPwd()));
+        user.setPwd(BCrypt.encode(user.getPwd()));
         return userDao.insert(user);
     }
 
@@ -72,7 +72,7 @@ public class UserService {
     public boolean changePwd(UserVo user) {
         UserVo u = new UserVo();
         u.setId(user.getId());
-        u.setPwd(BCrypt.hashpw(user.getNewPwd()));
+        u.setPwd(BCrypt.encode(user.getNewPwd()));
         return userDao.update(u);
     }
 
@@ -85,7 +85,7 @@ public class UserService {
     @Transactional
     public boolean update(UserVo user) {
         if (user.getPwd() != null) {
-            user.setPwd(BCrypt.hashpw(user.getPwd()));
+            user.setPwd(BCrypt.encode(user.getPwd()));
         }
         return userDao.update(user);
     }

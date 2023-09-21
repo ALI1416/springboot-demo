@@ -1,0 +1,24 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      type: simple
+      simple:
+        # 被拒绝的消息不重新进入队列，指定死信队列会进入死信队列，没有指定对丢弃
+        default-requeue-rejected: false
+
+logging:
+  level:
+    root: info
+  file:
+    name: /log/demo-rabbitmq.log

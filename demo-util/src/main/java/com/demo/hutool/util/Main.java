@@ -3,7 +3,7 @@ package com.demo.hutool.util;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.swing.clipboard.ClipboardUtil;
 import cn.hutool.core.util.*;
-import com.demo.util.ansj.AnsjUtils;
+import cn.z.util.AnsjUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

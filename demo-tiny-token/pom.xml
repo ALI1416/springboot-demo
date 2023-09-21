@@ -50,11 +50,6 @@
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
     </dependency>
-    <!--HuTool工具包-->
-    <dependency>
-      <groupId>cn.hutool</groupId>
-      <artifactId>hutool-all</artifactId>
-    </dependency>
     <!--MySQL-->
     <dependency>
       <groupId>com.mysql</groupId>

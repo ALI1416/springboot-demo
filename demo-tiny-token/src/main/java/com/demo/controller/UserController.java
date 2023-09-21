@@ -1,7 +1,7 @@
 package com.demo.controller;
 
-import cn.hutool.crypto.digest.BCrypt;
 import cn.z.tinytoken.T4s;
+import cn.z.tool.BCrypt;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.po.User;
@@ -49,7 +49,7 @@ public class UserController extends ControllerBase {
             return paramIsError();
         }
         UserVo u = userService.findByAccount(user.getAccount());
-        if (u != null && BCrypt.checkpw(user.getPwd(), u.getPwd())) {
+        if (u != null && BCrypt.check(user.getPwd(), u.getPwd())) {
             String token = t4s.setToken(u.getId());
             u.setPwd(null);
             u.setToken(token);
@@ -95,7 +95,7 @@ public class UserController extends ControllerBase {
         }
         user.setId(t4s.getId());
         User u = userService.info(user.getId());
-        if (!BCrypt.checkpw(user.getPwd(), u.getPwd())) {
+        if (!BCrypt.check(user.getPwd(), u.getPwd())) {
             return Result.e(ResultEnum.PASSWORD_ERROR);
         }
         return Result.o(userService.changePwd(user));

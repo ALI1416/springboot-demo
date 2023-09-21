@@ -1,0 +1,19 @@
+spring:
+  devtools:
+    restart:
+      enabled: true
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
+
+minio:
+  uri: http://127.0.0.1:9000
+  username: minioadmin
+  password: minioadmin
+
+logging:
+  level:
+    root: info
+  file:
+    name: /log/demo-minio.log

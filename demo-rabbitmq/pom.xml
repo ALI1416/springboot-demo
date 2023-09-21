@@ -44,6 +44,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-amqp</artifactId>
     </dependency>
+    <!--雪花ID生成器-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>id-spring-boot-autoconfigure</artifactId>
+    </dependency>
     <!--RabbitMQ SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>
@@ -53,11 +58,6 @@
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>util</artifactId>
-    </dependency>
-    <!--雪花ID生成器-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>id-spring-boot-autoconfigure</artifactId>
     </dependency>
   </dependencies>
 
