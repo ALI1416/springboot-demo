@@ -22,7 +22,7 @@ public class ScheduledThreadPool {
      * 执行一次线程
      *
      * @param command 线程
-     * @param delay   延迟执行时间(秒)
+     * @param delay   初始延迟时间(秒)
      */
     public static void once(Runnable command, long delay) {
         SCHEDULED_THREAD_POOL.schedule(command, delay, TimeUnit.SECONDS);
@@ -32,7 +32,7 @@ public class ScheduledThreadPool {
      * 执行一次线程
      *
      * @param command 线程
-     * @param delay   延迟执行时间
+     * @param delay   初始延迟时间
      * @param unit    TimeUnit
      */
     public static void once(Runnable command, long delay, TimeUnit unit) {
@@ -40,10 +40,11 @@ public class ScheduledThreadPool {
     }
 
     /**
-     * 循环执行线程
+     * 循环执行线程<br>
+     * (下一次执行时间=上一次开始执行时间+循环间隔时间)
      *
      * @param command      线程
-     * @param initialDelay 延迟执行时间(秒)
+     * @param initialDelay 初始延迟时间(秒)
      * @param delay        循环间隔时间(秒)
      */
     public static void loop(Runnable command, long initialDelay, long delay) {
@@ -51,10 +52,11 @@ public class ScheduledThreadPool {
     }
 
     /**
-     * 循环执行线程
+     * 循环执行线程<br>
+     * (下一次执行时间=上一次开始执行时间+循环间隔时间)
      *
      * @param command      线程
-     * @param initialDelay 延迟执行时间
+     * @param initialDelay 初始延迟时间
      * @param delay        循环间隔时间
      * @param unit         TimeUnit
      */
@@ -63,10 +65,11 @@ public class ScheduledThreadPool {
     }
 
     /**
-     * 增强循环执行线程
+     * 增强循环执行线程<br>
+     * (下一次执行时间=上一次执行完成时间+循环间隔时间)
      *
      * @param command      线程
-     * @param initialDelay 延迟执行时间(秒)
+     * @param initialDelay 初始延迟时间(秒)
      * @param delay        循环间隔时间(秒)
      */
     public static void loopExpand(Runnable command, long initialDelay, long delay) {
@@ -74,10 +77,11 @@ public class ScheduledThreadPool {
     }
 
     /**
-     * 增强循环执行线程
+     * 增强循环执行线程<br>
+     * (下一次执行时间=上一次执行完成时间+循环间隔时间)
      *
      * @param command      线程
-     * @param initialDelay 延迟执行时间
+     * @param initialDelay 初始延迟时间
      * @param delay        循环间隔时间
      * @param unit         TimeUnit
      */
