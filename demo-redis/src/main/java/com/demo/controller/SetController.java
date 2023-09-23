@@ -3,10 +3,7 @@ package com.demo.controller;
 import cn.z.redis.RedisTemp;
 import com.demo.entity.pojo.Result;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -35,14 +32,14 @@ public class SetController {
      * POST/set/sAdd?key=a&value=b 1<br>
      * POST/set/sAdd?key=a&value=a 0
      */
-    @PostMapping("sAdd")
+    @GetMapping("sAdd")
     public Result<Long> sAdd(String key, String value) {
         return Result.o(redisTemp.sAdd(key, value));
     }
 
     /**
      * <h3>添加多个</h3>
-     * POST /set/sAddMulti?key=a<br>
+     * POST http://localhost:8080/set/sAddMulti?key=a<br>
      * body JSON ["a","b"] 2<br>
      * body JSON ["b","c"] 1
      */
@@ -53,10 +50,10 @@ public class SetController {
 
     /**
      * <h3>添加多个</h3>
-     * POST /set/sAddMultiArray?key=a&value=b 2<br>
-     * POST /set/sAddMultiArray?key=b&value=c 1
+     * http://localhost:8080/set/sAddMultiArray?key=a&value=b 2<br>
+     * http://localhost:8080/set/sAddMultiArray?key=b&value=c 1
      */
-    @PostMapping("sAddMultiArray")
+    @GetMapping("sAddMultiArray")
     public Result<Long> sAddMultiArray(String key, String[] value) {
         return Result.o(redisTemp.sAddMulti(key, value));
     }
@@ -64,18 +61,18 @@ public class SetController {
     /**
      * <h3>删除值</h3>
      * 已存在键a值a/b/c<br>
-     * POST /set/sDelete?key=a&value=a 1<br>
-     * POST /set/sDelete?key=a&value=d 0<br>
-     * POST /set/sDelete?key=b&value=d 0
+     * http://localhost:8080/set/sDelete?key=a&value=a 1<br>
+     * http://localhost:8080/set/sDelete?key=a&value=d 0<br>
+     * http://localhost:8080/set/sDelete?key=b&value=d 0
      */
-    @PostMapping("sDelete")
+    @GetMapping("sDelete")
     public Result<Long> sDelete(String key, String value) {
         return Result.o(redisTemp.sDelete(key, value));
     }
 
     /**
      * <h3>删除多个值</h3>
-     * POST /set/sDeleteMulti?key=a<br>
+     * POST http://localhost:8080/set/sDeleteMulti?key=a<br>
      * body JSON ["a","b"] 2<br>
      * body JSON ["b","c"] 1
      */
@@ -86,10 +83,10 @@ public class SetController {
 
     /**
      * <h3>删除多个值</h3>
-     * POST /set/sDeleteMultiArray?key=a&value=a&value=b 2<br>
-     * POST /set/sDeleteMultiArray?key=b&value=c&value=d 1
+     * http://localhost:8080/set/sDeleteMultiArray?key=a&value=a&value=b 2<br>
+     * http://localhost:8080/set/sDeleteMultiArray?key=b&value=c&value=d 1
      */
-    @PostMapping("sDeleteMultiArray")
+    @GetMapping("sDeleteMultiArray")
     public Result<Long> sDeleteMultiArray(String key, String[] value) {
         return Result.o(redisTemp.sDeleteMulti(key, value));
     }
@@ -97,10 +94,10 @@ public class SetController {
     /**
      * <h3>返回并删除1个随机值</h3>
      * 已存在值a/b/c<br>
-     * POST /set/sPop?key=a c<br>
-     * POST /set/sPop?key=a a
+     * http://localhost:8080/set/sPop?key=a c<br>
+     * http://localhost:8080/set/sPop?key=a a
      */
-    @PostMapping("sPop")
+    @GetMapping("sPop")
     public Result<Object> sPop(String key) {
         return Result.o(redisTemp.sPop(key));
     }
@@ -108,30 +105,30 @@ public class SetController {
     /**
      * <h3>返回并删除多个随机值</h3>
      * 已存在值a/b/c<br>
-     * POST /set/sPopMulti?key=a&count=2<br>
+     * http://localhost:8080/set/sPopMulti?key=a&count=2<br>
      * ["b","c"]
      */
-    @PostMapping("sPopMulti")
+    @GetMapping("sPopMulti")
     public Result<List<Object>> sPopMulti(String key, long count) {
         return Result.o(redisTemp.sPopMulti(key, count));
     }
 
     /**
      * <h3>移动元素到目的键</h3>
-     * POST /set/sMove?key=a&value=b&destKey=c<br>
+     * http://localhost:8080/set/sMove?key=a&value=b&destKey=c<br>
      * true
      */
-    @PostMapping("sMove")
+    @GetMapping("sMove")
     public Result<Boolean> sMove(String key, String value, String destKey) {
         return Result.o(redisTemp.sMove(key, value, destKey));
     }
 
     /**
      * <h3>元素个数</h3>
-     * POST /set/sSize?key=a<br>
+     * http://localhost:8080/set/sSize?key=a<br>
      * 3
      */
-    @PostMapping("sSize")
+    @GetMapping("sSize")
     public Result<Long> sSize(String key) {
         return Result.o(redisTemp.sSize(key));
     }
@@ -139,11 +136,11 @@ public class SetController {
     /**
      * <h3>是否存在元素</h3>
      * 存在键a值a/b/c<br>
-     * POST /set/sIsMember?key=a&value=a true<br>
-     * POST /set/sIsMember?key=a&value=e false<br>
-     * POST /set/sIsMember?key=b&value=a false
+     * http://localhost:8080/set/sIsMember?key=a&value=a true<br>
+     * http://localhost:8080/set/sIsMember?key=a&value=e false<br>
+     * http://localhost:8080/set/sIsMember?key=b&value=a false
      */
-    @PostMapping("sIsMember")
+    @GetMapping("sIsMember")
     public Result<Boolean> sIsMember(String key, String value) {
         return Result.o(redisTemp.sIsMember(key, value));
     }
@@ -151,7 +148,7 @@ public class SetController {
     /**
      * <h3>是否存在多个元素</h3>
      * 存在元素a/b/c
-     * POST /set/sIsMultiMember?key=a<br>
+     * PostMapping http://localhost:8080/set/sIsMultiMember?key=a<br>
      * body JSON ["a","b","d"] {"a":true,"b":true,"d":false}<br>
      */
     @PostMapping("sIsMultiMember")
@@ -162,10 +159,10 @@ public class SetController {
     /**
      * <h3>是否存在多个元素</h3>
      * 存在元素a/b/c
-     * POST /set/sIsMultiMemberArray?key=a&value=a&value=b&value=d<br>
+     * http://localhost:8080/set/sIsMultiMemberArray?key=a&value=a&value=b&value=d<br>
      * {"a":true,"b":true,"d":false}
      */
-    @PostMapping("sIsMultiMemberArray")
+    @GetMapping("sIsMultiMemberArray")
     public Result<Map<Object, Boolean>> sIsMultiMemberArray(String key, String[] value) {
         return Result.o(redisTemp.sIsMemberMulti(key, value));
     }
@@ -173,10 +170,10 @@ public class SetController {
     /**
      * <h3>所有元素</h3>
      * 存在键a值a/b/c<br>
-     * POST /set/sMembers?key=a ["a","b","c"]<br>
-     * POST /set/sMembers?key=b []
+     * http://localhost:8080/set/sMembers?key=a ["a","b","c"]<br>
+     * http://localhost:8080/set/sMembers?key=b []
      */
-    @PostMapping("sMembers")
+    @GetMapping("sMembers")
     public Result<Set<Object>> sMembers(String key) {
         return Result.o(redisTemp.sMembers(key));
     }
@@ -184,11 +181,11 @@ public class SetController {
     /**
      * <h3>随机获取1个元素</h3>
      * 存在键a值a/b/c<br>
-     * POST /set/sRandomMember?key=a a<br>
-     * POST /set/sRandomMember?key=a c<br>
-     * POST /set/sRandomMember?key=b null
+     * http://localhost:8080/set/sRandomMember?key=a a<br>
+     * http://localhost:8080/set/sRandomMember?key=a c<br>
+     * http://localhost:8080/set/sRandomMember?key=b null
      */
-    @PostMapping("sRandomMember")
+    @GetMapping("sRandomMember")
     public Result<Object> sRandomMember(String key) {
         return Result.o(redisTemp.sRandomMember(key));
     }
@@ -196,11 +193,11 @@ public class SetController {
     /**
      * <h3>随机获取多个元素</h3>
      * 存在键a值a/b/c<br>
-     * POST /set/sRandomMember?key=a&count=2 ["a","b"]<br>
-     * POST /set/sRandomMember?key=a&count=2 ["a","a"]<br>
-     * POST /set/sRandomMember?key=b&count=2 []
+     * http://localhost:8080/set/sRandomMember?key=a&count=2 ["a","b"]<br>
+     * http://localhost:8080/set/sRandomMember?key=a&count=2 ["a","a"]<br>
+     * http://localhost:8080/set/sRandomMember?key=b&count=2 []
      */
-    @PostMapping("sRandomMultiMember")
+    @GetMapping("sRandomMultiMember")
     public Result<List<Object>> sRandomMultiMember(String key, long count) {
         return Result.o(redisTemp.sRandomMemberMulti(key, count));
     }
@@ -208,11 +205,11 @@ public class SetController {
     /**
      * <h3>随机获取多个元素(不重复)</h3>
      * 存在键a值a/b/c<br>
-     * POST /set/sRandomMultiDistinctMember?key=a&count=2 ["a","b"]<br>
-     * POST /set/sRandomMultiDistinctMember?key=a&count=2 ["a","c"]<br>
-     * POST /set/sRandomMultiDistinctMember?key=b&count=2 []
+     * http://localhost:8080/set/sRandomMultiDistinctMember?key=a&count=2 ["a","b"]<br>
+     * http://localhost:8080/set/sRandomMultiDistinctMember?key=a&count=2 ["a","c"]<br>
+     * http://localhost:8080/set/sRandomMultiDistinctMember?key=b&count=2 []
      */
-    @PostMapping("sRandomMultiDistinctMember")
+    @GetMapping("sRandomMultiDistinctMember")
     public Result<Set<Object>> sRandomMultiDistinctMember(String key, long count) {
         return Result.o(redisTemp.sRandomMemberMultiDistinct(key, count));
     }
@@ -221,10 +218,10 @@ public class SetController {
      * <h3>两键交集</h3>
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
-     * POST /set/sIntersect?key=a&otherKey=b<br>
+     * http://localhost:8080/set/sIntersect?key=a&otherKey=b<br>
      * ["b","c"]
      */
-    @PostMapping("sIntersect")
+    @GetMapping("sIntersect")
     public Result<Set<Object>> sIntersect(String key, String otherKey) {
         return Result.o(redisTemp.sIntersect(key, otherKey));
     }
@@ -234,7 +231,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sIntersectMulti?key=a<br>
+     * POST http://localhost:8080/set/sIntersectMulti?key=a<br>
      * body JSON ["b","c"]<br>
      * ["c"]
      */
@@ -248,7 +245,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sIntersectAll<br>
+     * POST http://localhost:8080/set/sIntersectAll<br>
      * body JSON ["a","b","c"]<br>
      * ["c"]
      */
@@ -261,10 +258,10 @@ public class SetController {
      * <h3>两键交集并储存</h3>
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
-     * POST /set/sIntersectAndStore?key=a&otherKey=b&destKey=z<br>
+     * http://localhost:8080/set/sIntersectAndStore?key=a&otherKey=b&destKey=z<br>
      * 2
      */
-    @PostMapping("sIntersectAndStore")
+    @GetMapping("sIntersectAndStore")
     public Result<Long> sIntersectAndStore(String key, String otherKey, String destKey) {
         return Result.o(redisTemp.sIntersectAndStore(key, otherKey, destKey));
     }
@@ -274,7 +271,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sIntersectMultiAndStore?key=a&destKey=z<br>
+     * POST http://localhost:8080/set/sIntersectMultiAndStore?key=a&destKey=z<br>
      * body JSON ["b","c"]<br>
      * 1
      */
@@ -288,7 +285,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sIntersectAllAndStore?destKey=z<br>
+     * POST http://localhost:8080/set/sIntersectAllAndStore?destKey=z<br>
      * body JSON ["a","b","c"]<br>
      * 1
      */
@@ -301,10 +298,10 @@ public class SetController {
      * <h3>两键并集</h3>
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
-     * POST /set/sUnion?key=a&otherKey=b<br>
+     * http://localhost:8080/set/sUnion?key=a&otherKey=b<br>
      * ["c","a","b","d"]
      */
-    @PostMapping("sUnion")
+    @GetMapping("sUnion")
     public Result<Set<Object>> sUnion(String key, String otherKey) {
         return Result.o(redisTemp.sUnion(key, otherKey));
     }
@@ -314,7 +311,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sUnionMulti?key=a<br>
+     * POST http://localhost:8080/set/sUnionMulti?key=a<br>
      * body JSON ["b","c"]<br>
      * ["c","a","b","d","e"]
      */
@@ -328,7 +325,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sUnionAll?key=a<br>
+     * POST http://localhost:8080/set/sUnionAll?key=a<br>
      * body JSON ["a","b","c"]<br>
      * ["c","a","b","d","e"]
      */
@@ -341,10 +338,10 @@ public class SetController {
      * <h3>两键并集并储存</h3>
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
-     * POST /set/sUnionAndStore?key=a&otherKey=b&destKey=z<br>
+     * http://localhost:8080/set/sUnionAndStore?key=a&otherKey=b&destKey=z<br>
      * 4
      */
-    @PostMapping("sUnionAndStore")
+    @GetMapping("sUnionAndStore")
     public Result<Long> sUnionAndStore(String key, String otherKey, String destKey) {
         return Result.o(redisTemp.sUnionAndStore(key, otherKey, destKey));
     }
@@ -354,7 +351,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sUnionMultiAndStore?key=a&destKey=z<br>
+     * POST http://localhost:8080/set/sUnionMultiAndStore?key=a&destKey=z<br>
      * body JSON ["b","c"]<br>
      * 5
      */
@@ -368,7 +365,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sUnionAllAndStore?destKey=z<br>
+     * POST http://localhost:8080/set/sUnionAllAndStore?destKey=z<br>
      * body JSON ["a","b","c"]<br>
      * 5
      */
@@ -381,10 +378,10 @@ public class SetController {
      * <h3>两键差集</h3>
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
-     * POST /set/sDifference?key=a&otherKey=b<br>
+     * http://localhost:8080/set/sDifference?key=a&otherKey=b<br>
      * ["a"]
      */
-    @PostMapping("sDifference")
+    @GetMapping("sDifference")
     public Result<Set<Object>> sDifference(String key, String otherKey) {
         return Result.o(redisTemp.sDifference(key, otherKey));
     }
@@ -394,7 +391,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sDifferenceMulti?key=a<br>
+     * POST http://localhost:8080/set/sDifferenceMulti?key=a<br>
      * body JSON ["b","c"]<br>
      * []
      */
@@ -408,7 +405,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sDifferenceAll?key=a<br>
+     * POST http://localhost:8080/set/sDifferenceAll?key=a<br>
      * body JSON ["a","b","c"]<br>
      * []
      */
@@ -421,10 +418,10 @@ public class SetController {
      * <h3>两键差集并储存</h3>
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
-     * POST /set/sDifferenceAndStore?key=a&otherKey=b&destKey=z<br>
+     * http://localhost:8080/set/sDifferenceAndStore?key=a&otherKey=b&destKey=z<br>
      * 1
      */
-    @PostMapping("sDifferenceAndStore")
+    @GetMapping("sDifferenceAndStore")
     public Result<Long> sDifferenceAndStore(String key, String otherKey, String destKey) {
         return Result.o(redisTemp.sDifferenceAndStore(key, otherKey, destKey));
     }
@@ -434,7 +431,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sDifferenceMultiAndStore?key=a&destKey=z<br>
+     * POST http://localhost:8080/set/sDifferenceMultiAndStore?key=a&destKey=z<br>
      * body JSON ["b","c"]<br>
      * 0
      */
@@ -448,7 +445,7 @@ public class SetController {
      * 存在键a值a/b/c<br>
      * 存在键b值b/c/d<br>
      * 存在键c值c/d/e<br>
-     * POST /set/sDifferenceAllAndStore?destKey=z<br>
+     * POST http://localhost:8080/set/sDifferenceAllAndStore?destKey=z<br>
      * body JSON ["a","b","c"]<br>
      * 0
      */
@@ -460,16 +457,16 @@ public class SetController {
     /**
      * <h3>模糊查询</h3>
      * 实际存在键a值有a/aabbcc/abc/abd/b/bc/bd/c/[]<br>
-     * POST /sScan?key=a&match=a 不匹配字符[a]<br>
-     * POST /sScan?key=a&match=b? 右侧匹配1个字符[bc,bd]<br>
-     * POST /sScan?key=a&match=*c 左侧匹配0+个字符[aabbcc,abc,bc,c]<br>
-     * POST /sScan?key=a&match=*b* 两侧匹配0+个字符[aabbcc,abc,abd,b,bc,bd]<br>
-     * POST /sScan?key=a&match=[abd] 匹配1个指定字符[a,b]<br>
-     * POST /sScan?key=a&match=[^abd] 不匹配1个指定字符[c]<br>
-     * POST /sScan?key=a&match=[A-z] 匹配1个指定字符[a,b,c]<br>
-     * POST /sScan?key=a&match=\[* 转义匹配匹配1个指定字符[[]]
+     * http://localhost:8080/sScan?key=a&match=a 不匹配字符[a]<br>
+     * http://localhost:8080/sScan?key=a&match=b? 右侧匹配1个字符[bc,bd]<br>
+     * http://localhost:8080/sScan?key=a&match=*c 左侧匹配0+个字符[aabbcc,abc,bc,c]<br>
+     * http://localhost:8080/sScan?key=a&match=*b* 两侧匹配0+个字符[aabbcc,abc,abd,b,bc,bd]<br>
+     * http://localhost:8080/sScan?key=a&match=[abd] 匹配1个指定字符[a,b]<br>
+     * http://localhost:8080/sScan?key=a&match=[^abd] 不匹配1个指定字符[c]<br>
+     * http://localhost:8080/sScan?key=a&match=[A-z] 匹配1个指定字符[a,b,c]<br>
+     * http://localhost:8080/sScan?key=a&match=\[* 转义匹配匹配1个指定字符[[]]
      */
-    @PostMapping("sScan")
+    @GetMapping("sScan")
     public Result<List<Object>> sScan(String key, String match) {
         return Result.o(redisTemp.sScan(key, match));
     }

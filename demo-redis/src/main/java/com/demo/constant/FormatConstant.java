@@ -34,17 +34,5 @@ public class FormatConstant {
     public static final JSONWriter.Feature[] JSON_WRITER_FEATURE = { //
             JSONWriter.Feature.WriteLongAsString // Long转String
     };
-    /**
-     * Redis的JSON序列化特性
-     */
-    public static final JSONWriter.Feature[] REDIS_JSON_SERIALIZE_FEATURE = { //
-            JSONWriter.Feature.WriteClassName // 写类名
-    };
-    /**
-     * Redis的JSON反序列化特性
-     */
-    public static final JSONReader.Feature[] REDIS_JSON_DESERIALIZE_FEATURE = { //
-            JSONReader.Feature.SupportAutoType // 类型自动探测
-    };
 
 }

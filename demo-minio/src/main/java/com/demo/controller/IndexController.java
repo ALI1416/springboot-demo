@@ -33,7 +33,7 @@ public class IndexController {
     private final MinioTemp minioTemp;
 
     /**
-     * 所有储存桶
+     * 所有储存桶<br>
      * http://localhost:8080/bucketAll
      */
     @GetMapping("bucketAll")
@@ -42,7 +42,7 @@ public class IndexController {
     }
 
     /**
-     * 是否存在储存桶
+     * 是否存在储存桶<br>
      * http://localhost:8080/bucketExist?bucket=test
      */
     @GetMapping("bucketExist")
@@ -51,7 +51,7 @@ public class IndexController {
     }
 
     /**
-     * 创建储存桶
+     * 创建储存桶<br>
      * http://localhost:8080/bucketCreate?bucket=test
      */
     @GetMapping("bucketCreate")
@@ -60,7 +60,7 @@ public class IndexController {
     }
 
     /**
-     * 删除储存桶
+     * 删除储存桶<br>
      * http://localhost:8080/bucketDelete?bucket=test
      */
     @GetMapping("bucketDelete")
@@ -69,7 +69,7 @@ public class IndexController {
     }
 
     /**
-     * 获取储存桶的标签
+     * 获取储存桶的标签<br>
      * http://localhost:8080/bucketTagGet?bucket=test
      */
     @GetMapping("bucketTagGet")
@@ -78,7 +78,7 @@ public class IndexController {
     }
 
     /**
-     * 设置储存桶的标签
+     * 设置储存桶的标签<br>
      * http://localhost:8080/bucketTagSet?bucket=test
      */
     @GetMapping("bucketTagSet")
@@ -90,7 +90,7 @@ public class IndexController {
     }
 
     /**
-     * 删除储存桶的全部标签
+     * 删除储存桶的全部标签<br>
      * http://localhost:8080/bucketTagDelete?bucket=test
      */
     @GetMapping("bucketTagDelete")
@@ -99,7 +99,7 @@ public class IndexController {
     }
 
     /**
-     * 所有对象(根目录)
+     * 所有对象(根目录)<br>
      * http://localhost:8080/objectAll?bucket=test
      */
     @GetMapping("objectAll")
@@ -108,7 +108,7 @@ public class IndexController {
     }
 
     /**
-     * 所有对象
+     * 所有对象<br>
      * http://localhost:8080/objectAll2?bucket=test&path=folder
      */
     @GetMapping("objectAll2")
@@ -117,7 +117,7 @@ public class IndexController {
     }
 
     /**
-     * 对象状态
+     * 对象状态<br>
      * http://localhost:8080/objectStat?bucket=test&path=README.md
      */
     @GetMapping("objectStat")
@@ -126,7 +126,7 @@ public class IndexController {
     }
 
     /**
-     * 获取对象
+     * 获取对象<br>
      * http://localhost:8080/objectGet?bucket=test&path=README.md
      */
     @GetMapping("objectGet")
@@ -150,7 +150,7 @@ public class IndexController {
     }
 
     /**
-     * 获取对象并下载
+     * 获取对象并下载<br>
      * http://localhost:8080/objectDownload2?bucket=test&path=README.md&name=1.md
      */
     @GetMapping("objectDownload2")
@@ -159,7 +159,7 @@ public class IndexController {
     }
 
     /**
-     * 获取对象并下载
+     * 获取对象并下载<br>
      * http://localhost:8080/objectDownload?bucket=test&path=README.md
      */
     @GetMapping("objectDownload")
@@ -168,7 +168,7 @@ public class IndexController {
     }
 
     /**
-     * 下载对象到本地
+     * 下载对象到本地<br>
      * http://localhost:8080/objectDownloadLocal?bucket=test&path=README.md&fileName=/1.md
      */
     @GetMapping("objectDownloadLocal")
@@ -177,7 +177,7 @@ public class IndexController {
     }
 
     /**
-     * 复制对象
+     * 复制对象<br>
      * http://localhost:8080/objectCopy?bucket=test&path=README.md&newBucket=test2&newPath=1.md
      */
     @GetMapping("objectCopy")
@@ -186,7 +186,7 @@ public class IndexController {
     }
 
     /**
-     * 复制对象
+     * 复制对象<br>
      * http://localhost:8080/objectCopy2?bucket=test&path=README.md&newPath=1.md
      */
     @GetMapping("objectCopy2")
@@ -195,7 +195,7 @@ public class IndexController {
     }
 
     /**
-     * 合并分片对象
+     * 合并分片对象<br>
      * http://localhost:8080/objectCompose?bucket=test&paths=minio.exe&paths=mc.exe&newPath=1.dat
      */
     @GetMapping("objectCompose")
@@ -204,7 +204,7 @@ public class IndexController {
     }
 
     /**
-     * 删除对象
+     * 删除对象<br>
      * http://localhost:8080/objectDelete?bucket=test&path=a.txt
      */
     @GetMapping("objectDelete")
@@ -213,7 +213,7 @@ public class IndexController {
     }
 
     /**
-     * 删除对象
+     * 删除对象<br>
      * http://localhost:8080/objectDelete2?bucket=test&paths=a.txt&paths=b.txt
      */
     @GetMapping("objectDelete2")
@@ -222,7 +222,7 @@ public class IndexController {
     }
 
     /**
-     * 上传对象
+     * 上传对象<br>
      * http://localhost:8080/objectUpload?bucket=test&path=folder
      */
     @GetMapping("objectUpload")
@@ -231,7 +231,7 @@ public class IndexController {
     }
 
     /**
-     * 上传对象
+     * 上传对象<br>
      * http://localhost:8080/objectUpload2?bucket=test&path=folder
      */
     @GetMapping("objectUpload2")
@@ -240,7 +240,7 @@ public class IndexController {
     }
 
     /**
-     * 创建文件夹
+     * 创建文件夹<br>
      * http://localhost:8080/folderCreate?bucket=test&path=ab
      */
     @GetMapping("folderCreate")
@@ -249,7 +249,7 @@ public class IndexController {
     }
 
     /**
-     * 从本地上传对象
+     * 从本地上传对象<br>
      * http://localhost:8080/objectUploadLocal?bucket=test&path=ab&localPath=E:\Pictures\头像壁纸\苹果ISO11壁纸.JPG
      */
     @GetMapping("objectUploadLocal")
@@ -258,7 +258,7 @@ public class IndexController {
     }
 
     /**
-     * 获取对象的标签
+     * 获取对象的标签<br>
      * http://localhost:8080/objectTagGet?bucket=test&path=a.txt
      */
     @GetMapping("objectTagGet")
@@ -267,7 +267,7 @@ public class IndexController {
     }
 
     /**
-     * 设置对象的标签
+     * 设置对象的标签<br>
      * http://localhost:8080/objectTagSet?bucket=test&path=a.txt
      */
     @GetMapping("objectTagSet")
@@ -279,7 +279,7 @@ public class IndexController {
     }
 
     /**
-     * 删除对象的全部标签
+     * 删除对象的全部标签<br>
      * http://localhost:8080/objectTagDelete?bucket=test&path=a.txt
      */
     @GetMapping("objectTagDelete")
@@ -288,7 +288,7 @@ public class IndexController {
     }
 
     /**
-     * 获取删除对象的URL
+     * 获取删除对象的URL<br>
      * http://localhost:8080/urlDelete?bucket=test&path=a.txt&expiry=600
      */
     @GetMapping("urlDelete")
@@ -297,7 +297,7 @@ public class IndexController {
     }
 
     /**
-     * 获取修改对象的URL
+     * 获取修改对象的URL<br>
      * http://localhost:8080/urlUpdate?bucket=test&path=a.txt&expiry=600
      */
     @GetMapping("urlUpdate")
@@ -308,7 +308,7 @@ public class IndexController {
     }
 
     /**
-     * 获取下载对象的URL
+     * 获取下载对象的URL<br>
      * http://localhost:8080/urlDownload?bucket=test&path=a.txt&expiry=600
      */
     @GetMapping("urlDownload")

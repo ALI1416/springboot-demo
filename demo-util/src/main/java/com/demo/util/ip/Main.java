@@ -1,5 +1,6 @@
 package com.demo.util.ip;
 
+import cn.z.util.IpUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**

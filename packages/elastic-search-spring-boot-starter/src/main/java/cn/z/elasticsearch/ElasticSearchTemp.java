@@ -1,5 +1,6 @@
 package cn.z.elasticsearch;
 
+import cn.z.elasticsearch.autoconfigure.ElasticSearchProperties;
 import cn.z.elasticsearch.entity.*;
 import cn.z.elasticsearch.entity.analyze.AnalyzeResponse;
 import cn.z.elasticsearch.entity.search.SearchResponse;
@@ -10,10 +11,19 @@ import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.search.Highlight;
 import co.elastic.clients.elasticsearch.indices.AnalyzeRequest;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.message.BasicHeader;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -42,10 +52,14 @@ public class ElasticSearchTemp {
     /**
      * 构造函数(自动注入)
      *
-     * @param elasticSearchClient ElasticsearchClient
+     * @param elasticSearchProperties ElasticSearchProperties
      */
-    public ElasticSearchTemp(ElasticsearchClient elasticSearchClient) {
-        this.elasticSearchClient = elasticSearchClient;
+    public ElasticSearchTemp(ElasticSearchProperties elasticSearchProperties) {
+        RestClientBuilder builder = RestClient.builder(HttpHost.create(elasticSearchProperties.getUri()));
+        if (elasticSearchProperties.getUsername() != null && elasticSearchProperties.getPassword() != null) {
+            builder.setDefaultHeaders(new Header[]{new BasicHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode((elasticSearchProperties.getUsername() + ":" + elasticSearchProperties.getPassword()).getBytes(StandardCharsets.UTF_8))))});
+        }
+        this.elasticSearchClient = new ElasticsearchClient(new RestClientTransport(builder.build(), new JacksonJsonpMapper()));
     }
 
     /* ==================== 索引 ==================== */
