@@ -51,5 +51,9 @@ public class RabbitQueue {
      * 死信测试4
      */
     public static final String DEAD_LETTER_TEST4 = "deadLetterTest4";
+    /**
+     * 测试
+     */
+    public static final String TEST = "test";
 
 }

@@ -243,4 +243,15 @@ public class IndexController {
         return Result.o();
     }
 
+    /**
+     * <h3>测试</h3>
+     * http://localhost:8080/test <br>
+     * 测试 ID 90261031736049664
+     */
+    @GetMapping("test")
+    public Result test() {
+        rabbitTemp.send(RabbitQueue.TEST, "ID " + Id.next());
+        return Result.o();
+    }
+
 }

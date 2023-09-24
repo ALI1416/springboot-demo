@@ -3,6 +3,10 @@ package com.demo.service.rabbit;
 import cn.z.rabbit.RabbitTemp;
 import cn.z.tool.ThreadPool;
 import com.demo.constant.RabbitQueue;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.DefaultConsumer;
+import com.rabbitmq.client.Envelope;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -11,10 +15,10 @@ import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +38,7 @@ import java.util.Map;
 public class RabbitService3 {
 
     private final RabbitTemp rabbitTemp;
-    private final RabbitTemplate rabbitTemplate;
+    private final ConnectionFactory factory;
 
     /**
      * 死信测试1
@@ -60,20 +64,42 @@ public class RabbitService3 {
     }
 
     /**
-     * 死信测试3
+     * 死信测试3<br>
+     * 非注解创建队列
      */
     @Bean
     public void deadLetterTest3() throws Exception {
-        ConnectionFactory factory = rabbitTemplate.getConnectionFactory();
-        Connection connection = factory.createConnection();
-        Map<String, Object> arguments = new HashMap<>();
-        arguments.put("x-message-ttl", 10000); // 队列消息过期时间(单位：毫秒)(ready状态)
-        arguments.put("x-max-length", 5); // 最大队列长度(ready状态)
-        arguments.put("x-max-length-bytes", 10); // 最大总数据长度(所有ready状态body的总长度)
-        arguments.put("x-dead-letter-exchange", ""); // 死信交换机
-        arguments.put("x-dead-letter-routing-key", RabbitQueue.DEAD_LETTER); // 死信队列
-        connection.createChannel(false).queueDeclare(RabbitQueue.DEAD_LETTER_TEST3, true, true, true, arguments);
-        connection.close();
+        try (Connection connection = factory.createConnection()) {
+            Map<String, Object> arguments = new HashMap<>();
+            arguments.put("x-message-ttl", 10000); // 队列消息过期时间(单位：毫秒)(ready状态)
+            arguments.put("x-max-length", 5); // 最大队列长度(ready状态)
+            arguments.put("x-max-length-bytes", 10); // 最大总数据长度(所有ready状态body的总长度)
+            arguments.put("x-dead-letter-exchange", ""); // 死信交换机
+            arguments.put("x-dead-letter-routing-key", RabbitQueue.DEAD_LETTER); // 死信队列
+            try (Channel channel = connection.createChannel(false)) {
+                channel.queueDeclare(RabbitQueue.DEAD_LETTER_TEST3, true, true, true, arguments);
+            }
+        }
+    }
+
+    /**
+     * 非注解监听队列
+     */
+    @Bean
+    public void test() throws Exception {
+        try (Connection connection = factory.createConnection()) {
+            try (Channel channel = connection.createChannel(false)) {
+                channel.queueDeclare(RabbitQueue.TEST, true, true, true, null);
+                channel.basicConsume(RabbitQueue.TEST, true, new DefaultConsumer(channel) {
+
+                    @Override
+                    public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) {
+                        log.info("测试 {}", new String(body, StandardCharsets.UTF_8));
+                    }
+
+                });
+            }
+        }
     }
 
     /**
