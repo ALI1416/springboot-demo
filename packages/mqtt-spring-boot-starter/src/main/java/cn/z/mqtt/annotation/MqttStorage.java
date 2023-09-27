@@ -1,7 +1,6 @@
 package cn.z.mqtt.annotation;
 
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class MqttStorage {
 
     /**

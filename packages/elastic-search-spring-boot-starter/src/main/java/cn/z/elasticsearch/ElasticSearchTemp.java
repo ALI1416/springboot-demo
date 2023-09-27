@@ -20,7 +20,6 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -37,7 +36,6 @@ import java.util.Map;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class ElasticSearchTemp {
 
     /**

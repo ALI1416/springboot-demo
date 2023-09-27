@@ -1,5 +1,6 @@
 package cn.z.minio;
 
+import cn.z.minio.autoconfigure.MinioProperties;
 import cn.z.minio.entity.GetObjectResponse;
 import cn.z.minio.entity.ObjectWriteResponse;
 import cn.z.minio.entity.StatObjectResponse;
@@ -9,7 +10,6 @@ import io.minio.http.Method;
 import io.minio.messages.DeleteObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,6 @@ import java.util.*;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class MinioTemp {
 
     /**
@@ -48,10 +47,16 @@ public class MinioTemp {
     /**
      * 构造函数(自动注入)
      *
-     * @param minioClient MinioClient
+     * @param minioProperties MinioProperties
      */
-    public MinioTemp(MinioClient minioClient) {
-        this.minioClient = minioClient;
+    public MinioTemp(MinioProperties minioProperties) {
+        MinioClient.Builder builder = MinioClient.builder()
+                .endpoint(minioProperties.getUri())
+                .credentials(minioProperties.getUsername(), minioProperties.getPassword());
+        if (minioProperties.getRegion() != null) {
+            builder.region(minioProperties.getRegion());
+        }
+        this.minioClient = builder.build();
     }
 
     /* ==================== 桶基本操作 ==================== */

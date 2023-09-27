@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 
@@ -19,7 +18,6 @@ import javax.mail.MessagingException;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class MailTemp {
 
     /**

@@ -1,7 +1,6 @@
 package cn.z.websocket;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
 
 /**
  * <h1>WebSocket模板</h1>
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class WebSocketTemp {
 
     /**

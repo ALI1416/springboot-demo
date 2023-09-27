@@ -12,18 +12,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@ConfigurationProperties(prefix = MqttProperties.MQTT_PREFIX)
+@ConfigurationProperties(prefix = "mqtt")
 public class MqttProperties {
-
-    /**
-     * 前缀{@value}
-     */
-    public static final String MQTT_PREFIX = "mqtt";
 
     /**
      * URI(默认值"tcp://127.0.0.1:1883")
      */
-    private String uri;
+    private String uri = "tcp://127.0.0.1:1883";
     /**
      * 用户名
      */
@@ -35,19 +30,19 @@ public class MqttProperties {
     /**
      * 连接超时时间(秒)(默认值30)
      */
-    private Integer connectionTimeout;
+    private int connectionTimeout = 30;
     /**
      * 保活时间(秒)(默认值60)
      */
-    private Integer keepAliveInterval;
+    private int keepAliveInterval = 60;
     /**
      * 清除会话(默认值true)
      */
-    private Boolean cleanSession;
+    private boolean cleanSession = true;
     /**
      * 自动重连(默认值false)
      */
-    private Boolean automaticReconnect;
+    private boolean automaticReconnect = false;
 
     public String getUri() {
         return uri;
@@ -73,35 +68,35 @@ public class MqttProperties {
         this.password = password;
     }
 
-    public Integer getConnectionTimeout() {
+    public int getConnectionTimeout() {
         return connectionTimeout;
     }
 
-    public void setConnectionTimeout(Integer connectionTimeout) {
+    public void setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
 
-    public Integer getKeepAliveInterval() {
+    public int getKeepAliveInterval() {
         return keepAliveInterval;
     }
 
-    public void setKeepAliveInterval(Integer keepAliveInterval) {
+    public void setKeepAliveInterval(int keepAliveInterval) {
         this.keepAliveInterval = keepAliveInterval;
     }
 
-    public Boolean getCleanSession() {
+    public boolean getCleanSession() {
         return cleanSession;
     }
 
-    public void setCleanSession(Boolean cleanSession) {
+    public void setCleanSession(boolean cleanSession) {
         this.cleanSession = cleanSession;
     }
 
-    public Boolean getAutomaticReconnect() {
+    public boolean getAutomaticReconnect() {
         return automaticReconnect;
     }
 
-    public void setAutomaticReconnect(Boolean automaticReconnect) {
+    public void setAutomaticReconnect(boolean automaticReconnect) {
         this.automaticReconnect = automaticReconnect;
     }
 

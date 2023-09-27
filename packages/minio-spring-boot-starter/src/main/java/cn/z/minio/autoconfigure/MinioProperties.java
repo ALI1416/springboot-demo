@@ -12,26 +12,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@ConfigurationProperties(prefix = MinioProperties.MINIO_PREFIX)
+@ConfigurationProperties(prefix = "minio")
 public class MinioProperties {
-
-    /**
-     * 前缀{@value}
-     */
-    public static final String MINIO_PREFIX = "minio";
 
     /**
      * URI(默认值"http://127.0.0.1:9000")
      */
-    private String uri;
+    private String uri = "http://127.0.0.1:9000";
     /**
      * 用户名(默认值"minioadmin")
      */
-    private String username;
+    private String username = "minioadmin";
     /**
      * 密码(默认值"minioadmin")
      */
-    private String password;
+    private String password = "minioadmin";
     /**
      * 区域
      */

@@ -4,7 +4,6 @@ import cn.z.mqtt.config.MqttConfig;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,7 +17,6 @@ import java.nio.charset.StandardCharsets;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class MqttTemp {
 
     /**

@@ -2,7 +2,6 @@ package cn.z.rabbit;
 
 import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.stereotype.Component;
 
 /**
  * <h1>RabbitMQ模板</h1>
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class RabbitTemp {
 
     /**

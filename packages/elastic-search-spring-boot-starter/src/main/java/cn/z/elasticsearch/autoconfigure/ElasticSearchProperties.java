@@ -12,18 +12,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@ConfigurationProperties(prefix = ElasticSearchProperties.ELASTIC_SEARCH_PREFIX)
+@ConfigurationProperties(prefix = "elasticsearch")
 public class ElasticSearchProperties {
-
-    /**
-     * 前缀{@value}
-     */
-    public static final String ELASTIC_SEARCH_PREFIX = "elasticsearch";
 
     /**
      * URI(默认值"http://127.0.0.1:9200")
      */
-    private String uri;
+    private String uri = "http://127.0.0.1:9200";
     /**
      * 用户名
      */

@@ -7,7 +7,6 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * <h1>MQTT配置</h1>
@@ -19,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Configuration
 public class MqttConfig {
 
     /**

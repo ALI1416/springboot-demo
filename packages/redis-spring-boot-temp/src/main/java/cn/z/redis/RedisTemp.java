@@ -13,7 +13,6 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +27,6 @@ import java.util.concurrent.TimeUnit;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Component
 public class RedisTemp {
 
     /**

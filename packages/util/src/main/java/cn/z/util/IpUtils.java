@@ -71,7 +71,7 @@ public class IpUtils {
             return false;
         }
         for (int i = 0; i < 4; i++) {
-            long v = Integer.parseInt(s[i]);
+            int v = Integer.parseInt(s[i]);
             if (v < 0 || v > 255) {
                 return false;
             }

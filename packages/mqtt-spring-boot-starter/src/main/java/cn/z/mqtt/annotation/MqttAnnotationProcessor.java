@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -25,7 +24,6 @@ import java.util.*;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@Configuration
 public class MqttAnnotationProcessor implements BeanPostProcessor {
 
     /**
@@ -34,7 +32,7 @@ public class MqttAnnotationProcessor implements BeanPostProcessor {
     private static final Logger log = LoggerFactory.getLogger(MqttAnnotationProcessor.class);
 
     /**
-     * MQTT缓存
+     * MQTT存储
      */
     private final MqttStorage mqttStorage;
 
