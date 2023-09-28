@@ -39,6 +39,6 @@ public enum HeaderEnum {
     /**
      * 重复
      */
-    DUPLICATE;
+    DUPLICATE
 
 }

@@ -2,7 +2,6 @@ package com.demo.job;
 
 import com.xxl.job.core.context.XxlJobHelper;
 import com.xxl.job.core.handler.annotation.XxlJob;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +23,6 @@ public class TestJob {
      * 简单任务(Bean模式)
      */
     @XxlJob("demoJobHandler")
-    @Scheduled
     public void demoJobHandler() throws InterruptedException {
         XxlJobHelper.log("XXL-JOB, Hello World.");
         for (int i = 0; i < 5; i++) {

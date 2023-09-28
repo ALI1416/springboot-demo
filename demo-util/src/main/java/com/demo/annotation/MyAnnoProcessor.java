@@ -22,11 +22,6 @@ import java.lang.reflect.*;
 public class MyAnnoProcessor implements BeanPostProcessor {
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Class<?> clazz = bean.getClass();
         scanClass(clazz);
@@ -42,7 +37,7 @@ public class MyAnnoProcessor implements BeanPostProcessor {
     private void scanClass(Class<?> clazz) {
         MyAnno myAnno = clazz.getAnnotation(MyAnno.class);
         if (myAnno != null) {
-            log.info("类 {} {} {}", clazz, myAnno.value(), myAnno.bool());
+            log.info("类 {} {}", clazz, myAnno);
         }
     }
 
@@ -54,7 +49,7 @@ public class MyAnnoProcessor implements BeanPostProcessor {
         for (Field field : fields) {
             MyAnno myAnno = field.getAnnotation(MyAnno.class);
             if (myAnno != null) {
-                log.info("字段 {} {} {}", field, myAnno.value(), myAnno.bool());
+                log.info("字段 {} {}", field, myAnno);
             }
         }
     }
@@ -67,7 +62,7 @@ public class MyAnnoProcessor implements BeanPostProcessor {
         for (Constructor<?> constructor : constructors) {
             MyAnno myAnno = constructor.getAnnotation(MyAnno.class);
             if (myAnno != null) {
-                log.info("构造函数 {} {} {}", constructor, myAnno.value(), myAnno.bool());
+                log.info("构造函数 {} {}", constructor, myAnno);
             }
             scanParameter(constructor);
         }
@@ -81,7 +76,7 @@ public class MyAnnoProcessor implements BeanPostProcessor {
         for (Method method : methods) {
             MyAnno myAnno = method.getAnnotation(MyAnno.class);
             if (myAnno != null) {
-                log.info("方法 {} {} {}", method, myAnno.value(), myAnno.bool());
+                log.info("方法 {} {}", method, myAnno);
             }
             scanParameter(method);
         }
@@ -95,7 +90,7 @@ public class MyAnnoProcessor implements BeanPostProcessor {
         for (Parameter parameter : parameters) {
             MyAnno myAnno = parameter.getAnnotation(MyAnno.class);
             if (myAnno != null) {
-                log.info("参数 {} {} {}", parameter, myAnno.value(), myAnno.bool());
+                log.info("参数 {} {}", parameter, myAnno);
             }
         }
     }
