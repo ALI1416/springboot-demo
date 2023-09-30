@@ -77,10 +77,6 @@
     <!--org.ansj:ansj_seg-->
     <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
     <ansj.version>5.1.6</ansj.version>
-    <!--雪花ID生成器-->
-    <!--cn.404z:id-spring-boot-autoconfigure-->
-    <!-- https://mvnrepository.com/artifact/cn.404z/id-spring-boot-autoconfigure -->
-    <id.version>3.0.1</id.version>
 
     <!--邮件SpringBoot模板-->
     <!--cn.404z:mail-spring-boot-temp-->
@@ -226,12 +222,6 @@
         <groupId>org.ansj</groupId>
         <artifactId>ansj_seg</artifactId>
         <version>${ansj.version}</version>
-      </dependency>
-      <!--雪花ID生成器-->
-      <dependency>
-        <groupId>cn.404z</groupId>
-        <artifactId>id-spring-boot-autoconfigure</artifactId>
-        <version>${id.version}</version>
       </dependency>
 
       <!--邮件SpringBoot模板-->

@@ -2,7 +2,6 @@ package cn.z.mqtt.annotation;
 
 import cn.z.mqtt.MqttException;
 import cn.z.mqtt.autoconfigure.MqttProperties;
-import cn.z.tool.Base62;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -91,7 +90,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      * @param mqttProperties MqttProperties
      */
     public MqttAnnotationProcessor(MqttProperties mqttProperties) throws org.eclipse.paho.client.mqttv3.MqttException {
-        mqttClient = new MqttClient(mqttProperties.getUri(), "mqtt_" + Base62.encode(new Random().nextInt(Integer.MAX_VALUE)), new MemoryPersistence());
+        mqttClient = new MqttClient(mqttProperties.getUri(), getRandomClientId(), new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
         if (mqttProperties.getUsername() != null && mqttProperties.getPassword() != null) {
             options.setUserName(mqttProperties.getUsername());
@@ -151,6 +150,30 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
 
         });
         mqttClient.connect(options);
+    }
+
+    /**
+     * 随机数实例
+     */
+    private static final Random RANDOM = new Random();
+    /**
+     * 所有数字和字母
+     */
+    private static final String NUMBER_ALL_LETTER = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    /**
+     * 所有数字和字母个数
+     */
+    private static final int NUMBER_ALL_LETTER_LENGTH = NUMBER_ALL_LETTER.length();
+
+    /**
+     * 获取随机客户端ID
+     */
+    private String getRandomClientId() {
+        StringBuilder sb = new StringBuilder("mqtt_");
+        for (int i = 0; i < 5; i++) {
+            sb.append(NUMBER_ALL_LETTER.charAt(RANDOM.nextInt(NUMBER_ALL_LETTER_LENGTH)));
+        }
+        return sb.toString();
     }
 
     /**
