@@ -28,4 +28,23 @@ public class MqttException extends RuntimeException {
         super(message);
     }
 
+    /**
+     * MQTT异常
+     *
+     * @param message 信息
+     * @param cause   异常
+     */
+    public MqttException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * MQTT异常
+     *
+     * @param cause 异常
+     */
+    public MqttException(Throwable cause) {
+        super(cause);
+    }
+
 }

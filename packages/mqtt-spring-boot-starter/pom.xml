@@ -26,6 +26,11 @@
       <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!-- 仅供编译使用 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

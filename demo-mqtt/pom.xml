@@ -41,6 +41,11 @@
       <groupId>cn.404z</groupId>
       <artifactId>mqtt-spring-boot-starter</artifactId>
     </dependency>
+    <!--工具-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

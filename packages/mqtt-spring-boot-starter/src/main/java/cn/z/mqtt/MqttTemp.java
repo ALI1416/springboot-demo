@@ -1,6 +1,6 @@
 package cn.z.mqtt;
 
-import cn.z.mqtt.config.MqttConfig;
+import cn.z.mqtt.annotation.MqttAnnotationProcessor;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,17 +25,17 @@ public class MqttTemp {
     private static final Logger log = LoggerFactory.getLogger(MqttTemp.class);
 
     /**
-     * MQTT配置
+     * MQTT注解处理
      */
-    private final MqttConfig mqttConfig;
+    private final MqttAnnotationProcessor mqttAnnotationProcessor;
 
     /**
      * 构造函数(自动注入)
      *
-     * @param mqttConfig MqttConfig
+     * @param mqttAnnotationProcessor MqttAnnotationProcessor
      */
-    public MqttTemp(MqttConfig mqttConfig) {
-        this.mqttConfig = mqttConfig;
+    public MqttTemp(MqttAnnotationProcessor mqttAnnotationProcessor) {
+        this.mqttAnnotationProcessor = mqttAnnotationProcessor;
     }
 
     /**
@@ -81,7 +81,7 @@ public class MqttTemp {
      */
     public void send(String topic, byte[] msg, int qos, boolean retain) {
         try {
-            mqttConfig.client().publish(topic, msg, qos, retain);
+            mqttAnnotationProcessor.getMqttClient().publish(topic, msg, qos, retain);
         } catch (MqttException e) {
             log.error("发送失败", e);
         }

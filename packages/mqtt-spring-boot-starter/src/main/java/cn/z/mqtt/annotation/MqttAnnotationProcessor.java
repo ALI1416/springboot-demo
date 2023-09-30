@@ -1,12 +1,20 @@
 package cn.z.mqtt.annotation;
 
 import cn.z.mqtt.MqttException;
-import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import cn.z.mqtt.autoconfigure.MqttProperties;
+import cn.z.tool.Base62;
+import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.SmartInitializingSingleton;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.MethodIntrospector;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
@@ -24,7 +32,7 @@ import java.util.*;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class MqttAnnotationProcessor implements BeanPostProcessor {
+public class MqttAnnotationProcessor implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
 
     /**
      * 日志实例
@@ -32,42 +40,190 @@ public class MqttAnnotationProcessor implements BeanPostProcessor {
     private static final Logger log = LoggerFactory.getLogger(MqttAnnotationProcessor.class);
 
     /**
-     * MQTT存储
+     * 主题
      */
-    private final MqttStorage mqttStorage;
+    private final List<String> topicList = new ArrayList<>();
+    /**
+     * QoS
+     */
+    private final List<Integer> qosList = new ArrayList<>();
+    /**
+     * 回调
+     */
+    private final List<IMqttMessageListener> callbackList = new ArrayList<>();
+
+    /**
+     * 获取主题数组
+     */
+    private String[] getTopicArray() {
+        return topicList.toArray(new String[0]);
+    }
+
+    /**
+     * 获取QoS数组
+     */
+    private int[] getQosArray() {
+        return qosList.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    /**
+     * 获取回调数组
+     */
+    private IMqttMessageListener[] getCallbackArray() {
+        return callbackList.toArray(new IMqttMessageListener[0]);
+    }
+
+    /**
+     * MQTT客户端
+     */
+    private final MqttClient mqttClient;
+
+    /**
+     * 获取MQTT客户端
+     */
+    public MqttClient getMqttClient() {
+        return mqttClient;
+    }
 
     /**
      * 构造函数(自动注入)
      *
-     * @param mqttStorage MqttStorage
+     * @param mqttProperties MqttProperties
      */
-    public MqttAnnotationProcessor(MqttStorage mqttStorage) {
-        this.mqttStorage = mqttStorage;
+    public MqttAnnotationProcessor(MqttProperties mqttProperties) throws org.eclipse.paho.client.mqttv3.MqttException {
+        mqttClient = new MqttClient(mqttProperties.getUri(), "mqtt_" + Base62.encode(new Random().nextInt(Integer.MAX_VALUE)), new MemoryPersistence());
+        MqttConnectOptions options = new MqttConnectOptions();
+        if (mqttProperties.getUsername() != null && mqttProperties.getPassword() != null) {
+            options.setUserName(mqttProperties.getUsername());
+            options.setPassword(mqttProperties.getPassword().toCharArray());
+        }
+        options.setConnectionTimeout(mqttProperties.getConnectionTimeout());
+        options.setKeepAliveInterval(mqttProperties.getKeepAliveInterval());
+        options.setCleanSession(mqttProperties.getCleanSession());
+        options.setAutomaticReconnect(mqttProperties.getAutomaticReconnect());
+        mqttClient.setCallback(new MqttCallbackExtended() {
+
+            /**
+             * 连接成功
+             *
+             * @param reconnect 重连
+             * @param uri       URI
+             */
+            @Override
+            public void connectComplete(boolean reconnect, String uri) {
+                if (reconnect) {
+                    log.info("MQTT重连成功");
+                    // 重连后恢复订阅
+                    subscribeWithResponse(getTopicArray(), getQosArray(), getCallbackArray());
+                } else {
+                    log.info("MQTT连接成功");
+                }
+            }
+
+            /**
+             * 失去连接
+             *
+             * @param cause Throwable
+             */
+            @Override
+            public void connectionLost(Throwable cause) {
+                log.error("MQTT失去连接", cause);
+            }
+
+            /**
+             * 消息到达
+             *
+             * @param topic   主题
+             * @param message MqttMessage
+             */
+            @Override
+            public void messageArrived(String topic, MqttMessage message) {
+            }
+
+            /**
+             * 消息发送成功
+             *
+             * @param token IMqttDeliveryToken
+             */
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+            }
+
+        });
+        mqttClient.connect(options);
     }
 
+    /**
+     * 订阅
+     */
+    private void subscribeWithResponse(String[] topicArray, int[] qosArray, IMqttMessageListener[] callbackArray) {
+        try {
+            mqttClient.subscribeWithResponse(topicArray, qosArray, callbackArray);
+        } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
+            throw new MqttException("订阅失败", e);
+        }
+    }
+
+    /**
+     * ApplicationContext
+     */
+    private ApplicationContext applicationContext;
+
+    /**
+     * ApplicationContextAware
+     */
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        Class<?> clazz = bean.getClass();
-        Method[] methods = clazz.getDeclaredMethods();
-        for (Method method : methods) {
-            Subscribe subscribe = method.getAnnotation(Subscribe.class);
-            if (subscribe != null) {
-                mqttStorage.addTopic(subscribe.value());
-                mqttStorage.addQos(subscribe.qos());
-                String[] subscribePartArray = subscribe.value().split("/", -1);
-                // 订阅主题分段列表 位置 +:true #:false
-                List<Map.Entry<Integer, Boolean>> subscribePartList = new ArrayList<>();
-                for (int i = 0; i < subscribePartArray.length; i++) {
-                    if ("+".equals(subscribePartArray[i])) {
-                        subscribePartList.add(new AbstractMap.SimpleEntry<>(i, true));
-                    } else if ("#".equals(subscribePartArray[i])) {
-                        subscribePartList.add(new AbstractMap.SimpleEntry<>(i, false));
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    /**
+     * SmartInitializingSingleton
+     */
+    @Override
+    public void afterSingletonsInstantiated() {
+        if (applicationContext == null) {
+            throw new MqttException("找不到 ApplicationContext");
+        }
+        // 所有Bean
+        String[] beanNamesForTypeArray = applicationContext.getBeanNamesForType(Object.class, false, true);
+        for (String beanNamesForType : beanNamesForTypeArray) {
+            // 跳过@Lazy注解
+            if (applicationContext.findAnnotationOnBean(beanNamesForType, Lazy.class) == null) {
+                Object bean = applicationContext.getBean(beanNamesForType);
+                // 含有@Subscribe注解的方法
+                Map<Method, Subscribe> annotatedMethodMap = MethodIntrospector.selectMethods(
+                        bean.getClass(),
+                        (MethodIntrospector.MetadataLookup<Subscribe>) method ->
+                                AnnotatedElementUtils.findMergedAnnotation(method, Subscribe.class));
+                annotatedMethodMap.forEach((method, subscribe) -> {
+                    topicList.add(subscribe.value());
+                    qosList.add(subscribe.qos());
+                    String[] subscribePartArray = subscribe.value().split("/", -1);
+                    // 订阅主题分段列表 位置 +:true #:false
+                    List<Map.Entry<Integer, Boolean>> subscribePartList = new ArrayList<>();
+                    for (int i = 0; i < subscribePartArray.length; i++) {
+                        if ("+".equals(subscribePartArray[i])) {
+                            subscribePartList.add(new AbstractMap.SimpleEntry<>(i, true));
+                        } else if ("#".equals(subscribePartArray[i])) {
+                            subscribePartList.add(new AbstractMap.SimpleEntry<>(i, false));
+                        }
                     }
-                }
-                mqttStorage.addCallback(callback(bean, method, subscribePartList));
+                    callbackList.add(callback(bean, method, subscribePartList));
+                });
             }
         }
-        return bean;
+        // 订阅
+        subscribeWithResponse(getTopicArray(), getQosArray(), getCallbackArray());
+    }
+
+    /**
+     * DisposableBean
+     */
+    @Override
+    public void destroy() throws Exception {
+        mqttClient.disconnect();
+        mqttClient.close();
     }
 
     /**
@@ -197,7 +353,7 @@ public class MqttAnnotationProcessor implements BeanPostProcessor {
         try {
             entry = subscribePartList.get(index);
         } catch (Exception e) {
-            throw new MqttException("方法 " + method + " 的参数 " + parameter + " @Header注解的主题片段匹配位置的值 " + index + " 超出最大值 " + (subscribePartList.size() - 1));
+            throw new MqttException("方法 " + method + " 的参数 " + parameter + " @Header注解的主题片段匹配位置的值 " + index + " 超出最大值 " + (subscribePartList.size() - 1), e);
         }
         int topicPartIndex = entry.getKey();
         boolean isSingle = entry.getValue();
@@ -370,7 +526,7 @@ public class MqttAnnotationProcessor implements BeanPostProcessor {
                 try {
                     return clazz.getConstructor(byte[].class).newInstance(bytes);
                 } catch (Exception e) {
-                    throw new MqttException("无法使用值 " + Arrays.toString(bytes) + " 实例化类 " + clazz + " 的入参为 byte[] 的构造方法");
+                    throw new MqttException("无法使用值 " + Arrays.toString(bytes) + " 实例化类 " + clazz + " 的入参为 byte[] 的构造方法", e);
                 }
             }
         }
@@ -481,7 +637,7 @@ public class MqttAnnotationProcessor implements BeanPostProcessor {
                 try {
                     return clazz.getConstructor(String.class).newInstance(string);
                 } catch (Exception e) {
-                    throw new MqttException("无法使用值 " + string + " 实例化类 " + clazz + " 的入参为 String 的构造方法");
+                    throw new MqttException("无法使用值 " + string + " 实例化类 " + clazz + " 的入参为 String 的构造方法", e);
                 }
             }
         }

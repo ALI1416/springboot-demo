@@ -2,6 +2,7 @@ package com.demo.annotation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -25,15 +26,24 @@ import java.util.Map;
  **/
 @Configuration
 @Slf4j
-public class MyAnnoProcessor2 implements ApplicationContextAware, SmartInitializingSingleton {
+public class MyAnnoProcessor2 implements ApplicationContextAware, SmartInitializingSingleton, DisposableBean {
 
+    /**
+     * ApplicationContext
+     */
     private ApplicationContext applicationContext;
 
+    /**
+     * ApplicationContextAware
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
 
+    /**
+     * SmartInitializingSingleton
+     */
     @Override
     public void afterSingletonsInstantiated() {
         if (applicationContext == null) {
@@ -53,6 +63,14 @@ public class MyAnnoProcessor2 implements ApplicationContextAware, SmartInitializ
                 annotatedMethodMap.forEach((method, myAnno) -> log.info("方法 {} ，注解 {}", method, myAnno));
             }
         }
+    }
+
+    /**
+     * DisposableBean
+     */
+    @Override
+    public void destroy() {
+        log.info("destroy");
     }
 
 }
