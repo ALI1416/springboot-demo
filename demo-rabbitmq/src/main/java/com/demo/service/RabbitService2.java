@@ -1,4 +1,4 @@
-package com.demo.service.rabbit;
+package com.demo.service;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.demo.constant.RabbitExchange;

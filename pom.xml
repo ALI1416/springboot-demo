@@ -38,11 +38,11 @@
     <module>demo-mysql2</module>
     <module>demo-rabbitmq</module>
     <module>demo-redis</module>
+    <module>demo-tiny-task</module>
     <module>demo-tiny-token</module>
     <module>demo-util</module>
     <module>demo-websocket</module>
     <module>demo-websocket-cluster</module>
-    <module>demo-xxl-job</module>
   </modules>
 
   <properties>
@@ -165,6 +165,11 @@
     <!-- https://mvnrepository.com/artifact/cn.404z/qrcode-encoder -->
     <qrcode-encoder.version>1.1.0</qrcode-encoder.version>
 
+    <!--轻量级集群任务SpringBoot启动器-->
+    <!--cn.404z:tiny-task-spring-boot-starter-->
+    <!-- https://mvnrepository.com/artifact/cn.404z/tiny-task-spring-boot-starter -->
+    <tiny-task.version>1.0.0</tiny-task.version>
+
     <!--轻量级权限认证SpringBoot启动器-->
     <!--cn.404z:tiny-token-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/cn.404z/tiny-token-spring-boot-starter -->
@@ -224,11 +229,6 @@
     <!--com.github.xiaoymin:knife4j-openapi3-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter -->
     <knife4j.version>4.3.0</knife4j.version>
-
-    <!--xxl-job-->
-    <!--com.xuxueli:xxl-job-core-->
-    <!-- https://mvnrepository.com/artifact/com.xuxueli/xxl-job-core -->
-    <xxl-job.version>2.4.0</xxl-job.version>
 
     <!---->
     <!--项目包-->
@@ -325,6 +325,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>qrcode-encoder</artifactId>
         <version>${qrcode-encoder.version}</version>
+      </dependency>
+      <!--轻量级集群任务SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>tiny-task-spring-boot-starter</artifactId>
+        <version>${tiny-task.version}</version>
       </dependency>
       <!--轻量级权限认证SpringBoot启动器-->
       <dependency>
@@ -433,12 +439,6 @@
         <groupId>com.github.xiaoymin</groupId>
         <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
         <version>${knife4j.version}</version>
-      </dependency>
-      <!--xxl-job-->
-      <dependency>
-        <groupId>com.xuxueli</groupId>
-        <artifactId>xxl-job-core</artifactId>
-        <version>${xxl-job.version}</version>
       </dependency>
 
       <!--邮件SpringBoot模板-->

@@ -29,10 +29,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0.0
  **/
 @SpringBootApplication
-public class DemoXxlJobApp {
+public class DemoTinyTaskApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoXxlJobApp.class, args);
+        SpringApplication.run(DemoTinyTaskApp.class, args);
     }
 
 }

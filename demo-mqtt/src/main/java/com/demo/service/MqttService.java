@@ -1,4 +1,4 @@
-package com.demo.service.mqtt;
+package com.demo.service;
 
 import cn.z.mqtt.annotation.Header;
 import cn.z.mqtt.annotation.HeaderEnum;

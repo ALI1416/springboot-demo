@@ -76,6 +76,11 @@ SpringBoot示例
   - FastJson
   - Redis
   - 雪花ID生成器
+- **`demo-tiny-task`** : 轻量级集群任务SpringBoot启动器
+  - SpringBoot
+  - Redis
+  - RabbitMQ
+  - 轻量级集群任务SpringBoot启动器
 - **`demo-tiny-token`** : 轻量级权限认证SpringBoot启动器
   - SpringBoot Web
   - FastJson
@@ -105,11 +110,6 @@ SpringBoot示例
   - SpringBoot WebSocket
   - FastJson
   - RabbitMQ
-- **`demo-xxl-job`** : xxl-job
-  - SpringBoot Web
-  - FastJson
-  - MySQL
-  - xxl-job
 
 ### 版本号
 
@@ -162,6 +162,8 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/phone2region-spring-boot-autoconfigure?label=Maven%20Central)
   - `二维码生成器` : `cn.404z:qrcode-encoder`  
     ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/qrcode-encoder?label=Maven%20Central)
+  - `轻量级集群任务SpringBoot启动器` : `cn.404z:tiny-task-spring-boot-starter`  
+    ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-task-spring-boot-starter?label=Maven%20Central)
   - `轻量级权限认证SpringBoot启动器` : `cn.404z:tiny-token-spring-boot-starter`  
     ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-token-spring-boot-starter?label=Maven%20Central)
   - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
@@ -190,8 +192,6 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
   - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
     ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
-  - `xxl-job` : `com.xuxueli:xxl-job-core`  
-    ![Maven Central](https://img.shields.io/maven-central/v/com.xuxueli/xxl-job-core?label=Maven%20Central)
 
 ## 关于
 

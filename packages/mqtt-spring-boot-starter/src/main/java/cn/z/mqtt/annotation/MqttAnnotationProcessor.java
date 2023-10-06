@@ -219,25 +219,34 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                         bean.getClass(),
                         (MethodIntrospector.MetadataLookup<Subscribe>) method ->
                                 AnnotatedElementUtils.findMergedAnnotation(method, Subscribe.class));
-                annotatedMethodMap.forEach((method, subscribe) -> {
-                    topicList.add(subscribe.value());
-                    qosList.add(subscribe.qos());
-                    String[] subscribePartArray = subscribe.value().split("/", -1);
-                    // 订阅主题分段列表 位置 +:true #:false
-                    List<Map.Entry<Integer, Boolean>> subscribePartList = new ArrayList<>();
-                    for (int i = 0; i < subscribePartArray.length; i++) {
-                        if ("+".equals(subscribePartArray[i])) {
-                            subscribePartList.add(new AbstractMap.SimpleEntry<>(i, true));
-                        } else if ("#".equals(subscribePartArray[i])) {
-                            subscribePartList.add(new AbstractMap.SimpleEntry<>(i, false));
-                        }
-                    }
-                    callbackList.add(callback(bean, method, subscribePartList));
-                });
+                annotatedMethodMap.forEach((method, subscribe) -> processSubscribe(bean, method, subscribe));
             }
         }
         // 订阅
         subscribeWithResponse(getTopicArray(), getQosArray(), getCallbackArray());
+    }
+
+    /**
+     * 处理
+     *
+     * @param bean      Bean
+     * @param method    Method
+     * @param subscribe Subscribe
+     */
+    private void processSubscribe(Object bean, Method method, Subscribe subscribe) {
+        topicList.add(subscribe.value());
+        qosList.add(subscribe.qos());
+        String[] subscribePartArray = subscribe.value().split("/", -1);
+        // 订阅主题分段列表 位置 +:true #:false
+        List<Map.Entry<Integer, Boolean>> subscribePartList = new ArrayList<>();
+        for (int i = 0; i < subscribePartArray.length; i++) {
+            if ("+".equals(subscribePartArray[i])) {
+                subscribePartList.add(new AbstractMap.SimpleEntry<>(i, true));
+            } else if ("#".equals(subscribePartArray[i])) {
+                subscribePartList.add(new AbstractMap.SimpleEntry<>(i, false));
+            }
+        }
+        callbackList.add(callback(bean, method, subscribePartList));
     }
 
     /**
@@ -252,12 +261,12 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     /**
      * 回调
      *
-     * @param object            Object
+     * @param bean              Bean
      * @param method            Method
      * @param subscribePartList 订阅主题分段列表
      * @return IMqttMessageListener
      */
-    private static IMqttMessageListener callback(Object object, Method method, List<Map.Entry<Integer, Boolean>> subscribePartList) {
+    private static IMqttMessageListener callback(Object bean, Method method, List<Map.Entry<Integer, Boolean>> subscribePartList) {
         Parameter[] parameters = method.getParameters();
         if (parameters.length == 0) {
             throw new MqttException("方法 " + method + " 至少要有 1 个参数");
@@ -293,7 +302,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                         objectList.add(mqttFunction.run(topic));
                     }
                 }
-                method.invoke(object, objectList.toArray());
+                method.invoke(bean, objectList.toArray());
             } catch (Exception e) {
                 log.error("方法 " + method + " 调用失败", e);
             }

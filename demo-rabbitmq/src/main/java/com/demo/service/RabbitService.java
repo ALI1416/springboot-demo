@@ -1,4 +1,4 @@
-package com.demo.service.rabbit;
+package com.demo.service;
 
 import com.demo.constant.RabbitQueue;
 import lombok.extern.slf4j.Slf4j;

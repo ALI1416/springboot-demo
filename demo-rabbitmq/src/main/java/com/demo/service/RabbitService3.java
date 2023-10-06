@@ -1,4 +1,4 @@
-package com.demo.service.rabbit;
+package com.demo.service;
 
 import cn.z.rabbit.RabbitTemp;
 import cn.z.tool.ThreadPool;
