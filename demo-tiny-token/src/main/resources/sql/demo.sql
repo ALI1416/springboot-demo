@@ -145,6 +145,7 @@ CREATE TABLE `route_not_intercept`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路径',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+  `is_match` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是匹配模式',
   `seq` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '顺序',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '路由-不拦截' ROW_FORMAT = DYNAMIC;
@@ -152,13 +153,14 @@ CREATE TABLE `route_not_intercept`  (
 -- ----------------------------
 -- Records of route_not_intercept
 -- ----------------------------
-INSERT INTO `route_not_intercept` VALUES (0, '/user/login', '登录', '0');
-INSERT INTO `route_not_intercept` VALUES (1, '/user/logout', '注销', '1');
-INSERT INTO `route_not_intercept` VALUES (2, '/user/register', '注册', '2');
-INSERT INTO `route_not_intercept` VALUES (3, '/user/changePwd', '修改密码', '3');
-INSERT INTO `route_not_intercept` VALUES (4, '/user/update', '修改个人信息(除密码)', '4');
-INSERT INTO `route_not_intercept` VALUES (5, '/user/findRoute', '获取路由', '5');
-INSERT INTO `route_not_intercept` VALUES (6, '/user/findRoleAndRoute', '获取角色和路由', '6');
+INSERT INTO `route_not_intercept` VALUES (0, '/user/login', '登录', 0, '0');
+INSERT INTO `route_not_intercept` VALUES (1, '/user/logout', '注销', 0, '1');
+INSERT INTO `route_not_intercept` VALUES (2, '/user/register', '注册', 0, '2');
+INSERT INTO `route_not_intercept` VALUES (3, '/user/changePwd', '修改密码', 0, '3');
+INSERT INTO `route_not_intercept` VALUES (4, '/user/update', '修改个人信息(除密码)', 0, '4');
+INSERT INTO `route_not_intercept` VALUES (5, '/user/findRoute', '获取路由', 0, '5');
+INSERT INTO `route_not_intercept` VALUES (6, '/user/findRoleAndRoute', '获取角色和路由', 0, '6');
+INSERT INTO `route_not_intercept` VALUES (7, '/user/avatar', '头像', 1, '0');
 
 -- ----------------------------
 -- Table structure for user

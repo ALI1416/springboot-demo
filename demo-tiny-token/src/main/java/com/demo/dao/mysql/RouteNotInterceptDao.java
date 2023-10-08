@@ -37,7 +37,7 @@ public class RouteNotInterceptDao extends DaoBase {
     /**
      * 插入
      *
-     * @param routeNotIntercept path,name,seq
+     * @param routeNotIntercept path,name,isMatch,seq
      * @return ok:id,e:0
      */
     public long insert(RouteNotInterceptVo routeNotIntercept) {
@@ -61,7 +61,7 @@ public class RouteNotInterceptDao extends DaoBase {
     /**
      * 更新
      *
-     * @param routeNotIntercept id(必须),path,name,seq(至少1个)
+     * @param routeNotIntercept id(必须),path,name,isMatch,seq(至少1个)
      * @return 是否成功
      */
     public boolean update(RouteNotInterceptVo routeNotIntercept) {

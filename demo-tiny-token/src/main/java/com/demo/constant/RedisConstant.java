@@ -12,14 +12,13 @@ package com.demo.constant;
  **/
 public class RedisConstant {
 
+    private RedisConstant() {
+    }
+
     /**
      * 路由-前缀{@value}
      */
     public static final String ROUTE_PREFIX = "route:";
-    /**
-     * 路由-所有"不拦截路径"{@value}
-     */
-    public static final String ROUTE_NOT_INTERCEPT = ROUTE_PREFIX + "not-intercept";
     /**
      * 路由-所有"匹配路径"{@value}
      */

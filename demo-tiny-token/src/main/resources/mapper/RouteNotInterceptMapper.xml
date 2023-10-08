@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.mapper.RouteNotInterceptMapper">
 
   <sql id="col">
-    id,path,name,seq
+    id,path,name,is_match,seq
   </sql>
 
   <insert id="insert" parameterType="RouteNotInterceptVo">
@@ -12,7 +12,7 @@
     )
     VALUES
     (
-    #{id},#{path},#{name},#{seq}
+    #{id},#{path},#{name},#{isMatch},#{seq}
     )
   </insert>
 
@@ -33,6 +33,9 @@
       <if test="name != null">
         name = #{name},
       </if>
+      <if test="isMatch != null">
+        is_match = #{isMatch},
+      </if>
       <if test="seq != null">
         seq = #{seq},
       </if>
@@ -43,10 +46,7 @@
 
   <select id="findAll" resultType="RouteNotInterceptVo">
     SELECT
-    id,
-    path,
-    name,
-    seq
+    <include refid="col"/>
     FROM
     route_not_intercept
     ORDER BY

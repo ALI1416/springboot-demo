@@ -7,10 +7,10 @@ import java.lang.annotation.*;
  *
  * <p>
  * 订阅主题：<br>
- * 直接模式：<code>发送主题</code>和<code>接收主题</code>完全一致<br>
- * 匹配模式：<code>接收主题</code>通配符：<br>
- * <code>?</code>：<code>0<code>或<code>1<code>个字符<br>
- * <code>*</code>：<code>0<code>及<code>0个以上<code>字符<br>
+ * 直接模式{@link ModeEnum#DIRECT}：<code>发送主题</code>和<code>接收主题</code>完全一致<br>
+ * 匹配模式{@link ModeEnum#MATCH}：<code>接收主题</code>通配符：<br>
+ * <code>?</code>：<code>1<code>个字符<br>
+ * <code>*</code>：<code>0+<code>个字符<br>
  * </p>
  *
  * <hr>

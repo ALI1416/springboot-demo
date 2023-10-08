@@ -128,8 +128,9 @@ public class RedisAnnotationProcessor implements ApplicationContextAware, SmartI
         }
         // 回调
         Parameter[] parameters = method.getParameters();
+        int length = parameters.length;
         Object[] objectArray;
-        switch (parameters.length) {
+        switch (length) {
             case 2: {
                 objectArray = new Object[2];
                 break;
@@ -143,7 +144,7 @@ public class RedisAnnotationProcessor implements ApplicationContextAware, SmartI
             }
         }
         MessageListener callback = (message, pattern) -> {
-            switch (parameters.length) {
+            switch (length) {
                 // 第二个参数：主题
                 case 2: {
                     objectArray[1] = new String(message.getChannel(), StandardCharsets.UTF_8);

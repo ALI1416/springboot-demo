@@ -4,9 +4,7 @@ import cn.z.redis.RedisTemp;
 import cn.z.tinytoken.T4s;
 import com.demo.constant.RedisConstant;
 import com.demo.constant.ResultEnum;
-import com.demo.entity.po.RouteNotIntercept;
 import com.demo.entity.pojo.GlobalException;
-import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.service.RoleService;
 import com.demo.service.RouteNotInterceptService;
@@ -15,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -46,6 +45,14 @@ public class RouteInterceptor implements HandlerInterceptor {
     private final RouteNotInterceptService routeNotInterceptService;
 
     /**
+     * 创建"不拦截路径"
+     */
+    @PostConstruct
+    public void setNotIntercept() {
+        routeNotInterceptService.updateNotIntercept(null);
+    }
+
+    /**
      * preHandle
      *
      * @param request  HttpServletRequest
@@ -61,8 +68,14 @@ public class RouteInterceptor implements HandlerInterceptor {
         }
         // 获取"URL"
         String url = request.getServletPath();
-        // 是"不拦截路径"
-        if (isNotIntercept(url)) {
+        // URL按"/"分割并组合后的列表
+        List<String> urlList = urlList(url);
+        // 是"不拦截-匹配路径"
+        if (routeNotInterceptService.isNotInterceptMatch(urlList)) {
+            return true;
+        }
+        // 是"不拦截-直接路径"
+        if (routeNotInterceptService.isNotInterceptDirect(url)) {
             return true;
         }
         // 获取"登录者id"
@@ -76,7 +89,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             return true;
         }
         // 是"匹配路径"
-        if (isMatcher(id, url)) {
+        if (isMatcher(id, urlList)) {
             return true;
         }
         // 是"直接路径"
@@ -88,40 +101,14 @@ public class RouteInterceptor implements HandlerInterceptor {
     }
 
     /**
-     * 是"不拦截路径"
-     *
-     * @param url URL
-     * @return 是否
-     */
-    private boolean isNotIntercept(String url) {
-        String key = RedisConstant.ROUTE_NOT_INTERCEPT;
-        // 判断值是否存在
-        if (Boolean.TRUE.equals(redisTemp.sIsMember(key, url))) {
-            // 存在
-            return true;
-        }
-        // 判断key是否存在
-        if (Boolean.TRUE.equals(redisTemp.exists(key))) {
-            // 存在
-            return false;
-        } else {
-            // 不存在，去添加
-            setNotIntercept();
-        }
-        // 判断值是否存在
-        return redisTemp.sIsMember(key, url);
-    }
-
-    /**
      * 是"匹配路径"
      *
-     * @param id  用户id
-     * @param url URL
+     * @param id      用户id
+     * @param urlList URL列表
      * @return 是否
      */
-    private boolean isMatcher(Long id, String url) {
+    private boolean isMatcher(Long id, List<String> urlList) {
         String key = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
-        List<String> urlList = urlList(url);
         // 判断值是否存在
         if (Boolean.TRUE.equals(redisTemp.sIsMemberMulti(key, urlList).containsValue(true))) {
             // 存在
@@ -150,27 +137,6 @@ public class RouteInterceptor implements HandlerInterceptor {
         String key = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
         // 判断值是否存在(setUserRoute已创建)
         return redisTemp.sIsMember(key, url);
-    }
-
-    /**
-     * 创建"不拦截路径"
-     */
-    private void setNotIntercept() {
-        String key = RedisConstant.ROUTE_NOT_INTERCEPT;
-        // 获取"不拦截路径"
-        List<RouteNotInterceptVo> notIntercept = routeNotInterceptService.findAll();
-        List<String> notInterceptPath = new ArrayList<>();
-        // 判断是否有"不拦截路径"
-        if (notIntercept.isEmpty()) {
-            // 不存在，给一个占位符
-            notInterceptPath.add(PLACEHOLDER);
-        } else {
-            // 存在，提取路径
-            notInterceptPath = notIntercept.stream().map(RouteNotIntercept::getPath).collect(Collectors.toList());
-        }
-        // 创建"不拦截路径"
-        redisTemp.sAddMulti(key, notInterceptPath);
-        redisTemp.expire(key, RedisConstant.ROUTE_EXPIRE);
     }
 
     /**
@@ -303,15 +269,6 @@ public class RouteInterceptor implements HandlerInterceptor {
             list.add(sb.toString());
         }
         return list;
-    }
-
-    /**
-     * 删除Redis全部不拦截路由
-     *
-     * @return 是否成功
-     */
-    public Boolean deleteRouteNotIntercept() {
-        return redisTemp.delete(RedisConstant.ROUTE_NOT_INTERCEPT);
     }
 
     /**
