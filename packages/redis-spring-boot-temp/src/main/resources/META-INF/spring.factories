@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.z.redis.annotation.RedisAnnotationProcessor,\
 cn.z.redis.RedisTemp

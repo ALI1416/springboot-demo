@@ -1825,4 +1825,19 @@ public class RedisTemp {
 
     // endregion
 
+    /* ==================== 发布订阅 ==================== */
+    // region 发布订阅
+
+    /**
+     * 广播
+     *
+     * @param topic 主题
+     * @param data  数据
+     */
+    public void broadcast(String topic, Object data) {
+        redisTemplate.convertAndSend(topic, data);
+    }
+
+    // endregion
+
 }

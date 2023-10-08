@@ -227,6 +227,15 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     }
 
     /**
+     * DisposableBean
+     */
+    @Override
+    public void destroy() throws Exception {
+        mqttClient.disconnect();
+        mqttClient.close();
+    }
+
+    /**
      * 处理
      *
      * @param bean      Bean
@@ -247,15 +256,6 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
             }
         }
         callbackList.add(callback(bean, method, subscribePartList));
-    }
-
-    /**
-     * DisposableBean
-     */
-    @Override
-    public void destroy() throws Exception {
-        mqttClient.disconnect();
-        mqttClient.close();
     }
 
     /**

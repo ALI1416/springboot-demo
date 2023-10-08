@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import cn.z.redis.RedisTemp;
+import com.demo.entity.po.User;
 import com.demo.entity.pojo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.connection.DataType;
@@ -342,6 +343,30 @@ public class IndexController {
     @GetMapping("scan")
     public Result<List<String>> scan(String match) {
         return Result.o(redisTemp.scan(match));
+    }
+
+    /**
+     * <h3>广播</h3>
+     * http://localhost:8080/broadcast?topic=direct&data=qwe
+     */
+    @GetMapping("broadcast")
+    public Result broadcast(String topic, String data) {
+        redisTemp.broadcast(topic, data);
+        return Result.o();
+    }
+
+    /**
+     * <h3>广播2</h3>
+     * http://localhost:8080/broadcast?topic=match
+     */
+    @GetMapping("broadcast2")
+    public Result broadcast2(String topic) {
+        User user = new User();
+        user.setAccount("账号");
+        user.setName("name");
+        user.setDate(new Date());
+        redisTemp.broadcast(topic, user);
+        return Result.o();
     }
 
 }

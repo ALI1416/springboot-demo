@@ -42,25 +42,4 @@ public class TaskService {
         log.info("测试3");
     }
 
-    /**
-     * 无效
-     */
-    // @Task
-    public void noTask() {
-    }
-
-    /**
-     * 含参
-     */
-    // @Task(fixedDelay = 10)
-    public void hasParameter(int a) {
-    }
-
-    /**
-     * initialDelay不合法
-     */
-    // @Task(initialDelay = -1)
-    public void initialDelayError() {
-    }
-
 }

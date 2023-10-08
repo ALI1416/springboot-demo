@@ -1,11 +1,8 @@
 package com.demo.util;
 
+import cn.z.tool.DeepCopy;
 import com.demo.entity.vo.RouteVo;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,7 +30,7 @@ public class RouteUtils {
      */
     public static RouteVo list2Tree(List<RouteVo> routeList) {
         // 拷贝原始数据
-        List<RouteVo> list = deepCopy(routeList);
+        List<RouteVo> list = DeepCopy.copy(routeList);
         // 找到并重置根节点
         RouteVo root;
         Optional<RouteVo> first = list.stream().filter(s -> s.getId() == 0).findFirst();
@@ -87,7 +84,7 @@ public class RouteUtils {
         route.setMatcher(matcher);
         route.setDirect(direct);
         // 拷贝原始数据
-        RouteVo tree = deepCopy(root);
+        RouteVo tree = DeepCopy.copy(root);
         // 找到子节点
         List<RouteVo> children = tree.getChildren();
         tree.setChildren(null);
@@ -142,28 +139,6 @@ public class RouteUtils {
                 makeExpandedList(route, child, prefix);
             }
         }
-    }
-
-    /**
-     * 深度拷贝
-     *
-     * @param <T>    任意类型
-     * @param object 对象
-     * @return 新对象
-     */
-    private static <T> T deepCopy(T object) {
-        T newObject = null;
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(object);
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            newObject = (T) objectInputStream.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return newObject;
     }
 
 }
