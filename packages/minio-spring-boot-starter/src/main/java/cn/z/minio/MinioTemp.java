@@ -60,6 +60,7 @@ public class MinioTemp {
     }
 
     /* ==================== 桶基本操作 ==================== */
+    // region 桶基本操作
 
     /**
      * 获取所有储存桶
@@ -128,7 +129,10 @@ public class MinioTemp {
         }
     }
 
+    // endregion
+
     /* ==================== 桶标签操作 ==================== */
+    // region 桶标签操作
 
     /**
      * 获取储存桶的标签
@@ -184,16 +188,10 @@ public class MinioTemp {
         }
     }
 
-    /* ==================== 桶版本操作 ==================== */
-    /* ==================== 桶策略操作 ==================== */
-    /* ==================== 桶生命周期操作 ==================== */
-    /* ==================== 桶通知操作 ==================== */
-    /* ==================== 桶主从复制操作 ==================== */
-    /* ==================== 桶加密操作 ==================== */
-    /* ==================== 桶对象默认保留操作 ==================== */
-
+    // endregion
 
     /* ==================== 对象操作 ==================== */
+    // region 对象操作
 
     /**
      * 获取根路径的所有对象
@@ -459,11 +457,24 @@ public class MinioTemp {
      * @return ObjectWriteResponse
      */
     public ObjectWriteResponse objectUpload(String bucket, String path, MultipartFile multipartFile) {
+        return objectUpload(bucket, path, multipartFile, null);
+    }
+
+    /**
+     * 上传对象
+     *
+     * @param bucket        储存桶
+     * @param path          路径
+     * @param multipartFile MultipartFile
+     * @param name          文件名(null为默认文件名)
+     * @return ObjectWriteResponse
+     */
+    public ObjectWriteResponse objectUpload(String bucket, String path, MultipartFile multipartFile, String name) {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             return new ObjectWriteResponse(minioClient.putObject( //
                     PutObjectArgs.builder() //
                             .bucket(bucket) //
-                            .object(path + "/" + multipartFile.getOriginalFilename()) //
+                            .object(path + "/" + (name == null ? multipartFile.getOriginalFilename() : name)) //
                             .stream(inputStream, multipartFile.getSize(), -1) //
                             .contentType(multipartFile.getContentType()) //
                             .build() //
@@ -483,6 +494,19 @@ public class MinioTemp {
      * @return ObjectWriteResponse
      */
     public ObjectWriteResponse objectUpload(String bucket, String path, MultipartFile[] multipartFileArray) {
+        return objectUpload(bucket, path, multipartFileArray, null);
+    }
+
+    /**
+     * 上传对象数组
+     *
+     * @param bucket             储存桶
+     * @param path               路径
+     * @param multipartFileArray MultipartFile数组
+     * @param nameArray          文件名数组(null为默认文件名)
+     * @return ObjectWriteResponse
+     */
+    public ObjectWriteResponse objectUpload(String bucket, String path, MultipartFile[] multipartFileArray, String[] nameArray) {
         List<InputStream> inputStreamList = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFileArray) {
             try {
@@ -496,7 +520,7 @@ public class MinioTemp {
         try {
             for (int i = 0; i < multipartFileArray.length; i++) {
                 list.add(new SnowballObject( //
-                        path + "/" + multipartFileArray[i].getOriginalFilename(), //
+                        path + "/" + (nameArray[i] == null ? multipartFileArray[i].getOriginalFilename() : nameArray[i]), //
                         inputStreamList.get(i),  //
                         multipartFileArray[i].getSize(),  //
                         null //
@@ -563,7 +587,10 @@ public class MinioTemp {
         }
     }
 
+    // endregion
+
     /* ==================== 对象标签操作 ==================== */
+    // region 对象标签操作
 
     /**
      * 获取对象的标签
@@ -621,7 +648,10 @@ public class MinioTemp {
         }
     }
 
+    // endregion
+
     /* ==================== URL ==================== */
+    // region URL
 
     /**
      * 获取删除对象的URL
@@ -697,12 +727,10 @@ public class MinioTemp {
         }
     }
 
-    /* ==================== 对象保留操作 ==================== */
-    /* ==================== 对象合法保留操作 ==================== */
-    /* ==================== SQL表达式选取对象 ==================== */
-    /* ==================== 获取对象的PostPolicy的表单数据，以使用POST方法上传其数据 ==================== */
+    // endregion
 
     /* ==================== 工具 ==================== */
+    // region 工具
 
     /**
      * ZonedDateTime转Timestamp
@@ -746,5 +774,7 @@ public class MinioTemp {
         }
         input.close();
     }
+
+    // endregion
 
 }

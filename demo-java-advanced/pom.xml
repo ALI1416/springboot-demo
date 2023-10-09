@@ -8,6 +8,7 @@
 
   <name>demo-java-advanced</name>
   <description>Java进阶</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-java-advanced</url>
 
   <parent>
     <groupId>com.demo</groupId>

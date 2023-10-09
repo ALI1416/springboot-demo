@@ -8,6 +8,7 @@
 
   <name>demo-mail</name>
   <description>邮件</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-mail</url>
 
   <parent>
     <groupId>com.demo</groupId>

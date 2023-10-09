@@ -8,6 +8,7 @@
 
   <name>demo-config</name>
   <description>配置</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-config</url>
 
   <parent>
     <groupId>com.demo</groupId>

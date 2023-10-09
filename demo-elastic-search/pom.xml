@@ -8,6 +8,7 @@
 
   <name>demo-elastic-search</name>
   <description>ElasticSearch</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-elastic-search</url>
 
   <parent>
     <groupId>com.demo</groupId>

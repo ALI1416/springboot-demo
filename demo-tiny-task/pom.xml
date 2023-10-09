@@ -8,6 +8,7 @@
 
   <name>demo-tiny-task</name>
   <description>轻量级集群任务SpringBoot启动器</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-tiny-task</url>
 
   <parent>
     <groupId>com.demo</groupId>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -6,14 +7,15 @@
   <artifactId>mail-spring-boot-temp</artifactId>
   <version>1.0.0</version>
 
+  <name>mail-spring-boot-temp</name>
+  <description>Mail SpringBoot Template 邮件SpringBoot模板</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/mail-spring-boot-temp</url>
+
   <parent>
     <groupId>cn.404z</groupId>
     <artifactId>packages</artifactId>
     <version>1.0.0</version>
   </parent>
-
-  <name>mail-spring-boot-temp</name>
-  <description>Mail SpringBoot Template 邮件SpringBoot模板</description>
 
   <dependencies>
     <dependency>

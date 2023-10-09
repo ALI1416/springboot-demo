@@ -8,6 +8,7 @@
 
   <name>demo-knife4j</name>
   <description>knife4j</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-knife4j</url>
 
   <parent>
     <groupId>com.demo</groupId>

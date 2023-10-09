@@ -240,12 +240,30 @@ public class IndexController {
     }
 
     /**
+     * 上传对象<br>
+     * http://localhost:8080/objectUpload2?bucket=test&path=folder&name=1.txt
+     */
+    @GetMapping("objectUpload2")
+    public Result<ObjectWriteResponse> objectUpload(String bucket, String path, MultipartFile file, String name) {
+        return Result.o(minioTemp.objectUpload(bucket, path, file, name));
+    }
+
+    /**
      * 上传对象数组<br>
      * http://localhost:8080/objectUploadArray?bucket=test&path=folder
      */
     @GetMapping("objectUploadArray")
     public Result<ObjectWriteResponse> objectUploadArray(String bucket, String path, MultipartFile[] files) {
         return Result.o(minioTemp.objectUpload(bucket, path, files));
+    }
+
+    /**
+     * 上传对象数组<br>
+     * http://localhost:8080/objectUploadArray2?bucket=test&path=folder&name=1.txt&name=2.txt
+     */
+    @GetMapping("objectUploadArray2")
+    public Result<ObjectWriteResponse> objectUploadArray(String bucket, String path, MultipartFile[] files, String[] names) {
+        return Result.o(minioTemp.objectUpload(bucket, path, files, names));
     }
 
     /**

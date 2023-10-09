@@ -9,6 +9,7 @@
 
   <name>demo-mqtt</name>
   <description>MQTT</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-mqtt</url>
 
   <parent>
     <groupId>com.demo</groupId>

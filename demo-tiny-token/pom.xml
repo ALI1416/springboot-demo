@@ -8,6 +8,7 @@
 
   <name>demo-tiny-token</name>
   <description>轻量级权限认证SpringBoot启动器</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-tiny-token</url>
 
   <parent>
     <groupId>com.demo</groupId>

@@ -11,6 +11,7 @@
 
   <name>springboot-demo</name>
   <description>SpringBoot示例</description>
+  <url>https://github.com/ALI1416/springboot-demo</url>
 
   <parent>
     <!--SpringBoot Parent-->

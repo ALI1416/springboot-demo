@@ -8,6 +8,7 @@
 
   <name>demo-mysql</name>
   <description>MySQL</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-mysql</url>
 
   <parent>
     <groupId>com.demo</groupId>

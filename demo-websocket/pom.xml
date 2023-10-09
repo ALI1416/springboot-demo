@@ -8,6 +8,7 @@
 
   <name>demo-websocket</name>
   <description>WebSocket</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-websocket</url>
 
   <parent>
     <groupId>com.demo</groupId>
