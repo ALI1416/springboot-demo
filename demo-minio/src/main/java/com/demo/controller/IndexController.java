@@ -150,6 +150,15 @@ public class IndexController {
     }
 
     /**
+     * 获取对象并显示<br>
+     * http://localhost:8080/objectShow?bucket=test&path=1.png
+     */
+    @GetMapping("objectShow")
+    public void objectShow(String bucket, String path, HttpServletResponse response) {
+        minioTemp.objectShow(bucket, path, response);
+    }
+
+    /**
      * 获取对象并下载<br>
      * http://localhost:8080/objectDownload2?bucket=test&path=README.md&name=1.md
      */
@@ -231,11 +240,11 @@ public class IndexController {
     }
 
     /**
-     * 上传对象<br>
-     * http://localhost:8080/objectUpload2?bucket=test&path=folder
+     * 上传对象数组<br>
+     * http://localhost:8080/objectUploadArray?bucket=test&path=folder
      */
-    @GetMapping("objectUpload2")
-    public Result<ObjectWriteResponse> objectUpload(String bucket, String path, MultipartFile[] files) {
+    @GetMapping("objectUploadArray")
+    public Result<ObjectWriteResponse> objectUploadArray(String bucket, String path, MultipartFile[] files) {
         return Result.o(minioTemp.objectUpload(bucket, path, files));
     }
 
