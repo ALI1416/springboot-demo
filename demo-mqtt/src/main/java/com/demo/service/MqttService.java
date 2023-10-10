@@ -24,6 +24,15 @@ import java.util.Arrays;
 public class MqttService {
 
     /**
+     * topic:noParameter<br>
+     * log:noParameter
+     */
+    @Subscribe("noParameter")
+    public void subscribe() {
+        log.info("noParameter");
+    }
+
+    /**
      * topic:byte<br>
      * msg:Hex 01 23 45 67 89 AB CD EF<br>
      * log:[1, 35, 69, 103, -119, -85, -51, -17]
@@ -180,13 +189,6 @@ public class MqttService {
             @Header(HeaderEnum.TOPIC_PART) MyClass topicPart
     ) {
         log.info("msg:{},topicPart:{}", msg, topicPart);
-    }
-
-    /**
-     * 没有参数
-     */
-    // @Subscribe("")
-    public void error() {
     }
 
     /**

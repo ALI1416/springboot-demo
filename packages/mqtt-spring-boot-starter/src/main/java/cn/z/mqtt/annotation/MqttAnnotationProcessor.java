@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * <h1>MQTT注解处理</h1>
@@ -50,27 +51,6 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      * 回调
      */
     private final List<IMqttMessageListener> callbackList = new ArrayList<>();
-
-    /**
-     * 获取主题数组
-     */
-    private String[] getTopicArray() {
-        return topicList.toArray(new String[0]);
-    }
-
-    /**
-     * 获取QoS数组
-     */
-    private int[] getQosArray() {
-        return qosList.stream().mapToInt(Integer::intValue).toArray();
-    }
-
-    /**
-     * 获取回调数组
-     */
-    private IMqttMessageListener[] getCallbackArray() {
-        return callbackList.toArray(new IMqttMessageListener[0]);
-    }
 
     /**
      * MQTT客户端
@@ -113,7 +93,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 if (reconnect) {
                     log.info("MQTT重连成功");
                     // 重连后恢复订阅
-                    subscribeWithResponse(getTopicArray(), getQosArray(), getCallbackArray());
+                    subscribe();
                 } else {
                     log.info("MQTT连接成功");
                 }
@@ -179,9 +159,13 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     /**
      * 订阅
      */
-    private void subscribeWithResponse(String[] topicArray, int[] qosArray, IMqttMessageListener[] callbackArray) {
+    private void subscribe() {
         try {
-            mqttClient.subscribeWithResponse(topicArray, qosArray, callbackArray);
+            mqttClient.subscribeWithResponse( //
+                    topicList.toArray(new String[0]), //
+                    qosList.stream().mapToInt(Integer::intValue).toArray(), //
+                    callbackList.toArray(new IMqttMessageListener[0]) //
+            );
         } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
             throw new MqttException("订阅失败", e);
         }
@@ -223,7 +207,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
             }
         }
         // 订阅
-        subscribeWithResponse(getTopicArray(), getQosArray(), getCallbackArray());
+        subscribe();
     }
 
     /**
@@ -246,63 +230,62 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
         topicList.add(subscribe.value());
         qosList.add(subscribe.qos());
         String[] subscribePartArray = subscribe.value().split("/", -1);
-        // 订阅主题分段列表 位置 +:true #:false
-        List<Map.Entry<Integer, Boolean>> subscribePartList = new ArrayList<>();
+        // 订阅主题分段列表 位置,类型
+        List<Map.Entry<Integer, Boolean>> partList = new ArrayList<>();
         for (int i = 0; i < subscribePartArray.length; i++) {
             if ("+".equals(subscribePartArray[i])) {
-                subscribePartList.add(new AbstractMap.SimpleEntry<>(i, true));
+                partList.add(new AbstractMap.SimpleEntry<>(i, true));
             } else if ("#".equals(subscribePartArray[i])) {
-                subscribePartList.add(new AbstractMap.SimpleEntry<>(i, false));
+                partList.add(new AbstractMap.SimpleEntry<>(i, false));
             }
         }
-        callbackList.add(callback(bean, method, subscribePartList));
+        callbackList.add(callback(bean, method, partList));
     }
 
     /**
      * 回调
      *
-     * @param bean              Bean
-     * @param method            Method
-     * @param subscribePartList 订阅主题分段列表
+     * @param bean     Bean
+     * @param method   Method
+     * @param partList 订阅主题分段列表
      * @return IMqttMessageListener
      */
-    private static IMqttMessageListener callback(Object bean, Method method, List<Map.Entry<Integer, Boolean>> subscribePartList) {
+    private static IMqttMessageListener callback(Object bean, Method method, List<Map.Entry<Integer, Boolean>> partList) {
         Parameter[] parameters = method.getParameters();
-        if (parameters.length == 0) {
-            throw new MqttException("方法 " + method + " 至少要有 1 个参数");
-        }
-        List<MqttFunction> mqttFunctionList = new ArrayList<>();
+        int parameterLength = parameters.length;
         boolean useAnnotation = false;
-        for (int i = 0; i < parameters.length; i++) {
-            // 第三个及以后参数都必须带注解
+        Function[] functionArray = new Function[parameterLength];
+        for (int i = 0; i < parameterLength; i++) {
+            // 第三个及以后参数都必须带Header注解
             if (i == 2) {
                 useAnnotation = true;
             }
             Parameter parameter = parameters[i];
             Header header = parameter.getAnnotation(Header.class);
             if (header == null) {
-                // 没有用注解
+                // 没有用Header注解
                 if (useAnnotation) {
                     throw new MqttException("方法 " + method + " 不合法");
                 }
-                notAnnotation(mqttFunctionList, parameter, i);
+                notUseHeaderAnnotation(functionArray, parameter, i);
             } else {
-                // 使用了注解，后面参数必须带注解
+                // 使用了Header注解，后面参数必须带Header注解
                 useAnnotation = true;
-                useAnnotation(mqttFunctionList, method, parameter, subscribePartList, header);
+                useHeaderAnnotation(functionArray, method, parameter, partList, header, i);
             }
         }
+        Object[] objectArray = new Object[parameterLength];
         return (topic, message) -> {
-            List<Object> objectList = new ArrayList<>();
             try {
-                for (MqttFunction mqttFunction : mqttFunctionList) {
-                    if (mqttFunction instanceof MqttFunctionMessage) {
-                        objectList.add(mqttFunction.run(message));
+                for (int i = 0; i < parameterLength; i++) {
+                    Function function = functionArray[i];
+                    if (function instanceof FunctionMessage) {
+                        objectArray[i] = function.apply(message);
                     } else {
-                        objectList.add(mqttFunction.run(topic));
+                        objectArray[i] = function.apply(topic);
                     }
                 }
-                method.invoke(bean, objectList.toArray());
+                method.invoke(bean, objectArray);
             } catch (Exception e) {
                 log.error("方法 " + method + " 调用失败", e);
             }
@@ -310,62 +293,59 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     }
 
     /**
-     * 没有用注解
+     * 没有用Header注解
      *
-     * @param mqttFunctionList List MqttFunction
-     * @param parameter        Parameter
-     * @param index            位置
+     * @param functionArray Function[]
+     * @param parameter     Parameter
+     * @param index         位置
      */
-    private static void notAnnotation(List<MqttFunction> mqttFunctionList, Parameter parameter, int index) {
+    private static void notUseHeaderAnnotation(Function[] functionArray, Parameter parameter, int index) {
         if (index == 0) {
-            addMsg(mqttFunctionList, parameter);
+            addMsg(functionArray, parameter, index);
         } else {
-            addTopic(mqttFunctionList, parameter);
+            addTopic(functionArray, parameter, index);
         }
     }
 
     /**
-     * 使用了注解
+     * 使用了Header注解
      *
-     * @param mqttFunctionList  List MqttFunction
-     * @param method            Method
-     * @param parameter         Parameter
-     * @param subscribePartList 订阅主题分段列表
-     * @param header            Header
+     * @param functionArray Function[]
+     * @param method        Method
+     * @param parameter     Parameter
+     * @param partList      订阅主题分段列表
+     * @param header        Header
+     * @param index         位置
      */
-    private static void useAnnotation(List<MqttFunction> mqttFunctionList, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> subscribePartList, Header header) {
+    private static void useHeaderAnnotation(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, Header header, int index) {
         switch (header.value()) {
             default:
             case MSG: {
-                addMsg(mqttFunctionList, parameter);
+                addMsg(functionArray, parameter, index);
                 break;
             }
             case TOPIC: {
-                addTopic(mqttFunctionList, parameter);
+                addTopic(functionArray, parameter, index);
                 break;
             }
             case TOPIC_PART: {
-                topicPartHandle(mqttFunctionList, method, parameter, subscribePartList, header.index());
+                topicPartHandle(functionArray, method, parameter, partList, header.index(), index);
                 break;
             }
             case ID: {
-                MqttFunctionMessage mqttFunctionMessage = MqttMessage::getId;
-                mqttFunctionList.add(mqttFunctionMessage);
+                functionArray[index] = (FunctionMessage) MqttMessage::getId;
                 break;
             }
             case QOS: {
-                MqttFunctionMessage mqttFunctionMessage = MqttMessage::getQos;
-                mqttFunctionList.add(mqttFunctionMessage);
+                functionArray[index] = (FunctionMessage) MqttMessage::getQos;
                 break;
             }
             case RETAIN: {
-                MqttFunctionMessage mqttFunctionMessage = MqttMessage::isRetained;
-                mqttFunctionList.add(mqttFunctionMessage);
+                functionArray[index] = (FunctionMessage) MqttMessage::isRetained;
                 break;
             }
             case DUPLICATE: {
-                MqttFunctionMessage mqttFunctionMessage = MqttMessage::isDuplicate;
-                mqttFunctionList.add(mqttFunctionMessage);
+                functionArray[index] = (FunctionMessage) MqttMessage::isDuplicate;
                 break;
             }
         }
@@ -374,35 +354,32 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     /**
      * 主题片段处理
      *
-     * @param mqttFunctionList  List MqttFunction
-     * @param method            Method
-     * @param parameter         Parameter
-     * @param subscribePartList 订阅主题分段列表
-     * @param index             主题片段位置
+     * @param functionArray Function[]
+     * @param method        Method
+     * @param parameter     Parameter
+     * @param partList      订阅主题分段列表
+     * @param partIndex     主题片段位置
+     * @param index         位置
      */
-    private static void topicPartHandle(List<MqttFunction> mqttFunctionList, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> subscribePartList, int index) {
+    private static void topicPartHandle(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, int partIndex, int index) {
         Map.Entry<Integer, Boolean> entry;
         try {
-            entry = subscribePartList.get(index);
+            entry = partList.get(partIndex);
         } catch (Exception e) {
-            throw new MqttException("方法 " + method + " 的参数 " + parameter + " @Header注解的主题片段匹配位置的值 " + index + " 超出最大值 " + (subscribePartList.size() - 1), e);
+            throw new MqttException("方法 " + method + " 的参数 " + parameter + " @Header注解的主题片段匹配位置的值 " + partIndex + " 超出最大值 " + (partList.size() - 1), e);
         }
         int topicPartIndex = entry.getKey();
         boolean isSingle = entry.getValue();
         boolean isArray = parameter.getType().isArray();
         if (isSingle) {
             if (!isArray) {
-                MqttFunctionTopic mqttFunctionTopic = topic -> {
-                    String[] topicPart = topic.split("/", -1);
-                    return castString(parameter.getType(), topicPart[topicPartIndex]);
-                };
-                mqttFunctionList.add(mqttFunctionTopic);
+                functionArray[index] = (FunctionTopic) topic -> castString(parameter.getType(), topic.split("/", -1)[topicPartIndex]);
             } else {
                 throw new MqttException("方法 " + method + " 的参数 " + parameter + " 不能是数组类型");
             }
         } else {
             if (isArray) {
-                MqttFunctionTopic mqttFunctionTopic = topic -> {
+                functionArray[index] = (FunctionTopic) topic -> {
                     String[] topicPart = topic.split("/", -1);
                     Class<?> parameterType = parameter.getType().getComponentType();
                     int arrayLength = topicPart.length - topicPartIndex;
@@ -412,7 +389,6 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                     }
                     return topicArray;
                 };
-                mqttFunctionList.add(mqttFunctionTopic);
             } else {
                 throw new MqttException("方法 " + method + " 的参数 " + parameter + " 必须是数组类型");
             }
@@ -422,23 +398,23 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     /**
      * 添加消息
      *
-     * @param mqttFunctionList List MqttFunction
-     * @param parameter        Parameter
+     * @param functionArray Function[]
+     * @param parameter     Parameter
+     * @param index         位置
      */
-    private static void addMsg(List<MqttFunction> mqttFunctionList, Parameter parameter) {
-        MqttFunctionMessage mqttFunctionMessage = msg -> castBytes(parameter.getType(), msg.getPayload());
-        mqttFunctionList.add(mqttFunctionMessage);
+    private static void addMsg(Function[] functionArray, Parameter parameter, int index) {
+        functionArray[index] = (FunctionMessage) msg -> castBytes(parameter.getType(), msg.getPayload());
     }
 
     /**
      * 添加主题
      *
-     * @param mqttFunctionList List MqttFunction
-     * @param parameter        Parameter
+     * @param functionArray Function[]
+     * @param parameter     Parameter
+     * @param index         位置
      */
-    private static void addTopic(List<MqttFunction> mqttFunctionList, Parameter parameter) {
-        MqttFunctionTopic mqttFunctionTopic = topic -> castString(parameter.getType(), topic);
-        mqttFunctionList.add(mqttFunctionTopic);
+    private static void addTopic(Function[] functionArray, Parameter parameter, int index) {
+        functionArray[index] = (FunctionTopic) topic -> castString(parameter.getType(), topic);
     }
 
     /**

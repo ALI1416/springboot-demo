@@ -16,8 +16,7 @@ import java.lang.annotation.*;
  * <hr>
  *
  * <p>
- * 方法：入参只能有<code>1<code>或<code>2<code>个<br>
- * 第<code>1</code>个参数为<code>消息</code>，第<code>2</code>个参数为<code>主题</code>(可选)<br>
+ * 方法：第<code>1</code>个参数为<code>消息</code>，第<code>2</code>个参数为<code>主题</code>(可选)<br>
  * 例如1：<br>
  * <code>
  * &#64;Subscribe("direct")<br>
@@ -33,10 +32,6 @@ import java.lang.annotation.*;
  * }<br>
  * </code>
  * </p>
- *
- * <hr>
- *
- * <p>注意：类必须被Spring扫描到，注解才生效</p>
  *
  * <p>
  * createDate 2023/10/07 16:26:50

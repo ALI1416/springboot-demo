@@ -2,8 +2,10 @@ package cn.z.mqtt.annotation;
 
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.function.Function;
+
 /**
- * <h1>MQTT函数-MqttMessage</h1>
+ * <h1>消息函数</h1>
  *
  * <p>
  * createDate 2020/11/28 20:25:11
@@ -13,12 +15,15 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * @since 1.0.0
  **/
 @FunctionalInterface
-public interface MqttFunctionMessage extends MqttFunction<MqttMessage, Object> {
+public interface FunctionMessage extends Function<MqttMessage, Object> {
 
     /**
-     * 执行
+     * 应用
+     *
+     * @param topic MqttMessage
+     * @return Object
      */
     @Override
-    Object run(MqttMessage topic);
+    Object apply(MqttMessage topic);
 
 }

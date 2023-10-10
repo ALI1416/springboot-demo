@@ -347,6 +347,7 @@ public class IndexController {
 
     /**
      * <h3>广播</h3>
+     * http://localhost:8080/broadcast?topic=noParameter&data=qwe<br>
      * http://localhost:8080/broadcast?topic=direct&data=qwe
      */
     @GetMapping("broadcast")

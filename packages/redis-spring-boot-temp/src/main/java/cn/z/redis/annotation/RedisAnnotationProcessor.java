@@ -128,35 +128,25 @@ public class RedisAnnotationProcessor implements ApplicationContextAware, SmartI
         }
         // 回调
         Parameter[] parameters = method.getParameters();
-        int length = parameters.length;
-        Object[] objectArray;
-        switch (length) {
-            case 2: {
-                objectArray = new Object[2];
-                break;
-            }
-            case 1: {
-                objectArray = new Object[1];
-                break;
-            }
-            default: {
-                throw new RedisException("方法 " + method + " 只能有 1 或 2 个参数");
-            }
+        int parameterLength = parameters.length;
+        if (parameterLength > 2) {
+            throw new RedisException("方法 " + method + " 最多有 2 个参数");
         }
+        Object[] objectArray = new Object[parameterLength];
         MessageListener callback = (message, pattern) -> {
-            switch (length) {
-                // 第二个参数：主题
-                case 2: {
-                    objectArray[1] = new String(message.getChannel(), StandardCharsets.UTF_8);
-                    // 无break
-                }
-                // 第一个参数：数据
-                case 1: {
-                    objectArray[0] = JSON.parseObject(message.getBody(), parameters[0].getType(), JSONReader.Feature.SupportAutoType);
-                    break;
-                }
-            }
             try {
+                switch (parameterLength) {
+                    // 第二个参数：主题
+                    case 2: {
+                        objectArray[1] = new String(message.getChannel(), StandardCharsets.UTF_8);
+                        // 无break
+                    }
+                    // 第一个参数：数据
+                    case 1: {
+                        objectArray[0] = JSON.parseObject(message.getBody(), parameters[0].getType(), JSONReader.Feature.SupportAutoType);
+                        break;
+                    }
+                }
                 method.invoke(bean, objectArray);
             } catch (Exception e) {
                 log.error("方法 " + method + " 调用失败", e);

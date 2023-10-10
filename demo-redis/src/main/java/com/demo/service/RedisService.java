@@ -20,21 +20,28 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RedisService {
 
+    /**
+     * 没有参数
+     */
+    @Subscribe("noParameter")
+    public void noParameter() {
+        log.info("noParameter");
+    }
+
+    /**
+     * 1个参数
+     */
     @Subscribe("direct")
     public void direct(String msg) {
         log.info(msg);
     }
 
+    /**
+     * 2个参数
+     */
     @Subscribe(value = "match*", mode = ModeEnum.MATCH)
     public void match(User user, String topic) {
         log.info("user {} topic {}", user, topic);
-    }
-
-    /**
-     * 无参
-     */
-    // @Subscribe("noParameter")
-    public void noParameter() {
     }
 
     /**
