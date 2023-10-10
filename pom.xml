@@ -35,6 +35,7 @@
     <module>demo-minio</module>
     <module>demo-mongodb</module>
     <module>demo-mqtt</module>
+    <module>demo-mqtt-cluster</module>
     <module>demo-mysql</module>
     <module>demo-mysql2</module>
     <module>demo-rabbitmq</module>

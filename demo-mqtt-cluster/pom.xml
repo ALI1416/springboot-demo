@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>demo-mqtt-cluster</artifactId>
+  <version>1.0.0</version>
+
+  <name>demo-mqtt-cluster</name>
+  <description>MQTT集群</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-mqtt-cluster</url>
+
+  <parent>
+    <groupId>com.demo</groupId>
+    <artifactId>springboot-demo</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <dependencies>
+    <!--SpringBoot Web-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!--FastJson-->
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2-extension-spring5</artifactId>
+    </dependency>
+    <!--MQTT-->
+    <dependency>
+      <groupId>org.eclipse.paho</groupId>
+      <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+    </dependency>
+    <!--Redis-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+    <!--MQTT SpringBoot启动器-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>mqtt-spring-boot-starter</artifactId>
+    </dependency>
+    <!--Redis SpringBoot模板-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>redis-spring-boot-temp</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

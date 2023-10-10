@@ -21,15 +21,10 @@
 </div>
 <div>
   <h3>广播形式</h3>
-  <input id="broadcastText" type="text">
+  <input id="broadcastText" type="text" value="发送广播">
   <button id="broadcastBtn" disabled>发送</button>
   <h4>广播消息：</h4>
   <textarea id="broadcastMsg" readonly cols="30" rows="3"></textarea>
-</div>
-<div>
-  <h3>广播形式2</h3>
-  <input id="broadcast2Text" type="text">
-  <button id="broadcast2Btn" disabled>发送</button>
   <h4>广播消息2：</h4>
   <textarea id="broadcast2Msg" readonly cols="30" rows="3"></textarea>
 </div>
@@ -40,19 +35,12 @@
 <div>
   <h3>角色形式</h3>
   <span>发送到用户：</span>
-  <input id="userSendUsernameText" type="text" size="10">
+  <input id="userSendUsernameText" type="text" size="10" value="ali">
   <br>
-  <input id="userText" type="text">
+  <input id="userText" type="text" value="发送到用户">
   <button id="userBtn" disabled>发送</button>
   <h4>用户消息：</h4>
   <textarea id="userMsg" readonly cols="30" rows="3"></textarea>
-</div>
-<div>
-  <h3>没有处理方法的广播</h3>
-  <input id="appText" type="text">
-  <button id="appBtn" disabled>发送</button>
-  <h4>消息：</h4>
-  <textarea id="appMsg" readonly cols="30" rows="3"></textarea>
 </div>
 </body>
 <script>
@@ -63,17 +51,12 @@
   const broadcastText = document.getElementById('broadcastText')
   const broadcastBtn = document.getElementById('broadcastBtn')
   const broadcastMsg = document.getElementById('broadcastMsg')
-  const broadcast2Text = document.getElementById('broadcast2Text')
-  const broadcast2Btn = document.getElementById('broadcast2Btn')
   const broadcast2Msg = document.getElementById('broadcast2Msg')
   const subscribeMsg = document.getElementById('subscribeMsg')
   const userSendUsernameText = document.getElementById('userSendUsernameText')
   const userText = document.getElementById('userText')
   const userBtn = document.getElementById('userBtn')
   const userMsg = document.getElementById('userMsg')
-  const appText = document.getElementById('appText')
-  const appBtn = document.getElementById('appBtn')
-  const appMsg = document.getElementById('appMsg')
   let stomp
 
   /**
@@ -106,25 +89,21 @@
    */
   function connectCallback() {
     connectStatus(true)
-    // 广播
+    // 广播消息
     stomp.subscribe('/topic/broadcast', function (res) {
       broadcastMsg.value = res.body + '\n' + broadcastMsg.value
     })
-    // 广播2
+    // 广播消息2
     stomp.subscribe('/topic/broadcast2', function (res) {
       broadcast2Msg.value = res.body + '\n' + broadcast2Msg.value
     })
-    // 订阅
-    stomp.subscribe('/app/subscribe/' + usernameText.value, function (res) {
+    // 订阅消息
+    stomp.subscribe('/app/subscribe/订阅消息', function (res) {
       subscribeMsg.value = res.body + '\n' + subscribeMsg.value
     })
-    // 用户
-    stomp.subscribe('/user/queue/one', function (res) {
+    // 用户消息
+    stomp.subscribe('/user/queue/sendToUser', function (res) {
       userMsg.value = res.body + '\n' + userMsg.value
-    })
-    // 没有处理方法的广播
-    stomp.subscribe('/topic/aaa', function (res) {
-      appMsg.value = res.body + '\n' + appMsg.value
     })
   }
 
@@ -156,15 +135,11 @@
     broadcastBtn.removeAttribute('disabled')
     if (status) {
       connectBtn.innerText = '断开'
-      broadcast2Btn.removeAttribute('disabled')
       userBtn.removeAttribute('disabled')
-      appBtn.removeAttribute('disabled')
     } else {
       connectBtn.innerText = '连接'
       broadcastBtn.setAttribute('disabled', 'true')
-      broadcast2Btn.setAttribute('disabled', 'true')
       userBtn.setAttribute('disabled', 'true')
-      appBtn.setAttribute('disabled', 'true')
     }
   }
 
@@ -172,29 +147,16 @@
    * 发送广播消息
    */
   broadcastBtn.addEventListener('click', function () {
-    stomp.send('/app/broadcast', {}, JSON.stringify({msg: broadcastText.value}))
-  })
-
-  /**
-   * 发送广播消息2
-   */
-  broadcast2Btn.addEventListener('click', function () {
-    stomp.send('/app/broadcast2', {}, JSON.stringify({msg: broadcast2Text.value}))
+    stomp.send('/app/broadcast', {}, broadcastText.value)
   })
 
   /**
    * 发送用户消息
    */
   userBtn.addEventListener('click', function () {
-    stomp.send('/app/one', {}, JSON.stringify({username: userSendUsernameText.value, msg: userText.value}))
+    stomp.send('/app/sendToUser/' + userSendUsernameText.value, {}, userText.value)
   })
 
-  /**
-   * 没有处理方法的广播
-   */
-  appBtn.addEventListener('click', function () {
-    stomp.send('/topic/aaa', {}, JSON.stringify({msg: appText.value}))
-  })
 </script>
 
 </html>

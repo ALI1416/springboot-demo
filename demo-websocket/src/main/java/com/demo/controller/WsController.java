@@ -1,7 +1,6 @@
 package com.demo.controller;
 
 import cn.z.websocket.WebSocketTemp;
-import com.demo.entity.po.WsMsg;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -9,7 +8,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.security.Principal;
 
@@ -31,44 +29,40 @@ public class WsController {
     private final WebSocketTemp webSocketTemp;
 
     /**
-     * 广播模式(注解实现)
+     * 广播模式
      */
-    // @MessageMapping是服务器处理客户端发来的消息，目的地是/app/broadcast(/app前缀是隐含的，用户发给服务器都必须带/app)
+    // 接收来自用户发送到/app/broadcast的消息，默认转发到/topic/broadcast
     @MessageMapping("/broadcast")
-    // @SendTo不加这个注解，默认转发给消息代理(加上前缀/topic，也是/topic/broadcast)。
-    // 这个是重写消息代理的目的地为/topic/broadcast，即广播地址
+    // 重写转发地址
     @SendTo("/topic/broadcast")
-    public String broadcast(@RequestBody WsMsg<String> wsMsg, Principal principal) {
-        log.info("broadcast:接收到用户[{}]发来的广播消息[{}]", principal.getName(), wsMsg.getMsg());
-        return wsMsg.getMsg();
+    public String broadcast(String msg, Principal principal) {
+        String data = "broadcast:用户[" + principal.getName() + "]发送广播消息[" + msg + "]";
+        log.info(data);
+        // 手动发送广播
+        webSocketTemp.send("/topic/broadcast2", "broadcast2:" + data);
+        return data;
     }
 
     /**
-     * 广播模式(方法实现)
+     * 订阅模式(等同于HTTP异步请求)
      */
-    @MessageMapping("/broadcast2")
-    public void broadcast2(@RequestBody WsMsg<String> wsMsg, Principal principal) {
-        log.info("broadcast2:接收到用户[{}]发来的广播消息[{}]", principal.getName(), wsMsg.getMsg());
-        webSocketTemp.send("/topic/broadcast2", wsMsg.getMsg());
-    }
-
-    /**
-     * 订阅模式(订阅成功返回消息)<br>
-     * 用户发送请求，服务器直接返回数据，与HTTP类似，只不过这个是异步的
-     */
-    @SubscribeMapping("/subscribe/{user}")
-    public String subscribe(@DestinationVariable String user, Principal principal) {
-        log.info("subscribe:接收到用户[{}]发来的订阅消息[{}]", principal.getName(), user);
-        return user;
+    // 接收来自用户发送到/app/subscribe/{path}的请求(没有消息)，不会转发，仅返回一次订阅成功的消息(返回到原用户原路径)
+    @SubscribeMapping("/subscribe/{path}")
+    public String subscribe(@DestinationVariable String path, Principal principal) {
+        String data = "subscribe:用户[" + principal.getName() + "]订阅[/subscribe/" + path + "]";
+        log.info(data);
+        return data;
     }
 
     /**
      * 用户模式
      */
-    @MessageMapping("/one")
-    public void sendToUser(@RequestBody WsMsg<String> wsMsg, Principal principal) {
-        webSocketTemp.send("/queue/one", wsMsg.getUsername(), wsMsg.getMsg());
-        log.info("sendToUser:接收到用户[{}]发给用户[{}]的消息[{}]", principal.getName(), wsMsg.getUsername(), wsMsg.getMsg());
+    // 返回类型为void时，不会转发
+    @MessageMapping("/sendToUser/{user}")
+    public void sendToUser(@DestinationVariable String user, String msg, Principal principal) {
+        String data = "sendToUser:用户[" + principal.getName() + "]发送给用户[" + user + "]消息[" + msg + "]";
+        log.info(data);
+        webSocketTemp.send("/queue/sendToUser", user, data);
     }
 
 }
