@@ -30,10 +30,6 @@ import java.util.concurrent.TimeUnit;
 public class RedisTemp {
 
     /**
-     * 秒
-     */
-    private static final TimeUnit SECONDS = TimeUnit.SECONDS;
-    /**
      * Redis模板
      */
     private final RedisTemplate<String, Object> redisTemplate;
@@ -285,7 +281,7 @@ public class RedisTemp {
      * @return 是否成功
      */
     public Boolean expire(String key, long timeout) {
-        return redisTemplate.expire(key, timeout, SECONDS);
+        return redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -320,6 +316,17 @@ public class RedisTemp {
     }
 
     /**
+     * 获取超时时间(ttl)
+     *
+     * @param key  键
+     * @param unit TimeUnit
+     * @return 超时时间(- 1不过期 ， - 2不存在)
+     */
+    public Long getExpire(String key, TimeUnit unit) {
+        return redisTemplate.getExpire(key, unit);
+    }
+
+    /**
      * 将key移动到指定索引的数据库(move)
      *
      * @param key     键
@@ -349,7 +356,20 @@ public class RedisTemp {
      * @param replace key已存在也执行操作
      */
     public void restore(String key, byte[] value, long timeout, boolean replace) {
-        redisTemplate.restore(key, value, timeout, SECONDS, replace);
+        redisTemplate.restore(key, value, timeout, TimeUnit.SECONDS, replace);
+    }
+
+    /**
+     * 导入(restore)
+     *
+     * @param key     键(已存在并且replace为false时报错)
+     * @param value   byte[]
+     * @param timeout 超时时间(必须>=0，0不过期)
+     * @param unit    TimeUnit
+     * @param replace key已存在也执行操作
+     */
+    public void restore(String key, byte[] value, long timeout, TimeUnit unit, boolean replace) {
+        redisTemplate.restore(key, value, timeout, unit, replace);
     }
 
     /**
@@ -370,6 +390,15 @@ public class RedisTemp {
     /**
      * 放入(set)
      *
+     * @param key 键(已存在会被覆盖)
+     */
+    public void set(String key) {
+        redisTemplate.opsForValue().set(key, null);
+    }
+
+    /**
+     * 放入(set)
+     *
      * @param <T>   指定数据类型
      * @param key   键(已存在会被覆盖)
      * @param value 值
@@ -381,13 +410,57 @@ public class RedisTemp {
     /**
      * 放入，并设置超时时间(setEX)
      *
+     * @param key     键(已存在会被覆盖)
+     * @param timeout 超时时间(秒，必须>0)
+     */
+    public void set(String key, long timeout) {
+        redisTemplate.opsForValue().set(key, null, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 放入，并设置超时时间(setEX)
+     *
+     * @param key     键(已存在会被覆盖)
+     * @param timeout 超时时间(必须>0)
+     * @param unit    TimeUnit
+     */
+    public void set(String key, long timeout, TimeUnit unit) {
+        redisTemplate.opsForValue().set(key, null, timeout, unit);
+    }
+
+    /**
+     * 放入，并设置超时时间(setEX)
+     *
      * @param <T>     指定数据类型
      * @param key     键(已存在会被覆盖)
      * @param value   值
      * @param timeout 超时时间(秒，必须>0)
      */
     public <T> void set(String key, T value, long timeout) {
-        redisTemplate.opsForValue().set(key, value, timeout, SECONDS);
+        redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 放入，并设置超时时间(setEX)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键(已存在会被覆盖)
+     * @param value   值
+     * @param timeout 超时时间(必须>0)
+     * @param unit    TimeUnit
+     */
+    public <T> void set(String key, T value, long timeout, TimeUnit unit) {
+        redisTemplate.opsForValue().set(key, value, timeout, unit);
+    }
+
+    /**
+     * 如果key不存在，则放入(setNX)
+     *
+     * @param key 键
+     * @return 是否成功
+     */
+    public Boolean setIfAbsent(String key) {
+        return redisTemplate.opsForValue().setIfAbsent(key, null);
     }
 
     /**
@@ -405,6 +478,29 @@ public class RedisTemp {
     /**
      * 如果key不存在，则放入，并设置超时时间(set)
      *
+     * @param key     键
+     * @param timeout 超时时间(秒，必须>0)
+     * @return 是否成功
+     */
+    public Boolean setIfAbsent(String key, long timeout) {
+        return redisTemplate.opsForValue().setIfAbsent(key, null, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 如果key不存在，则放入，并设置超时时间(set)
+     *
+     * @param key     键
+     * @param timeout 超时时间(必须>0)
+     * @param unit    TimeUnit
+     * @return 是否成功
+     */
+    public Boolean setIfAbsent(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().setIfAbsent(key, null, timeout, unit);
+    }
+
+    /**
+     * 如果key不存在，则放入，并设置超时时间(set)
+     *
      * @param <T>     指定数据类型
      * @param key     键
      * @param value   值
@@ -412,7 +508,31 @@ public class RedisTemp {
      * @return 是否成功
      */
     public <T> Boolean setIfAbsent(String key, T value, long timeout) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, SECONDS);
+        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 如果key不存在，则放入，并设置超时时间(set)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 超时时间(必须>0)
+     * @param unit    TimeUnit
+     * @return 是否成功
+     */
+    public <T> Boolean setIfAbsent(String key, T value, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().setIfAbsent(key, value, timeout, unit);
+    }
+
+    /**
+     * 如果key存在，则放入(set)
+     *
+     * @param key 键
+     * @return 是否成功
+     */
+    public Boolean setIfPresent(String key) {
+        return redisTemplate.opsForValue().setIfPresent(key, null);
     }
 
     /**
@@ -430,6 +550,29 @@ public class RedisTemp {
     /**
      * 如果key存在，则放入，并设置超时时间(set)
      *
+     * @param key     键
+     * @param timeout 超时时间(秒，必须>0)
+     * @return 是否成功
+     */
+    public Boolean setIfPresent(String key, long timeout) {
+        return redisTemplate.opsForValue().setIfPresent(key, null, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 如果key存在，则放入，并设置超时时间(set)
+     *
+     * @param key     键
+     * @param timeout 超时时间(必须>0)
+     * @param unit    TimeUnit
+     * @return 是否成功
+     */
+    public Boolean setIfPresent(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().setIfPresent(key, null, timeout, unit);
+    }
+
+    /**
+     * 如果key存在，则放入，并设置超时时间(set)
+     *
      * @param <T>     指定数据类型
      * @param key     键
      * @param value   值
@@ -437,7 +580,21 @@ public class RedisTemp {
      * @return 是否成功
      */
     public <T> Boolean setIfPresent(String key, T value, long timeout) {
-        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, SECONDS);
+        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 如果key存在，则放入，并设置超时时间(set)
+     *
+     * @param <T>     指定数据类型
+     * @param key     键
+     * @param value   值
+     * @param timeout 超时时间(必须>0)
+     * @param unit    TimeUnit
+     * @return 是否成功
+     */
+    public <T> Boolean setIfPresent(String key, T value, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().setIfPresent(key, value, timeout, unit);
     }
 
     /**
@@ -488,7 +645,19 @@ public class RedisTemp {
      * @return 值
      */
     public Object getAndExpire(String key, long timeout) {
-        return redisTemplate.opsForValue().getAndExpire(key, timeout, SECONDS);
+        return redisTemplate.opsForValue().getAndExpire(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 获取并设置超时时间(getEx)
+     *
+     * @param key     键(不存在返回null)
+     * @param timeout 超时时间(秒，必须>0)
+     * @param unit    TimeUnit
+     * @return 值
+     */
+    public Object getAndExpire(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForValue().getAndExpire(key, timeout, unit);
     }
 
     /**
@@ -499,6 +668,16 @@ public class RedisTemp {
      */
     public Object getAndPersist(String key) {
         return redisTemplate.opsForValue().getAndPersist(key);
+    }
+
+    /**
+     * 获取并放入(getSet)
+     *
+     * @param key 键(不存在返回null)
+     * @return 值
+     */
+    public Object getAndSet(String key) {
+        return redisTemplate.opsForValue().getAndSet(key, null);
     }
 
     /**
@@ -1222,7 +1401,7 @@ public class RedisTemp {
     }
 
     /**
-     * 删除并返回左侧的值，并阻塞指定时间(秒)(bLPop)<br>
+     * 删除并返回左侧的值，并阻塞指定时间(bLPop)<br>
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param key     键
@@ -1230,7 +1409,20 @@ public class RedisTemp {
      * @return 值
      */
     public Object lLeftPop(String key, long timeout) {
-        return redisTemplate.opsForList().leftPop(key, timeout, SECONDS);
+        return redisTemplate.opsForList().leftPop(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 删除并返回左侧的值，并阻塞指定时间(bLPop)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param key     键
+     * @param timeout 阻塞时间
+     * @param unit    TimeUnit
+     * @return 值
+     */
+    public Object lLeftPop(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().leftPop(key, timeout, unit);
     }
 
     /**
@@ -1244,7 +1436,7 @@ public class RedisTemp {
     }
 
     /**
-     * 删除并返回右侧的值，并阻塞指定时间(秒)(bRPop)<br>
+     * 删除并返回右侧的值，并阻塞指定时间(bRPop)<br>
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param key     键
@@ -1252,7 +1444,20 @@ public class RedisTemp {
      * @return 值
      */
     public Object lRightPop(String key, long timeout) {
-        return redisTemplate.opsForList().rightPop(key, timeout, SECONDS);
+        return redisTemplate.opsForList().rightPop(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 删除并返回右侧的值，并阻塞指定时间(bRPop)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param key     键
+     * @param timeout 阻塞时间
+     * @param unit    TimeUnit
+     * @return 值
+     */
+    public Object lRightPop(String key, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().rightPop(key, timeout, unit);
     }
 
     /**
@@ -1352,7 +1557,7 @@ public class RedisTemp {
     }
 
     /**
-     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(秒)(bRPopLPush)<br>
+     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(bRPopLPush)<br>
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param sourceKey      源键(不存在返回null)
@@ -1361,7 +1566,21 @@ public class RedisTemp {
      * @return 值
      */
     public Object lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout) {
-        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, SECONDS);
+        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 从sourceKey的右侧删除，添加到destinationKey的左侧，并返回这个值，并阻塞指定时间(bRPopLPush)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param sourceKey      源键(不存在返回null)
+     * @param destinationKey 目的键
+     * @param timeout        阻塞时间
+     * @param unit           TimeUnit
+     * @return 值
+     */
+    public Object lRightPopAndLeftPush(String sourceKey, String destinationKey, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().rightPopAndLeftPush(sourceKey, destinationKey, timeout, unit);
     }
 
     /**
@@ -1378,7 +1597,7 @@ public class RedisTemp {
     }
 
     /**
-     * 从sourceKey的左侧/右侧，添加到destinationKey的左侧/右侧，并返回这个值，并阻塞指定时间(秒)(bLMove)<br>
+     * 从sourceKey的左侧/右侧，添加到destinationKey的左侧/右侧，并返回这个值，并阻塞指定时间(bLMove)<br>
      * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
      *
      * @param sourceKey      源键(不存在返回null)
@@ -1389,7 +1608,23 @@ public class RedisTemp {
      * @return 值
      */
     public Object lMove(String sourceKey, boolean from, String destinationKey, boolean to, long timeout) {
-        return redisTemplate.opsForList().move(sourceKey, from ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, destinationKey, to ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, timeout, SECONDS);
+        return redisTemplate.opsForList().move(sourceKey, from ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, destinationKey, to ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 从sourceKey的左侧/右侧，添加到destinationKey的左侧/右侧，并返回这个值，并阻塞指定时间(bLMove)<br>
+     * 当指定键不存在值时，客户端将等待指定时间查询数据，查询到了返回数据，查询不到返回null
+     *
+     * @param sourceKey      源键(不存在返回null)
+     * @param from           从源键的左侧(true)/右侧(false)
+     * @param destinationKey 目的键
+     * @param to             到目的键左侧(true)/右侧(false)
+     * @param timeout        阻塞时间
+     * @param unit           TimeUnit
+     * @return 值
+     */
+    public Object lMove(String sourceKey, boolean from, String destinationKey, boolean to, long timeout, TimeUnit unit) {
+        return redisTemplate.opsForList().move(sourceKey, from ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, destinationKey, to ? RedisListCommands.Direction.LEFT : RedisListCommands.Direction.RIGHT, timeout, unit);
     }
 
     // endregion

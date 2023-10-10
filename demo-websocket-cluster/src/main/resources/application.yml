@@ -6,11 +6,15 @@ spring:
     multipart:
       max-file-size: 4GB
       max-request-size: 4GB
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    timeout: 10s
+
+#server:
+#  port: 8081
 
 logging:
   level:

@@ -31,7 +31,7 @@ public class MqttService {
      */
     @Subscribe("msg")
     public void msg(String msg, String topic) {
-        if (Boolean.TRUE.equals(redisTemp.setIfAbsent(REDIS_MQTT_PREFIX + topic, "", REDIS_MQTT_TIMEOUT))) {
+        if (Boolean.TRUE.equals(redisTemp.setIfAbsent(REDIS_MQTT_PREFIX + topic, REDIS_MQTT_TIMEOUT))) {
             log.info("msg:{},topic:{}", msg, topic);
         }
     }

@@ -49,6 +49,11 @@ SpringBoot示例
   - SpringBoot Web
   - FastJson
   - MQTT
+- **`demo-mqtt-cluster`** : MQTT集群
+  - SpringBoot Web
+  - FastJson
+  - MQTT
+  - Redis
 - **`demo-mysql`** : MySQL
   - SpringBoot Web
   - FastJson
@@ -109,7 +114,7 @@ SpringBoot示例
   - SpringBoot Web
   - SpringBoot WebSocket
   - FastJson
-  - RabbitMQ
+  - Redis
 
 ### 版本号
 

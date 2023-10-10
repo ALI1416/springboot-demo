@@ -22,9 +22,9 @@
 <div>
   <h3>角色形式</h3>
   <span>发送到用户：</span>
-  <input id="userSendUsernameText" type="text" size="10">
+  <input id="userSendUsernameText" type="text" size="10" value="ali">
   <br>
-  <input id="userText" type="text">
+  <input id="userText" type="text" value="发送到用户">
   <button id="userBtn" disabled>发送</button>
   <h4>用户消息：</h4>
   <textarea id="userMsg" readonly cols="30" rows="3"></textarea>
@@ -71,8 +71,8 @@
    */
   function connectCallback() {
     connectStatus(true)
-    // 用户
-    stomp.subscribe('/user/queue/one', function (res) {
+    // 用户消息
+    stomp.subscribe('/user/queue/sendToUser', function (res) {
       userMsg.value = res.body + '\n' + userMsg.value
     })
   }
@@ -115,7 +115,7 @@
    * 发送用户消息
    */
   userBtn.addEventListener('click', function () {
-    stomp.send('/app/one', {}, JSON.stringify({username: userSendUsernameText.value, msg: userText.value}))
+    stomp.send('/app/sendToUser/' + userSendUsernameText.value, {}, userText.value)
   })
 
 </script>

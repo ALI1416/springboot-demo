@@ -36,20 +36,20 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2-extension-spring5</artifactId>
     </dependency>
-    <!--RabbitMQ-->
+    <!--Redis-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-amqp</artifactId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
     <!--WebSocket SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>websocket-spring-boot-temp</artifactId>
     </dependency>
-    <!--RabbitMQ SpringBoot模板-->
+    <!--Redis SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>
-      <artifactId>rabbitmq-spring-boot-temp</artifactId>
+      <artifactId>redis-spring-boot-temp</artifactId>
     </dependency>
   </dependencies>
 

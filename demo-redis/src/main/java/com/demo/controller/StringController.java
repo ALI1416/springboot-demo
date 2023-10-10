@@ -31,6 +31,18 @@ public class StringController {
     // region
 
     /**
+     * <h3>放入null</h3>
+     * http://localhost:8080/string/nullSet?key=null<br>
+     * Redis中的值 (null)<br>
+     * get返回值 null
+     */
+    @GetMapping("nullSet")
+    public Result nullSet(String key) {
+        redisTemp.set(key);
+        return Result.o();
+    }
+
+    /**
      * <h3>放入int</h3>
      * http://localhost:8080/string/intSet?key=int&value=12<br>
      * Redis中的值 12<br>
