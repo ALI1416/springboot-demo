@@ -15,6 +15,9 @@ import com.demo.entity.pojo.Result;
  **/
 public class ControllerBase {
 
+    private ControllerBase() {
+    }
+
     /**
      * 请求参数错误
      */

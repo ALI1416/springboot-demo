@@ -25,6 +25,9 @@ import java.util.Objects;
  **/
 public class DaoBase {
 
+    private DaoBase() {
+    }
+
     /**
      * 自定义查询分页排序
      *
@@ -34,7 +37,7 @@ public class DaoBase {
      * @param pageable      分页器
      * @return Page
      */
-    public <T> Page<T> find(MongoTemplate mongoTemplate, Class<T> entityClass, Criteria criteria, Pageable pageable) {
+    public static <T> Page<T> find(MongoTemplate mongoTemplate, Class<T> entityClass, Criteria criteria, Pageable pageable) {
         Query query = Query.query(criteria);
         long count = mongoTemplate.count(query, entityClass);
         return new PageImpl<>( //
@@ -70,7 +73,7 @@ public class DaoBase {
     private static Object[] conversionType(String type, String value, String value2) {
         Object[] objects = new Object[2];
         if (value == null) {
-            return null;
+            return new Object[0];
         }
         // switch不能为null
         if (type == null) {
@@ -125,7 +128,7 @@ public class DaoBase {
      * @param value    值对象数组
      */
     private static void buildCriteria(Criteria criteria, String operator, String field, Object[] value) {
-        if (field == null || value == null) {
+        if (field == null || value == null || value.length == 0) {
             return;
         }
         // switch不能为null

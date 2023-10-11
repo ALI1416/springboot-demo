@@ -7,7 +7,10 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.convert.*;
+import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
+import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 import java.sql.Timestamp;
@@ -17,7 +20,7 @@ import java.util.Date;
  * <h1>MongoDB配置</h1>
  *
  * <p>
- * 作用：去除_class字段，节省储存空间<br>
+ * 映射转换器作用：去除_class字段，节省储存空间<br>
  * 注意：继承关系的类，对应的collection名字不能相同<br>
  * 例如：B extends A，那么A和B类对应的collection名字不能都为"abc"
  * </p>
@@ -32,19 +35,19 @@ import java.util.Date;
 @Configuration
 public class MongoDbConfig {
 
+    /**
+     * 映射转换器(去除_class字段)
+     */
     @Bean
-    public MappingMongoConverter mappingMongoConverter(MongoDatabaseFactory factory, MongoMappingContext context,
-                                                       BeanFactory beanFactory) {
-        DbRefResolver dbRefResolver = new DefaultDbRefResolver(factory);
-        MappingMongoConverter mappingConverter = new MappingMongoConverter(dbRefResolver, context);
+    public MappingMongoConverter mappingMongoConverter(MongoDatabaseFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
+        MappingMongoConverter mappingConverter = new MappingMongoConverter(new DefaultDbRefResolver(factory), context);
         mappingConverter.setCustomConversions(beanFactory.getBean(CustomConversions.class));
-        // 去除_class字段
         mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return mappingConverter;
     }
 
     /**
-     * 自定义转换器
+     * 自定义转换器(Date转Timestamp)
      */
     @Bean
     public MongoCustomConversions customConversions() {

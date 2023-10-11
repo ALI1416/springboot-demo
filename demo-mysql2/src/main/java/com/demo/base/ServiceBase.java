@@ -19,6 +19,9 @@ import java.util.List;
  **/
 public class ServiceBase {
 
+    private ServiceBase() {
+    }
+
     /**
      * 分页
      *

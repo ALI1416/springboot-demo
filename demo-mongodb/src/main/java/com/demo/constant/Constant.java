@@ -12,6 +12,9 @@ package com.demo.constant;
  **/
 public class Constant {
 
+    private Constant() {
+    }
+
     /**
      * mongo分页-默认页码{@value}
      */

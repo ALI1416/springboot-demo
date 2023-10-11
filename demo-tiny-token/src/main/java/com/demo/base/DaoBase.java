@@ -17,6 +17,9 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 @Slf4j
 public class DaoBase {
 
+    private DaoBase() {
+    }
+
     /**
      * 执行function：捕获到异常/条件不符合回滚<br>
      * 注意：回滚后，后面的语句还会继续执行
