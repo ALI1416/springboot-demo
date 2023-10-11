@@ -118,11 +118,9 @@ public class RouteNotInterceptService {
 
     /**
      * 更新"不拦截路径"
-     *
-     * @param msg 消息
      */
     @Subscribe(UPDATE_NOT_INTERCEPT)
-    public void updateNotIntercept(String msg) {
+    public void updateNotIntercept() {
         // 获取"不拦截路径"
         List<RouteNotInterceptVo> notIntercept = findAll();
         // 存在"不拦截路径"

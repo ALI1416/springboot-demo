@@ -49,7 +49,7 @@ public class RouteInterceptor implements HandlerInterceptor {
      */
     @PostConstruct
     public void setNotIntercept() {
-        routeNotInterceptService.updateNotIntercept(null);
+        routeNotInterceptService.updateNotIntercept();
     }
 
     /**

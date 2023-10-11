@@ -25,9 +25,6 @@ import java.util.Objects;
  **/
 public class DaoBase {
 
-    private DaoBase() {
-    }
-
     /**
      * 自定义查询分页排序
      *

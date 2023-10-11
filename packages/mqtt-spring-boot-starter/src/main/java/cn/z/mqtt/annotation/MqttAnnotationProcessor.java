@@ -160,14 +160,16 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      * 订阅
      */
     private void subscribe() {
-        try {
-            mqttClient.subscribeWithResponse( //
-                    topicList.toArray(new String[0]), //
-                    qosList.stream().mapToInt(Integer::intValue).toArray(), //
-                    callbackList.toArray(new IMqttMessageListener[0]) //
-            );
-        } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
-            throw new MqttException("订阅失败", e);
+        if (!topicList.isEmpty()) {
+            try {
+                mqttClient.subscribeWithResponse( //
+                        topicList.toArray(new String[0]), //
+                        qosList.stream().mapToInt(Integer::intValue).toArray(), //
+                        callbackList.toArray(new IMqttMessageListener[0]) //
+                );
+            } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
+                throw new MqttException("订阅失败", e);
+            }
         }
     }
 

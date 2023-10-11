@@ -39,7 +39,7 @@ public class MongoDbConfig {
      * 映射转换器(去除_class字段)
      */
     @Bean
-    public MappingMongoConverter mappingMongoConverter(MongoDatabaseFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
+    public MappingMongoConverter removeFieldClass(MongoDatabaseFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
         MappingMongoConverter mappingConverter = new MappingMongoConverter(new DefaultDbRefResolver(factory), context);
         mappingConverter.setCustomConversions(beanFactory.getBean(CustomConversions.class));
         mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
@@ -50,13 +50,14 @@ public class MongoDbConfig {
      * 自定义转换器(Date转Timestamp)
      */
     @Bean
-    public MongoCustomConversions customConversions() {
+    public MongoCustomConversions date2Timestamp() {
         return MongoCustomConversions.create(mongoConverterConfigurationAdapter -> //
-                mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter()));
+                mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter()) //
+        );
     }
 
     /**
-     * Date转Timestamp转换器
+     * Date转Timestamp转换器(读)
      */
     @ReadingConverter
     public static class Date2TimestampConverter implements Converter<Date, Timestamp> {
