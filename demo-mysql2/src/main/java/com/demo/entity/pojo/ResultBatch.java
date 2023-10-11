@@ -55,17 +55,17 @@ public class ResultBatch<T> extends ToStringBase {
     /**
      * 新增一个对象
      *
-     * @param status  true/false
-     * @param t   对象
-     * @param msg 状态信息
+     * @param status true/false
+     * @param object 对象
+     * @param msg    状态信息
      */
-    public void add(boolean status, T t, String msg) {
+    public void add(boolean status, T object, String msg) {
         if (status) {
-            listTrue.add(t);
+            listTrue.add(object);
             listTrueMsg.add(msg);
             totalTrue += 1;
         } else {
-            listFalse.add(t);
+            listFalse.add(object);
             listFalseMsg.add(msg);
             totalFalse += 1;
             ok = false;
@@ -78,7 +78,6 @@ public class ResultBatch<T> extends ToStringBase {
      *
      * @param resultBatchList 多个ResultBatch(需要相同泛型)
      */
-    @SafeVarargs
     public static <T> ResultBatch<T> merge(ResultBatch<T>... resultBatchList) {
         ResultBatch<T> result = new ResultBatch<>();
         for (ResultBatch<T> resultBatch : resultBatchList) {
@@ -95,4 +94,5 @@ public class ResultBatch<T> extends ToStringBase {
         }
         return result;
     }
+
 }

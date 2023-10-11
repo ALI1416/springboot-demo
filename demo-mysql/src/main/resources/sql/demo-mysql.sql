@@ -34,6 +34,6 @@ CREATE TABLE `login_log_test`  (
   `ua_is_mobile` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '浏览器标识-是手机',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC COMMENT = '登录日志测试';
 
 SET FOREIGN_KEY_CHECKS = 1;

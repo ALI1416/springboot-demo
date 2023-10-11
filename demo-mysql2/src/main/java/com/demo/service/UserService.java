@@ -146,7 +146,7 @@ public class UserService extends ServiceBase {
      * 精确查询
      *
      * @param user UserVo
-     * @return PageInfo<UserVo>
+     * @return PageInfo UserVo
      */
     public PageInfo<UserVo> findExact(UserVo user) {
         return pagination(user, () -> userDao.findExact(user));
@@ -156,7 +156,7 @@ public class UserService extends ServiceBase {
      * 查询
      *
      * @param user UserVo
-     * @return PageInfo<UserVo>
+     * @return PageInfo UserVo
      */
     public PageInfo<UserVo> find(UserVo user) {
         return pagination(user, () -> userDao.find(user));
@@ -166,7 +166,7 @@ public class UserService extends ServiceBase {
      * 查询备份
      *
      * @param user id
-     * @return PageInfo<UserBak>
+     * @return PageInfo UserBak
      */
     public PageInfo<UserBak> findBak(UserBak user) {
         return pagination(user, () -> userDao.findBak(user.getId()));

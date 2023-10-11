@@ -93,8 +93,7 @@
     ),false)
   </select>
 
-  <select id="findByUniqueKey" parameterType="UserVo"
-          resultType="UserVo">
+  <select id="findByUniqueKey" parameterType="UserVo" resultType="UserVo">
     SELECT
     <include refid="col"/>
     FROM
@@ -108,8 +107,7 @@
     </if>
   </select>
 
-  <select id="findExact" parameterType="UserVo"
-          resultType="UserVo">
+  <select id="findExact" parameterType="UserVo" resultType="UserVo">
     SELECT
     <include refid="col"/>
     FROM

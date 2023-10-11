@@ -2,8 +2,8 @@ package com.demo.base;
 
 import cn.z.tool.Function;
 import com.demo.constant.Constant;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.page.PageMethod;
 
 import java.util.List;
 
@@ -84,15 +84,15 @@ public class ServiceBase {
             // pages == 0 && orderBy.isEmpty()
             if (!orderBy.isEmpty()) {
                 // 全部查询，排序
-                PageHelper.orderBy(orderBy);
+                PageMethod.orderBy(orderBy);
             }
         } else {
             if (orderBy.isEmpty()) {
                 // 分页查询，不排序
-                PageHelper.startPage(pages, rows);
+                PageMethod.startPage(pages, rows);
             } else {
                 // 分页查询，排序
-                PageHelper.startPage(pages, rows, orderBy);
+                PageMethod.startPage(pages, rows, orderBy);
             }
         }
         return function.run();

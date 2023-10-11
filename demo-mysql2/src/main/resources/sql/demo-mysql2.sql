@@ -42,7 +42,7 @@ CREATE TABLE `user`  (
   INDEX `update_id`(`update_id`) USING BTREE,
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `user_ibfk_2` FOREIGN KEY (`update_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic COMMENT = '用户';
 
 -- ----------------------------
 -- Records of user
@@ -73,7 +73,7 @@ CREATE TABLE `user_bak`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `ref_id`(`ref_id`) USING BTREE,
   CONSTRAINT `user_bak_ibfk_1` FOREIGN KEY (`ref_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic COMMENT = '用户备份';
 
 -- ----------------------------
 -- Records of user

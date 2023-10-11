@@ -18,7 +18,6 @@ public class UserBak extends User {
      * 构造函数
      */
     public UserBak() {
-
     }
 
     /**

@@ -29,8 +29,6 @@ public class IndexController {
 
     /**
      * 首页
-     *
-     * @return LoginLogTest
      */
     @GetMapping(value = {"", "/", "index"})
     public Result<LoginLogTest> index() {
