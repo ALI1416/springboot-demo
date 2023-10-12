@@ -3,6 +3,7 @@ package com.demo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * <h1>启动类</h1>
@@ -31,6 +32,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  **/
 @MapperScan("com.demo.mapper")
 @SpringBootApplication
+@EnableScheduling
 public class DemoTinyTokenApp {
 
     public static void main(String[] args) {

@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.sql.Timestamp;
 
 /**
- * <h1>用户Mongo实体</h1>
+ * <h1>用户Mongo</h1>
  *
  * <p>
  * createDate 2021/03/27 19:12:56
@@ -54,7 +54,6 @@ public class UserMongo extends MongoEntityBase {
     private Timestamp date;
 
     public UserMongo() {
-
     }
 
     public UserMongo(UserMongo mongo) {

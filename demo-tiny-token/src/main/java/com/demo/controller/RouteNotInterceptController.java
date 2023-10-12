@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * <h1>路由不拦截Controller</h1>
+ * <h1>路由不拦截</h1>
  *
  * <p>
  * createDate 2021/12/08 13:55:45
@@ -35,7 +35,8 @@ public class RouteNotInterceptController extends ControllerBase {
      */
     @PostMapping("insert")
     public Result<Long> insert(@RequestBody RouteNotInterceptVo routeNotIntercept) {
-        if (existNull(routeNotIntercept.getPages(), routeNotIntercept.getName(), routeNotIntercept.getIsMatch(), routeNotIntercept.getSeq())) {
+        if (existNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
+                routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
         return Result.o(routeNotInterceptService.insert(routeNotIntercept));
@@ -57,7 +58,8 @@ public class RouteNotInterceptController extends ControllerBase {
      */
     @PostMapping("update")
     public Result<Boolean> update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
-        if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), routeNotIntercept.getIsMatch(), routeNotIntercept.getSeq())) {
+        if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
+                routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
         return Result.o(routeNotInterceptService.update(routeNotIntercept));

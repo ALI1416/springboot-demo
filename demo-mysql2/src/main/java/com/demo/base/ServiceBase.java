@@ -22,59 +22,59 @@ public class ServiceBase {
     /**
      * 分页
      *
-     * @param <E>        对象类型
-     * @param entityBase 基实体<br>
-     *                   默认分页，默认排序：entityBase == null<br>
-     *                   默认页码：pages == null<br>
-     *                   默认每页条数：rows == null || rows <= 0<br>
-     *                   默认排序：orderBy == null<br>
-     *                   全部查询，不排序：pages == 0 && orderBy == ""<br>
-     *                   全部查询，排序：pages == 0 && orderBy != ""<br>
-     *                   分页查询，不排序：pages != 0 && orderBy == ""<br>
-     *                   分页查询，排序：pages != 0 && orderBy != ""<br>
-     * @param function   要执行的查询语句
-     * @return PageInfo封装的对象
+     * @param <T>      数据类型
+     * @param base     实体层基类<br>
+     *                 默认分页，默认排序：base == null<br>
+     *                 默认页码：pages == null<br>
+     *                 默认每页条数：rows == null || rows <= 0<br>
+     *                 默认排序：orderBy == null<br>
+     *                 全部查询，不排序：pages == 0 && orderBy == ""<br>
+     *                 全部查询，排序：pages == 0 && orderBy != ""<br>
+     *                 分页查询，不排序：pages != 0 && orderBy == ""<br>
+     *                 分页查询，排序：pages != 0 && orderBy != ""<br>
+     * @param function 查询语句
+     * @return PageInfo
      */
-    public static <E> PageInfo<E> pagination(EntityBase entityBase, Function<List<E>> function) {
-        return new PageInfo<>(paginationUnpack(entityBase, function));
+    public static <T> PageInfo<T> pagination(EntityBase base, Function<List<T>> function) {
+        return new PageInfo<>(paginationUnpack(base, function));
     }
 
     /**
      * 分页
      *
-     * @param <E>        对象类型
-     * @param entityBase 基实体<br>
-     *                   默认分页，默认排序：entityBase == null<br>
-     *                   默认页码：pages == null<br>
-     *                   默认每页条数：rows == null || rows <= 0<br>
-     *                   默认排序：orderBy == null<br>
-     *                   全部查询，不排序：pages == 0 && orderBy == ""<br>
-     *                   全部查询，排序：pages == 0 && orderBy != ""<br>
-     *                   分页查询，不排序：pages != 0 && orderBy == ""<br>
-     *                   分页查询，排序：pages != 0 && orderBy != ""<br>
-     * @param function   要执行的查询语句
-     * @return List封装的对象
+     * @param <T>      数据类型
+     * @param base     实体层基类<br>
+     *                 默认分页，默认排序：base == null<br>
+     *                 默认页码：pages == null<br>
+     *                 默认每页条数：rows == null || rows <= 0<br>
+     *                 默认排序：orderBy == null<br>
+     *                 全部查询，不排序：pages == 0 && orderBy == ""<br>
+     *                 全部查询，排序：pages == 0 && orderBy != ""<br>
+     *                 分页查询，不排序：pages != 0 && orderBy == ""<br>
+     *                 分页查询，排序：pages != 0 && orderBy != ""<br>
+     * @param function 查询语句
+     * @return List
      */
-    public static <E> List<E> paginationUnpack(EntityBase entityBase, Function<List<E>> function) {
+    public static <T> List<T> paginationUnpack(EntityBase base, Function<List<T>> function) {
         /* 默认分页，默认排序(baseEntity为null) */
-        if (entityBase == null) {
-            entityBase = new EntityBase();
-            entityBase.setPages(Constant.PAGE_DEFAULT_PAGES);
-            entityBase.setRows(Constant.PAGE_DEFAULT_ROWS);
-            entityBase.setOrderBy(Constant.PAGE_DEFAULT_ORDER_BY);
+        if (base == null) {
+            base = new EntityBase();
+            base.setPages(Constant.PAGE_DEFAULT_PAGES);
+            base.setRows(Constant.PAGE_DEFAULT_ROWS);
+            base.setOrderBy(Constant.PAGE_DEFAULT_ORDER_BY);
         }
         // 页码(pages为null时，默认)
-        Integer pages = entityBase.getPages();
+        Integer pages = base.getPages();
         if (pages == null) {
             pages = Constant.PAGE_DEFAULT_PAGES;
         }
         // 每页条数(rows为null或<=0时，默认)
-        Integer rows = entityBase.getRows();
+        Integer rows = base.getRows();
         if (rows == null || rows <= 0) {
             rows = Constant.PAGE_DEFAULT_ROWS;
         }
         // 排序(orderBy为null时，默认)
-        String orderBy = entityBase.getOrderBy();
+        String orderBy = base.getOrderBy();
         if (orderBy == null) {
             orderBy = Constant.PAGE_DEFAULT_ORDER_BY;
         }

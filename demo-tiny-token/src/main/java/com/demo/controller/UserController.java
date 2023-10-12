@@ -13,15 +13,12 @@ import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * <h1>用户Controller</h1>
+ * <h1>用户</h1>
  *
  * <p>
  * createDate 2021/11/29 16:45:45
@@ -128,6 +125,14 @@ public class UserController extends ControllerBase {
     @PostMapping("findRoleAndRoute")
     public Result<List<RoleVo>> findRoleAndRoute() {
         return Result.o(roleService.findRoleAndRouteByUserId(t4s.getId()));
+    }
+
+    /**
+     * 用户头像
+     */
+    @GetMapping("avatar")
+    public Result<Long> avatar() {
+        return Result.o(t4s.getId());
     }
 
 }

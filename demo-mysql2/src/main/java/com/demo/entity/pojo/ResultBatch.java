@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>批量返回结果实体类</h1>
+ * <h1>批量返回</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -74,9 +74,7 @@ public class ResultBatch<T> extends ToStringBase {
     }
 
     /**
-     * 合并多个ResultBatch
-     *
-     * @param resultBatchList 多个ResultBatch(需要相同泛型)
+     * 合并
      */
     public static <T> ResultBatch<T> merge(ResultBatch<T>... resultBatchList) {
         ResultBatch<T> result = new ResultBatch<>();

@@ -46,6 +46,6 @@ public class RedisConstant {
     /**
      * 路由-失效时间(秒){@value}
      */
-    public static final Integer ROUTE_EXPIRE = 2 * 60 * 60;
+    public static final int ROUTE_EXPIRE = 2 * 60 * 60;
 
 }

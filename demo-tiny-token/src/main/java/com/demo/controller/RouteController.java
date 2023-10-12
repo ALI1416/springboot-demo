@@ -4,7 +4,6 @@ import com.demo.base.ControllerBase;
 import com.demo.base.EntityBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
-import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * <h1>路由Controller</h1>
+ * <h1>路由</h1>
  *
  * <p>
  * createDate 2021/11/26 14:05:46
@@ -30,7 +29,6 @@ import java.util.List;
 public class RouteController extends ControllerBase {
 
     private final RouteService routeService;
-    private final RouteInterceptor routeInterceptor;
 
     /**
      * 新增
@@ -130,7 +128,7 @@ public class RouteController extends ControllerBase {
      */
     @PostMapping("refresh")
     public Result<Long> refresh() {
-        return Result.o(routeInterceptor.deleteRoute());
+        return Result.o(routeService.deleteRoute());
     }
 
 }

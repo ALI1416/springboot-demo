@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -43,14 +42,6 @@ public class RouteInterceptor implements HandlerInterceptor {
     private final RouteService routeService;
     private final RoleService roleService;
     private final RouteNotInterceptService routeNotInterceptService;
-
-    /**
-     * 创建"不拦截路径"
-     */
-    @PostConstruct
-    public void setNotIntercept() {
-        routeNotInterceptService.updateNotIntercept();
-    }
 
     /**
      * preHandle
@@ -86,6 +77,14 @@ public class RouteInterceptor implements HandlerInterceptor {
         }
         // 是"root"用户
         if (id == 0L) {
+            return true;
+        }
+        // 是"不拦截-匹配路径(需要登录)"
+        if (routeNotInterceptService.isNotInterceptLoginMatch(urlList)) {
+            return true;
+        }
+        // 是"不拦截-直接路径(需要登录)"
+        if (routeNotInterceptService.isNotInterceptLoginDirect(url)) {
             return true;
         }
         // 是"匹配路径"
@@ -269,52 +268,6 @@ public class RouteInterceptor implements HandlerInterceptor {
             list.add(sb.toString());
         }
         return list;
-    }
-
-    /**
-     * 删除Redis全部路由
-     *
-     * @return 成功条数
-     */
-    public Long deleteRoute() {
-        return redisTemp.deleteMulti(redisTemp.scan(RedisConstant.ROUTE_PREFIX + "*"));
-    }
-
-    /**
-     * 删除Redis角色路由，通过角色id<br>
-     * 请手动查询该角色下的所有用户并删除用户路由
-     *
-     * @param id 角色id
-     * @return 成功条数
-     * @see #deleteRouteUser(List)
-     */
-    public Long deleteRouteRole(Long id) {
-        return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
-                RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
-    }
-
-    /**
-     * 删除Redis用户路由，通过用户id列表
-     *
-     * @param ids 用户id列表
-     */
-    public Long deleteRouteUser(List<Long> ids) {
-        List<String> keys = new ArrayList<>();
-        for (Long id : ids) {
-            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
-            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
-        }
-        return redisTemp.deleteMulti(keys);
-    }
-
-    /**
-     * 删除Redis用户路由，通过用户id
-     *
-     * @param id 用户id
-     */
-    public Long deleteRouteUser(Long id) {
-        return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
-                RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }
 
 }

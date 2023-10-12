@@ -6,7 +6,7 @@ import com.demo.entity.vo.UserRoleVo;
 import java.util.List;
 
 /**
- * <h1>用户-角色Mapper</h1>
+ * <h1>用户-角色</h1>
  *
  * <p>
  * createDate 2021/12/16 10:41:17

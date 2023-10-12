@@ -27,9 +27,13 @@ public class RouteNotIntercept extends EntityBase {
      */
     private String name;
     /**
-     * 匹配
+     * 匹配模式
      */
     private Integer isMatch;
+    /**
+     * 需要登录
+     */
+    private Integer needLogin;
     /**
      * 顺序
      */

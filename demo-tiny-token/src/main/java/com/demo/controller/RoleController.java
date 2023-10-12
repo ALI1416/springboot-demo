@@ -9,7 +9,6 @@ import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.UserVo;
-import com.demo.interceptor.RouteInterceptor;
 import com.demo.service.RoleRouteService;
 import com.demo.service.RoleService;
 import com.demo.service.RouteService;
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <h1>角色Controller</h1>
+ * <h1>角色</h1>
  *
  * <p>
  * createDate 2021/11/29 15:56:18
@@ -44,7 +43,6 @@ public class RoleController extends ControllerBase {
     private final RoleRouteService roleRouteService;
     private final UserService userService;
     private final RouteService routeService;
-    private final RouteInterceptor routeInterceptor;
 
     /**
      * 新增
@@ -150,9 +148,8 @@ public class RoleController extends ControllerBase {
      */
     @PostMapping("refreshRole")
     public Result<Long> refreshRole(@RequestBody EntityBase role) {
-        List<Long> ids =
-                userService.findByRoleId(role.getId()).stream().map(UserVo::getId).collect(Collectors.toList());
-        return Result.o(routeInterceptor.deleteRouteRole(role.getId()) + routeInterceptor.deleteRouteUser(ids));
+        List<Long> ids = userService.findByRoleId(role.getId()).stream().map(UserVo::getId).collect(Collectors.toList());
+        return Result.o(routeService.deleteRouteRole(role.getId()) + routeService.deleteRouteUser(ids));
     }
 
 }

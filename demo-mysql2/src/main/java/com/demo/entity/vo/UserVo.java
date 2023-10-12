@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>用户vo</h1>
+ * <h1>用户</h1>
  *
  * <p>
  * createDate 2021/10/09 15:20:59

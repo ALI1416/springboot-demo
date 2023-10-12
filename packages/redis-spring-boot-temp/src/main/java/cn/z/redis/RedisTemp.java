@@ -399,7 +399,7 @@ public class RedisTemp {
     /**
      * 放入(set)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(已存在会被覆盖)
      * @param value 值
      */
@@ -431,7 +431,7 @@ public class RedisTemp {
     /**
      * 放入，并设置超时时间(setEX)
      *
-     * @param <T>     指定数据类型
+     * @param <T>     数据类型
      * @param key     键(已存在会被覆盖)
      * @param value   值
      * @param timeout 超时时间(秒，必须>0)
@@ -443,7 +443,7 @@ public class RedisTemp {
     /**
      * 放入，并设置超时时间(setEX)
      *
-     * @param <T>     指定数据类型
+     * @param <T>     数据类型
      * @param key     键(已存在会被覆盖)
      * @param value   值
      * @param timeout 超时时间(必须>0)
@@ -466,7 +466,7 @@ public class RedisTemp {
     /**
      * 如果key不存在，则放入(setNX)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 是否成功
@@ -501,7 +501,7 @@ public class RedisTemp {
     /**
      * 如果key不存在，则放入，并设置超时时间(set)
      *
-     * @param <T>     指定数据类型
+     * @param <T>     数据类型
      * @param key     键
      * @param value   值
      * @param timeout 超时时间(秒，必须>0)
@@ -514,7 +514,7 @@ public class RedisTemp {
     /**
      * 如果key不存在，则放入，并设置超时时间(set)
      *
-     * @param <T>     指定数据类型
+     * @param <T>     数据类型
      * @param key     键
      * @param value   值
      * @param timeout 超时时间(必须>0)
@@ -538,7 +538,7 @@ public class RedisTemp {
     /**
      * 如果key存在，则放入(set)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 是否成功
@@ -573,7 +573,7 @@ public class RedisTemp {
     /**
      * 如果key存在，则放入，并设置超时时间(set)
      *
-     * @param <T>     指定数据类型
+     * @param <T>     数据类型
      * @param key     键
      * @param value   值
      * @param timeout 超时时间(秒，必须>0)
@@ -586,7 +586,7 @@ public class RedisTemp {
     /**
      * 如果key存在，则放入，并设置超时时间(set)
      *
-     * @param <T>     指定数据类型
+     * @param <T>     数据类型
      * @param key     键
      * @param value   值
      * @param timeout 超时时间(必须>0)
@@ -600,7 +600,7 @@ public class RedisTemp {
     /**
      * 键和值依次放入(mSet)
      *
-     * @param <T> 指定数据类型
+     * @param <T> 数据类型
      * @param map 键和值(key已存在会被覆盖)
      */
     public <T> void setMulti(Map<String, T> map) {
@@ -610,7 +610,7 @@ public class RedisTemp {
     /**
      * 如果键和值全部不存在，则依次放入(mSetNX)
      *
-     * @param <T> 指定数据类型
+     * @param <T> 数据类型
      * @param map 键和值
      */
     public <T> Boolean setMultiIfAbsent(Map<String, T> map) {
@@ -683,7 +683,7 @@ public class RedisTemp {
     /**
      * 获取并放入(getSet)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在返回null)
      * @param value 值
      * @return 值
@@ -807,7 +807,7 @@ public class RedisTemp {
      * 设置字符串(setRange)<br>
      * 注意：慎用
      *
-     * @param <T>    指定数据类型
+     * @param <T>    数据类型
      * @param key    键(不存在将创建)
      * @param value  值
      * @param offset 下标
@@ -1086,7 +1086,7 @@ public class RedisTemp {
     /**
      * 设置map的1个键值(hSet)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param item  项(已存在会被覆盖)
      * @param value 值
@@ -1098,7 +1098,7 @@ public class RedisTemp {
     /**
      * 设置map的多个键值(hMSet)
      *
-     * @param <T> 指定数据类型
+     * @param <T> 数据类型
      * @param key 键
      * @param map 多个键值(已存在会被覆盖)
      */
@@ -1109,7 +1109,7 @@ public class RedisTemp {
     /**
      * 项不存在时，设置map的1个键值(hSetNX)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param item  项
      * @param value 值
@@ -1273,7 +1273,7 @@ public class RedisTemp {
     /**
      * 添加到指定值的左侧(lInsert before)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在返回0)
      * @param pivot 指定值(不存在返回 - 1)
      * @param value 值
@@ -1286,7 +1286,7 @@ public class RedisTemp {
     /**
      * 添加到指定值的右侧(lInsert after)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在返回0)
      * @param pivot 指定值(不存在返回 - 1)
      * @param value 值
@@ -1299,7 +1299,7 @@ public class RedisTemp {
     /**
      * 添加到左侧(lPush)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在将新建)
      * @param value 值
      * @return 列表长度
@@ -1322,7 +1322,7 @@ public class RedisTemp {
     /**
      * 添加到左侧(多个值依次添加a/b/c变成c/b/a)(lPush)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在将新建)
      * @param value 多个值
      * @return 列表长度
@@ -1334,7 +1334,7 @@ public class RedisTemp {
     /**
      * 当key存在时，添加到左侧(lPushX)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在返回0)
      * @param value 值
      * @return 列表长度
@@ -1346,7 +1346,7 @@ public class RedisTemp {
     /**
      * 添加到右侧(rPush)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在将新建)
      * @param value 值
      * @return 列表长度
@@ -1369,7 +1369,7 @@ public class RedisTemp {
     /**
      * 添加到右侧(多个值依次添加a/b/c还是a/b/c)(rPush)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在将新建)
      * @param value 多个值
      * @return 列表长度
@@ -1381,7 +1381,7 @@ public class RedisTemp {
     /**
      * 当列表存在时，添加到右侧(rPushX)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键(不存在返回0)
      * @param value 值
      * @return 列表长度
@@ -1463,7 +1463,7 @@ public class RedisTemp {
     /**
      * 指定值第一次出现的下标(lPos)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值(不存在返回null)
      * @return 下标
@@ -1475,7 +1475,7 @@ public class RedisTemp {
     /**
      * 指定值最后一次出现的下标(lPos)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值(不存在返回null)
      * @return 下标
@@ -1487,7 +1487,7 @@ public class RedisTemp {
     /**
      * 插入到指定位置(会替换该位置的值)(lSet)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param index 下标(越界报错)
      * @param value 值
@@ -1499,7 +1499,7 @@ public class RedisTemp {
     /**
      * 删除第count次出现的值(正数从左边删，负数从右边删，0全部删除)(lRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param count 第几次
      * @param value 值
@@ -1512,7 +1512,7 @@ public class RedisTemp {
     /**
      * 删除左侧第一次出现的值(lRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 删除成功的个数(未删除返回0)
@@ -1524,7 +1524,7 @@ public class RedisTemp {
     /**
      * 删除右侧第一次出现的值(lRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 删除成功的个数(删除返回0)
@@ -1536,7 +1536,7 @@ public class RedisTemp {
     /**
      * 删除全部出现的值(lRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 删除成功的个数(未删除返回0)
@@ -1635,7 +1635,7 @@ public class RedisTemp {
     /**
      * 添加(sAdd)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 列表长度
@@ -1647,7 +1647,7 @@ public class RedisTemp {
     /**
      * 添加多个(sAdd)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 列表长度
@@ -1659,7 +1659,7 @@ public class RedisTemp {
     /**
      * 添加多个(sAdd)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 列表长度
@@ -1671,7 +1671,7 @@ public class RedisTemp {
     /**
      * 删除值(sRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 列表长度
@@ -1683,7 +1683,7 @@ public class RedisTemp {
     /**
      * 删除多个值(sRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 列表长度
@@ -1695,7 +1695,7 @@ public class RedisTemp {
     /**
      * 删除多个值(sRem)
      *
-     * @param <T>   指定数据类型
+     * @param <T>   数据类型
      * @param key   键
      * @param value 值
      * @return 列表长度
@@ -2062,6 +2062,15 @@ public class RedisTemp {
 
     /* ==================== 发布订阅 ==================== */
     // region 发布订阅
+
+    /**
+     * 广播
+     *
+     * @param topic 主题
+     */
+    public void broadcast(String topic) {
+        redisTemplate.convertAndSend(topic, null);
+    }
 
     /**
      * 广播

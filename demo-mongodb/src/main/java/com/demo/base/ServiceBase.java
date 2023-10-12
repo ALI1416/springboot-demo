@@ -22,35 +22,35 @@ public class ServiceBase {
     /**
      * 构建分页
      *
-     * @param mongoEntityBase mongo基实体<br>
-     *                        默认分页，默认排序：mongoEntityBase == null<br>
-     *                        默认页码：pages == null<br>
-     *                        默认每页条数：rows == null || rows <= 0<br>
-     *                        默认排序：orderBy == null<br>
-     *                        分页查询，不排序：orderBy == ""<br>
-     *                        分页查询，排序：orderBy != ""<br>
+     * @param base Mongo实体层基类<br>
+     *             默认分页，默认排序：base == null<br>
+     *             默认页码：pages == null<br>
+     *             默认每页条数：rows == null || rows <= 0<br>
+     *             默认排序：orderBy == null<br>
+     *             分页查询，不排序：orderBy == ""<br>
+     *             分页查询，排序：orderBy != ""<br>
      * @return PageRequest
      */
-    public static PageRequest buildPage(MongoEntityBase mongoEntityBase) {
+    public static PageRequest buildPage(MongoEntityBase base) {
         /* 默认分页，默认排序(mongoEntityBase为null) */
-        if (mongoEntityBase == null) {
-            mongoEntityBase = new MongoEntityBase();
-            mongoEntityBase.setPages(Constant.MONGO_PAGE_DEFAULT_PAGES);
-            mongoEntityBase.setRows(Constant.MONGO_PAGE_DEFAULT_ROWS);
-            mongoEntityBase.setOrderBy(Constant.MONGO_PAGE_DEFAULT_ORDER_BY);
+        if (base == null) {
+            base = new MongoEntityBase();
+            base.setPages(Constant.MONGO_PAGE_DEFAULT_PAGES);
+            base.setRows(Constant.MONGO_PAGE_DEFAULT_ROWS);
+            base.setOrderBy(Constant.MONGO_PAGE_DEFAULT_ORDER_BY);
         }
         // 页码(pages为null时，默认)
-        Integer pages = mongoEntityBase.getPages();
+        Integer pages = base.getPages();
         if (pages == null) {
             pages = Constant.MONGO_PAGE_DEFAULT_PAGES;
         }
         // 每页条数(rows为null或<=0时，默认)
-        Integer rows = mongoEntityBase.getRows();
+        Integer rows = base.getRows();
         if (rows == null || rows <= 0) {
             rows = Constant.MONGO_PAGE_DEFAULT_ROWS;
         }
         // 排序(orderBy为null时，默认)
-        String orderBy = mongoEntityBase.getOrderBy();
+        String orderBy = base.getOrderBy();
         if (orderBy == null) {
             orderBy = Constant.MONGO_PAGE_DEFAULT_ORDER_BY;
         }

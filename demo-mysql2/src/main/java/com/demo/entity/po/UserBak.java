@@ -3,7 +3,7 @@ package com.demo.entity.po;
 import cn.z.id.Id;
 
 /**
- * <h1>用户备份实体类</h1>
+ * <h1>用户备份</h1>
  *
  * <p>
  * createDate 2021/10/28 14:45:04
@@ -14,9 +14,6 @@ import cn.z.id.Id;
  **/
 public class UserBak extends User {
 
-    /**
-     * 构造函数
-     */
     public UserBak() {
     }
 

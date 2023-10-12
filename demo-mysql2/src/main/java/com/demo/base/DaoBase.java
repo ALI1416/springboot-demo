@@ -134,7 +134,7 @@ public class DaoBase {
      * @param function 要执行的function
      * @return true:执行成功;false:捕获到异常
      */
-    public static boolean tryif3(Function<?> function) {
+    public static boolean tryif3(Function function) {
         return tryif3(function, true);
     }
 
@@ -146,7 +146,7 @@ public class DaoBase {
      * @param exception 捕获到异常是否回滚
      * @return true:执行成功;false:捕获到异常
      */
-    public static boolean tryif3(Function<?> function, boolean exception) {
+    public static boolean tryif3(Function function, boolean exception) {
         try {
             function.run();
         } catch (Exception e) {

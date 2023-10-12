@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * <h1>角色Vo</h1>
+ * <h1>角色</h1>
  *
  * <p>
  * createDate 2021/11/29 15:16:50

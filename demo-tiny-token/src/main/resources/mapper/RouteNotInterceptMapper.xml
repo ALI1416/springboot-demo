@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.mapper.RouteNotInterceptMapper">
 
   <sql id="col">
-    id,path,name,is_match,seq
+    id,path,name,is_match,need_login,seq
   </sql>
 
   <insert id="insert" parameterType="RouteNotInterceptVo">
@@ -12,7 +12,7 @@
     )
     VALUES
     (
-    #{id},#{path},#{name},#{isMatch},#{seq}
+    #{id},#{path},#{name},#{isMatch},#{needLogin},#{seq}
     )
   </insert>
 
@@ -35,6 +35,9 @@
       </if>
       <if test="isMatch != null">
         is_match = #{isMatch},
+      </if>
+      <if test="needLogin != null">
+        need_login = #{needLogin},
       </if>
       <if test="seq != null">
         seq = #{seq},

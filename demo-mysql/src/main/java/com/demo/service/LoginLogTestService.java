@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * <h1>登录日志测试Service</h1>
+ * <h1>登录日志测试</h1>
  *
  * <p>
  * createDate 2021/09/13 10:49:28

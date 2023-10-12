@@ -28,17 +28,18 @@ public class DaoBase {
     /**
      * 自定义查询分页排序
      *
-     * @param mongoTemplate mongoTemplate
-     * @param entityClass   类
-     * @param criteria      查询
-     * @param pageable      分页器
+     * @param <T>      数据类型
+     * @param template MongoTemplate
+     * @param clazz    T.class
+     * @param criteria 查询
+     * @param pageable 分页器
      * @return Page
      */
-    public static <T> Page<T> find(MongoTemplate mongoTemplate, Class<T> entityClass, Criteria criteria, Pageable pageable) {
+    public static <T> Page<T> find(MongoTemplate template, Class<T> clazz, Criteria criteria, Pageable pageable) {
         Query query = Query.query(criteria);
-        long count = mongoTemplate.count(query, entityClass);
+        long count = template.count(query, clazz);
         return new PageImpl<>( //
-                mongoTemplate.find(query.with(pageable), entityClass), // 查询
+                template.find(query.with(pageable), clazz), // 查询
                 pageable, // 分页
                 count // 总数
         );
@@ -47,14 +48,14 @@ public class DaoBase {
     /**
      * 构建查询参数
      *
-     * @param criteria        Criteria
-     * @param paramsQueryList List&lt;ParamsQuery>
+     * @param criteria Criteria
+     * @param list     List ParamsQuery
      */
-    public static void buildParamsQuery(Criteria criteria, List<ParamsQuery> paramsQueryList) {
-        if (paramsQueryList == null || paramsQueryList.isEmpty()) {
+    public static void buildParamsQuery(Criteria criteria, List<ParamsQuery> list) {
+        if (list == null || list.isEmpty()) {
             return;
         }
-        for (ParamsQuery query : paramsQueryList) {
+        for (ParamsQuery query : list) {
             buildCriteria(criteria, query.getOperator(), query.getField(), //
                     conversionType(query.getType(), query.getValue(), query.getValue2()));
         }
@@ -63,9 +64,10 @@ public class DaoBase {
     /**
      * 转换类型
      *
-     * @param type  类型
-     * @param value 值
-     * @return 转换后的值对象数组
+     * @param type   数据类型
+     * @param value  值
+     * @param value2 值2
+     * @return 值对象数组
      */
     private static Object[] conversionType(String type, String value, String value2) {
         Object[] objects = new Object[2];

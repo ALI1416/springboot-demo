@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * <h1>登录日志测试Dao</h1>
+ * <h1>登录日志测试</h1>
  *
  * <p>
  * createDate 2021/09/13 10:46:29

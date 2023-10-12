@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * <h1>UserMongoVo</h1>
+ * <h1>用户Mongo</h1>
  *
  * <p>
  * createDate 2022/06/02 15:32:09
@@ -34,13 +34,5 @@ public class UserMongoVo extends UserMongo {
      * 查询参数列表
      */
     private List<ParamsQuery> paramsQueryList;
-
-    public UserMongoVo() {
-
-    }
-
-    public UserMongoVo(UserMongoVo vo) {
-        super(vo);
-    }
 
 }

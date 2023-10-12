@@ -2,18 +2,21 @@ package com.demo.service;
 
 import cn.z.redis.RedisTemp;
 import cn.z.redis.annotation.Subscribe;
+import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RouteNotInterceptDao;
 import com.demo.entity.po.RouteNotIntercept;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- * <h1>路由-不拦截Service</h1>
+ * <h1>路由-不拦截</h1>
  *
  * <p>
  * createDate 2021/12/08 10:28:26
@@ -41,6 +44,14 @@ public class RouteNotInterceptService {
      * 不拦截-直接路径
      */
     private List<String> notInterceptDirect;
+    /**
+     * 不拦截-匹配路径(需要登录)
+     */
+    private List<String> notInterceptLoginMatch;
+    /**
+     * 不拦截-直接路径(需要登录)
+     */
+    private List<String> notInterceptLoginDirect;
 
     /**
      * 查询所有
@@ -54,7 +65,7 @@ public class RouteNotInterceptService {
     /**
      * 插入
      *
-     * @param routeNotIntercept path,name,isMatch,seq
+     * @param routeNotIntercept path,name,isMatch,needLogin,seq
      * @return ok:id,e:0
      */
     @Transactional
@@ -76,7 +87,7 @@ public class RouteNotInterceptService {
     /**
      * 更新
      *
-     * @param routeNotIntercept id(必须),path,name,isMatch,seq(至少1个)
+     * @param routeNotIntercept id(必须),path,name,isMatch,needLogin,seq(至少1个)
      * @return 是否成功
      */
     @Transactional
@@ -88,7 +99,7 @@ public class RouteNotInterceptService {
      * 刷新
      */
     public void refresh() {
-        redisTemp.broadcast(UPDATE_NOT_INTERCEPT, UPDATE_NOT_INTERCEPT);
+        redisTemp.broadcast(UPDATE_NOT_INTERCEPT);
     }
 
     /**
@@ -117,18 +128,48 @@ public class RouteNotInterceptService {
     }
 
     /**
+     * 是"不拦截-匹配路径(需要登录)"
+     *
+     * @param urlList URL列表
+     * @return 是否
+     */
+    public boolean isNotInterceptLoginMatch(List<String> urlList) {
+        for (String url : urlList) {
+            if (notInterceptLoginMatch.contains(url)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是"不拦截-直接路径(需要登录)"
+     *
+     * @param url URL
+     * @return 是否
+     */
+    public boolean isNotInterceptLoginDirect(String url) {
+        return notInterceptLoginDirect.contains(url);
+    }
+
+    /**
      * 更新"不拦截路径"
      */
     @Subscribe(UPDATE_NOT_INTERCEPT)
+    @Scheduled(fixedDelay = RedisConstant.ROUTE_EXPIRE, timeUnit = TimeUnit.SECONDS)
     public void updateNotIntercept() {
         // 获取"不拦截路径"
         List<RouteNotInterceptVo> notIntercept = findAll();
         // 存在"不拦截路径"
         if (!notIntercept.isEmpty()) {
             // 创建"不拦截-匹配路径"
-            notInterceptMatch = notIntercept.stream().filter(r -> r.getIsMatch() == 1).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            notInterceptMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() == 0 && r.getIsMatch() == 1)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-直接路径"
-            notInterceptDirect = notIntercept.stream().filter(r -> r.getIsMatch() == 0).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            notInterceptDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() == 0 && r.getIsMatch() == 0)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            // 创建"不拦截-匹配路径(需要登录)"
+            notInterceptLoginMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() == 1 && r.getIsMatch() == 1)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            // 创建"不拦截-直接路径(需要登录)"
+            notInterceptLoginDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() == 1 && r.getIsMatch() == 0)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
         }
     }
 

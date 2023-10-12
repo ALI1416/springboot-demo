@@ -102,7 +102,7 @@ public class EntityBase extends ToStringBase {
     /* ==================== 日志类 ==================== */
 
     /**
-     * 设置ip信息<br>
+     * 设置IP信息<br>
      * 包括ip,ipCountry,ipProvince,ipCity,ipIsp
      *
      * @param request HttpServletRequest
@@ -125,7 +125,7 @@ public class EntityBase extends ToStringBase {
     }
 
     /**
-     * 设置userAgent信息<br>
+     * 设置UserAgent信息<br>
      * 包括userAgent,uaOs,uaBrowser,uaIsMobile
      *
      * @param request HttpServletRequest

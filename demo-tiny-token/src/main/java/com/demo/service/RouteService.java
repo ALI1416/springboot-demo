@@ -7,6 +7,7 @@ import com.demo.dao.mysql.RouteDao;
 import com.demo.entity.vo.RouteVo;
 import com.demo.util.RouteUtils;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * <h1>RouteService</h1>
+ * <h1>路由</h1>
  *
  * <p>
  * createDate 2021/11/29 14:07:58
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RouteService {
 
     private final RedisTemp redisTemp;
@@ -57,7 +59,8 @@ public class RouteService {
         // 递归删除RoleRoute/Route的子节点
         try {
             deleteChildren(id);
-        } catch (Exception ignore) {
+        } catch (Exception e) {
+            log.error("删除自己和子节点失败！", e);
             return false;
         }
         // 删除自己
@@ -69,7 +72,7 @@ public class RouteService {
      *
      * @param parentId parentId
      */
-    private void deleteChildren(Long parentId) {
+    private void deleteChildren(Long parentId) throws Exception {
         // 获取子节点
         List<RouteVo> children = routeDao.findByParentId(parentId);
         // 递归
@@ -84,7 +87,7 @@ public class RouteService {
         }
         // 删除子节点
         if (!(roleRouteDao.deleteByRouteIdList(ids) && routeDao.deleteByIdList(ids))) {
-            throw new RuntimeException("删除失败！");
+            throw new Exception("递归删除RoleRoute/Route的子节点-删除子节点异常！");
         }
     }
 
@@ -272,6 +275,52 @@ public class RouteService {
      */
     public List<Long> findIdByRoleId(Long roleId) {
         return routeDao.findIdByRoleId(roleId);
+    }
+
+    /**
+     * 删除Redis全部路由
+     *
+     * @return 成功条数
+     */
+    public Long deleteRoute() {
+        return redisTemp.deleteMulti(redisTemp.scan(RedisConstant.ROUTE_PREFIX + "*"));
+    }
+
+    /**
+     * 删除Redis角色路由，通过角色id<br>
+     * 请手动查询该角色下的所有用户并删除用户路由
+     *
+     * @param id 角色id
+     * @return 成功条数
+     * @see #deleteRouteUser(List)
+     */
+    public Long deleteRouteRole(Long id) {
+        return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+                RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+    }
+
+    /**
+     * 删除Redis用户路由，通过用户id列表
+     *
+     * @param ids 用户id列表
+     */
+    public Long deleteRouteUser(List<Long> ids) {
+        List<String> keys = new ArrayList<>();
+        for (Long id : ids) {
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+        }
+        return redisTemp.deleteMulti(keys);
+    }
+
+    /**
+     * 删除Redis用户路由，通过用户id
+     *
+     * @param id 用户id
+     */
+    public Long deleteRouteUser(Long id) {
+        return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+                RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }
 
 }

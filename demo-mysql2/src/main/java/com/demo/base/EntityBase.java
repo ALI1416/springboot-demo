@@ -97,27 +97,4 @@ public class EntityBase extends ToStringBase {
      */
     private String orderBy;
 
-    public EntityBase() {
-    }
-
-    public EntityBase(EntityBase base) {
-        this.id = base.id;
-        this.isDelete = base.isDelete;
-        this.createId = base.createId;
-        this.createTime = base.createTime;
-        this.updateId = base.updateId;
-        this.updateTime = base.updateTime;
-        this.version = base.version;
-        this.refId = base.refId;
-        this.createTimeEnd = base.createTimeEnd;
-        this.createTimeNot = base.createTimeNot;
-        this.updateTimeEnd = base.updateTimeEnd;
-        this.updateTimeNot = base.updateTimeNot;
-        this.versionEnd = base.versionEnd;
-        this.versionNot = base.versionNot;
-        this.pages = base.pages;
-        this.rows = base.rows;
-        this.orderBy = base.orderBy;
-    }
-
 }

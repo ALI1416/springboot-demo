@@ -5,7 +5,7 @@ import com.demo.entity.vo.RouteVo;
 import java.util.List;
 
 /**
- * <h1>路由Mapper</h1>
+ * <h1>路由</h1>
  *
  * <p>
  * createDate 2021/09/13 10:48:57

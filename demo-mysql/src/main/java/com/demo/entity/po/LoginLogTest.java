@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * <h1>登录日志测试实体类</h1>
+ * <h1>登录日志测试</h1>
  *
  * <p>
  * createDate 2021/09/29 14:18:44

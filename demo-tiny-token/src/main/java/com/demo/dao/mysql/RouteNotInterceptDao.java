@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * <h1>路由-不拦截Dao</h1>
+ * <h1>路由-不拦截</h1>
  *
  * <p>
  * createDate 2021/12/08 10:00:36
@@ -37,7 +37,7 @@ public class RouteNotInterceptDao extends DaoBase {
     /**
      * 插入
      *
-     * @param routeNotIntercept path,name,isMatch,seq
+     * @param routeNotIntercept path,name,isMatch,needLogin,seq
      * @return ok:id,e:0
      */
     public long insert(RouteNotInterceptVo routeNotIntercept) {
@@ -61,7 +61,7 @@ public class RouteNotInterceptDao extends DaoBase {
     /**
      * 更新
      *
-     * @param routeNotIntercept id(必须),path,name,isMatch,seq(至少1个)
+     * @param routeNotIntercept id(必须),path,name,isMatch,needLogin,seq(至少1个)
      * @return 是否成功
      */
     public boolean update(RouteNotInterceptVo routeNotIntercept) {

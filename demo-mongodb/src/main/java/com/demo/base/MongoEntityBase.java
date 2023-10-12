@@ -89,24 +89,4 @@ public class MongoEntityBase extends ToStringBase {
     @Transient
     private String orderBy;
 
-    public MongoEntityBase() {
-
-    }
-
-    public MongoEntityBase(MongoEntityBase base) {
-        this.id = base.id;
-        this.createTime = base.createTime;
-        this.updateTime = base.updateTime;
-        this.version = base.version;
-        this.createTimeEnd = base.createTimeEnd;
-        this.createTimeNot = base.createTimeNot;
-        this.updateTimeEnd = base.updateTimeEnd;
-        this.updateTimeNot = base.updateTimeNot;
-        this.versionEnd = base.versionEnd;
-        this.versionNot = base.versionNot;
-        this.pages = base.pages;
-        this.rows = base.rows;
-        this.orderBy = base.orderBy;
-    }
-
 }

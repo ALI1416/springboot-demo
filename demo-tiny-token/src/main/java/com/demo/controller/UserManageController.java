@@ -6,7 +6,7 @@ import com.demo.base.EntityBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
-import com.demo.interceptor.RouteInterceptor;
+import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * <h1>用户管理Controller</h1>
+ * <h1>用户管理</h1>
  *
  * <p>
  * createDate 2021/11/29 16:45:45
@@ -33,7 +33,7 @@ public class UserManageController extends ControllerBase {
 
     private final T4s t4s;
     private final UserService userService;
-    private final RouteInterceptor routeInterceptor;
+    private final RouteService routeService;
 
     /**
      * 新增用户
@@ -95,7 +95,7 @@ public class UserManageController extends ControllerBase {
         if (isNull(user.getId())) {
             return paramIsError();
         }
-        return Result.o(routeInterceptor.deleteRouteUser(user.getId()));
+        return Result.o(routeService.deleteRouteUser(user.getId()));
     }
 
 }

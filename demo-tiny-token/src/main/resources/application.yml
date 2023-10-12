@@ -33,5 +33,6 @@ tiny-token:
 logging:
   level:
     root: info
+    com.demo.mapper: trace
   file:
     name: /log/demo-tiny-token.log

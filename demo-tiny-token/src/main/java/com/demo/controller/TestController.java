@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <h1>测试Controller</h1>
+ * <h1>测试</h1>
  *
  * <p>
  * createDate 2023/08/11 11:15:46

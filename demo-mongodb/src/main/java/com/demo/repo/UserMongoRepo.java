@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
- * <h1>UserMongoRepo</h1>
+ * <h1>用户Mongo</h1>
  *
  * <p>
  * createDate 2021/03/27 19:34:51
