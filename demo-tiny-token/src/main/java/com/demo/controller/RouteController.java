@@ -1,15 +1,11 @@
 package com.demo.controller;
 
 import com.demo.base.ControllerBase;
-import com.demo.base.EntityBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
 import com.demo.service.RouteService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,7 +40,7 @@ public class RouteController extends ControllerBase {
     /**
      * 查询列表
      */
-    @PostMapping("findList")
+    @GetMapping("findList")
     public Result<List<RouteVo>> findList() {
         return Result.o(routeService.findList());
     }
@@ -52,7 +48,7 @@ public class RouteController extends ControllerBase {
     /**
      * 查询树
      */
-    @PostMapping("findTree")
+    @GetMapping("findTree")
     public Result<RouteVo> findTree() {
         return Result.o(routeService.findTree());
     }
@@ -60,7 +56,7 @@ public class RouteController extends ControllerBase {
     /**
      * 查询展开后的列表
      */
-    @PostMapping("findExpandedList")
+    @GetMapping("findExpandedList")
     public Result<RouteVo> findExpandedList() {
         return Result.o(routeService.findExpandedList());
     }
@@ -68,22 +64,21 @@ public class RouteController extends ControllerBase {
     /**
      * 删除
      */
-    @PostMapping("delete")
-    public Result<Boolean> delete(@RequestBody RouteVo route) {
-        if (existNull(route.getId(), route.getDeleteChildren())) {
-            return paramIsError();
-        }
-        if (Boolean.TRUE.equals(route.getDeleteChildren())) {
-            return Result.o(routeService.deleteWithChildren(route.getId()));
+    @DeleteMapping("delete")
+    public Result<Boolean> delete(long id, boolean deleteChildren) {
+        if (deleteChildren) {
+            // 删除自己和子节点
+            return Result.o(routeService.deleteAndChildren(id));
         } else {
-            return Result.o(routeService.deleteAndMoveChildren(route.getId()));
+            // 删除自己，不删除子节点，移动子节点到上一级
+            return Result.o(routeService.deleteAndMoveChildren(id));
         }
     }
 
     /**
      * 更新
      */
-    @PostMapping("update")
+    @PatchMapping("update")
     public Result<Boolean> update(@RequestBody RouteVo route) {
         if (isNull(route.getId()) && !allNull(route.getPath(), route.getName(), route.getSeq())) {
             return paramIsError();
@@ -94,17 +89,17 @@ public class RouteController extends ControllerBase {
     /**
      * 查询，通过UserId
      */
-    @PostMapping("findByUserId")
-    public Result<RouteVo> findByUserId(@RequestBody EntityBase route) {
-        return Result.o(routeService.findByUserId(route.getId()));
+    @GetMapping("findByUserId")
+    public Result<RouteVo> findByUserId(long id) {
+        return Result.o(routeService.findByUserId(id));
     }
 
     /**
      * 查询id，通过RoleId
      */
-    @PostMapping("findIdByRoleId")
-    public Result<List<Long>> findIdByRoleId(@RequestBody EntityBase route) {
-        return Result.o(routeService.findIdByRoleId(route.getId()));
+    @GetMapping("findIdByRoleId")
+    public Result<List<Long>> findIdByRoleId(long id) {
+        return Result.o(routeService.findIdByRoleId(id));
     }
 
     /**
@@ -126,7 +121,7 @@ public class RouteController extends ControllerBase {
     /**
      * 刷新
      */
-    @PostMapping("refresh")
+    @GetMapping("refresh")
     public Result<Long> refresh() {
         return Result.o(routeService.deleteRoute());
     }

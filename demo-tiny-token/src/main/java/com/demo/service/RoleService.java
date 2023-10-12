@@ -60,7 +60,7 @@ public class RoleService {
      * @return 是否成功
      */
     @Transactional
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         return userRoleDao.deleteByRoleId(id) && roleRouteDao.deleteByRoleId(id) && roleDao.delete(id);
     }
 
@@ -90,7 +90,7 @@ public class RoleService {
      * @param userId userId
      * @return List RoleVo
      */
-    public List<RoleVo> findByUserId(Long userId) {
+    public List<RoleVo> findByUserId(long userId) {
         return roleDao.findByUserId(userId);
     }
 
@@ -100,7 +100,7 @@ public class RoleService {
      * @param userId userId
      * @return List Long
      */
-    public List<Long> findIdByUserId(Long userId) {
+    public List<Long> findIdByUserId(long userId) {
         return roleDao.findIdByUserId(userId);
     }
 
@@ -110,7 +110,7 @@ public class RoleService {
      * @param userId userId
      * @return List RoleVo
      */
-    public List<RoleVo> findRoleAndRouteByUserId(Long userId) {
+    public List<RoleVo> findRoleAndRouteByUserId(long userId) {
         List<RoleVo> roles = roleDao.findByUserId(userId);
         for (RoleVo role : roles) {
             role.setRouteIds(routeDao.findIdByRoleId(role.getId()));
@@ -124,8 +124,18 @@ public class RoleService {
      * @param createId createId
      * @return List RoleVo
      */
-    public List<RoleVo> findByCreateId(Long createId) {
+    public List<RoleVo> findByCreateId(long createId) {
         return roleDao.findByCreateId(createId);
+    }
+
+    /**
+     * 查询id，通过createId
+     *
+     * @param createId createId
+     * @return List Long
+     */
+    public List<Long> findIdByCreateId(long createId) {
+        return roleDao.findIdByCreateId(createId);
     }
 
 }

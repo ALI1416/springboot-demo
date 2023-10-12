@@ -27,10 +27,10 @@ public interface RoleRouteMapper {
     /**
      * 删除，通过routeId
      *
-     * @param list routeId
+     * @param routeIdList routeId
      * @return 执行成功数量
      */
-    int deleteByRouteIdList(List<Long> list);
+    int deleteByRouteIdList(List<Long> routeIdList);
 
     /**
      * 删除，通过roleId
@@ -38,6 +38,6 @@ public interface RoleRouteMapper {
      * @param roleId roleId
      * @return 执行成功数量
      */
-    int deleteByRoleId(Long roleId);
+    int deleteByRoleId(long roleId);
 
 }

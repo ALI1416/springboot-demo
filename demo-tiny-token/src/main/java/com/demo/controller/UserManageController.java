@@ -2,17 +2,13 @@ package com.demo.controller;
 
 import cn.z.tinytoken.T4s;
 import com.demo.base.ControllerBase;
-import com.demo.base.EntityBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -57,7 +53,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 修改用户信息
      */
-    @PostMapping("update")
+    @PatchMapping("update")
     public Result<Boolean> update(@RequestBody UserVo user) {
         if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd())) {
             return paramIsError();
@@ -71,7 +67,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 查询全部用户
      */
-    @PostMapping("findAll")
+    @GetMapping("findAll")
     public Result<List<UserVo>> findAll() {
         return Result.o(userService.findAll());
     }
@@ -79,7 +75,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 修改用户的角色
      */
-    @PostMapping("updateRole")
+    @PatchMapping("updateRole")
     public Result<Boolean> updateRole(@RequestBody UserVo user) {
         if (existNull(user.getId(), user.getRoleIds()) || user.getRoleIds().isEmpty()) {
             return paramIsError();
@@ -90,12 +86,9 @@ public class UserManageController extends ControllerBase {
     /**
      * 刷新角色，通过UserId
      */
-    @PostMapping("refreshRole")
-    public Result<Long> refreshRole(@RequestBody EntityBase user) {
-        if (isNull(user.getId())) {
-            return paramIsError();
-        }
-        return Result.o(routeService.deleteRouteUser(user.getId()));
+    @GetMapping("refreshRole")
+    public Result<Long> refreshRole(long userId) {
+        return Result.o(routeService.deleteRouteUser(userId));
     }
 
 }

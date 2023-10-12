@@ -1,17 +1,14 @@
 package com.demo.controller;
 
 import com.demo.base.ControllerBase;
-import com.demo.entity.po.UserBak;
+import com.demo.entity.bak.UserBak;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.pojo.ResultBatch;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.UserService;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -71,7 +68,7 @@ public class UserController extends ControllerBase {
      * @param user id,updateId;至少一个account,pwd,name,gender,year,profile,comment
      * @return 是否成功
      */
-    @PostMapping("/update")
+    @PatchMapping("/update")
     public Result<Boolean> update(@RequestBody UserVo user) {
         return Result.o(userService.update(user));
     }
@@ -82,7 +79,7 @@ public class UserController extends ControllerBase {
      * @param user id,updateId
      * @return 是否成功
      */
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public Result<Boolean> delete(@RequestBody UserVo user) {
         return Result.o(userService.delete(user));
     }
@@ -93,7 +90,7 @@ public class UserController extends ControllerBase {
      * @param user id,updateId
      * @return 是否成功
      */
-    @PostMapping("/restore")
+    @PatchMapping("/restore")
     public Result<Boolean> restore(@RequestBody UserVo user) {
         return Result.o(userService.restore(user));
     }
@@ -104,7 +101,7 @@ public class UserController extends ControllerBase {
      * @param id id
      * @return 是否存在
      */
-    @PostMapping("/existId")
+    @GetMapping("/existId")
     public Result<Boolean> existId(long id) {
         return Result.o(userService.existId(id));
     }
@@ -115,7 +112,7 @@ public class UserController extends ControllerBase {
      * @param account account
      * @return 是否存在
      */
-    @PostMapping("/existAccount")
+    @GetMapping("/existAccount")
     public Result<Boolean> existAccount(String account) {
         return Result.o(userService.existAccount(account));
     }
@@ -126,7 +123,7 @@ public class UserController extends ControllerBase {
      * @param id id
      * @return UserVo
      */
-    @PostMapping("/findById")
+    @GetMapping("/findById")
     public Result<UserVo> findById(long id) {
         return Result.o(userService.findById(id));
     }
@@ -137,7 +134,7 @@ public class UserController extends ControllerBase {
      * @param account account
      * @return PageInfo UserVo
      */
-    @PostMapping("/findByAccount")
+    @GetMapping("/findByAccount")
     public Result<UserVo> findByAccount(String account) {
         return Result.o(userService.findByAccount(account));
     }
@@ -167,12 +164,12 @@ public class UserController extends ControllerBase {
     /**
      * 查询备份
      *
-     * @param user id
+     * @param userBak UserBak
      * @return PageInfo UserBak
      */
     @PostMapping("/findBak")
-    public Result<PageInfo<UserBak>> find(@RequestBody UserBak user) {
-        return Result.o(userService.findBak(user));
+    public Result<PageInfo<UserBak>> find(@RequestBody UserBak userBak) {
+        return Result.o(userService.findBak(userBak));
     }
 
 }

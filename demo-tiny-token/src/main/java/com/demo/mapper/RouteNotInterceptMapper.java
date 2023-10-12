@@ -37,7 +37,7 @@ public interface RouteNotInterceptMapper {
      * @param id id
      * @return 执行成功数量
      */
-    int delete(Long id);
+    int delete(long id);
 
     /**
      * 更新

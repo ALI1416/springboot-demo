@@ -7,11 +7,10 @@
   </sql>
 
   <insert id="insert" parameterType="RouteNotInterceptVo">
-    INSERT route_not_intercept (
+    INSERT
+    route_not_intercept(
     <include refid="col"/>
-    )
-    VALUES
-    (
+    )VALUES(
     #{id},#{path},#{name},#{isMatch},#{needLogin},#{seq}
     )
   </insert>
@@ -25,7 +24,8 @@
   </delete>
 
   <update id="update" parameterType="RouteNotInterceptVo">
-    UPDATE route_not_intercept
+    UPDATE
+    route_not_intercept
     <set>
       <if test="path != null">
         path = #{path},

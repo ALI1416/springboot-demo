@@ -67,7 +67,7 @@ public class UserDao extends DaoBase {
      * @param id id
      * @return UserVo
      */
-    public UserVo findById(Long id) {
+    public UserVo findById(long id) {
         UserVo user = new UserVo();
         user.setId(id);
         return userMapper.findByUniqueKey(user);
@@ -86,12 +86,22 @@ public class UserDao extends DaoBase {
     }
 
     /**
+     * 查询id，通过roleId
+     *
+     * @param roleId roleId
+     * @return List Long
+     */
+    public List<Long> findIdByRoleId(long roleId) {
+        return userMapper.findIdByRoleId(roleId);
+    }
+
+    /**
      * 查询，通过roleId
      *
      * @param roleId roleId
      * @return List UserVo
      */
-    public List<UserVo> findByRoleId(Long roleId) {
+    public List<UserVo> findByRoleId(long roleId) {
         return userMapper.findByRoleId(roleId);
     }
 

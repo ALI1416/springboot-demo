@@ -76,9 +76,9 @@ public class ResultBatch<T> extends ToStringBase {
     /**
      * 合并
      */
-    public static <T> ResultBatch<T> merge(ResultBatch<T>... resultBatchList) {
+    public static <T> ResultBatch<T> merge(ResultBatch<T>... list) {
         ResultBatch<T> result = new ResultBatch<>();
-        for (ResultBatch<T> resultBatch : resultBatchList) {
+        for (ResultBatch<T> resultBatch : list) {
             if (!resultBatch.ok) {
                 result.ok = false;
             }

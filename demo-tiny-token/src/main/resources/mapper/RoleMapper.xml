@@ -16,7 +16,8 @@
   </insert>
 
   <update id="update" parameterType="RoleVo">
-    UPDATE role
+    UPDATE
+    role
     <set>
       <if test="name != null">
         name = #{name},
@@ -50,7 +51,16 @@
     FROM
     role
     WHERE
-    create_id = #{id}
+    create_id = #{createId}
+  </select>
+
+  <select id="findIdByCreateId" parameterType="Long" resultType="Long">
+    SELECT
+    id
+    FROM
+    role
+    WHERE
+    create_id = #{createId}
   </select>
 
   <select id="findByUserId" parameterType="Long" resultType="RoleVo">

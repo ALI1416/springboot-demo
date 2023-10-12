@@ -28,7 +28,7 @@ public class RoleRouteService {
      * @return 是否成功
      */
     @Transactional
-    public boolean deleteByRoleId(Long roleId) {
+    public boolean deleteByRoleId(long roleId) {
         return roleRouteDao.deleteByRoleId(roleId);
     }
 

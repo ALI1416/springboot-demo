@@ -54,7 +54,7 @@ public class RouteNotInterceptDao extends DaoBase {
      * @param id id
      * @return 是否成功
      */
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         return tryif(() -> routeNotInterceptMapper.delete(id));
     }
 

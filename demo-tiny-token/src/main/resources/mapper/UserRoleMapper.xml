@@ -7,10 +7,10 @@
   </sql>
 
   <insert id="insertList" parameterType="UserRoleVo">
-    INSERT user_role (
+    INSERT
+    user_role(
     <include refid="col"/>
-    )
-    VALUES
+    )VALUES
     <foreach collection="list" separator="," item="item">
       (#{item.id},#{item.userId},#{item.roleId})
     </foreach>

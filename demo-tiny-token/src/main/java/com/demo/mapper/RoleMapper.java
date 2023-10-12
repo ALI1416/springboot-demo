@@ -38,7 +38,7 @@ public interface RoleMapper {
      * @param id id
      * @return 执行成功数量
      */
-    int delete(Long id);
+    int delete(long id);
 
     /**
      * 查询所有
@@ -53,7 +53,15 @@ public interface RoleMapper {
      * @param createId createId
      * @return List RoleVo
      */
-    List<RoleVo> findByCreateId(Long createId);
+    List<RoleVo> findByCreateId(long createId);
+
+    /**
+     * 查询id，通过createId
+     *
+     * @param createId createId
+     * @return List Long
+     */
+    List<Long> findIdByCreateId(long createId);
 
     /**
      * 查询，通过userId
@@ -61,7 +69,7 @@ public interface RoleMapper {
      * @param userId userId
      * @return List RoleVo
      */
-    List<RoleVo> findByUserId(Long userId);
+    List<RoleVo> findByUserId(long userId);
 
     /**
      * 查询id，通过userId
@@ -69,6 +77,6 @@ public interface RoleMapper {
      * @param userId userId
      * @return List Long
      */
-    List<Long> findIdByUserId(Long userId);
+    List<Long> findIdByUserId(long userId);
 
 }

@@ -96,8 +96,18 @@ public class UserService {
      * @param id id
      * @return UserVo
      */
-    public UserVo info(Long id) {
+    public UserVo info(long id) {
         return userDao.findById(id);
+    }
+
+    /**
+     * 查询id，通过roleId
+     *
+     * @param roleId roleId
+     * @return List Long
+     */
+    public List<Long> findIdByRoleId(long roleId) {
+        return userDao.findIdByRoleId(roleId);
     }
 
     /**
@@ -106,7 +116,7 @@ public class UserService {
      * @param roleId roleId
      * @return List UserVo
      */
-    public List<UserVo> findByRoleId(Long roleId) {
+    public List<UserVo> findByRoleId(long roleId) {
         return userDao.findByRoleId(roleId);
     }
 

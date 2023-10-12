@@ -95,6 +95,7 @@ INSERT INTO `route` VALUES (10004, 'changePwd', '修改密码', 3, 10000);
 INSERT INTO `route` VALUES (10005, 'update', '修改个人信息(除密码)', 4, 10000);
 INSERT INTO `route` VALUES (10006, 'findRoute', '获取路由', 5, 10000);
 INSERT INTO `route` VALUES (10007, 'findRoleAndRoute', '获取角色和路由', 6, 10000);
+INSERT INTO `route` VALUES (10008, 'avatar', '用户头像', 0, 10000);
 INSERT INTO `route` VALUES (20000, 'userManage', '用户管理', 1, 0);
 INSERT INTO `route` VALUES (20001, 'insert', '新增用户', 0, 20000);
 INSERT INTO `route` VALUES (20002, 'update', '修改用户信息', 1, 20000);
@@ -136,6 +137,7 @@ INSERT INTO `route` VALUES (60003, 'test3', '测试3', 2, 60000);
 INSERT INTO `route` VALUES (61000, 'test1', '测试1-1', 0, 60001);
 INSERT INTO `route` VALUES (61001, 'test2', '测试1-2', 1, 60001);
 INSERT INTO `route` VALUES (61100, 'test1', '测试1-1-1', 0, 61000);
+INSERT INTO `route` VALUES (70000, 'avatar', '查看用户头像', 0, 0);
 
 -- ----------------------------
 -- Table structure for route_not_intercept
@@ -145,22 +147,24 @@ CREATE TABLE `route_not_intercept`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路径',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
-  `is_match` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '是匹配模式',
-  `seq` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '顺序',
+  `is_match` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '匹配模式：1是0否',
+  `need_login` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '需要登录：1是0否',
+  `seq` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '顺序',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '路由-不拦截' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of route_not_intercept
 -- ----------------------------
-INSERT INTO `route_not_intercept` VALUES (0, '/user/login', '登录', 0, '0');
-INSERT INTO `route_not_intercept` VALUES (1, '/user/logout', '注销', 0, '1');
-INSERT INTO `route_not_intercept` VALUES (2, '/user/register', '注册', 0, '2');
-INSERT INTO `route_not_intercept` VALUES (3, '/user/changePwd', '修改密码', 0, '3');
-INSERT INTO `route_not_intercept` VALUES (4, '/user/update', '修改个人信息(除密码)', 0, '4');
-INSERT INTO `route_not_intercept` VALUES (5, '/user/findRoute', '获取路由', 0, '5');
-INSERT INTO `route_not_intercept` VALUES (6, '/user/findRoleAndRoute', '获取角色和路由', 0, '6');
-INSERT INTO `route_not_intercept` VALUES (7, '/user/avatar', '头像', 1, '0');
+INSERT INTO `route_not_intercept` VALUES (0, '/user/login', '登录', 0, 0, 0);
+INSERT INTO `route_not_intercept` VALUES (1, '/user/logout', '注销', 0, 0, 1);
+INSERT INTO `route_not_intercept` VALUES (2, '/user/register', '注册', 0, 0, 2);
+INSERT INTO `route_not_intercept` VALUES (3, '/user/changePwd', '修改密码', 0, 0, 3);
+INSERT INTO `route_not_intercept` VALUES (4, '/user/update', '修改个人信息(除密码)', 0, 1, 4);
+INSERT INTO `route_not_intercept` VALUES (5, '/user/findRoute', '获取路由', 0, 1, 5);
+INSERT INTO `route_not_intercept` VALUES (6, '/user/findRoleAndRoute', '获取角色和路由', 0, 1, 6);
+INSERT INTO `route_not_intercept` VALUES (7, '/user/avatar', '用户头像', 0, 1, 7);
+INSERT INTO `route_not_intercept` VALUES (8, '/avatar', '查看用户头像', 1, 0, 8);
 
 -- ----------------------------
 -- Table structure for user

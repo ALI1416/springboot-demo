@@ -80,7 +80,7 @@ public class RouteNotInterceptService {
      * @return 是否成功
      */
     @Transactional
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         return routeNotInterceptDao.delete(id);
     }
 

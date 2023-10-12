@@ -1,6 +1,6 @@
 package com.demo.mapper;
 
-import com.demo.entity.po.UserBak;
+import com.demo.entity.bak.UserBak;
 import com.demo.entity.vo.UserVo;
 
 import java.util.List;
@@ -84,9 +84,9 @@ public interface UserMapper {
     /**
      * 查询备份
      *
-     * @param id id
+     * @param refId refId
      * @return List UserBak
      */
-    List<UserBak> findBak(Long id);
+    List<UserBak> findBak(long refId);
 
 }

@@ -38,11 +38,11 @@ public class RoleRouteDao extends DaoBase {
     /**
      * 删除，通过routeId
      *
-     * @param list routeId
+     * @param routeIdList routeId
      * @return 是否成功
      */
-    public boolean deleteByRouteIdList(List<Long> list) {
-        return tryif3(() -> roleRouteMapper.deleteByRouteIdList(list));
+    public boolean deleteByRouteIdList(List<Long> routeIdList) {
+        return tryif3(() -> roleRouteMapper.deleteByRouteIdList(routeIdList));
     }
 
     /**
@@ -51,19 +51,19 @@ public class RoleRouteDao extends DaoBase {
      * @param roleId roleId
      * @return 是否成功
      */
-    public boolean deleteByRoleId(Long roleId) {
+    public boolean deleteByRoleId(long roleId) {
         return tryif3(() -> roleRouteMapper.deleteByRoleId(roleId));
     }
 
     /**
      * 删除，通过routeId
      *
-     * @param id routeId
+     * @param routeId routeId
      * @return 是否成功
      */
-    public boolean deleteByRouteId(Long id) {
+    public boolean deleteByRouteId(long routeId) {
         List<Long> list = new ArrayList<>(1);
-        list.add(id);
+        list.add(routeId);
         return deleteByRouteIdList(list);
     }
 

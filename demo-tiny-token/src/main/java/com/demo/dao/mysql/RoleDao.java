@@ -55,7 +55,7 @@ public class RoleDao extends DaoBase {
      * @param id id
      * @return 是否成功
      */
-    public boolean delete(Long id) {
+    public boolean delete(long id) {
         return tryif(() -> roleMapper.delete(id));
     }
 
@@ -74,8 +74,18 @@ public class RoleDao extends DaoBase {
      * @param createId createId
      * @return List RoleVo
      */
-    public List<RoleVo> findByCreateId(Long createId) {
+    public List<RoleVo> findByCreateId(long createId) {
         return roleMapper.findByCreateId(createId);
+    }
+
+    /**
+     * 查询id，通过createId
+     *
+     * @param createId createId
+     * @return List Long
+     */
+    public List<Long> findIdByCreateId(long createId) {
+        return roleMapper.findIdByCreateId(createId);
     }
 
     /**
@@ -84,7 +94,7 @@ public class RoleDao extends DaoBase {
      * @param userId userId
      * @return List RoleVo
      */
-    public List<RoleVo> findByUserId(Long userId) {
+    public List<RoleVo> findByUserId(long userId) {
         return roleMapper.findByUserId(userId);
     }
 
@@ -94,7 +104,7 @@ public class RoleDao extends DaoBase {
      * @param userId userId
      * @return List Long
      */
-    public List<Long> findIdByUserId(Long userId) {
+    public List<Long> findIdByUserId(long userId) {
         return roleMapper.findIdByUserId(userId);
     }
 

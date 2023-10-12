@@ -16,7 +16,8 @@
   </insert>
 
   <update id="update" parameterType="UserVo">
-    UPDATE user
+    UPDATE
+    user
     <set>
       <if test="account != null">
         account = #{account},
@@ -58,6 +59,16 @@
     </if>
   </select>
 
+  <select id="findIdByRoleId" parameterType="Long" resultType="Long">
+    SELECT
+    u.id
+    FROM
+    USER u
+    INNER JOIN user_role ur ON ur.user_id = u.id
+    WHERE
+    ur.role_id = #{roleId}
+  </select>
+
   <select id="findByRoleId" parameterType="Long" resultType="UserVo">
     SELECT
     u.id,
@@ -69,7 +80,7 @@
     USER u
     INNER JOIN user_role ur ON ur.user_id = u.id
     WHERE
-    ur.role_id = #{id}
+    ur.role_id = #{roleId}
   </select>
 
   <select id="findAll" resultType="UserVo">

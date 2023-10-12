@@ -16,7 +16,8 @@
   </insert>
 
   <update id="update" parameterType="RouteVo">
-    UPDATE route
+    UPDATE
+    route
     <set>
       <if test="path != null">
         path = #{path},
@@ -41,7 +42,7 @@
     route
     WHERE
     id IN
-    <foreach collection="list" open="(" close=")" separator="," item="id">
+    <foreach collection="idList" open="(" close=")" separator="," item="id">
       #{id}
     </foreach>
   </delete>
@@ -53,6 +54,17 @@
     route
     WHERE
     id = #{id}
+  </select>
+
+  <select id="findIdParentIdAndByParentId" parameterType="Long" resultType="RouteVo">
+    SELECT
+    id,parent_id
+    FROM
+    route
+    WHERE
+    parent_id = #{parentId}
+    ORDER BY
+    seq
   </select>
 
   <select id="findByParentId" parameterType="Long" resultType="RouteVo">

@@ -58,7 +58,7 @@ public class UserController extends ControllerBase {
     /**
      * 注销
      */
-    @PostMapping("logout")
+    @GetMapping("logout")
     public Result<Boolean> logout() {
         return Result.o(t4s.deleteByToken());
     }
@@ -85,7 +85,7 @@ public class UserController extends ControllerBase {
     /**
      * 修改密码
      */
-    @PostMapping("changePwd")
+    @PatchMapping("changePwd")
     public Result<Boolean> changePwd(@RequestBody UserVo user) {
         if (existNull(user.getPwd(), user.getNewPwd())) {
             return paramIsError();
@@ -101,7 +101,7 @@ public class UserController extends ControllerBase {
     /**
      * 修改个人信息(除密码)
      */
-    @PostMapping("update")
+    @PatchMapping("update")
     public Result<Boolean> update(@RequestBody UserVo user) {
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
@@ -114,7 +114,7 @@ public class UserController extends ControllerBase {
     /**
      * 获取路由
      */
-    @PostMapping("findRoute")
+    @GetMapping("findRoute")
     public Result<RouteVo> findRoute() {
         return Result.o(routeService.findByUserId(t4s.getId()));
     }
@@ -122,7 +122,7 @@ public class UserController extends ControllerBase {
     /**
      * 获取角色和路由
      */
-    @PostMapping("findRoleAndRoute")
+    @GetMapping("findRoleAndRoute")
     public Result<List<RoleVo>> findRoleAndRoute() {
         return Result.o(roleService.findRoleAndRouteByUserId(t4s.getId()));
     }

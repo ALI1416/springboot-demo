@@ -5,25 +5,25 @@
   <!-- 精确查询通用模板 -->
   <sql id="findExact">
     <if test="id != null">
-      and id=#{id}
+      and id = #{id}
     </if>
     <if test="isDelete != null">
-      and is_delete=#{isDelete}
+      and is_delete = #{isDelete}
     </if>
     <if test="createId != null">
-      and create_id=#{createId}
+      and create_id = #{createId}
     </if>
     <if test="createTime != null">
-      and create_time=#{createTime}
+      and create_time = #{createTime}
     </if>
     <if test="updateId != null">
-      and update_id=#{updateId}
+      and update_id = #{updateId}
     </if>
     <if test="updateTime != null">
-      and update_time=#{updateTime}
+      and update_time = #{updateTime}
     </if>
     <if test="version != null">
-      and version=#{version}
+      and version = #{version}
     </if>
   </sql>
 
@@ -65,16 +65,16 @@
   <!-- 查询通用模板 -->
   <sql id="find">
     <if test="id != null">
-      and id=#{id}
+      and id = #{id}
     </if>
     <if test="isDelete != null">
-      and is_delete=#{isDelete}
+      and is_delete = #{isDelete}
     </if>
     <if test="createId != null">
-      and create_id=#{createId}
+      and create_id = #{createId}
     </if>
     <if test="updateId != null">
-      and update_id=#{updateId}
+      and update_id = #{updateId}
     </if>
     <include refid="com.demo.mapper.BaseMapper.chooseField">
       <property name="field" value="create_time"/>

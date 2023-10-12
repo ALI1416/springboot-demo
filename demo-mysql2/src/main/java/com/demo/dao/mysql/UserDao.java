@@ -2,7 +2,7 @@ package com.demo.dao.mysql;
 
 import cn.z.id.Id;
 import com.demo.base.DaoBase;
-import com.demo.entity.po.UserBak;
+import com.demo.entity.bak.UserBak;
 import com.demo.entity.vo.UserVo;
 import com.demo.mapper.UserMapper;
 import lombok.AllArgsConstructor;
@@ -209,11 +209,11 @@ public class UserDao extends DaoBase {
     /**
      * 查询备份
      *
-     * @param id id
+     * @param refId refId
      * @return List UserBak
      */
-    public List<UserBak> findBak(Long id) {
-        return userMapper.findBak(id);
+    public List<UserBak> findBak(long refId) {
+        return userMapper.findBak(refId);
     }
 
 }

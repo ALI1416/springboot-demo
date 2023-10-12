@@ -30,7 +30,7 @@ public class UserRoleDao extends DaoBase {
      * @param userId userId
      * @return 是否成功
      */
-    public boolean deleteByUserId(Long userId) {
+    public boolean deleteByUserId(long userId) {
         return tryif3(() -> userRoleMapper.deleteByUserId(userId));
     }
 
@@ -40,7 +40,7 @@ public class UserRoleDao extends DaoBase {
      * @param roleId roleId
      * @return 是否成功
      */
-    public boolean deleteByRoleId(Long roleId) {
+    public boolean deleteByRoleId(long roleId) {
         return tryif3(() -> userRoleMapper.deleteByRoleId(roleId));
     }
 

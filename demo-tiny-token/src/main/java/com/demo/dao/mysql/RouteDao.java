@@ -56,7 +56,7 @@ public class RouteDao extends DaoBase {
      * @param id id
      * @return 是否成功
      */
-    public boolean deleteById(Long id) {
+    public boolean deleteById(long id) {
         List<Long> ids = new ArrayList<>();
         ids.add(id);
         return deleteByIdList(ids);
@@ -78,8 +78,18 @@ public class RouteDao extends DaoBase {
      * @param id id
      * @return RouteVo
      */
-    public RouteVo findById(Long id) {
+    public RouteVo findById(long id) {
         return routeMapper.findById(id);
+    }
+
+    /**
+     * 查询id和parentId，通过parentId
+     *
+     * @param parentId parentId
+     * @return List RouteVo
+     */
+    public List<RouteVo> findIdParentIdAndByParentId(long parentId) {
+        return routeMapper.findIdParentIdAndByParentId(parentId);
     }
 
     /**
@@ -88,7 +98,7 @@ public class RouteDao extends DaoBase {
      * @param parentId parentId
      * @return List RouteVo
      */
-    public List<RouteVo> findByParentId(Long parentId) {
+    public List<RouteVo> findByParentId(long parentId) {
         return routeMapper.findByParentId(parentId);
     }
 
@@ -107,7 +117,7 @@ public class RouteDao extends DaoBase {
      * @param roleId roleId
      * @return List RouteVo
      */
-    public List<RouteVo> findByRoleId(Long roleId) {
+    public List<RouteVo> findByRoleId(long roleId) {
         return routeMapper.findByRoleId(roleId);
     }
 
@@ -117,7 +127,7 @@ public class RouteDao extends DaoBase {
      * @param roleId roleId
      * @return List Long
      */
-    public List<Long> findIdByRoleId(Long roleId) {
+    public List<Long> findIdByRoleId(long roleId) {
         return routeMapper.findIdByRoleId(roleId);
     }
 

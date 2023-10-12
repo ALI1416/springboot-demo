@@ -49,12 +49,20 @@ public interface UserMapper {
     UserVo findByUniqueKey(UserVo user);
 
     /**
+     * 查询id，通过roleId
+     *
+     * @param roleId roleId
+     * @return List Long
+     */
+    List<Long> findIdByRoleId(long roleId);
+
+    /**
      * 查询，通过roleId
      *
      * @param roleId roleId
      * @return List UserVo
      */
-    List<UserVo> findByRoleId(Long roleId);
+    List<UserVo> findByRoleId(long roleId);
 
     /**
      * 查询全部

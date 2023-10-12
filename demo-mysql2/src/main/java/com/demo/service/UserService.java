@@ -2,7 +2,7 @@ package com.demo.service;
 
 import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
-import com.demo.entity.po.UserBak;
+import com.demo.entity.bak.UserBak;
 import com.demo.entity.pojo.ResultBatch;
 import com.demo.entity.vo.UserVo;
 import com.github.pagehelper.PageInfo;
@@ -62,7 +62,7 @@ public class UserService extends ServiceBase {
         for (UserVo user : users) {
             if (userDao.insertNotRollback(user) == 0) {
                 result.add(false, user, "失败");
-            }else{
+            } else {
                 result.add(true, user, "成功");
             }
         }
@@ -165,7 +165,7 @@ public class UserService extends ServiceBase {
     /**
      * 查询备份
      *
-     * @param user id
+     * @param user UserBak
      * @return PageInfo UserBak
      */
     public PageInfo<UserBak> findBak(UserBak user) {

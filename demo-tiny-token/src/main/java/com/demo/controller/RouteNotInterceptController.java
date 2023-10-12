@@ -1,15 +1,11 @@
 package com.demo.controller;
 
 import com.demo.base.ControllerBase;
-import com.demo.base.EntityBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.service.RouteNotInterceptService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,18 +41,15 @@ public class RouteNotInterceptController extends ControllerBase {
     /**
      * 删除
      */
-    @PostMapping("delete")
-    public Result<Boolean> delete(@RequestBody EntityBase routeNotIntercept) {
-        if (isNull(routeNotIntercept.getId())) {
-            return paramIsError();
-        }
-        return Result.o(routeNotInterceptService.delete(routeNotIntercept.getId()));
+    @DeleteMapping("delete")
+    public Result<Boolean> delete(long id) {
+        return Result.o(routeNotInterceptService.delete(id));
     }
 
     /**
      * 更新
      */
-    @PostMapping("update")
+    @PatchMapping("update")
     public Result<Boolean> update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
         if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
@@ -68,7 +61,7 @@ public class RouteNotInterceptController extends ControllerBase {
     /**
      * 查询所有
      */
-    @PostMapping("findAll")
+    @GetMapping("findAll")
     public Result<List<RouteNotInterceptVo>> findAll() {
         return Result.o(routeNotInterceptService.findAll());
     }
@@ -76,7 +69,7 @@ public class RouteNotInterceptController extends ControllerBase {
     /**
      * 刷新
      */
-    @PostMapping("refresh")
+    @GetMapping("refresh")
     public Result refresh() {
         routeNotInterceptService.refresh();
         return Result.o();

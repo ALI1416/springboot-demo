@@ -7,10 +7,10 @@
   </sql>
 
   <insert id="insertList" parameterType="RoleRouteVo">
-    INSERT role_route (
+    INSERT
+    role_route(
     <include refid="col"/>
-    )
-    VALUES
+    )VALUES
     <foreach collection="list" separator="," item="item">
       (#{item.id},#{item.roleId},#{item.routeId})
     </foreach>
@@ -22,8 +22,8 @@
     role_route
     WHERE
     route_id IN
-    <foreach collection="list" open="(" close=")" separator="," item="id">
-      #{id}
+    <foreach collection="routeIdList" open="(" close=")" separator="," item="routeId">
+      #{routeId}
     </foreach>
   </delete>
 

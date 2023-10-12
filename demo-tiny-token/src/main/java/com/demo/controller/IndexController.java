@@ -22,7 +22,7 @@ public class IndexController {
      * 查看用户头像
      */
     @GetMapping("avatar/{id}")
-    public Result<Long> avatar(@PathVariable Long id) {
+    public Result<Long> avatar(@PathVariable long id) {
         return Result.o(id);
     }
 

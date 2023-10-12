@@ -55,12 +55,12 @@ public class RouteService {
      * @return 是否成功
      */
     @Transactional
-    public boolean deleteWithChildren(Long id) {
+    public boolean deleteAndChildren(long id) {
         // 递归删除RoleRoute/Route的子节点
         try {
             deleteChildren(id);
         } catch (Exception e) {
-            log.error("删除自己和子节点失败！", e);
+            log.error("删除自己和子节点失败！id为{}", id);
             return false;
         }
         // 删除自己
@@ -72,7 +72,7 @@ public class RouteService {
      *
      * @param parentId parentId
      */
-    private void deleteChildren(Long parentId) throws Exception {
+    private void deleteChildren(long parentId) throws Exception {
         // 获取子节点
         List<RouteVo> children = routeDao.findByParentId(parentId);
         // 递归
@@ -87,7 +87,7 @@ public class RouteService {
         }
         // 删除子节点
         if (!(roleRouteDao.deleteByRouteIdList(ids) && routeDao.deleteByIdList(ids))) {
-            throw new Exception("递归删除RoleRoute/Route的子节点-删除子节点异常！");
+            throw new Exception();
         }
     }
 
@@ -98,16 +98,17 @@ public class RouteService {
      * @return 是否成功
      */
     @Transactional
-    public boolean deleteAndMoveChildren(Long id) {
+    public boolean deleteAndMoveChildren(long id) {
         // 获取自己
         RouteVo route = routeDao.findById(id);
         // 获取子节点
         List<RouteVo> children = routeDao.findByParentId(id);
+        Long parentId = route.getParentId();
         // 更改子节点的父节点
         for (RouteVo child : children) {
             RouteVo routeChild = new RouteVo();
             routeChild.setId(child.getId());
-            routeChild.setParentId(route.getParentId());
+            routeChild.setParentId(parentId);
             if (!routeDao.update(routeChild)) {
                 return false;
             }
@@ -148,7 +149,7 @@ public class RouteService {
     }
 
     /**
-     * 查询id，通过userId
+     * 查询路由id(不包含子路由)，通过userId
      *
      * @param userId userId
      */
@@ -156,7 +157,7 @@ public class RouteService {
         Set<Long> ids = new HashSet<>();
         // 获取用户拥有的角色id
         List<Long> roles = roleService.findIdByUserId(userId);
-        // 获取该角色id的所有路由id
+        // 获取该角色id的路由id
         for (Long role : roles) {
             ids.addAll(findIdByRoleId(role));
         }
@@ -164,53 +165,33 @@ public class RouteService {
     }
 
     /**
-     * 查询路由和子节点id，通过userId
+     * 查询路由和子路由id，通过userId
      *
      * @param userId userId
      */
-    public Set<Long> findChildrenIdByUserId(long userId) {
-        Set<Long> ids = new HashSet<>();
+    public Set<Long> findIdAndChildrenIdByUserId(long userId) {
+        Set<Long> routeIds = new HashSet<>();
         // 获取用户拥有的角色id
         List<Long> roles = roleService.findIdByUserId(userId);
-        // 获取该角色id的所有路由以及子节点id
+        // 获取该角色id的路由和子路由id
         for (Long role : roles) {
             for (Long routeId : findIdByRoleId(role)) {
-                ids.add(routeId);
-                ids.addAll(findChildrenById(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
+                routeIds.add(routeId);
+                routeIds.addAll(findChildrenById(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
             }
         }
-        return ids;
+        return routeIds;
     }
 
     /**
-     * 查询，通过id
-     *
-     * @param id id
-     * @return RouteVo
-     */
-    public RouteVo findById(Long id) {
-        return routeDao.findById(id);
-    }
-
-    /**
-     * 查询，通过父id
+     * 查询子节点，通过parentId
      *
      * @param parentId parentId
      * @return List RouteVo
      */
-    public List<RouteVo> findByParentId(Long parentId) {
-        return routeDao.findByParentId(parentId);
-    }
-
-    /**
-     * 查询子节点，通过id
-     *
-     * @param id id
-     * @return List RouteVo
-     */
-    public List<RouteVo> findChildrenById(Long id) {
+    private List<RouteVo> findChildrenById(long parentId) {
         List<RouteVo> routeList = new ArrayList<>();
-        findChildren(id, routeList);
+        findChildren(parentId, routeList);
         return routeList;
     }
 
@@ -220,14 +201,34 @@ public class RouteService {
      * @param parentId  parentId
      * @param routeList routeList
      */
-    private void findChildren(Long parentId, List<RouteVo> routeList) {
-        List<RouteVo> children = routeDao.findByParentId(parentId);
+    private void findChildren(long parentId, List<RouteVo> routeList) {
+        List<RouteVo> children = routeDao.findIdParentIdAndByParentId(parentId);
         routeList.addAll(children);
         for (RouteVo child : children) {
             if (child.getId() != 0) {
                 findChildren(child.getId(), routeList);
             }
         }
+    }
+
+    /**
+     * 查询，通过id
+     *
+     * @param id id
+     * @return RouteVo
+     */
+    public RouteVo findById(long id) {
+        return routeDao.findById(id);
+    }
+
+    /**
+     * 查询，通过父id
+     *
+     * @param parentId parentId
+     * @return List RouteVo
+     */
+    public List<RouteVo> findByParentId(long parentId) {
+        return routeDao.findByParentId(parentId);
     }
 
     /**
@@ -263,7 +264,7 @@ public class RouteService {
      * @param roleId roleId
      * @return List RouteVo
      */
-    public List<RouteVo> findByRoleId(Long roleId) {
+    public List<RouteVo> findByRoleId(long roleId) {
         return routeDao.findByRoleId(roleId);
     }
 
@@ -273,7 +274,7 @@ public class RouteService {
      * @param roleId roleId
      * @return List Long
      */
-    public List<Long> findIdByRoleId(Long roleId) {
+    public List<Long> findIdByRoleId(long roleId) {
         return routeDao.findIdByRoleId(roleId);
     }
 
@@ -294,7 +295,7 @@ public class RouteService {
      * @return 成功条数
      * @see #deleteRouteUser(List)
      */
-    public Long deleteRouteRole(Long id) {
+    public Long deleteRouteRole(long id) {
         return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
                 RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }
@@ -302,11 +303,11 @@ public class RouteService {
     /**
      * 删除Redis用户路由，通过用户id列表
      *
-     * @param ids 用户id列表
+     * @param userIdList userId
      */
-    public Long deleteRouteUser(List<Long> ids) {
+    public Long deleteRouteUser(List<Long> userIdList) {
         List<String> keys = new ArrayList<>();
-        for (Long id : ids) {
+        for (Long id : userIdList) {
             keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
             keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
         }
@@ -316,11 +317,11 @@ public class RouteService {
     /**
      * 删除Redis用户路由，通过用户id
      *
-     * @param id 用户id
+     * @param userId userId
      */
-    public Long deleteRouteUser(Long id) {
-        return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
-                RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+    public Long deleteRouteUser(long userId) {
+        return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+                RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }
 
 }
