@@ -19,6 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class IndexController {
 
     /**
+     * 首页
+     */
+    @GetMapping(value = {"", "/"})
+    public Result index() {
+        return Result.o();
+    }
+
+    /**
      * 查看用户头像
      */
     @GetMapping("avatar/{id}")

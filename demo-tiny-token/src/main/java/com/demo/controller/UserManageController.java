@@ -5,7 +5,6 @@ import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
-import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -29,10 +28,37 @@ public class UserManageController extends ControllerBase {
 
     private final T4s t4s;
     private final UserService userService;
-    private final RouteService routeService;
 
     /**
-     * 新增用户
+     * 注销id
+     */
+    @GetMapping("logoutById")
+    public Result<Long> logoutById(long id) {
+        // 只能管理自己创建的用户
+        if (!userService.findExistByIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(t4s.deleteById(id));
+    }
+
+    /**
+     * 注销token
+     */
+    @GetMapping("logoutByToken")
+    public Result<Boolean> logoutByToken(String token) {
+        // 只能管理自己创建的用户
+        Long id = t4s.getId(token);
+        if (id == null) {
+            return Result.e(ResultEnum.NOT_LOGIN);
+        }
+        if (!userService.findExistByIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(t4s.deleteByToken(token));
+    }
+
+    /**
+     * 新增
      */
     @PostMapping("insert")
     public Result<Long> insert(@RequestBody UserVo user) {
@@ -51,12 +77,16 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 修改用户信息
+     * 修改信息
      */
     @PatchMapping("update")
     public Result<Boolean> update(@RequestBody UserVo user) {
-        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd())) {
+        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
             return paramIsError();
+        }
+        // 只能管理自己创建的用户
+        if (!userService.findExistByIdAndCreateId(user.getId(), t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
@@ -65,30 +95,34 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 查询全部用户
+     * 查询，通过角色id
      */
-    @GetMapping("findAll")
-    public Result<List<UserVo>> findAll() {
-        return Result.o(userService.findAll());
+    @GetMapping("findByRoleId")
+    public Result<List<UserVo>> findByRoleId(long roleId) {
+        return Result.o(userService.findByRoleIdAndCreateId(roleId, t4s.getId()));
     }
 
     /**
-     * 修改用户的角色
+     * 查询全部
      */
-    @PatchMapping("updateRole")
+    @GetMapping("getAll")
+    public Result<List<UserVo>> getAll() {
+        return Result.o(userService.findByCreateId(t4s.getId()));
+    }
+
+    /**
+     * 修改角色
+     */
+    @PutMapping("updateRole")
     public Result<Boolean> updateRole(@RequestBody UserVo user) {
-        if (existNull(user.getId(), user.getRoleIds()) || user.getRoleIds().isEmpty()) {
+        if (existNull(user.getId(), user.getRoleIdList())) {
             return paramIsError();
         }
+        // 只能管理自己创建的用户
+        if (!userService.findExistByIdAndCreateId(user.getId(), t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
         return Result.o(userService.updateRole(user));
-    }
-
-    /**
-     * 刷新角色，通过UserId
-     */
-    @GetMapping("refreshRole")
-    public Result<Long> refreshRole(long userId) {
-        return Result.o(routeService.deleteRouteUser(userId));
     }
 
 }

@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80027
+ Source Server Version : 80029
  Source Host           : localhost:3306
- Source Schema         : demo-mysql
+ Source Schema         : demo
 
  Target Server Type    : MySQL
- Target Server Version : 80027
+ Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 06/04/2023 15:25:37
+ Date: 13/10/2023 10:35:08
 */
 
 SET NAMES utf8mb4;
@@ -34,6 +34,6 @@ CREATE TABLE `login_log_test`  (
   `ua_is_mobile` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '浏览器标识-是手机',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC COMMENT = '登录日志测试';
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志测试' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

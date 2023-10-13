@@ -1,5 +1,6 @@
 package com.demo.controller;
 
+import cn.z.id.Id;
 import com.demo.base.ControllerBase;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
@@ -40,24 +41,24 @@ public class RouteController extends ControllerBase {
     /**
      * 查询列表
      */
-    @GetMapping("findList")
-    public Result<List<RouteVo>> findList() {
+    @GetMapping("getList")
+    public Result<List<RouteVo>> getList() {
         return Result.o(routeService.findList());
     }
 
     /**
      * 查询树
      */
-    @GetMapping("findTree")
-    public Result<RouteVo> findTree() {
+    @GetMapping("getTree")
+    public Result<RouteVo> getTree() {
         return Result.o(routeService.findTree());
     }
 
     /**
      * 查询展开后的列表
      */
-    @GetMapping("findExpandedList")
-    public Result<RouteVo> findExpandedList() {
+    @GetMapping("fgetExpandedList")
+    public Result<RouteVo> getExpandedList() {
         return Result.o(routeService.findExpandedList());
     }
 
@@ -76,6 +77,23 @@ public class RouteController extends ControllerBase {
     }
 
     /**
+     * TODO 复制角色id到父id下
+     */
+    @GetMapping("copy")
+    public Result copy(long id, long parentId) {
+        RouteVo route = routeService.findById(id);
+        route.setParentId(parentId);
+        long newId = Id.next();
+        List<RouteVo> routeList = routeService.findByParentId(id);
+        for (RouteVo r : routeList) {
+            r.setId(Id.next());
+            r.setParentId(newId);
+        }
+        routeList.add(route);
+        return Result.o(routeService.insertList(routeList));
+    }
+
+    /**
      * 更新
      */
     @PatchMapping("update")
@@ -87,7 +105,7 @@ public class RouteController extends ControllerBase {
     }
 
     /**
-     * 查询，通过UserId
+     * 查询，通过用户id
      */
     @GetMapping("findByUserId")
     public Result<RouteVo> findByUserId(long id) {
@@ -95,27 +113,11 @@ public class RouteController extends ControllerBase {
     }
 
     /**
-     * 查询id，通过RoleId
+     * 查询id，通过角色id
      */
     @GetMapping("findIdByRoleId")
     public Result<List<Long>> findIdByRoleId(long id) {
         return Result.o(routeService.findIdByRoleId(id));
-    }
-
-    /**
-     * TODO 移动该节点
-     */
-    @PostMapping("move")
-    public Result move() {
-        return Result.o();
-    }
-
-    /**
-     * TODO 复制该节点
-     */
-    @PostMapping("copy")
-    public Result copy() {
-        return Result.o();
     }
 
     /**
@@ -124,6 +126,14 @@ public class RouteController extends ControllerBase {
     @GetMapping("refresh")
     public Result<Long> refresh() {
         return Result.o(routeService.deleteRoute());
+    }
+
+    /**
+     * 刷新，通过用户id
+     */
+    @GetMapping("refreshRoute")
+    public Result<Long> refreshRoute(long userId) {
+        return Result.o(routeService.deleteRouteUser(userId));
     }
 
 }

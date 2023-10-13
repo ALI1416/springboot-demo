@@ -49,27 +49,28 @@ public interface RouteMapper {
     RouteVo findById(long id);
 
     /**
-     * 查询id和parentId，通过parentId
+     * 查询
      *
-     * @param parentId parentId
+     * @param route RouteVo
      * @return List RouteVo
      */
-    List<RouteVo> findIdParentIdAndByParentId(long parentId);
+    List<RouteVo> find(RouteVo route);
 
     /**
-     * 查询，通过parentId
+     * 查询id
      *
-     * @param parentId parentId
-     * @return List RouteVo
+     * @param route RouteVo
+     * @return List Long
      */
-    List<RouteVo> findByParentId(long parentId);
+    List<Long> findId(RouteVo route);
 
     /**
-     * 查询所有
+     * 查询id和parentId
      *
+     * @param route RouteVo
      * @return List RouteVo
      */
-    List<RouteVo> findAll();
+    List<RouteVo> findIdAndParentId(RouteVo route);
 
     /**
      * 查询，通过roleId

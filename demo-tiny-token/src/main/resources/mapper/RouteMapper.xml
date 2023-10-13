@@ -52,37 +52,48 @@
     <include refid="col"/>
     FROM
     route
-    WHERE
     id = #{id}
   </select>
 
-  <select id="findIdParentIdAndByParentId" parameterType="Long" resultType="RouteVo">
+  <sql id="findTemp">
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="name != null">
+        AND name = #{name}
+      </if>
+      <if test="seq != null">
+        AND seq = #{seq}
+      </if>
+      <if test="createId != null">
+        AND create_id = #{createId}
+      </if>
+    </where>
+  </sql>
+
+  <select id="find" parameterType="Long" resultType="RouteVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    route
+    <include refid="findTemp"/>
+  </select>
+
+  <select id="findId" parameterType="Long" resultType="Long">
+    SELECT
+    id
+    FROM
+    route
+    <include refid="findTemp"/>
+  </select>
+
+  <select id="findIdAndParentId" parameterType="Long" resultType="RouteVo">
     SELECT
     id,parent_id
     FROM
     route
-    WHERE
-    parent_id = #{parentId}
-    ORDER BY
-    seq
-  </select>
-
-  <select id="findByParentId" parameterType="Long" resultType="RouteVo">
-    SELECT
-    <include refid="col"/>
-    FROM
-    route
-    WHERE
-    parent_id = #{parentId}
-    ORDER BY
-    seq
-  </select>
-
-  <select id="findAll" resultType="RouteVo">
-    SELECT
-    <include refid="col"/>
-    FROM
-    route
+    <include refid="findTemp"/>
   </select>
 
   <select id="findByRoleId" parameterType="Long" resultType="RouteVo">

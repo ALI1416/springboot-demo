@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.mapper.UserMapper">
 
   <sql id="col">
-    id,account,pwd,name,create_id
+    id,account,pwd,name,is_delete,create_id,create_time
   </sql>
 
   <insert id="insert" parameterType="UserVo">
@@ -11,7 +11,7 @@
     user(
     <include refid="col"/>
     )VALUES(
-    #{id},#{account},#{pwd},#{name},#{createId}
+    #{id},#{account},#{pwd},#{name},0,#{createId},NOW()
     )
   </insert>
 
@@ -28,21 +28,31 @@
       <if test="name != null">
         name = #{name},
       </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete},
+      </if>
     </set>
     WHERE
     id = #{id}
   </update>
 
+  <sql id="findUniqueTemp">
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="account != null">
+        account = #{account}
+      </if>
+    </where>
+  </sql>
+
   <select id="existUniqueKey" parameterType="UserVo" resultType="Boolean">
-    SELECT
-    IFNULL((SELECT true FROM user WHERE
-    <if test="id != null">
-      id = #{id}
-    </if>
-    <if test="account != null">
-      account = #{account}
-    </if>
-    ),false)
+    SELECT EXISTS(SELECT 1
+    FROM
+    user
+    <include refid="findUniqueTemp"/>
+    )
   </select>
 
   <select id="findByUniqueKey" parameterType="UserVo" resultType="UserVo">
@@ -50,20 +60,14 @@
     <include refid="col"/>
     FROM
     user
-    WHERE
-    <if test="id != null">
-      id = #{id}
-    </if>
-    <if test="account != null">
-      account = #{account}
-    </if>
+    <include refid="findUniqueTemp"/>
   </select>
 
   <select id="findIdByRoleId" parameterType="Long" resultType="Long">
     SELECT
     u.id
     FROM
-    USER u
+    user u
     INNER JOIN user_role ur ON ur.user_id = u.id
     WHERE
     ur.role_id = #{roleId}
@@ -75,19 +79,74 @@
     u.account,
     u.pwd,
     u.name,
-    u.create_id
+    u.is_delete,
+    u.create_id,
+    u.create_time
     FROM
-    USER u
+    user u
     INNER JOIN user_role ur ON ur.user_id = u.id
     WHERE
     ur.role_id = #{roleId}
   </select>
 
-  <select id="findAll" resultType="UserVo">
+  <select id="findByRoleIdAndCreateId" resultType="UserVo">
+    SELECT
+    u.id,
+    u.account,
+    u.pwd,
+    u.name,
+    u.is_delete,
+    u.create_id,
+    u.create_time
+    FROM
+    user u
+    INNER JOIN user_role ur ON ur.user_id = u.id
+    WHERE
+    ur.role_id = #{roleId}
+    AND
+    u.create_id = #{createId}
+  </select>
+
+  <sql id="findTemp">
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="account != null">
+        AND account = #{account}
+      </if>
+      <if test="pwd != null">
+        AND pwd = #{pwd}
+      </if>
+      <if test="name != null">
+        AND name = #{name}
+      </if>
+      <if test="isDelete != null">
+        AND is_delete = #{isDelete}
+      </if>
+      <if test="createId != null">
+        AND create_id = #{createId}
+      </if>
+      <if test="createTime != null">
+        AND create_time = #{createTime}
+      </if>
+    </where>
+  </sql>
+
+  <select id="find" parameterType="UserVo" resultType="UserVo">
     SELECT
     <include refid="col"/>
     FROM
     user
+    <include refid="findTemp"/>
+  </select>
+
+  <select id="findExist" parameterType="UserVo" resultType="Boolean">
+    SELECT EXISTS(SELECT 1
+    FROM
+    user
+    <include refid="findTemp"/>
+    )
   </select>
 
 </mapper>

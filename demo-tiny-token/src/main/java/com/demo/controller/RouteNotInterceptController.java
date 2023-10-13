@@ -31,7 +31,7 @@ public class RouteNotInterceptController extends ControllerBase {
      */
     @PostMapping("insert")
     public Result<Long> insert(@RequestBody RouteNotInterceptVo routeNotIntercept) {
-        if (existNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
+        if (existNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), //
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
@@ -51,7 +51,7 @@ public class RouteNotInterceptController extends ControllerBase {
      */
     @PatchMapping("update")
     public Result<Boolean> update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
-        if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
+        if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), //
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }

@@ -1,6 +1,7 @@
 package com.demo.mapper;
 
 import com.demo.entity.vo.UserVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface UserMapper {
     /**
      * 更新
      *
-     * @param user id(必须),account,pwd,name(至少1个)
+     * @param user id(必须),account,pwd,name,isDelete(至少1个)
      * @return 执行成功数量
      */
     int update(UserVo user);
@@ -65,10 +66,28 @@ public interface UserMapper {
     List<UserVo> findByRoleId(long roleId);
 
     /**
-     * 查询全部
+     * 查询，通过roleId和createId
      *
+     * @param roleId   roleId
+     * @param createId createId
      * @return List UserVo
      */
-    List<UserVo> findAll();
+    List<UserVo> findByRoleIdAndCreateId(@Param("roleId") long roleId, @Param("createId") long createId);
+
+    /**
+     * 查询
+     *
+     * @param user UserVo
+     * @return List UserVo
+     */
+    List<UserVo> find(UserVo user);
+
+    /**
+     * 查询是否存在
+     *
+     * @param user UserVo
+     * @return 是否存在
+     */
+    boolean findExist(UserVo user);
 
 }

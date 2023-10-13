@@ -46,11 +46,15 @@ public class UserController extends ControllerBase {
             return paramIsError();
         }
         UserVo u = userService.findByAccount(user.getAccount());
-        if (u != null && BCrypt.check(user.getPwd(), u.getPwd())) {
-            String token = t4s.setToken(u.getId());
-            u.setPwd(null);
-            u.setToken(token);
-            return Result.o(u);
+        if (u != null) {
+            if (u.getIsDelete() != 0) {
+                return Result.e(ResultEnum.ACCOUNT_DISABLE);
+            }
+            if (BCrypt.check(user.getPwd(), u.getPwd())) {
+                u.setPwd(null);
+                u.setToken(t4s.setToken(u.getId()));
+                return Result.o(u);
+            }
         }
         return Result.e(ResultEnum.LOGIN_FAIL);
     }
@@ -99,7 +103,7 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 修改个人信息(除密码)
+     * 修改信息(除密码、删除)
      */
     @PatchMapping("update")
     public Result<Boolean> update(@RequestBody UserVo user) {
@@ -108,27 +112,36 @@ public class UserController extends ControllerBase {
         }
         user.setId(t4s.getId());
         user.setPwd(null);
+        user.setIsDelete(null);
         return Result.o(userService.update(user));
     }
 
     /**
-     * 获取路由
+     * 角色
      */
-    @GetMapping("findRoute")
-    public Result<RouteVo> findRoute() {
+    @GetMapping("role")
+    public Result<List<RoleVo>> role() {
+        return Result.o(roleService.findByUserId(t4s.getId()));
+    }
+
+    /**
+     * 路由
+     */
+    @GetMapping("route")
+    public Result<RouteVo> route() {
         return Result.o(routeService.findByUserId(t4s.getId()));
     }
 
     /**
-     * 获取角色和路由
+     * 角色和路由
      */
-    @GetMapping("findRoleAndRoute")
-    public Result<List<RoleVo>> findRoleAndRoute() {
+    @GetMapping("roleAndRoute")
+    public Result<List<RoleVo>> roleAndRoute() {
         return Result.o(roleService.findRoleAndRouteByUserId(t4s.getId()));
     }
 
     /**
-     * 用户头像
+     * 头像
      */
     @GetMapping("avatar")
     public Result<Long> avatar() {

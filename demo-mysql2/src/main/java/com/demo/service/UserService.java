@@ -42,24 +42,24 @@ public class UserService extends ServiceBase {
     /**
      * 批量插入
      *
-     * @param users List UserVo account,pwd,createId
+     * @param userList account,pwd,createId
      * @return 是否成功
      */
     @Transactional
-    public boolean batchInsert(List<UserVo> users) {
-        return userDao.batchInsert(users);
+    public boolean batchInsert(List<UserVo> userList) {
+        return userDao.batchInsert(userList);
     }
 
     /**
      * 批量插入含详情
      *
-     * @param users List UserVo account,pwd,createId
+     * @param userList account,pwd,createId
      * @return ResultBatch UserVo
      */
     @Transactional
-    public ResultBatch<UserVo> batchInsertDetail(List<UserVo> users) {
+    public ResultBatch<UserVo> batchInsertDetail(List<UserVo> userList) {
         ResultBatch<UserVo> result = new ResultBatch<>();
-        for (UserVo user : users) {
+        for (UserVo user : userList) {
             if (userDao.insertNotRollback(user) == 0) {
                 result.add(false, user, "失败");
             } else {
@@ -72,7 +72,7 @@ public class UserService extends ServiceBase {
     /**
      * 更新
      *
-     * @param user id,updateId;至少一个account,pwd,name,gender,year,profile,comment
+     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
      * @return 是否成功
      */
     @Transactional

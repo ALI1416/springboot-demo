@@ -83,23 +83,27 @@ public class RouteDao extends DaoBase {
     }
 
     /**
-     * 查询id和parentId，通过parentId
+     * 查询id和父id，通过父id
      *
      * @param parentId parentId
      * @return List RouteVo
      */
-    public List<RouteVo> findIdParentIdAndByParentId(long parentId) {
-        return routeMapper.findIdParentIdAndByParentId(parentId);
+    public List<RouteVo> findIdAndParentIdByParentId(long parentId) {
+        RouteVo route = new RouteVo();
+        route.setParentId(parentId);
+        return routeMapper.findIdAndParentId(route);
     }
 
     /**
-     * 查询，通过parentId
+     * 查询，通过父id
      *
      * @param parentId parentId
      * @return List RouteVo
      */
     public List<RouteVo> findByParentId(long parentId) {
-        return routeMapper.findByParentId(parentId);
+        RouteVo route = new RouteVo();
+        route.setParentId(parentId);
+        return routeMapper.find(route);
     }
 
     /**
@@ -108,11 +112,11 @@ public class RouteDao extends DaoBase {
      * @return List RouteVo
      */
     public List<RouteVo> findAll() {
-        return routeMapper.findAll();
+        return routeMapper.find(null);
     }
 
     /**
-     * 查询，通过roleId
+     * 查询，通过角色id
      *
      * @param roleId roleId
      * @return List RouteVo
@@ -122,7 +126,7 @@ public class RouteDao extends DaoBase {
     }
 
     /**
-     * 查询id，通过roleId
+     * 查询id，通过角色id
      *
      * @param roleId roleId
      * @return List Long

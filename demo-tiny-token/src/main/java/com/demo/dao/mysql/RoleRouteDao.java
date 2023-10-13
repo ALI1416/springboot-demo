@@ -36,7 +36,7 @@ public class RoleRouteDao extends DaoBase {
     }
 
     /**
-     * 删除，通过routeId
+     * 删除，通过路由id
      *
      * @param routeIdList routeId
      * @return 是否成功
@@ -46,7 +46,7 @@ public class RoleRouteDao extends DaoBase {
     }
 
     /**
-     * 删除，通过roleId
+     * 删除，通过角色id
      *
      * @param roleId roleId
      * @return 是否成功
@@ -56,7 +56,7 @@ public class RoleRouteDao extends DaoBase {
     }
 
     /**
-     * 删除，通过routeId
+     * 删除，通过路由id
      *
      * @param routeId routeId
      * @return 是否成功

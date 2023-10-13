@@ -22,7 +22,7 @@ public class RoleRouteService {
     private final RoleRouteDao roleRouteDao;
 
     /**
-     * 删除，通过roleId
+     * 删除，通过角色id
      *
      * @param roleId roleId
      * @return 是否成功

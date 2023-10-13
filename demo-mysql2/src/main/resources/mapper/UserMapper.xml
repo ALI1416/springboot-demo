@@ -72,23 +72,30 @@
         is_delete = #{isDelete},
       </if>
       update_id = #{updateId},
-      update_time=CURRENT_TIMESTAMP,
-      version=version+1,
+      update_time = CURRENT_TIMESTAMP,
+      version = version + 1
     </set>
     WHERE
     id = #{id}
   </update>
 
+  <sql id="findUniqueTemp">
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="account != null">
+        account = #{account}
+      </if>
+    </where>
+  </sql>
+
   <select id="existUniqueKey" parameterType="UserVo" resultType="Boolean">
-    SELECT
-    IFNULL((SELECT true FROM user WHERE
-    <if test="id != null">
-      id = #{id}
-    </if>
-    <if test="account != null">
-      account = #{account}
-    </if>
-    ),false)
+    SELECT EXISTS(SELECT 1
+    FROM
+    user
+    <include refid="findUniqueTemp"/>
+    )
   </select>
 
   <select id="findByUniqueKey" parameterType="UserVo" resultType="UserVo">
@@ -96,13 +103,7 @@
     <include refid="col"/>
     FROM
     user
-    WHERE
-    <if test="id != null">
-      id = #{id}
-    </if>
-    <if test="account != null">
-      account = #{account}
-    </if>
+    <include refid="findUniqueTemp"/>
   </select>
 
   <select id="findExact" parameterType="UserVo" resultType="UserVo">
@@ -112,16 +113,16 @@
     user
     <where>
       <if test="account != null">
-        and account = #{account}
+        AND account = #{account}
       </if>
       <if test="name != null">
-        and name = #{name}
+        AND name = #{name}
       </if>
       <if test="gender != null">
-        and gender = #{gender}
+        AND gender = #{gender}
       </if>
       <if test="year != null">
-        and year = #{year}
+        AND year = #{year}
       </if>
       <include refid="com.demo.mapper.BaseMapper.findExact"/>
     </where>
@@ -133,16 +134,16 @@
     FROM
     user
     <where>
-      <if test="account != null and account != ''">
+      <if test="account != null AND account != ''">
         <bind name="account1" value="'%'+ account +'%'"/>
-        and account like #{account1}
+        AND account like #{account1}
       </if>
-      <if test="name != null and name != ''">
+      <if test="name != null AND name != ''">
         <bind name="name1" value="'%'+ name +'%'"/>
-        and name like #{name1}
+        AND name like #{name1}
       </if>
       <if test="gender != null">
-        and gender = #{gender}
+        AND gender = #{gender}
       </if>
       <include refid="com.demo.mapper.BaseMapper.chooseField">
         <property name="field" value="year"/>

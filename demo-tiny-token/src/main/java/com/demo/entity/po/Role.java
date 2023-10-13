@@ -26,9 +26,5 @@ public class Role extends EntityBase {
      * 顺序
      */
     private Integer seq;
-    /**
-     * 创建者id
-     */
-    private Long createId;
 
 }

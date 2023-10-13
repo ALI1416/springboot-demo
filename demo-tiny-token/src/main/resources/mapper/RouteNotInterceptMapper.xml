@@ -52,8 +52,6 @@
     <include refid="col"/>
     FROM
     route_not_intercept
-    ORDER BY
-    seq
   </select>
 
 </mapper>

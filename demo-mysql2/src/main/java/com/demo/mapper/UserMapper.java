@@ -44,23 +44,23 @@ public interface UserMapper {
     /**
      * 更新
      *
-     * @param user id,updateId;至少一个account,pwd,name,gender,year,profile,comment,isDelete
+     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
      * @return 执行成功数量
      */
     int update(UserVo user);
 
     /**
-     * 存在一个唯一键
+     * 是否存在唯一键
      *
-     * @param user 仅一个id,account
+     * @param user id,account(至少1个)
      * @return 是否存在
      */
     boolean existUniqueKey(UserVo user);
 
     /**
-     * 查询一个唯一键
+     * 是否存在唯一键
      *
-     * @param user 仅一个id,account
+     * @param user id,account(至少1个)
      * @return UserVo
      */
     UserVo findByUniqueKey(UserVo user);

@@ -21,7 +21,7 @@ public interface UserRoleMapper {
      * 删除，通过userId
      *
      * @param id userId
-     * @return 删除成功个数
+     * @return 执行成功数量
      */
     int deleteByUserId(long id);
 
@@ -29,7 +29,7 @@ public interface UserRoleMapper {
      * 删除，通过roleId
      *
      * @param id roleId
-     * @return 删除成功个数
+     * @return 执行成功数量
      */
     int deleteByRoleId(long id);
 
@@ -37,7 +37,7 @@ public interface UserRoleMapper {
      * 插入多个
      *
      * @param list id,userId,roleId
-     * @return 删除成功个数
+     * @return 执行成功数量
      */
     int insertList(List<UserRoleVo> list);
 

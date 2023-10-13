@@ -21,12 +21,12 @@ import java.util.List;
 public class RoleVo extends Role {
 
     /**
-     * 路由
+     * 路由列表
      */
-    private List<RouteVo> routes;
+    private List<RouteVo> routeList;
     /**
-     * 路由id
+     * 路由id列表
      */
-    private List<Long> routeIds;
+    private List<Long> routeIdList;
 
 }

@@ -38,29 +38,46 @@
     id = #{id}
   </delete>
 
-  <select id="findAll" resultType="RoleVo">
+  <sql id="findTemp">
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="name != null">
+        AND name = #{name}
+      </if>
+      <if test="seq != null">
+        AND seq = #{seq}
+      </if>
+      <if test="createId != null">
+        AND create_id = #{createId}
+      </if>
+    </where>
+  </sql>
+
+  <select id="find" parameterType="Long" resultType="RoleVo">
     SELECT
     <include refid="col"/>
     FROM
     role
+    <include refid="findTemp"/>
   </select>
 
-  <select id="findByCreateId" parameterType="Long" resultType="RoleVo">
+  <select id="findExist" parameterType="RoleVo" resultType="Boolean">
+    SELECT EXISTS(SELECT 1
+    FROM
+    role
+    <include refid="findTemp"/>
+    )
+  </select>
+
+  <select id="findById" parameterType="Long" resultType="RoleVo">
     SELECT
     <include refid="col"/>
     FROM
     role
     WHERE
-    create_id = #{createId}
-  </select>
-
-  <select id="findIdByCreateId" parameterType="Long" resultType="Long">
-    SELECT
-    id
-    FROM
-    role
-    WHERE
-    create_id = #{createId}
+    id = #{id}
   </select>
 
   <select id="findByUserId" parameterType="Long" resultType="RoleVo">

@@ -25,19 +25,19 @@ public class ControllerBase {
     /**
      * 是null对象
      *
-     * @param obj 对象
+     * @param object 对象
      */
-    public static boolean isNull(Object obj) {
-        return obj == null;
+    public static boolean isNull(Object object) {
+        return object == null;
     }
 
     /**
      * 存在null对象
      *
-     * @param objs 对象
+     * @param objects 多个对象
      */
-    public static boolean existNull(Object... objs) {
-        for (Object obj : objs) {
+    public static boolean existNull(Object... objects) {
+        for (Object obj : objects) {
             if (obj == null) {
                 return true;
             }
@@ -48,10 +48,10 @@ public class ControllerBase {
     /**
      * 都是null对象
      *
-     * @param objs 对象
+     * @param objects 多个对象
      */
-    public static boolean allNull(Object... objs) {
-        for (Object obj : objs) {
+    public static boolean allNull(Object... objects) {
+        for (Object obj : objects) {
             if (obj != null) {
                 return false;
             }
@@ -71,7 +71,7 @@ public class ControllerBase {
     /**
      * 存在空字符串
      *
-     * @param strings 字符串
+     * @param strings 多个字符串
      */
     public static boolean existEmpty(String... strings) {
         for (String string : strings) {
@@ -94,7 +94,7 @@ public class ControllerBase {
     /**
      * 存在空白字符串
      *
-     * @param strings 字符串
+     * @param strings 多个字符串
      */
     public static boolean existBlack(String... strings) {
         for (String string : strings) {

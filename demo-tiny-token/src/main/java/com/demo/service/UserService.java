@@ -53,7 +53,7 @@ public class UserService {
     }
 
     /**
-     * 查询通过account
+     * 查询通过账号
      *
      * @param account account
      * @return UserVo
@@ -79,7 +79,7 @@ public class UserService {
     /**
      * 修改用户信息
      *
-     * @param user id(必须),account,pwd,name(至少1个)
+     * @param user id(必须),account,pwd,name,isDelete(至少1个)
      * @return 是否成功
      */
     @Transactional
@@ -101,7 +101,7 @@ public class UserService {
     }
 
     /**
-     * 查询id，通过roleId
+     * 查询id，通过角色id
      *
      * @param roleId roleId
      * @return List Long
@@ -111,13 +111,45 @@ public class UserService {
     }
 
     /**
-     * 查询，通过roleId
+     * 查询，通过角色id
      *
      * @param roleId roleId
      * @return List UserVo
      */
     public List<UserVo> findByRoleId(long roleId) {
         return userDao.findByRoleId(roleId);
+    }
+
+    /**
+     * 查询，通过创建者id
+     *
+     * @param createId createId
+     * @return List UserVo
+     */
+    public List<UserVo> findByCreateId(long createId) {
+        return userDao.findByCreateId(createId);
+    }
+
+    /**
+     * 查询，通过角色id和创建者id
+     *
+     * @param roleId   roleId
+     * @param createId createId
+     * @return List UserVo
+     */
+    public List<UserVo> findByRoleIdAndCreateId(long roleId, long createId) {
+        return userDao.findByRoleIdAndCreateId(roleId, createId);
+    }
+
+    /**
+     * 查询id是否为创建者id创建的
+     *
+     * @param id       id
+     * @param createId createId
+     * @return 是否
+     */
+    public boolean findExistByIdAndCreateId(long id, long createId) {
+        return userDao.findExistByIdAndCreateId(id, createId);
     }
 
     /**
@@ -132,13 +164,13 @@ public class UserService {
     /**
      * 更新用户的角色
      *
-     * @param user id,roleIds
+     * @param user id,roleIdList
      * @return 是否成功
      */
     @Transactional
     public boolean updateRole(UserVo user) {
         List<UserRoleVo> userRoles = new ArrayList<>();
-        for (Long roleId : user.getRoleIds()) {
+        for (Long roleId : user.getRoleIdList()) {
             UserRoleVo u = new UserRoleVo();
             u.setId(Id.next());
             u.setUserId(user.getId());

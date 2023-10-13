@@ -85,7 +85,7 @@ public class RoleService {
     }
 
     /**
-     * 查询，通过userId
+     * 查询，通过用户id
      *
      * @param userId userId
      * @return List RoleVo
@@ -95,7 +95,17 @@ public class RoleService {
     }
 
     /**
-     * 查询id，通过userId
+     * 查询，通过id
+     *
+     * @param id id
+     * @return RoleVo
+     */
+    public RoleVo findById(long id) {
+        return roleDao.findById(id);
+    }
+
+    /**
+     * 查询id，通过用户id
      *
      * @param userId userId
      * @return List Long
@@ -105,37 +115,28 @@ public class RoleService {
     }
 
     /**
-     * 查询角色和路由，通过userId
+     * 查询角色和路由，通过用户id
      *
      * @param userId userId
      * @return List RoleVo
      */
     public List<RoleVo> findRoleAndRouteByUserId(long userId) {
-        List<RoleVo> roles = roleDao.findByUserId(userId);
-        for (RoleVo role : roles) {
-            role.setRouteIds(routeDao.findIdByRoleId(role.getId()));
+        List<RoleVo> roleList = roleDao.findByUserId(userId);
+        for (RoleVo role : roleList) {
+            role.setRouteList(routeDao.findByRoleId(role.getId()));
         }
-        return roles;
+        return roleList;
     }
 
     /**
-     * 查询，通过createId
+     * 查询是否存在，通过id和创建者id
      *
+     * @param id       id
      * @param createId createId
-     * @return List RoleVo
+     * @return 是否存在
      */
-    public List<RoleVo> findByCreateId(long createId) {
-        return roleDao.findByCreateId(createId);
-    }
-
-    /**
-     * 查询id，通过createId
-     *
-     * @param createId createId
-     * @return List Long
-     */
-    public List<Long> findIdByCreateId(long createId) {
-        return roleDao.findIdByCreateId(createId);
+    public boolean findExistByIdAndCreateId(long id, long createId) {
+        return roleDao.findExistByIdAndCreateId(id, createId);
     }
 
 }

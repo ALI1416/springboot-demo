@@ -1,9 +1,8 @@
-package com.demo.controller;
+package com.demo.controller.root;
 
 import cn.z.id.Id;
 import cn.z.tinytoken.T4s;
 import com.demo.base.ControllerBase;
-import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
@@ -21,34 +20,22 @@ import java.util.List;
  * <h1>角色</h1>
  *
  * <p>
- * createDate 2021/11/29 15:56:18
+ * createDate 2023/10/13 17:44:14
  * </p>
  *
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
 @RestController
-@RequestMapping("role")
+@RequestMapping("root/role")
 @AllArgsConstructor
-public class RoleController extends ControllerBase {
+public class RootRoleController extends ControllerBase {
 
     private final T4s t4s;
     private final RoleService roleService;
     private final RoleRouteService roleRouteService;
-    private final UserService userService;
     private final RouteService routeService;
-
-    /**
-     * 新增
-     */
-    @PostMapping("insert")
-    public Result<Long> insert(@RequestBody RoleVo role) {
-        if (existNull(role.getName(), role.getSeq())) {
-            return paramIsError();
-        }
-        role.setCreateId(t4s.getId());
-        return Result.o(roleService.insert(role));
-    }
+    private final UserService userService;
 
     /**
      * 更新
@@ -58,10 +45,6 @@ public class RoleController extends ControllerBase {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
-        // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(role.getId(), t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
         return Result.o(roleService.update(role));
     }
 
@@ -70,10 +53,6 @@ public class RoleController extends ControllerBase {
      */
     @DeleteMapping("delete")
     public Result<Boolean> delete(long id) {
-        // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
         return Result.o(roleService.delete(id));
     }
 
@@ -87,11 +66,6 @@ public class RoleController extends ControllerBase {
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
             return paramIsError();
         }
-        long userId = t4s.getId();
-        // 只能管理自己创建的角色 只能管理自己有权限的路由
-        if (!roleService.findExistByIdAndCreateId(roleId, userId) && !routeService.findIdAndChildrenIdByUserId(userId).containsAll(routeIdList)) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
         List<RoleRouteVo> roleRouteList = new ArrayList<>();
         for (Long id : routeIdList) {
             RoleRouteVo roleRoute = new RoleRouteVo();
@@ -104,14 +78,18 @@ public class RoleController extends ControllerBase {
     }
 
     /**
+     * 查询全部
+     */
+    @GetMapping("getAll")
+    public Result<List<RoleVo>> getAll() {
+        return Result.o(roleService.findAll());
+    }
+
+    /**
      * 获取用户id的角色
      */
     @GetMapping("findByUserId")
     public Result<List<RoleVo>> findByUserId(long userId) {
-        // 只能管理自己创建的用户
-        if (!userService.findExistByIdAndCreateId(userId, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
         return Result.o(roleService.findByUserId(userId));
     }
 
@@ -120,12 +98,9 @@ public class RoleController extends ControllerBase {
      */
     @GetMapping("copy")
     public Result<Long> copy(long id) {
-        // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
         RoleVo role = roleService.findById(id);
         role.setId(Id.next());
+        role.setCreateId(t4s.getId());
         return Result.o(roleService.insert(role));
     }
 
@@ -134,10 +109,6 @@ public class RoleController extends ControllerBase {
      */
     @GetMapping("refresh")
     public Result<Long> refresh(long id) {
-        // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
         return Result.o(routeService.deleteRouteRole(id) + routeService.deleteRouteUser(userService.findIdByRoleId(id)));
     }
 

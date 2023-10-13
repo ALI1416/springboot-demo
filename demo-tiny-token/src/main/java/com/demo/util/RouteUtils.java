@@ -41,7 +41,7 @@ public class RouteUtils {
         } else {
             return new RouteVo();
         }
-        // 按parentId分组
+        // 按父id分组
         Map<Long, List<RouteVo>> map = list.stream().collect(Collectors.groupingBy(RouteVo::getParentId));
         // 生成树
         makeTree(root, map);
@@ -52,7 +52,7 @@ public class RouteUtils {
      * 生成树
      *
      * @param tree 接收的树
-     * @param map  按parentId分组的map
+     * @param map  按父id分组的map
      */
     private static void makeTree(RouteVo tree, Map<Long, List<RouteVo>> map) {
         // 找到子节点

@@ -25,13 +25,9 @@ public class UserVo extends User {
      */
     private String newPwd;
     /**
-     * 角色
+     * 角色id列表
      */
-    private List<RoleVo> roles;
-    /**
-     * 角色id
-     */
-    private List<Long> roleIds;
+    private List<Long> roleIdList;
     /**
      * token
      */

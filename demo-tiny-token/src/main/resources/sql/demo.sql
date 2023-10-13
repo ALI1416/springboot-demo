@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 11/08/2023 15:08:09
+ Date: 13/10/2023 18:12:27
 */
 
 SET NAMES utf8mb4;
@@ -95,7 +95,7 @@ INSERT INTO `route` VALUES (10004, 'changePwd', '修改密码', 3, 10000);
 INSERT INTO `route` VALUES (10005, 'update', '修改个人信息(除密码)', 4, 10000);
 INSERT INTO `route` VALUES (10006, 'findRoute', '获取路由', 5, 10000);
 INSERT INTO `route` VALUES (10007, 'findRoleAndRoute', '获取角色和路由', 6, 10000);
-INSERT INTO `route` VALUES (10008, 'avatar', '用户头像', 0, 10000);
+INSERT INTO `route` VALUES (10008, 'avatar', '用户头像', 7, 10000);
 INSERT INTO `route` VALUES (20000, 'userManage', '用户管理', 1, 0);
 INSERT INTO `route` VALUES (20001, 'insert', '新增用户', 0, 20000);
 INSERT INTO `route` VALUES (20002, 'update', '修改用户信息', 1, 20000);
@@ -156,15 +156,17 @@ CREATE TABLE `route_not_intercept`  (
 -- ----------------------------
 -- Records of route_not_intercept
 -- ----------------------------
-INSERT INTO `route_not_intercept` VALUES (0, '/user/login', '登录', 0, 0, 0);
-INSERT INTO `route_not_intercept` VALUES (1, '/user/logout', '注销', 0, 0, 1);
-INSERT INTO `route_not_intercept` VALUES (2, '/user/register', '注册', 0, 0, 2);
-INSERT INTO `route_not_intercept` VALUES (3, '/user/changePwd', '修改密码', 0, 0, 3);
-INSERT INTO `route_not_intercept` VALUES (4, '/user/update', '修改个人信息(除密码)', 0, 1, 4);
-INSERT INTO `route_not_intercept` VALUES (5, '/user/findRoute', '获取路由', 0, 1, 5);
-INSERT INTO `route_not_intercept` VALUES (6, '/user/findRoleAndRoute', '获取角色和路由', 0, 1, 6);
-INSERT INTO `route_not_intercept` VALUES (7, '/user/avatar', '用户头像', 0, 1, 7);
-INSERT INTO `route_not_intercept` VALUES (8, '/avatar', '查看用户头像', 1, 0, 8);
+INSERT INTO `route_not_intercept` VALUES (0, '/', '首页', 0, 0, 0);
+INSERT INTO `route_not_intercept` VALUES (1, '/user/login', '登录', 0, 0, 1);
+INSERT INTO `route_not_intercept` VALUES (2, '/user/logout', '注销', 0, 1, 2);
+INSERT INTO `route_not_intercept` VALUES (3, '/user/register', '注册', 0, 0, 3);
+INSERT INTO `route_not_intercept` VALUES (4, '/user/changePwd', '修改密码', 0, 0, 4);
+INSERT INTO `route_not_intercept` VALUES (5, '/user/update', '修改个人信息(除密码)', 0, 1, 5);
+INSERT INTO `route_not_intercept` VALUES (6, '/user/role', '角色', 0, 1, 6);
+INSERT INTO `route_not_intercept` VALUES (7, '/user/route', '路由', 0, 1, 7);
+INSERT INTO `route_not_intercept` VALUES (8, '/user/roleAndRoute', '角色和路由', 0, 1, 8);
+INSERT INTO `route_not_intercept` VALUES (9, '/user/avatar', '头像', 0, 1, 9);
+INSERT INTO `route_not_intercept` VALUES (10, '/avatar', '查看用户头像', 1, 0, 10);
 
 -- ----------------------------
 -- Table structure for user
@@ -175,7 +177,9 @@ CREATE TABLE `user`  (
   `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '账号：唯一',
   `pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '昵称',
+  `is_delete` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '已删除',
   `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id，外键：user.id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `account`(`account` ASC) USING BTREE,
   INDEX `create_id`(`create_id` ASC) USING BTREE,
@@ -185,10 +189,11 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (0, 'root', '$2a$10$hJ1YXxTgb3xk65vf4mMtBOaS32ZeZOWlhqjlxAtgLpdL4R/H/e/9q', 'ROOT', 0);
-INSERT INTO `user` VALUES (1, 'admin', '$2a$10$qQRy7tw0h51FUAvwu866B.GUpbn11BjTDtl.cNvA2wpIkR1Kt85OG', 'ADMIN', 0);
-INSERT INTO `user` VALUES (2, 'admin2', '$2a$10$qQRy7tw0h51FUAvwu866B.GUpbn11BjTDtl.cNvA2wpIkR1Kt85OG', 'ADMIN2', 0);
-INSERT INTO `user` VALUES (3, 'guest', '$2a$10$VnA1/sMYptvwQufzyArI5e3giuQoEHAGux9aRScMrJB3WwPqU2sxG', 'GUEST', 0);
+INSERT INTO `user` VALUES (0, 'root', '$2a$10$hJ1YXxTgb3xk65vf4mMtBOaS32ZeZOWlhqjlxAtgLpdL4R/H/e/9q', 'ROOT', 0, 0, '2020-01-01 00:00:00');
+INSERT INTO `user` VALUES (1, 'admin', '$2a$10$qQRy7tw0h51FUAvwu866B.GUpbn11BjTDtl.cNvA2wpIkR1Kt85OG', 'ADMIN', 0, 0, '2020-01-01 00:00:00');
+INSERT INTO `user` VALUES (2, 'admin2', '$2a$10$qQRy7tw0h51FUAvwu866B.GUpbn11BjTDtl.cNvA2wpIkR1Kt85OG', 'ADMIN2', 0, 1, '2020-01-01 00:00:00');
+INSERT INTO `user` VALUES (3, 'guest', '$2a$10$VnA1/sMYptvwQufzyArI5e3giuQoEHAGux9aRScMrJB3WwPqU2sxG', 'GUEST', 0, 1, '2020-01-01 00:00:00');
+INSERT INTO `user` VALUES (4, 'test', '$2a$10$Ps8j5ygzWFj4zf09yjl73.5BJ2vrWVyKcMbs87vj5og5U4Z.dh4fC', 'TEST', 1, 1, '2020-01-01 00:00:00');
 
 -- ----------------------------
 -- Table structure for user_role

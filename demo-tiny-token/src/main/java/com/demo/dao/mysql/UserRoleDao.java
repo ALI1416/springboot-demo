@@ -25,7 +25,7 @@ public class UserRoleDao extends DaoBase {
     private final UserRoleMapper userRoleMapper;
 
     /**
-     * 删除，通过userId
+     * 删除，通过用户id
      *
      * @param userId userId
      * @return 是否成功
@@ -35,7 +35,7 @@ public class UserRoleDao extends DaoBase {
     }
 
     /**
-     * 删除，通过roleId
+     * 删除，通过角色id
      *
      * @param roleId roleId
      * @return 是否成功

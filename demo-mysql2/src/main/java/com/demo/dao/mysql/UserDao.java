@@ -69,15 +69,15 @@ public class UserDao extends DaoBase {
     /**
      * 批量插入
      *
-     * @param users List UserVo account,pwd,createId
+     * @param userList account,pwd,createId
      * @return 是否成功
      */
-    public boolean batchInsert(List<UserVo> users) {
-        for (UserVo user : users) {
+    public boolean batchInsert(List<UserVo> userList) {
+        for (UserVo user : userList) {
             user.setId(Id.next());
         }
-        if (tryif2(() -> userMapper.batchInsert(users) == users.size())) {
-            for (UserVo user : users) {
+        if (tryif2(() -> userMapper.batchInsert(userList) == userList.size())) {
+            for (UserVo user : userList) {
                 bak(user.getId());
             }
             return true;
@@ -89,7 +89,7 @@ public class UserDao extends DaoBase {
     /**
      * 更新
      *
-     * @param user id,updateId;至少一个account,pwd,name,gender,year,profile,comment
+     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
      * @return 是否成功
      */
     public boolean update(UserVo user) {

@@ -65,31 +65,35 @@ public class RoleDao extends DaoBase {
      * @return List RoleVo
      */
     public List<RoleVo> findAll() {
-        return roleMapper.findAll();
+        return roleMapper.find(null);
     }
 
     /**
-     * 查询，通过createId
+     * 查询是否存在，通过id和创建者id
      *
+     * @param id       id
      * @param createId createId
-     * @return List RoleVo
+     * @return 是否存在
      */
-    public List<RoleVo> findByCreateId(long createId) {
-        return roleMapper.findByCreateId(createId);
+    public boolean findExistByIdAndCreateId(long id, long createId) {
+        RoleVo role = new RoleVo();
+        role.setId(id);
+        role.setCreateId(createId);
+        return roleMapper.findExist(role);
     }
 
     /**
-     * 查询id，通过createId
+     * 查询，通过id
      *
-     * @param createId createId
-     * @return List Long
+     * @param id id
+     * @return RoleVo
      */
-    public List<Long> findIdByCreateId(long createId) {
-        return roleMapper.findIdByCreateId(createId);
+    public RoleVo findById(long id) {
+        return roleMapper.findById(id);
     }
 
     /**
-     * 查询，通过userId
+     * 查询，通过用户id
      *
      * @param userId userId
      * @return List RoleVo
@@ -99,7 +103,7 @@ public class RoleDao extends DaoBase {
     }
 
     /**
-     * 查询id，通过userId
+     * 查询id，通过用户id
      *
      * @param userId userId
      * @return List Long

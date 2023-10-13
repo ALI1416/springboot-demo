@@ -41,27 +41,28 @@ public interface RoleMapper {
     int delete(long id);
 
     /**
-     * 查询所有
+     * 查询
      *
+     * @param role RoleVo
      * @return List RoleVo
      */
-    List<RoleVo> findAll();
+    List<RoleVo> find(RoleVo role);
 
     /**
-     * 查询，通过createId
+     * 查询是否存在
      *
-     * @param createId createId
-     * @return List RoleVo
+     * @param role RoleVo
+     * @return 是否存在
      */
-    List<RoleVo> findByCreateId(long createId);
+    boolean findExist(RoleVo role);
 
     /**
-     * 查询id，通过createId
+     * 查询，通过id
      *
-     * @param createId createId
-     * @return List Long
+     * @param id id
+     * @return RoleVo
      */
-    List<Long> findIdByCreateId(long createId);
+    RoleVo findById(long id);
 
     /**
      * 查询，通过userId

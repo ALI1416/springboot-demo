@@ -5,25 +5,25 @@
   <!-- 精确查询通用模板 -->
   <sql id="findExact">
     <if test="id != null">
-      and id = #{id}
+      AND id = #{id}
     </if>
     <if test="isDelete != null">
-      and is_delete = #{isDelete}
+      AND is_delete = #{isDelete}
     </if>
     <if test="createId != null">
-      and create_id = #{createId}
+      AND create_id = #{createId}
     </if>
     <if test="createTime != null">
-      and create_time = #{createTime}
+      AND create_time = #{createTime}
     </if>
     <if test="updateId != null">
-      and update_id = #{updateId}
+      AND update_id = #{updateId}
     </if>
     <if test="updateTime != null">
-      and update_time = #{updateTime}
+      AND update_time = #{updateTime}
     </if>
     <if test="version != null">
-      and version = #{version}
+      AND version = #{version}
     </if>
   </sql>
 
@@ -31,33 +31,33 @@
   <sql id="chooseField">
     <choose>
       <!-- 不查询，SE同时为null -->
-      <when test="${alias} == null and ${alias}End == null"/>
+      <when test="${alias} == null AND ${alias}End == null"/>
       <!-- SE不同时为null。SE相等时，根据N是否为null或false决定==和!= -->
       <!-- ___(S=E)___ 等于-->
-      <when test="${alias} == ${alias}End and (${alias}Not == null or ${alias}Not == false)">
-        and ${field} = #{${alias}}
+      <when test="${alias} == ${alias}End AND (${alias}Not == null OR ${alias}Not == false)">
+        AND ${field} = #{${alias}}
       </when>
       <!-- _xxx(S=E)xxx_(N) 不等 -->
-      <when test="${alias} == ${alias}End and (${alias}Not != null or ${alias}Not == true)">
-        and ${field} != #{${alias}}
+      <when test="${alias} == ${alias}End AND (${alias}Not != null OR ${alias}Not == true)">
+        AND ${field} != #{${alias}}
       </when>
       <!-- SE有一个为null，N无效。根据SE是否为null<和> -->
       <!-- _xxx(E)___ 小于 -->
       <when test="${alias} == null">
-        and ${field} &lt;= #{${alias}End}
+        AND ${field} &lt;= #{${alias}End}
       </when>
       <!-- ___(S)xxx_ 大于 -->
       <when test="${alias}End == null">
-        and ${field} &gt;= #{${alias}}
+        AND ${field} &gt;= #{${alias}}
       </when>
       <!-- SE既不同时为null也不相等。根据N是否为null或false决定between和not between -->
       <!-- ___(S)xxx(E)___ 在...与...之间 -->
-      <when test="${alias}Not == null or ${alias}Not == false">
-        and ${field} between #{${alias}} and #{${alias}End}
+      <when test="${alias}Not == null OR ${alias}Not == false">
+        AND ${field} BETWEEN #{${alias}} AND #{${alias}End}
       </when>
       <!-- _xxx(S)___(E)xxx_(N) 不在...与...之间 -->
-      <when test="${alias}Not != null or ${alias}Not == true">
-        and ${field} not between #{${alias}} and #{${alias}End}
+      <when test="${alias}Not != null OR ${alias}Not == true">
+        AND ${field} NOT BETWEEN #{${alias}} AND #{${alias}End}
       </when>
     </choose>
   </sql>
@@ -65,16 +65,16 @@
   <!-- 查询通用模板 -->
   <sql id="find">
     <if test="id != null">
-      and id = #{id}
+      AND id = #{id}
     </if>
     <if test="isDelete != null">
-      and is_delete = #{isDelete}
+      AND is_delete = #{isDelete}
     </if>
     <if test="createId != null">
-      and create_id = #{createId}
+      AND create_id = #{createId}
     </if>
     <if test="updateId != null">
-      and update_id = #{updateId}
+      AND update_id = #{updateId}
     </if>
     <include refid="com.demo.mapper.BaseMapper.chooseField">
       <property name="field" value="create_time"/>

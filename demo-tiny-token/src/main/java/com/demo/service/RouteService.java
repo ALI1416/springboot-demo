@@ -49,6 +49,17 @@ public class RouteService {
     }
 
     /**
+     * 插入多个
+     *
+     * @param list id,path,name,seq,parentId
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean insertList(List<RouteVo> list) {
+        return true;
+    }
+
+    /**
      * 删除自己和子节点
      *
      * @param id id
@@ -130,7 +141,7 @@ public class RouteService {
     }
 
     /**
-     * 查询，通过userId
+     * 查询，通过用户id
      *
      * @param userId userId
      * @return RouteVo
@@ -149,7 +160,7 @@ public class RouteService {
     }
 
     /**
-     * 查询路由id(不包含子路由)，通过userId
+     * 查询路由id(不包含子路由)，通过用户id
      *
      * @param userId userId
      */
@@ -165,26 +176,26 @@ public class RouteService {
     }
 
     /**
-     * 查询路由和子路由id，通过userId
+     * 查询路由和子路由id，通过用户id
      *
      * @param userId userId
      */
     public Set<Long> findIdAndChildrenIdByUserId(long userId) {
-        Set<Long> routeIds = new HashSet<>();
+        Set<Long> routeIdList = new HashSet<>();
         // 获取用户拥有的角色id
-        List<Long> roles = roleService.findIdByUserId(userId);
+        List<Long> roleList = roleService.findIdByUserId(userId);
         // 获取该角色id的路由和子路由id
-        for (Long role : roles) {
+        for (Long role : roleList) {
             for (Long routeId : findIdByRoleId(role)) {
-                routeIds.add(routeId);
-                routeIds.addAll(findChildrenById(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
+                routeIdList.add(routeId);
+                routeIdList.addAll(findChildrenById(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
             }
         }
-        return routeIds;
+        return routeIdList;
     }
 
     /**
-     * 查询子节点，通过parentId
+     * 查询子节点，通过父id
      *
      * @param parentId parentId
      * @return List RouteVo
@@ -196,13 +207,13 @@ public class RouteService {
     }
 
     /**
-     * 查询子节点，通过parentId
+     * 查询子节点，通过父id
      *
      * @param parentId  parentId
      * @param routeList routeList
      */
     private void findChildren(long parentId, List<RouteVo> routeList) {
-        List<RouteVo> children = routeDao.findIdParentIdAndByParentId(parentId);
+        List<RouteVo> children = routeDao.findIdAndParentIdByParentId(parentId);
         routeList.addAll(children);
         for (RouteVo child : children) {
             if (child.getId() != 0) {
@@ -259,7 +270,7 @@ public class RouteService {
     }
 
     /**
-     * 查询，通过roleId
+     * 查询，通过角色id
      *
      * @param roleId roleId
      * @return List RouteVo
@@ -269,7 +280,7 @@ public class RouteService {
     }
 
     /**
-     * 查询id，通过roleId
+     * 查询id，通过角色id
      *
      * @param roleId roleId
      * @return List Long
@@ -291,13 +302,13 @@ public class RouteService {
      * 删除Redis角色路由，通过角色id<br>
      * 请手动查询该角色下的所有用户并删除用户路由
      *
-     * @param id 角色id
+     * @param roleId roleId
      * @return 成功条数
      * @see #deleteRouteUser(List)
      */
-    public Long deleteRouteRole(long id) {
-        return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX, //
-                RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+    public Long deleteRouteRole(long roleId) {
+        return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+                RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }
 
     /**

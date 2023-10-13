@@ -42,7 +42,7 @@ public class UserDao extends DaoBase {
     /**
      * 更新
      *
-     * @param user id(必须),account,pwd,name(至少1个)
+     * @param user id(必须),account,pwd,name,isDelete(至少1个)
      * @return 是否成功
      */
     public boolean update(UserVo user) {
@@ -50,7 +50,7 @@ public class UserDao extends DaoBase {
     }
 
     /**
-     * 是否存在account
+     * 是否存在账号
      *
      * @param account account
      * @return 是否存在
@@ -74,7 +74,7 @@ public class UserDao extends DaoBase {
     }
 
     /**
-     * 查询通过account
+     * 查询通过账号
      *
      * @param account account
      * @return UserVo
@@ -86,7 +86,7 @@ public class UserDao extends DaoBase {
     }
 
     /**
-     * 查询id，通过roleId
+     * 查询id，通过角色id
      *
      * @param roleId roleId
      * @return List Long
@@ -96,7 +96,7 @@ public class UserDao extends DaoBase {
     }
 
     /**
-     * 查询，通过roleId
+     * 查询，通过角色id
      *
      * @param roleId roleId
      * @return List UserVo
@@ -106,12 +106,49 @@ public class UserDao extends DaoBase {
     }
 
     /**
+     * 查询，通过角色id和创建者id
+     *
+     * @param roleId   roleId
+     * @param createId createId
+     * @return List UserVo
+     */
+    public List<UserVo> findByRoleIdAndCreateId(long roleId, long createId) {
+        return userMapper.findByRoleIdAndCreateId(roleId, createId);
+    }
+
+    /**
+     * 查询，通过创建者id
+     *
+     * @param createId createId
+     * @return List UserVo
+     */
+    public List<UserVo> findByCreateId(long createId) {
+        UserVo user = new UserVo();
+        user.setCreateId(createId);
+        return userMapper.find(user);
+    }
+
+    /**
+     * 查询是否存在，通过id和创建者id
+     *
+     * @param id       id
+     * @param createId createId
+     * @return 是否存在
+     */
+    public boolean findExistByIdAndCreateId(long id, long createId) {
+        UserVo user = new UserVo();
+        user.setId(id);
+        user.setCreateId(createId);
+        return userMapper.findExist(user);
+    }
+
+    /**
      * 查询全部
      *
      * @return List UserVo
      */
     public List<UserVo> findAll() {
-        return userMapper.findAll();
+        return userMapper.find(null);
     }
 
 }

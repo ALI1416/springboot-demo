@@ -43,29 +43,29 @@ public class UserController extends ControllerBase {
     /**
      * 批量插入
      *
-     * @param users List account,pwd,createId
+     * @param userList List account,pwd,createId
      * @return 是否成功
      */
     @PostMapping("/batchInsert")
-    public Result<Boolean> batchInsert(@RequestBody List<UserVo> users) {
-        return Result.o(userService.batchInsert(users));
+    public Result<Boolean> batchInsert(@RequestBody List<UserVo> userList) {
+        return Result.o(userService.batchInsert(userList));
     }
 
     /**
      * 批量插入含详情
      *
-     * @param users List account,pwd,createId
+     * @param userList List account,pwd,createId
      * @return ResultBatch UserVo
      */
     @PostMapping("/batchInsertDetail")
-    public Result<ResultBatch<UserVo>> batchInsertDetail(@RequestBody List<UserVo> users) {
-        return Result.o(userService.batchInsertDetail(users));
+    public Result<ResultBatch<UserVo>> batchInsertDetail(@RequestBody List<UserVo> userList) {
+        return Result.o(userService.batchInsertDetail(userList));
     }
 
     /**
      * 更新
      *
-     * @param user id,updateId;至少一个account,pwd,name,gender,year,profile,comment
+     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
      * @return 是否成功
      */
     @PatchMapping("/update")
@@ -132,7 +132,7 @@ public class UserController extends ControllerBase {
      * 查询通过account
      *
      * @param account account
-     * @return PageInfo UserVo
+     * @return UserVo
      */
     @GetMapping("/findByAccount")
     public Result<UserVo> findByAccount(String account) {
