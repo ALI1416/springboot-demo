@@ -32,7 +32,7 @@ public class RoleRouteDao extends DaoBase {
      * @return 是否成功
      */
     public boolean insertList(List<RoleRouteVo> list) {
-        return tryif2(() -> roleRouteMapper.insertList(list) == list.size());
+        return tryif(() -> roleRouteMapper.insertList(list) == list.size());
     }
 
     /**
@@ -42,7 +42,7 @@ public class RoleRouteDao extends DaoBase {
      * @return 是否成功
      */
     public boolean deleteByRouteIdList(List<Long> routeIdList) {
-        return tryif3(() -> roleRouteMapper.deleteByRouteIdList(routeIdList));
+        return tryif(() -> roleRouteMapper.deleteByRouteIdList(routeIdList));
     }
 
     /**
@@ -52,7 +52,7 @@ public class RoleRouteDao extends DaoBase {
      * @return 是否成功
      */
     public boolean deleteByRoleId(long roleId) {
-        return tryif3(() -> roleRouteMapper.deleteByRoleId(roleId));
+        return tryif(() -> roleRouteMapper.deleteByRoleId(roleId));
     }
 
     /**

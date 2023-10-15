@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Transient;
 import java.sql.Timestamp;
 
 /**
- * <h1>Mongo实体层基类</h1>
+ * <h1>MongoDB实体层基类</h1>
  *
  * <p>
  * createDate 2021/11/18 13:32:47

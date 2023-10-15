@@ -1,9 +1,8 @@
 package com.demo.base;
 
 import com.alibaba.fastjson2.util.DateUtils;
-import com.demo.entity.pojo.ParamsQuery;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import com.demo.entity.pojo.PageInfo;
+import com.demo.entity.pojo.ParamQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -31,31 +30,26 @@ public class DaoBase {
      * @param <T>      数据类型
      * @param template MongoTemplate
      * @param clazz    T.class
-     * @param criteria 查询
-     * @param pageable 分页器
-     * @return Page
+     * @param criteria Criteria
+     * @param pageable Pageable
+     * @return PageInfo
      */
-    public static <T> Page<T> find(MongoTemplate template, Class<T> clazz, Criteria criteria, Pageable pageable) {
+    public static <T> PageInfo<T> find(MongoTemplate template, Class<T> clazz, Criteria criteria, Pageable pageable) {
         Query query = Query.query(criteria);
-        long count = template.count(query, clazz);
-        return new PageImpl<>( //
-                template.find(query.with(pageable), clazz), // 查询
-                pageable, // 分页
-                count // 总数
-        );
+        return new PageInfo<>(template.find(query.with(pageable), clazz), pageable, template.count(query, clazz));
     }
 
     /**
      * 构建查询参数
      *
      * @param criteria Criteria
-     * @param list     List ParamsQuery
+     * @param list     List ParamQuery
      */
-    public static void buildParamsQuery(Criteria criteria, List<ParamsQuery> list) {
+    public static void buildParamQuery(Criteria criteria, List<ParamQuery> list) {
         if (list == null || list.isEmpty()) {
             return;
         }
-        for (ParamsQuery query : list) {
+        for (ParamQuery query : list) {
             buildCriteria(criteria, query.getOperator(), query.getField(), //
                     conversionType(query.getType(), query.getValue(), query.getValue2()));
         }
@@ -70,7 +64,7 @@ public class DaoBase {
      * @return 值对象数组
      */
     private static Object[] conversionType(String type, String value, String value2) {
-        Object[] objects = new Object[2];
+        Object[] objectArray = new Object[2];
         if (value == null) {
             return new Object[0];
         }
@@ -80,42 +74,42 @@ public class DaoBase {
         }
         switch (type) {
             case "int": {
-                objects[0] = Integer.parseInt(value);
+                objectArray[0] = Integer.parseInt(value);
                 if (value2 != null) {
-                    objects[1] = Integer.parseInt(value2);
+                    objectArray[1] = Integer.parseInt(value2);
                 }
                 break;
             }
             case "long": {
-                objects[0] = Long.parseLong(value);
+                objectArray[0] = Long.parseLong(value);
                 if (value2 != null) {
-                    objects[1] = Long.parseLong(value2);
+                    objectArray[1] = Long.parseLong(value2);
                 }
                 break;
             }
             case "boolean": {
-                objects[0] = Boolean.parseBoolean(value);
+                objectArray[0] = Boolean.parseBoolean(value);
                 if (value2 != null) {
-                    objects[1] = Boolean.parseBoolean(value2);
+                    objectArray[1] = Boolean.parseBoolean(value2);
                 }
                 break;
             }
             case "timestamp": {
-                objects[0] = new Timestamp(DateUtils.parseMillis(value));
+                objectArray[0] = new Timestamp(DateUtils.parseMillis(value));
                 if (value2 != null) {
-                    objects[1] = new Timestamp(DateUtils.parseMillis(value2));
+                    objectArray[1] = new Timestamp(DateUtils.parseMillis(value2));
                 }
                 break;
             }
             case "string":
             default: {
-                objects[0] = value;
+                objectArray[0] = value;
                 if (value2 != null) {
-                    objects[1] = value2;
+                    objectArray[1] = value2;
                 }
             }
         }
-        return objects;
+        return objectArray;
     }
 
     /**

@@ -38,6 +38,7 @@
     <module>demo-mqtt-cluster</module>
     <module>demo-mysql</module>
     <module>demo-mysql2</module>
+    <module>demo-mysql3</module>
     <module>demo-rabbitmq</module>
     <module>demo-redis</module>
     <module>demo-tiny-task</module>

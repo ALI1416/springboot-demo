@@ -76,7 +76,7 @@ public class UserDao extends DaoBase {
         for (UserVo user : userList) {
             user.setId(Id.next());
         }
-        if (tryif2(() -> userMapper.batchInsert(userList) == userList.size())) {
+        if (tryif(() -> userMapper.batchInsert(userList) == userList.size())) {
             for (UserVo user : userList) {
                 bak(user.getId());
             }

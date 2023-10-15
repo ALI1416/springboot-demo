@@ -28,6 +28,10 @@
       <artifactId>easyexcel</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

@@ -3,11 +3,12 @@ package com.demo.service;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.mongo.UserMongo;
+import com.demo.entity.pojo.PageInfo;
+import com.demo.entity.pojo.PageRequestFix;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -224,9 +225,9 @@ public class UserMongoService extends ServiceBase {
      * 查询所有
      *
      * @param pageRequest PageRequest
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findList(PageRequest pageRequest) {
+    public PageInfo<UserMongo> findList(PageRequest pageRequest) {
         return userMongoDao.findPage(pageRequest);
     }
 
@@ -234,9 +235,9 @@ public class UserMongoService extends ServiceBase {
      * 分页查询
      *
      * @param userMongo UserMongo
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findPage(UserMongoVo userMongo) {
+    public PageInfo<UserMongo> findPage(UserMongoVo userMongo) {
         return userMongoDao.findPage(buildPage(userMongo));
     }
 
@@ -244,9 +245,9 @@ public class UserMongoService extends ServiceBase {
      * 分页查询2
      *
      * @param userMongo UserMongo
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findPage2(UserMongoVo userMongo) {
+    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo) {
         return userMongoDao.findPage2(userMongo, buildPage(userMongo));
     }
 
@@ -264,10 +265,10 @@ public class UserMongoService extends ServiceBase {
      * 排序查询2
      *
      * @param userMongo UserMongo
-     * @return List
+     * @return PageInfo
      */
-    public List<UserMongo> findSort2(UserMongoVo userMongo) {
-        return userMongoDao.findSort2(userMongo, buildSort(userMongo.getOrderBy()));
+    public PageInfo<UserMongo> findSort2(UserMongoVo userMongo) {
+        return new PageInfo<>(userMongoDao.findSort2(userMongo, buildSort(userMongo.getOrderBy())));
     }
 
     /**
@@ -275,10 +276,10 @@ public class UserMongoService extends ServiceBase {
      *
      * @param example     Example
      * @param pageRequest PageRequest
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findList(Example<UserMongo> example, PageRequest pageRequest) {
-        return userMongoDao.findList(example, pageRequest);
+    public PageInfo<UserMongo> findList(Example<UserMongo> example, PageRequest pageRequest) {
+        return new PageInfo<>(userMongoDao.findList(example, pageRequest));
     }
 
     /**
@@ -286,16 +287,17 @@ public class UserMongoService extends ServiceBase {
      *
      * @param name        姓名
      * @param pageRequest 分页
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findByName(String name, PageRequest pageRequest) {
-        return userMongoDao.findByName(name, pageRequest);
+    public PageInfo<UserMongo> findByName(String name, PageRequest pageRequest) {
+        return new PageInfo<>(userMongoDao.findByName(name, pageRequest));
     }
 
     /**
      * 关注+1
      *
      * @param id id
+     * @return UpdateResult
      */
     public UpdateResult addFollowers(Long id) {
         return userMongoDao.addFollowers(id);

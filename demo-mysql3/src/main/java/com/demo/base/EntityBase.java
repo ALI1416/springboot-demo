@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 @Setter
 public class EntityBase extends ToStringBase {
 
+    /* ==================== po ==================== */
     /**
      * id
      */
@@ -36,6 +37,7 @@ public class EntityBase extends ToStringBase {
      */
     private Timestamp createTime;
 
+    /* ==================== vo ==================== */
     /**
      * 创建时间-否定
      */
@@ -45,6 +47,7 @@ public class EntityBase extends ToStringBase {
      */
     private Timestamp createTimeEnd;
 
+    /* -------------------- 分页 -------------------- */
     /**
      * 分页-页码
      */

@@ -16,7 +16,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class ParamsQuery extends ToStringBase {
+public class ParamQuery extends ToStringBase {
 
     /**
      * 字段

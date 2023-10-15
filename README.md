@@ -70,6 +70,14 @@ SpringBoot示例
   - PageHelper分页排序查询
   - IP解析
   - 雪花ID生成器
+- **`demo-mysql3`** : MySQL3
+  - SpringBoot Web
+  - FastJson
+  - Redis
+  - 轻量级权限认证SpringBoot启动器
+  - MySQL
+  - MyBatis
+  - 雪花ID生成器
 - **`demo-rabbitmq`** : RabbitMQ
   - SpringBoot Web
   - FastJson
@@ -88,11 +96,8 @@ SpringBoot示例
   - 轻量级集群任务SpringBoot启动器
 - **`demo-tiny-token`** : 轻量级权限认证SpringBoot启动器
   - SpringBoot Web
-  - FastJson
   - Redis
   - 轻量级权限认证SpringBoot启动器
-  - MySQL
-  - MyBatis
   - 雪花ID生成器
 - **`demo-util`** : 工具
   - SpringBoot Web

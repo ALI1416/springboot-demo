@@ -2,6 +2,7 @@ package com.demo.dao.mongo;
 
 import com.demo.base.DaoBase;
 import com.demo.entity.mongo.UserMongo;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.UserMongoVo;
 import com.demo.repo.UserMongoRepo;
 import com.mongodb.client.result.UpdateResult;
@@ -245,19 +246,19 @@ public class UserMongoDao extends DaoBase {
      * 分页查询
      *
      * @param pageRequest PageRequest
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findPage(PageRequest pageRequest) {
-        return userMongoRepo.findAll(pageRequest);
+    public PageInfo<UserMongo> findPage(PageRequest pageRequest) {
+        return new PageInfo<>(userMongoRepo.findAll(pageRequest));
     }
 
     /**
      * 分页查询
      *
      * @param pageRequest PageRequest
-     * @return Page
+     * @return PageInfo
      */
-    public Page<UserMongo> findPage2(UserMongoVo userMongo, PageRequest pageRequest) {
+    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo, PageRequest pageRequest) {
         Criteria criteria = new Criteria();
         if (userMongo.getName() != null) {
             criteria.and("name").is(userMongo.getName());
@@ -268,7 +269,7 @@ public class UserMongoDao extends DaoBase {
         if (userMongo.getFollowing() != null) {
             criteria.and("following").is(userMongo.getFollowing());
         }
-        buildParamsQuery(criteria, userMongo.getParamsQueryList());
+        buildParamQuery(criteria, userMongo.getParamQueryList());
         buildRange(criteria, "date", userMongo.getDate(), userMongo.getDateEnd(), userMongo.getDateNot());
         return find(mongoTemplate, UserMongo.class, criteria, pageRequest);
     }
@@ -290,7 +291,7 @@ public class UserMongoDao extends DaoBase {
         if (userMongo.getFollowing() != null) {
             criteria.and("following").is(userMongo.getFollowing());
         }
-        buildParamsQuery(criteria, userMongo.getParamsQueryList());
+        buildParamQuery(criteria, userMongo.getParamQueryList());
         buildRange(criteria, "date", userMongo.getDate(), userMongo.getDateEnd(), userMongo.getDateNot());
         return mongoTemplate.find(Query.query(criteria).with(sort), UserMongo.class);
     }
@@ -326,7 +327,7 @@ public class UserMongoDao extends DaoBase {
      *
      * @param id id
      */
-    public UpdateResult addFollowers(Long id) {
+    public UpdateResult addFollowers(long id) {
         Query query = Query.query(Criteria.where("_id").is(id));
         Update update = new Update();
         update.inc("follower", 1);

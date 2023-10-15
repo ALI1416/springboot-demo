@@ -1,6 +1,5 @@
 package com.demo;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -30,7 +29,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@MapperScan("com.demo.mapper")
 @SpringBootApplication
 @EnableScheduling
 public class DemoTinyTokenApp {

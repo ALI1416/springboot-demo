@@ -18,10 +18,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for login_log_test
+-- Table structure for login_log
 -- ----------------------------
-DROP TABLE IF EXISTS `login_log_test`;
-CREATE TABLE `login_log_test`  (
+DROP TABLE IF EXISTS `login_log`;
+CREATE TABLE `login_log`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
   `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'IP地址',
   `user_agent` varchar(1024) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '浏览器标识',
@@ -34,6 +34,6 @@ CREATE TABLE `login_log_test`  (
   `ua_is_mobile` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '浏览器标识-是手机',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志测试' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -1,6 +1,6 @@
 package com.demo.util.easyexcel;
 
-import cn.z.spring.util.EasyExcelUtils;
+import cn.z.spring.util.EasyExcelSpringUtils;
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.excel.UserExcel;
 import com.demo.entity.pojo.Result;
@@ -40,7 +40,7 @@ public class EasyExcelController {
      */
     @GetMapping("template")
     public void template() throws Exception {
-        EasyExcelUtils.download(response, "模板", null, UserExcel.class);
+        EasyExcelSpringUtils.download(response, "模板", null, UserExcel.class);
     }
 
     /**
@@ -64,7 +64,7 @@ public class EasyExcelController {
         u2.setGender("女");
         u2.setYear(2000);
         exportList.add(u2);
-        EasyExcelUtils.download(response, "导出", exportList, UserExcel.class);
+        EasyExcelSpringUtils.download(response, "导出", exportList, UserExcel.class);
     }
 
     /**
@@ -74,7 +74,7 @@ public class EasyExcelController {
     @PostMapping("importExcel")
     public Result<List<UserExcel>> importExcel(MultipartFile file) throws Exception {
         List<UserExcel> importList = new ArrayList<>();
-        EasyExcelUtils.upload(file, importList, UserExcel.class);
+        EasyExcelSpringUtils.upload(file, importList, UserExcel.class);
         log.info(JSON.toJSONString(importList));
         return Result.o(importList);
     }

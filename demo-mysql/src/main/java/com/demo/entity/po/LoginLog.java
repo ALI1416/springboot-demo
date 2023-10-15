@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * <h1>登录日志测试</h1>
+ * <h1>登录日志</h1>
  *
  * <p>
  * createDate 2021/09/29 14:18:44
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @Getter
 @Setter
-public class LoginLogTest extends EntityBase {
+public class LoginLog extends EntityBase {
 
     /**
      * IP地址
@@ -61,7 +61,7 @@ public class LoginLogTest extends EntityBase {
     /**
      * 构造函数
      */
-    public LoginLogTest(HttpServletRequest request) {
+    public LoginLog(HttpServletRequest request) {
         setId(Id.next());
         setIpInfo(request);
         setUserAgentInfo(request);

@@ -1,9 +1,9 @@
 package com.demo.controller;
 
 import com.demo.constant.ResultEnum;
-import com.demo.entity.po.LoginLogTest;
+import com.demo.entity.po.LoginLog;
 import com.demo.entity.pojo.Result;
-import com.demo.service.LoginLogTestService;
+import com.demo.service.LoginLogService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,18 +25,18 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
 
     private final HttpServletRequest request;
-    private final LoginLogTestService loginLogTestService;
+    private final LoginLogService loginLogService;
 
     /**
      * 首页
      */
     @GetMapping(value = {"", "/", "index"})
-    public Result<LoginLogTest> index() {
-        LoginLogTest loginLogTest = new LoginLogTest(request);
-        if (loginLogTestService.insert(loginLogTest)) {
-            return Result.o(loginLogTest);
+    public Result<LoginLog> index() {
+        LoginLog loginLog = new LoginLog(request);
+        if (loginLogService.insert(loginLog)) {
+            return Result.o(loginLog);
         } else {
-            return Result.e(ResultEnum.ERROR, loginLogTest);
+            return Result.e(ResultEnum.ERROR, loginLog);
         }
     }
 

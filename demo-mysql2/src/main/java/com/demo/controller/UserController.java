@@ -2,11 +2,11 @@ package com.demo.controller;
 
 import com.demo.base.ControllerBase;
 import com.demo.entity.bak.UserBak;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.pojo.ResultBatch;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.UserService;
-import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,6 @@ import java.util.List;
  * @since 1.0.0
  **/
 @RestController
-@RequestMapping("user")
 @AllArgsConstructor
 public class UserController extends ControllerBase {
 

@@ -24,9 +24,6 @@ import java.util.List;
  **/
 public class EasyExcelUtils {
 
-    private EasyExcelUtils() {
-    }
-
     /**
      * yyyyMMddHHmmssSSS格式DateTimeFormatter
      */

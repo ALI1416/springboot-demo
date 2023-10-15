@@ -16,15 +16,15 @@ public class Constant {
     }
 
     /**
-     * mongo分页-默认页码{@value}
+     * MongoDB分页-默认页码{@value}
      */
-    public static final int MONGO_PAGE_DEFAULT_PAGES = 0;
+    public static final int MONGO_PAGE_DEFAULT_PAGES = 1;
     /**
-     * mongo分页-默认每页条数{@value}
+     * MongoDB分页-默认每页条数{@value}
      */
     public static final int MONGO_PAGE_DEFAULT_ROWS = 5;
     /**
-     * mongo分页-默认排序{@value}
+     * MongoDB分页-默认排序{@value}
      */
     public static final String MONGO_PAGE_DEFAULT_ORDER_BY = "id desc";
 

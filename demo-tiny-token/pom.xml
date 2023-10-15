@@ -22,15 +22,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <!--FastJson-->
-    <dependency>
-      <groupId>com.alibaba.fastjson2</groupId>
-      <artifactId>fastjson2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.alibaba.fastjson2</groupId>
-      <artifactId>fastjson2-extension-spring5</artifactId>
-    </dependency>
     <!--Redis-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -41,33 +32,10 @@
       <groupId>cn.404z</groupId>
       <artifactId>tiny-token-spring-boot-starter</artifactId>
     </dependency>
-    <!--MyBatis-->
-    <dependency>
-      <groupId>org.mybatis.spring.boot</groupId>
-      <artifactId>mybatis-spring-boot-starter</artifactId>
-    </dependency>
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <!--MySQL-->
-    <dependency>
-      <groupId>com.mysql</groupId>
-      <artifactId>mysql-connector-j</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--Redis SpringBoot模板-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>redis-spring-boot-temp</artifactId>
-      <version>${redis-spring-boot-temp.version}</version>
-    </dependency>
-    <!--工具-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>util</artifactId>
-      <version>${util.version}</version>
     </dependency>
   </dependencies>
 

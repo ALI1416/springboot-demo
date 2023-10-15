@@ -69,7 +69,7 @@ public class RouteDao extends DaoBase {
      * @return 是否成功
      */
     public boolean deleteByIdList(List<Long> list) {
-        return tryif2(() -> routeMapper.deleteByIdList(list) == list.size());
+        return tryif(() -> routeMapper.deleteByIdList(list) == list.size());
     }
 
     /**

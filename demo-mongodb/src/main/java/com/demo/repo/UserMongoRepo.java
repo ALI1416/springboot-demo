@@ -18,10 +18,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface UserMongoRepo extends MongoRepository<UserMongo, Long> {
 
     /**
-     * JPA：根据名字查询并分页
+     * 查询通过name
      *
      * @param name     姓名
-     * @param pageable 分页器
+     * @param pageable 分页
      * @return Page
      */
     Page<UserMongo> findByName(String name, Pageable pageable);

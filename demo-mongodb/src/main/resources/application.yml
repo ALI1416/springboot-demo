@@ -15,4 +15,4 @@ logging:
   level:
     root: info
   file:
-    name: /log/demo-base.log
+    name: /log/demo-mongodb.log

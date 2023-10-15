@@ -1,7 +1,7 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.mongo.UserMongo;
-import com.demo.entity.pojo.ParamsQuery;
+import com.demo.entity.pojo.ParamQuery;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +33,6 @@ public class UserMongoVo extends UserMongo {
     /**
      * 查询参数列表
      */
-    private List<ParamsQuery> paramsQueryList;
+    private List<ParamQuery> paramQueryList;
 
 }

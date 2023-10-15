@@ -31,7 +31,7 @@ public class UserRoleDao extends DaoBase {
      * @return 是否成功
      */
     public boolean deleteByUserId(long userId) {
-        return tryif3(() -> userRoleMapper.deleteByUserId(userId));
+        return tryif(() -> userRoleMapper.deleteByUserId(userId));
     }
 
     /**
@@ -41,7 +41,7 @@ public class UserRoleDao extends DaoBase {
      * @return 是否成功
      */
     public boolean deleteByRoleId(long roleId) {
-        return tryif3(() -> userRoleMapper.deleteByRoleId(roleId));
+        return tryif(() -> userRoleMapper.deleteByRoleId(roleId));
     }
 
     /**
@@ -51,7 +51,7 @@ public class UserRoleDao extends DaoBase {
      * @return 是否成功
      */
     public boolean insertList(List<UserRoleVo> list) {
-        return tryif2(() -> userRoleMapper.insertList(list) == list.size());
+        return tryif(() -> userRoleMapper.insertList(list) == list.size());
     }
 
 }
