@@ -4,12 +4,11 @@ import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.mongo.UserMongo;
 import com.demo.entity.pojo.PageInfo;
-import com.demo.entity.pojo.PageRequestFix;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -224,11 +223,11 @@ public class UserMongoService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @param pageRequest PageRequest
+     * @param pageable Pageable
      * @return PageInfo
      */
-    public PageInfo<UserMongo> findList(PageRequest pageRequest) {
-        return userMongoDao.findPage(pageRequest);
+    public PageInfo<UserMongo> findList(Pageable pageable) {
+        return userMongoDao.findPage(pageable);
     }
 
     /**
@@ -274,23 +273,23 @@ public class UserMongoService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @param example     Example
-     * @param pageRequest PageRequest
+     * @param example  Example
+     * @param pageable Pageable
      * @return PageInfo
      */
-    public PageInfo<UserMongo> findList(Example<UserMongo> example, PageRequest pageRequest) {
-        return new PageInfo<>(userMongoDao.findList(example, pageRequest));
+    public PageInfo<UserMongo> findList(Example<UserMongo> example, Pageable pageable) {
+        return new PageInfo<>(userMongoDao.findList(example, pageable));
     }
 
     /**
      * 根据名字查询并分页
      *
-     * @param name        姓名
-     * @param pageRequest 分页
+     * @param name     姓名
+     * @param pageable Pageable
      * @return PageInfo
      */
-    public PageInfo<UserMongo> findByName(String name, PageRequest pageRequest) {
-        return new PageInfo<>(userMongoDao.findByName(name, pageRequest));
+    public PageInfo<UserMongo> findByName(String name, Pageable pageable) {
+        return new PageInfo<>(userMongoDao.findByName(name, pageable));
     }
 
     /**

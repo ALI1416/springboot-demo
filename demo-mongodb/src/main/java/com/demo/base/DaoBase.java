@@ -50,8 +50,7 @@ public class DaoBase {
             return;
         }
         for (ParamQuery query : list) {
-            buildCriteria(criteria, query.getOperator(), query.getField(), //
-                    conversionType(query.getType(), query.getValue(), query.getValue2()));
+            buildCriteria(criteria, query.getOperator(), query.getField(), conversionType(query.getType(), query.getValue(), query.getValue2()));
         }
     }
 
@@ -68,7 +67,7 @@ public class DaoBase {
         if (value == null) {
             return new Object[0];
         }
-        // switch不能为null
+        // 默认string
         if (type == null) {
             type = "string";
         }
@@ -124,7 +123,7 @@ public class DaoBase {
         if (field == null || value == null || value.length == 0) {
             return;
         }
-        // switch不能为null
+        // 默认eq
         if (operator == null) {
             operator = "eq";
         }

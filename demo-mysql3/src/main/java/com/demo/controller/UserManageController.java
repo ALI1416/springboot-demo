@@ -42,6 +42,14 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
+     * 注销id(不校验)
+     */
+    @GetMapping("logoutByIdNoCheck")
+    public Result<Long> logoutByIdNoCheck(long id) {
+        return Result.o(t4s.deleteById(id));
+    }
+
+    /**
      * 注销token
      */
     @GetMapping("logoutByToken")
@@ -54,6 +62,14 @@ public class UserManageController extends ControllerBase {
         if (!userService.findExistByIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
+        return Result.o(t4s.deleteByToken(token));
+    }
+
+    /**
+     * 注销token(不校验)
+     */
+    @GetMapping("logoutByTokenNoCheck")
+    public Result<Boolean> logoutByTokenNoCheck(String token) {
         return Result.o(t4s.deleteByToken(token));
     }
 
@@ -95,6 +111,20 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
+     * 修改信息(不校验)
+     */
+    @PatchMapping("updateNoCheck")
+    public Result<Boolean> updateNoCheck(@RequestBody UserVo user) {
+        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
+            return paramIsError();
+        }
+        if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
+            return Result.e(ResultEnum.ACCOUNT_EXIST);
+        }
+        return Result.o(userService.update(user));
+    }
+
+    /**
      * 查询，通过角色id
      */
     @GetMapping("findByRoleId")
@@ -103,11 +133,27 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
+     * 查询，通过角色id(不校验)
+     */
+    @GetMapping("findByRoleIdNoCheck")
+    public Result<List<UserVo>> findUserByRoleIdNoCheck(long roleId) {
+        return Result.o(userService.findByRoleId(roleId));
+    }
+
+    /**
      * 查询全部
      */
     @GetMapping("getAll")
     public Result<List<UserVo>> getAll() {
         return Result.o(userService.findByCreateId(t4s.getId()));
+    }
+
+    /**
+     * 查询全部(不校验)
+     */
+    @GetMapping("getAllNoCheck")
+    public Result<List<UserVo>> getAllNoCheck() {
+        return Result.o(userService.findAll());
     }
 
     /**
@@ -121,6 +167,17 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         if (!userService.findExistByIdAndCreateId(user.getId(), t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(userService.updateRole(user));
+    }
+
+    /**
+     * 修改角色(不校验)
+     */
+    @PutMapping("updateRoleNoCheck")
+    public Result<Boolean> updateRoleNoCheck(@RequestBody UserVo user) {
+        if (existNull(user.getId(), user.getRoleIdList())) {
+            return paramIsError();
         }
         return Result.o(userService.updateRole(user));
     }

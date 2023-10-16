@@ -15,6 +15,16 @@
     )
   </insert>
 
+  <insert id="insertList" parameterType="RouteVo">
+    INSERT
+    route(
+    <include refid="col"/>
+    )VALUES
+    <foreach collection="list" separator="," item="item">
+      (#{item.id},#{item.path},#{item.name},#{item.seq},#{item.parentId})
+    </foreach>
+  </insert>
+
   <update id="update" parameterType="RouteVo">
     UPDATE
     route
@@ -36,6 +46,14 @@
     id = #{id}
   </update>
 
+  <delete id="delete" parameterType="Long">
+    DELETE
+    FROM
+    route
+    WHERE
+    id = #{id}
+  </delete>
+
   <delete id="deleteByIdList" parameterType="Long">
     DELETE
     FROM
@@ -52,6 +70,7 @@
     <include refid="col"/>
     FROM
     route
+    WHERE
     id = #{id}
   </select>
 
@@ -66,8 +85,8 @@
       <if test="seq != null">
         AND seq = #{seq}
       </if>
-      <if test="createId != null">
-        AND create_id = #{createId}
+      <if test="parentId != null">
+        AND parent_id = #{parentId}
       </if>
     </where>
   </sql>

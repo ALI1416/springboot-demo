@@ -42,30 +42,30 @@ public class RouteNotInterceptDao extends DaoBase {
      */
     public long insert(RouteNotInterceptVo routeNotIntercept) {
         routeNotIntercept.setId(Id.next());
-        if (tryif(() -> routeNotInterceptMapper.insert(routeNotIntercept))) {
+        if (tryEq1(() -> routeNotInterceptMapper.insert(routeNotIntercept))) {
             return routeNotIntercept.getId();
         }
         return 0L;
     }
 
     /**
-     * 删除
-     *
-     * @param id id
-     * @return 是否成功
-     */
-    public boolean delete(long id) {
-        return tryif(() -> routeNotInterceptMapper.delete(id));
-    }
-
-    /**
      * 更新
      *
      * @param routeNotIntercept id(必须),path,name,isMatch,needLogin,seq(至少1个)
-     * @return 是否成功
+     * @return 是否成功更新1条
      */
     public boolean update(RouteNotInterceptVo routeNotIntercept) {
-        return tryif(() -> routeNotInterceptMapper.update(routeNotIntercept));
+        return tryEq1(() -> routeNotInterceptMapper.update(routeNotIntercept));
+    }
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return 是否成功删除1条
+     */
+    public boolean delete(long id) {
+        return tryEq1(() -> routeNotInterceptMapper.delete(id));
     }
 
 }

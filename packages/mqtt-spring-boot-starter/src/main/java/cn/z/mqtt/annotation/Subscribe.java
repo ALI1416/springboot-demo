@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * 例如：<br>
  * <code>only</code>只能匹配<code>only</code><br>
  * <code>one/+</code>可以匹配<code>one/</code>、<code>one/two</code>，但不能匹配<code>one</code>、<code>one/two/</code>、<code>one/two/three</code><br>
- * <code>more/#</code>可以匹配<code>more</code>、<code>more/</code>、<code>more/two</code><br>
+ * <code>more/#</code>可以匹配<code>more</code>、<code>more/</code>、<code>more/two</code>
  * </p>
  * <hr>
  *
@@ -57,7 +57,7 @@ import java.lang.annotation.*;
  * &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#64;Header(HeaderEnum.MSG) String msg<br>
  * ) {<br>
  * &ensp;&ensp;&ensp;&ensp;log.info("id:{},qos:{},retain:{},duplicate:{},topic:{},msg:{}", id, qos, retain, duplicate, topic, msg);<br>
- * }<br>
+ * }
  * </code>
  * </p>
  * <hr>
@@ -74,7 +74,7 @@ import java.lang.annotation.*;
  * &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&#64;Header(HeaderEnum.TOPIC_PART) int topicPart<br>
  * ) {<br>
  * &ensp;&ensp;&ensp;&ensp;log.info("msg:{},topicPartArray:{},topicPart:{}", msg, topicPartArray, topicPart);<br>
- * }<br>
+ * }
  * </code>
  * </p>
  *

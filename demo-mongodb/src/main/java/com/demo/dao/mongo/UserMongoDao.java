@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -245,20 +245,20 @@ public class UserMongoDao extends DaoBase {
     /**
      * 分页查询
      *
-     * @param pageRequest PageRequest
+     * @param pageable Pageable
      * @return PageInfo
      */
-    public PageInfo<UserMongo> findPage(PageRequest pageRequest) {
-        return new PageInfo<>(userMongoRepo.findAll(pageRequest));
+    public PageInfo<UserMongo> findPage(Pageable pageable) {
+        return new PageInfo<>(userMongoRepo.findAll(pageable));
     }
 
     /**
      * 分页查询
      *
-     * @param pageRequest PageRequest
+     * @param pageable Pageable
      * @return PageInfo
      */
-    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo, PageRequest pageRequest) {
+    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo, Pageable pageable) {
         Criteria criteria = new Criteria();
         if (userMongo.getName() != null) {
             criteria.and("name").is(userMongo.getName());
@@ -271,7 +271,7 @@ public class UserMongoDao extends DaoBase {
         }
         buildParamQuery(criteria, userMongo.getParamQueryList());
         buildRange(criteria, "date", userMongo.getDate(), userMongo.getDateEnd(), userMongo.getDateNot());
-        return find(mongoTemplate, UserMongo.class, criteria, pageRequest);
+        return find(mongoTemplate, UserMongo.class, criteria, pageable);
     }
 
     /**
@@ -299,12 +299,12 @@ public class UserMongoDao extends DaoBase {
     /**
      * 查询所有
      *
-     * @param example     Example
-     * @param pageRequest PageRequest
+     * @param example  Example
+     * @param pageable Pageable
      * @return Page
      */
-    public Page<UserMongo> findList(Example<UserMongo> example, PageRequest pageRequest) {
-        return userMongoRepo.findAll(example, pageRequest);
+    public Page<UserMongo> findList(Example<UserMongo> example, Pageable pageable) {
+        return userMongoRepo.findAll(example, pageable);
     }
 
     // 自定义JPA方法
@@ -312,12 +312,12 @@ public class UserMongoDao extends DaoBase {
     /**
      * 根据名字查询并分页
      *
-     * @param name        姓名
-     * @param pageRequest 分页
+     * @param name     姓名
+     * @param pageable Pageable
      * @return Page
      */
-    public Page<UserMongo> findByName(String name, PageRequest pageRequest) {
-        return userMongoRepo.findByName(name, pageRequest);
+    public Page<UserMongo> findByName(String name, Pageable pageable) {
+        return userMongoRepo.findByName(name, pageable);
     }
 
     // MongoTemplate方法

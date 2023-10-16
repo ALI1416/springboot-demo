@@ -24,8 +24,8 @@ public class DaoBase {
      * @param function 函数(返回结果<code>1</code>符合条件)
      * @return 是否成功
      */
-    public static boolean tryif(IntSupplier function) {
-        return tryif(function, true, true);
+    public static boolean tryEq1(IntSupplier function) {
+        return tryEq1(function, true, true);
     }
 
     /**
@@ -36,8 +36,8 @@ public class DaoBase {
      * @param inconformity 不符合条件回滚
      * @return 是否成功
      */
-    public static boolean tryif(IntSupplier function, boolean inconformity) {
-        return tryif(function, true, inconformity);
+    public static boolean tryEq1(IntSupplier function, boolean inconformity) {
+        return tryEq1(function, true, inconformity);
     }
 
     /**
@@ -49,7 +49,7 @@ public class DaoBase {
      * @param inconformity 不符合条件回滚
      * @return 是否成功
      */
-    public static boolean tryif(IntSupplier function, boolean exception, boolean inconformity) {
+    public static boolean tryEq1(IntSupplier function, boolean exception, boolean inconformity) {
         try {
             if (function.getAsInt() != 1) {
                 // 不符合条件
@@ -75,8 +75,8 @@ public class DaoBase {
      * @param function 函数(返回结果<code>true</code>符合条件)
      * @return 是否成功
      */
-    public static boolean tryif(BooleanSupplier function) {
-        return tryif(function, true, true);
+    public static boolean tryEqTrue(BooleanSupplier function) {
+        return tryEqTrue(function, true, true);
     }
 
     /**
@@ -87,8 +87,8 @@ public class DaoBase {
      * @param inconformity 不符合条件回滚
      * @return 是否成功
      */
-    public static boolean tryif(BooleanSupplier function, boolean inconformity) {
-        return tryif(function, true, inconformity);
+    public static boolean tryEqTrue(BooleanSupplier function, boolean inconformity) {
+        return tryEqTrue(function, true, inconformity);
     }
 
     /**
@@ -100,7 +100,7 @@ public class DaoBase {
      * @param inconformity 不符合条件回滚
      * @return 是否成功
      */
-    public static boolean tryif(BooleanSupplier function, boolean exception, boolean inconformity) {
+    public static boolean tryEqTrue(BooleanSupplier function, boolean exception, boolean inconformity) {
         try {
             if (function.getAsBoolean()) {
                 // 不符合条件
@@ -126,8 +126,8 @@ public class DaoBase {
      * @param function 函数
      * @return 是否成功
      */
-    public static boolean tryif(Runnable function) {
-        return tryif(function, true);
+    public static boolean tryAny(Runnable function) {
+        return tryAny(function, true);
     }
 
     /**
@@ -138,7 +138,7 @@ public class DaoBase {
      * @param exception 捕获到异常回滚
      * @return 是否成功
      */
-    public static boolean tryif(Runnable function, boolean exception) {
+    public static boolean tryAny(Runnable function, boolean exception) {
         try {
             function.run();
         } catch (Exception e) {

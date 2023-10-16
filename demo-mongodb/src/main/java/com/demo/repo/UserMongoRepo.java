@@ -21,7 +21,7 @@ public interface UserMongoRepo extends MongoRepository<UserMongo, Long> {
      * 查询通过name
      *
      * @param name     姓名
-     * @param pageable 分页
+     * @param pageable Pageable
      * @return Page
      */
     Page<UserMongo> findByName(String name, Pageable pageable);

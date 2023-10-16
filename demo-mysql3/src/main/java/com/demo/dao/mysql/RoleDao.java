@@ -33,7 +33,7 @@ public class RoleDao extends DaoBase {
      */
     public long insert(RoleVo role) {
         role.setId(Id.next());
-        if (tryif(() -> roleMapper.insert(role))) {
+        if (tryEq1(() -> roleMapper.insert(role))) {
             return role.getId();
         }
         return 0L;
@@ -43,20 +43,20 @@ public class RoleDao extends DaoBase {
      * 更新
      *
      * @param role id(必须),name,seq(至少1个)
-     * @return 是否成功
+     * @return 是否成功更新1条
      */
     public boolean update(RoleVo role) {
-        return tryif(() -> roleMapper.update(role));
+        return tryEq1(() -> roleMapper.update(role));
     }
 
     /**
      * 删除
      *
      * @param id id
-     * @return 是否成功
+     * @return 是否成功删除1条
      */
     public boolean delete(long id) {
-        return tryif(() -> roleMapper.delete(id));
+        return tryEq1(() -> roleMapper.delete(id));
     }
 
     /**

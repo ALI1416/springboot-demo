@@ -25,12 +25,28 @@ public interface RouteMapper {
     int insert(RouteVo route);
 
     /**
+     * 插入多个
+     *
+     * @param list id,path,name,seq,parentId
+     * @return 执行成功数量
+     */
+    int insertList(List<RouteVo> list);
+
+    /**
      * 更新
      *
      * @param route id(必须),path,name,seq,parentId(至少1个)
      * @return 执行成功数量
      */
     int update(RouteVo route);
+
+    /**
+     * 删除通过id
+     *
+     * @param id id
+     * @return 执行成功数量
+     */
+    int delete(long id);
 
     /**
      * 删除多个通过id

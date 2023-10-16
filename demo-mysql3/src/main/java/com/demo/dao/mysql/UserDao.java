@@ -33,7 +33,7 @@ public class UserDao extends DaoBase {
      */
     public long insert(UserVo user) {
         user.setId(Id.next());
-        if (tryif(() -> userMapper.insert(user))) {
+        if (tryEq1(() -> userMapper.insert(user))) {
             return user.getId();
         }
         return 0L;
@@ -43,10 +43,10 @@ public class UserDao extends DaoBase {
      * 更新
      *
      * @param user id(必须),account,pwd,name,isDelete(至少1个)
-     * @return 是否成功
+     * @return 是否成功更新1条
      */
     public boolean update(UserVo user) {
-        return tryif(() -> userMapper.update(user));
+        return tryEq1(() -> userMapper.update(user));
     }
 
     /**

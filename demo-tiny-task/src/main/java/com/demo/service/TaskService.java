@@ -22,51 +22,35 @@ import java.util.concurrent.TimeUnit;
 public class TaskService {
 
     /**
-     * 立即执行，10秒循环
+     * 每分钟的0秒执行一次
      */
-    @Task(fixedDelay = 10)
-    public void test1() {
-        log.info("测试1");
+    @Task("0/10 * * * * *")
+    public void test() {
+        log.info("@Task测试");
     }
 
     /**
-     * 1秒后执行，10秒增强循环
+     * 每分钟的0秒执行一次
      */
-    @Task(initialDelay = 1, fixedRateDuration = "PT10S")
+    @Scheduled(cron = "0/10 * * * * *")
     public void test2() {
-        log.info("测试2");
-    }
-
-    /**
-     * cron表达式，10秒循环
-     */
-    @Task("*/10 * * * * *")
-    public void test3() {
-        log.info("测试3");
+        log.info("@Scheduled测试");
     }
 
     /**
      * 立即执行，10秒循环
      */
     @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
-    public void test4() {
-        log.info("测试4");
+    public void test3() {
+        log.info("fixedDelay测试");
     }
 
     /**
      * 1秒后执行，10秒增强循环
      */
     @Scheduled(initialDelay = 1, fixedRateString = "PT10S")
-    public void test5() {
-        log.info("测试5");
-    }
-
-    /**
-     * cron表达式，10秒循环
-     */
-    @Scheduled(cron = "*/10 * * * * *")
-    public void test6() {
-        log.info("测试6");
+    public void test4() {
+        log.info("initialDelay/fixedRateString测试");
     }
 
 }

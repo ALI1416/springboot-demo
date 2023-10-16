@@ -263,8 +263,8 @@ public class UserMongoController {
      */
     @GetMapping("/findListPage")
     public Result<PageInfo<UserMongo>> findList(int page, int size) {
-        PageRequestFix pageRequest = PageRequestFix.of(page, size);
-        return Result.o(userMongoService.findList(pageRequest));
+        PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
+        return Result.o(userMongoService.findList(pageRequestFix));
     }
 
     /**
@@ -275,8 +275,8 @@ public class UserMongoController {
     @GetMapping("/findListPageSort")
     public Result<PageInfo<UserMongo>> findListSort(int page, int size, String field) {
         Sort sort = Sort.by(Sort.Order.desc(field));
-        PageRequestFix pageRequest = PageRequestFix.of(page, size, sort);
-        return Result.o(userMongoService.findList(pageRequest));
+        PageRequestFix pageRequestFix = PageRequestFix.of(page, size, sort);
+        return Result.o(userMongoService.findList(pageRequestFix));
     }
 
     /**
@@ -333,8 +333,8 @@ public class UserMongoController {
     @PostMapping("/findListExamplePage")
     public Result<PageInfo<UserMongo>> findList(@RequestBody UserMongo userMongo, int page, int size) {
         Example<UserMongo> example = Example.of(userMongo);
-        PageRequestFix pageRequest = PageRequestFix.of(page, size);
-        return Result.o(userMongoService.findList(example, pageRequest));
+        PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
+        return Result.o(userMongoService.findList(example, pageRequestFix));
     }
 
     /**
@@ -344,8 +344,8 @@ public class UserMongoController {
      */
     @GetMapping("/findByName")
     public Result<PageInfo<UserMongo>> findByName(String name, int page, int size) {
-        PageRequestFix pageRequest = PageRequestFix.of(page, size);
-        return Result.o(userMongoService.findByName(name, pageRequest));
+        PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
+        return Result.o(userMongoService.findByName(name, pageRequestFix));
     }
 
     /**

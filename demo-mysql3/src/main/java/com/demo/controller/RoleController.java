@@ -66,6 +66,17 @@ public class RoleController extends ControllerBase {
     }
 
     /**
+     * 更新(不校验)
+     */
+    @PatchMapping("updateNoCheck")
+    public Result<Boolean> updateNoCheck(@RequestBody RoleVo role) {
+        if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
+            return paramIsError();
+        }
+        return Result.o(roleService.update(role));
+    }
+
+    /**
      * 删除
      */
     @DeleteMapping("delete")
@@ -74,6 +85,14 @@ public class RoleController extends ControllerBase {
         if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
+        return Result.o(roleService.delete(id));
+    }
+
+    /**
+     * 删除(不校验)
+     */
+    @DeleteMapping("deleteNoCheck")
+    public Result<Boolean> deleteNoCheck(long id) {
         return Result.o(roleService.delete(id));
     }
 
@@ -104,6 +123,35 @@ public class RoleController extends ControllerBase {
     }
 
     /**
+     * 修改路由(不校验)
+     */
+    @PutMapping("updateRouteIdListNoCheck")
+    public Result<Boolean> updateRouteIdListNoCheck(@RequestBody RoleVo role) {
+        Long roleId = role.getId();
+        List<Long> routeIdList = role.getRouteIdList();
+        if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
+            return paramIsError();
+        }
+        List<RoleRouteVo> roleRouteList = new ArrayList<>();
+        for (Long id : routeIdList) {
+            RoleRouteVo roleRoute = new RoleRouteVo();
+            roleRoute.setId(Id.next());
+            roleRoute.setRoleId(roleId);
+            roleRoute.setRouteId(id);
+            roleRouteList.add(roleRoute);
+        }
+        return Result.o(roleRouteService.deleteByRoleId(roleId) && roleService.addRouteIdList(roleRouteList));
+    }
+
+    /**
+     * 查询全部(不校验)
+     */
+    @GetMapping("getAllNoCheck")
+    public Result<List<RoleVo>> getAllNoCheck() {
+        return Result.o(roleService.findAll());
+    }
+
+    /**
      * 获取用户id的角色
      */
     @GetMapping("findByUserId")
@@ -112,6 +160,14 @@ public class RoleController extends ControllerBase {
         if (!userService.findExistByIdAndCreateId(userId, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
+        return Result.o(roleService.findByUserId(userId));
+    }
+
+    /**
+     * 获取用户id的角色(不校验)
+     */
+    @GetMapping("findByUserIdNoCheck")
+    public Result<List<RoleVo>> findByUserIdNoCheck(long userId) {
         return Result.o(roleService.findByUserId(userId));
     }
 
@@ -130,6 +186,17 @@ public class RoleController extends ControllerBase {
     }
 
     /**
+     * 复制角色(不校验)
+     */
+    @GetMapping("copyNoCheck")
+    public Result<Long> copyNoCheck(long id) {
+        RoleVo role = roleService.findById(id);
+        role.setId(Id.next());
+        role.setCreateId(t4s.getId());
+        return Result.o(roleService.insert(role));
+    }
+
+    /**
      * 刷新，通过角色id
      */
     @GetMapping("refresh")
@@ -138,6 +205,14 @@ public class RoleController extends ControllerBase {
         if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
+        return Result.o(routeService.deleteRouteRole(id) + routeService.deleteRouteUser(userService.findIdByRoleId(id)));
+    }
+
+    /**
+     * 刷新，通过角色id(不校验)
+     */
+    @GetMapping("refreshNoCheck")
+    public Result<Long> refreshNoCheck(long id) {
         return Result.o(routeService.deleteRouteRole(id) + routeService.deleteRouteUser(userService.findIdByRoleId(id)));
     }
 

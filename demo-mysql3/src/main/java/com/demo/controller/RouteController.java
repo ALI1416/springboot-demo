@@ -8,6 +8,7 @@ import com.demo.service.RouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class RouteController extends ControllerBase {
      */
     @PostMapping("insert")
     public Result<Long> insert(@RequestBody RouteVo route) {
-        if (existNull(route.getPath(), route.getName(), route.getSeq())) {
+        if (existNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
             return paramIsError();
         }
         return Result.o(routeService.insert(route));
@@ -57,7 +58,7 @@ public class RouteController extends ControllerBase {
     /**
      * 查询展开后的列表
      */
-    @GetMapping("fgetExpandedList")
+    @GetMapping("getExpandedList")
     public Result<RouteVo> getExpandedList() {
         return Result.o(routeService.findExpandedList());
     }
@@ -66,31 +67,40 @@ public class RouteController extends ControllerBase {
      * 删除
      */
     @DeleteMapping("delete")
-    public Result<Boolean> delete(long id, boolean deleteChildren) {
-        if (deleteChildren) {
-            // 删除自己和子节点
-            return Result.o(routeService.deleteAndChildren(id));
+    public Result<Boolean> delete(long id, boolean deleteChild) {
+        if (deleteChild) {
+            // 删除自己和所有子节点
+            return Result.o(routeService.deleteAndChild(id));
         } else {
             // 删除自己，不删除子节点，移动子节点到上一级
-            return Result.o(routeService.deleteAndMoveChildren(id));
+            return Result.o(routeService.deleteAndMoveChild(id));
         }
     }
 
     /**
-     * TODO 复制角色id到父id下
+     * 复制到父id下
      */
     @GetMapping("copy")
-    public Result copy(long id, long parentId) {
+    public Result<Boolean> copy(long id, long parentId, boolean copyChild) {
         RouteVo route = routeService.findById(id);
-        route.setParentId(parentId);
         long newId = Id.next();
-        List<RouteVo> routeList = routeService.findByParentId(id);
-        for (RouteVo r : routeList) {
-            r.setId(Id.next());
-            r.setParentId(newId);
+        route.setId(newId);
+        route.setParentId(parentId);
+        if (copyChild) {
+            // 复制自己和所有子节点
+            List<RouteVo> routeList = new ArrayList<>();
+            routeList.add(route);
+            List<RouteVo> childList = routeService.findChildByParentId(id);
+            for (RouteVo r : childList) {
+                r.setId(Id.next());
+                r.setParentId(newId);
+            }
+            routeList.addAll(childList);
+            return Result.o(routeService.insertList(routeList));
+        } else {
+            // 复制自己，不复制子节点
+            return Result.o(routeService.insert(route) != 0);
         }
-        routeList.add(route);
-        return Result.o(routeService.insertList(routeList));
     }
 
     /**
@@ -98,7 +108,7 @@ public class RouteController extends ControllerBase {
      */
     @PatchMapping("update")
     public Result<Boolean> update(@RequestBody RouteVo route) {
-        if (isNull(route.getId()) && !allNull(route.getPath(), route.getName(), route.getSeq())) {
+        if (isNull(route.getId()) && !allNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
             return paramIsError();
         }
         return Result.o(routeService.update(route));

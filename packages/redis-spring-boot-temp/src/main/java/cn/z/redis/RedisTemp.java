@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +44,7 @@ public class RedisTemp {
         redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
         // key使用String序列化
-        RedisSerializer<String> stringRedisSerializer = RedisSerializer.string();
+        RedisSerializer<String> stringRedisSerializer = StringRedisSerializer.UTF_8;
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
         // value使用FastJson序列化
@@ -59,9 +60,6 @@ public class RedisTemp {
 
             @Override
             public Object deserialize(byte[] bytes) throws SerializationException {
-                if (bytes == null || bytes.length == 0) {
-                    return null;
-                }
                 // 类型自动探测
                 return JSON.parseObject(bytes, Object.class, JSONReader.Feature.SupportAutoType);
             }

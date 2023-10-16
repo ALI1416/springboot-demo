@@ -56,7 +56,7 @@ public class RouteService {
      */
     @Transactional
     public boolean insertList(List<RouteVo> list) {
-        return true;
+        return routeDao.insertList(list);
     }
 
     /**
@@ -66,10 +66,10 @@ public class RouteService {
      * @return 是否成功
      */
     @Transactional
-    public boolean deleteAndChildren(long id) {
+    public boolean deleteAndChild(long id) {
         // 递归删除RoleRoute/Route的子节点
         try {
-            deleteChildren(id);
+            deleteChild(id);
         } catch (Exception e) {
             log.error("删除自己和子节点失败！id为{}", id);
             return false;
@@ -83,12 +83,12 @@ public class RouteService {
      *
      * @param parentId parentId
      */
-    private void deleteChildren(long parentId) throws Exception {
+    private void deleteChild(long parentId) throws Exception {
         // 获取子节点
         List<RouteVo> children = routeDao.findByParentId(parentId);
         // 递归
         for (RouteVo child : children) {
-            deleteChildren(child.getId());
+            deleteChild(child.getId());
         }
         // 查询子节点
         List<Long> ids = children.stream().map(RouteVo::getId).collect(Collectors.toList());
@@ -109,9 +109,12 @@ public class RouteService {
      * @return 是否成功
      */
     @Transactional
-    public boolean deleteAndMoveChildren(long id) {
+    public boolean deleteAndMoveChild(long id) {
         // 获取自己
         RouteVo route = routeDao.findById(id);
+        if (route == null) {
+            return false;
+        }
         // 获取子节点
         List<RouteVo> children = routeDao.findByParentId(id);
         Long parentId = route.getParentId();
@@ -176,7 +179,7 @@ public class RouteService {
     }
 
     /**
-     * 查询路由和子路由id，通过用户id
+     * 查询路由和所有子路由id，通过用户id
      *
      * @param userId userId
      */
@@ -188,26 +191,26 @@ public class RouteService {
         for (Long role : roleList) {
             for (Long routeId : findIdByRoleId(role)) {
                 routeIdList.add(routeId);
-                routeIdList.addAll(findChildrenById(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
+                routeIdList.addAll(findChildByParentId(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
             }
         }
         return routeIdList;
     }
 
     /**
-     * 查询子节点，通过父id
+     * 查询所有子路由，通过父id
      *
      * @param parentId parentId
      * @return List RouteVo
      */
-    private List<RouteVo> findChildrenById(long parentId) {
+    public List<RouteVo> findChildByParentId(long parentId) {
         List<RouteVo> routeList = new ArrayList<>();
         findChildren(parentId, routeList);
         return routeList;
     }
 
     /**
-     * 查询子节点，通过父id
+     * 查询所有子路由，通过父id
      *
      * @param parentId  parentId
      * @param routeList routeList

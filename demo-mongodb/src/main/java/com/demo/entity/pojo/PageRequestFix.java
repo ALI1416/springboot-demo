@@ -20,7 +20,7 @@ public class PageRequestFix extends PageRequest {
      * @param size 每页条数
      * @param sort 排序
      */
-    protected PageRequestFix(int page, int size, Sort sort) {
+    public PageRequestFix(int page, int size, Sort sort) {
         super(page - 1, size, sort);
     }
 

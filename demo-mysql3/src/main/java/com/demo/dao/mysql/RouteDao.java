@@ -7,7 +7,6 @@ import com.demo.mapper.RouteMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,42 +33,50 @@ public class RouteDao extends DaoBase {
      */
     public long insert(RouteVo route) {
         route.setId(Id.next());
-        if (tryif(() -> routeMapper.insert(route))) {
+        if (tryEq1(() -> routeMapper.insert(route))) {
             return route.getId();
         }
         return 0L;
     }
 
     /**
+     * 插入多个
+     *
+     * @param list id,path,name,seq,parentId
+     * @return 是否成功
+     */
+    public boolean insertList(List<RouteVo> list) {
+        return tryAny(() -> routeMapper.insertList(list));
+    }
+
+    /**
      * 更新
      *
      * @param route id(必须),path,name,seq,parentId(至少1个)
-     * @return 是否成功
+     * @return 是否成功更新1条
      */
     public boolean update(RouteVo route) {
-        return tryif(() -> routeMapper.update(route));
+        return tryEq1(() -> routeMapper.update(route));
     }
 
     /**
      * 删除
      *
      * @param id id
-     * @return 是否成功
+     * @return 是否成功删除1条
      */
     public boolean deleteById(long id) {
-        List<Long> ids = new ArrayList<>();
-        ids.add(id);
-        return deleteByIdList(ids);
+        return tryEq1(() -> routeMapper.delete(id));
     }
 
     /**
-     * 删除
+     * 删除多个
      *
      * @param list id
      * @return 是否成功
      */
     public boolean deleteByIdList(List<Long> list) {
-        return tryif(() -> routeMapper.deleteByIdList(list) == list.size());
+        return tryAny(() -> routeMapper.deleteByIdList(list));
     }
 
     /**
