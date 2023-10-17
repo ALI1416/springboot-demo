@@ -3,7 +3,6 @@ package com.demo.util.useragent;
 import cn.z.tool.useragent.UserAgent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,15 +19,14 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @Slf4j
-@RequestMapping("userAgent")
 public class UserAgentController {
 
     /**
      * 解析<br>
-     * http://localhost:8080/userAgent/parse
+     * http://localhost:8080/userAgent
      */
-    @GetMapping("/parse")
-    public UserAgent parse(HttpServletRequest request) {
+    @GetMapping("userAgent")
+    public UserAgent userAgent(HttpServletRequest request) {
         String userAgent = request.getHeader("User-Agent");
         log.info(userAgent);
         return UserAgent.parse(userAgent);

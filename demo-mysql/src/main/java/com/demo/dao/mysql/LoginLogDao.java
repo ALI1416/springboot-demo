@@ -29,7 +29,16 @@ public class LoginLogDao extends DaoBase {
      * @return 是否成功
      */
     public boolean insert(LoginLog loginLog) {
-        return tryif(() -> loginLogMapper.insert(loginLog));
+        return tryEq1(() -> loginLogMapper.insert(loginLog));
+    }
+
+    /**
+     * 获取最后一条
+     *
+     * @return LoginLog
+     */
+    public LoginLog getLast() {
+        return loginLogMapper.getLast();
     }
 
 }

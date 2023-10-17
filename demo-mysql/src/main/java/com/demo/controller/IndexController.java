@@ -30,7 +30,7 @@ public class IndexController {
     /**
      * 首页
      */
-    @GetMapping(value = {"", "/", "index"})
+    @GetMapping
     public Result<LoginLog> index() {
         LoginLog loginLog = new LoginLog(request);
         if (loginLogService.insert(loginLog)) {
@@ -38,6 +38,14 @@ public class IndexController {
         } else {
             return Result.e(ResultEnum.ERROR, loginLog);
         }
+    }
+
+    /**
+     * 获取最后一条
+     */
+    @GetMapping("getLast")
+    public Result<LoginLog> getLast() {
+        return Result.o(loginLogService.getLast());
     }
 
 }

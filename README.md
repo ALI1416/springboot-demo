@@ -17,6 +17,14 @@ SpringBoot示例
   - SpringBoot Web
   - FastJson
   - 配置
+- **`demo-dynamic-route`** : 动态路由
+  - SpringBoot Web
+  - FastJson
+  - Redis
+  - 轻量级权限认证SpringBoot启动器
+  - MySQL
+  - MyBatis
+  - 雪花ID生成器
 - **`demo-elastic-search`** : ElasticSearch
   - SpringBoot Web
   - FastJson
@@ -50,7 +58,7 @@ SpringBoot示例
   - FastJson
   - MQTT
 - **`demo-mqtt-cluster`** : MQTT集群
-  - SpringBoot Web
+  - SpringBoot
   - FastJson
   - MQTT
   - Redis
@@ -59,25 +67,10 @@ SpringBoot示例
   - FastJson
   - MySQL
   - MyBatis
-  - IP解析
-  - 雪花ID生成器
-  - IP地址转区域
-- **`demo-mysql2`** : MySQL2
-  - SpringBoot Web
-  - FastJson
-  - MySQL
-  - MyBatis
   - PageHelper分页排序查询
   - IP解析
   - 雪花ID生成器
-- **`demo-mysql3`** : MySQL3
-  - SpringBoot Web
-  - FastJson
-  - Redis
-  - 轻量级权限认证SpringBoot启动器
-  - MySQL
-  - MyBatis
-  - 雪花ID生成器
+  - IP地址转区域
 - **`demo-rabbitmq`** : RabbitMQ
   - SpringBoot Web
   - FastJson
@@ -96,6 +89,7 @@ SpringBoot示例
   - 轻量级集群任务SpringBoot启动器
 - **`demo-tiny-token`** : 轻量级权限认证SpringBoot启动器
   - SpringBoot Web
+  - FastJson
   - Redis
   - 轻量级权限认证SpringBoot启动器
   - 雪花ID生成器
@@ -114,7 +108,6 @@ SpringBoot示例
 - **`demo-websocket`** : WebSocket
   - SpringBoot Web
   - SpringBoot WebSocket
-  - FastJson
 - **`demo-websocket-cluster`** : WebSocket集群
   - SpringBoot Web
   - SpringBoot WebSocket

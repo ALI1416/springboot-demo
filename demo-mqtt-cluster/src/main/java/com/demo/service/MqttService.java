@@ -23,14 +23,13 @@ public class MqttService {
 
     private static final String REDIS_MQTT_PREFIX = "mqtt:";
     private static final long REDIS_MQTT_TIMEOUT = 1L;
-
     private final RedisTemp redisTemp;
 
     /**
-     * msg
+     * 接收消息
      */
-    @Subscribe("msg")
-    public void msg(String msg, String topic) {
+    @Subscribe("receive")
+    public void receive(String msg, String topic) {
         if (Boolean.TRUE.equals(redisTemp.setIfAbsent(REDIS_MQTT_PREFIX + topic, REDIS_MQTT_TIMEOUT))) {
             log.info("msg:{},topic:{}", msg, topic);
         }

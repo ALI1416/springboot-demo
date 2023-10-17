@@ -4,7 +4,6 @@ import cn.z.phone2region.Phone2Region;
 import cn.z.phone2region.Region;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,15 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @Slf4j
-@RequestMapping("phone2region")
 public class Phone2RegionController {
 
     /**
      * 解析<br>
-     * http://localhost:8080/phone2region/parse?phone=1875471
+     * http://localhost:8080/phone2region?phone=1875471
      */
-    @GetMapping("/parse")
-    public Region parse(int phone) {
+    @GetMapping("phone2region")
+    public Region phone2region(int phone) {
         Region region = Phone2Region.parse(phone);
         log.info(String.valueOf(region));
         return region;

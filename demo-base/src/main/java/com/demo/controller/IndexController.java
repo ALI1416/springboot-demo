@@ -31,16 +31,15 @@ public class IndexController {
      * <h3>正常请求</h3>
      * GET http://localhost:8080<br>
      * GET http://localhost:8080/<br>
-     * GET http://localhost:8080/index<br>
      * 结果 {"code":0,"msg":"成功","ok":true}
      * <h3>请求地址找不到</h3>
      * POST http://localhost:8080/e<br>
      * 结果 {"code":101,"msg":"请求地址找不到","ok":false}
      * <h3>请求方法不支持</h3>
-     * POST http://localhost:8080/index<br>
+     * POST http://localhost:8080/<br>
      * 结果 {"code":110,"msg":"请求方法不支持","ok":false}
      */
-    @GetMapping(value = {"", "/", "index"})
+    @GetMapping
     public Result index() {
         return Result.o();
     }

@@ -27,15 +27,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-websocket</artifactId>
     </dependency>
-    <!--FastJson-->
-    <dependency>
-      <groupId>com.alibaba.fastjson2</groupId>
-      <artifactId>fastjson2</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.alibaba.fastjson2</groupId>
-      <artifactId>fastjson2-extension-spring5</artifactId>
-    </dependency>
     <!--WebSocket SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>

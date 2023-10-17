@@ -38,7 +38,7 @@ public class UserMongoController {
      * 返回 true<br>
      * 再次插入 返回 false
      */
-    @PostMapping("/insert")
+    @PostMapping("insert")
     public Result<Boolean> insert(@RequestBody UserMongoVo userMongo) {
         userMongo.setDate(Clock.timestamp());
         return Result.o(userMongoService.insert(userMongo));
@@ -52,7 +52,7 @@ public class UserMongoController {
      * [{"id":4,"name":"a","followers":10,"following":20},{"id":2,"name":"a","followers":10,"following":20},{"id":5,"name":"a","followers":10,"following":20}]<br>
      * 返回 false 只插入了id=4<br>
      */
-    @PostMapping("/insertList")
+    @PostMapping("insertList")
     public Result<Boolean> insertList(@RequestBody List<UserMongo> userMongoList) {
         return Result.o(userMongoService.insertList(userMongoList));
     }
@@ -63,7 +63,7 @@ public class UserMongoController {
      * {"id":1,"name":"a","followers":10,"following":20}<br>
      * id=1已存在会更新，不存在会插入
      */
-    @PutMapping("/save")
+    @PutMapping("save")
     public Result save(@RequestBody UserMongoVo userMongo) {
         userMongoService.save(userMongo);
         return Result.o();
@@ -75,7 +75,7 @@ public class UserMongoController {
      * [{"id":2,"name":"a","followers":10,"following":20},{"id":3,"name":"a","followers":10,"following":20}]<br>
      * 已存在会更新，不存在会插入
      */
-    @PutMapping("/saveList")
+    @PutMapping("saveList")
     public Result saveList(@RequestBody List<UserMongo> userMongoList) {
         userMongoService.saveList(userMongoList);
         return Result.o();
@@ -86,7 +86,7 @@ public class UserMongoController {
      * http://localhost:8080/existsById?id=1<br>
      * id=1存在true不存在false
      */
-    @GetMapping("/existsById")
+    @GetMapping("existsById")
     public Result<Boolean> existsById(long id) {
         return Result.o(userMongoService.existsById(id));
     }
@@ -97,7 +97,7 @@ public class UserMongoController {
      * {"name":"a"}<br>
      * name=a存在true不存在false
      */
-    @PostMapping("/exists")
+    @PostMapping("exists")
     public Result<Boolean> exists(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.exists(example));
@@ -108,7 +108,7 @@ public class UserMongoController {
      * http://localhost:8080/countAll<br>
      * 返回记录总数
      */
-    @GetMapping("/countAll")
+    @GetMapping("countAll")
     public Result<Long> countAll() {
         return Result.o(userMongoService.countAll());
     }
@@ -119,7 +119,7 @@ public class UserMongoController {
      * {"name":"a"}<br>
      * name=a的记录总数
      */
-    @PostMapping("/count")
+    @PostMapping("count")
     public Result<Long> count(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.count(example));
@@ -129,7 +129,7 @@ public class UserMongoController {
      * <h3>删除，通过id，不存在不会报错</h3>
      * http://localhost:8080/deleteById?id=1
      */
-    @DeleteMapping("/deleteById")
+    @DeleteMapping("deleteById")
     public Result deleteById(long id) {
         userMongoService.deleteById(id);
         return Result.o();
@@ -140,7 +140,7 @@ public class UserMongoController {
      * http://localhost:8080/delete<br>
      * {"id":1}
      */
-    @PostMapping("/delete")
+    @PostMapping("delete")
     public Result delete(@RequestBody UserMongoVo userMongo) {
         userMongoService.delete(userMongo);
         return Result.o();
@@ -151,7 +151,7 @@ public class UserMongoController {
      * http://localhost:8080/deleteListById<br>
      * [1,2,3]
      */
-    @DeleteMapping("/deleteListById")
+    @DeleteMapping("deleteListById")
     public Result deleteListById(@RequestBody List<Long> idList) {
         userMongoService.deleteListById(idList);
         return Result.o();
@@ -162,7 +162,7 @@ public class UserMongoController {
      * http://localhost:8080/deleteList<br>
      * [{"id":1},{"id":2},{"id":3}]
      */
-    @DeleteMapping("/deleteList")
+    @DeleteMapping("deleteList")
     public Result deleteList(@RequestBody List<UserMongo> userMongoList) {
         userMongoService.deleteList(userMongoList);
         return Result.o();
@@ -171,7 +171,7 @@ public class UserMongoController {
     /**
      * <h3>删除所有</h3>
      */
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("deleteAll")
     public Result deleteAll() {
         userMongoService.deleteAll();
         return Result.o();
@@ -182,7 +182,7 @@ public class UserMongoController {
      * http://localhost:8080/findById?id=1<br>
      * 存在:实体;不存在:null
      */
-    @GetMapping("/findById")
+    @GetMapping("findById")
     public Result<UserMongo> findById(long id) {
         return Result.o(userMongoService.findById(id));
     }
@@ -193,7 +193,7 @@ public class UserMongoController {
      * {"name":"a"}<br>
      * 存在:实体;不存在:null
      */
-    @PostMapping("/findOne")
+    @PostMapping("findOne")
     public Result<UserMongo> findOne(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.findOne(example));
@@ -205,7 +205,7 @@ public class UserMongoController {
      * [1,2,3]<br>
      * 存在:[实体];不存在:[]
      */
-    @PostMapping("/findListById")
+    @PostMapping("findListById")
     public Result<List<UserMongo>> findListById(@RequestBody List<Long> idList) {
         return Result.o(userMongoService.findListById(idList));
     }
@@ -215,7 +215,7 @@ public class UserMongoController {
      * http://localhost:8080/findAll<br>
      * [实体]
      */
-    @GetMapping("/findAll")
+    @GetMapping("findAll")
     public Result<List<UserMongo>> findAll() {
         return Result.o(userMongoService.findAll());
     }
@@ -225,7 +225,7 @@ public class UserMongoController {
      * http://localhost:8080/findListSort?field=name<br>
      * 根据name倒序的[实体]
      */
-    @GetMapping("/findListSort")
+    @GetMapping("findListSort")
     public Result<List<UserMongo>> findList(String field) {
         Sort sort = Sort.by(Sort.Order.desc(field));
         return Result.o(userMongoService.findList(sort));
@@ -237,7 +237,7 @@ public class UserMongoController {
      * {"name":"a"}<br>
      * name=a的[实体]
      */
-    @PostMapping("/findListExample")
+    @PostMapping("findListExample")
     public Result<List<UserMongo>> findList(@RequestBody UserMongo userMongo) {
         Example<UserMongo> example = Example.of(userMongo);
         return Result.o(userMongoService.findList(example));
@@ -249,7 +249,7 @@ public class UserMongoController {
      * {"name":"a"}<br>
      * name=a并且按照id倒序的[实体]
      */
-    @PostMapping("/findListExampleSort")
+    @PostMapping("findListExampleSort")
     public Result<List<UserMongo>> findList(@RequestBody UserMongo userMongo, String field) {
         Example<UserMongo> example = Example.of(userMongo);
         Sort sort = Sort.by(Sort.Order.desc(field));
@@ -261,7 +261,7 @@ public class UserMongoController {
      * http://localhost:8080/findListPage?page=1&size=1<br>
      * PageInfo
      */
-    @GetMapping("/findListPage")
+    @GetMapping("findListPage")
     public Result<PageInfo<UserMongo>> findList(int page, int size) {
         PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
         return Result.o(userMongoService.findList(pageRequestFix));
@@ -272,7 +272,7 @@ public class UserMongoController {
      * http://localhost:8080/findListPageSort?page=1&size=1&field=id<br>
      * PageInfo
      */
-    @GetMapping("/findListPageSort")
+    @GetMapping("findListPageSort")
     public Result<PageInfo<UserMongo>> findListSort(int page, int size, String field) {
         Sort sort = Sort.by(Sort.Order.desc(field));
         PageRequestFix pageRequestFix = PageRequestFix.of(page, size, sort);
@@ -285,7 +285,7 @@ public class UserMongoController {
      * {"pages":"1","rows":"2","orderBy":"name desc"}<br>
      * PageInfo
      */
-    @PostMapping("/findPage")
+    @PostMapping("findPage")
     public Result<PageInfo<UserMongo>> findPage(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage(userMongo));
     }
@@ -297,7 +297,7 @@ public class UserMongoController {
      * {"pages":"1","rows":"10","paramQueryList":[{"field":"date","value":"2023-03-09","value2":"2023-03-10","type":"timestamp","operator":"bt"}]}<br>
      * PageInfo
      */
-    @PostMapping("/findPage2")
+    @PostMapping("findPage2")
     public Result<PageInfo<UserMongo>> findPage2(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage2(userMongo));
     }
@@ -308,7 +308,7 @@ public class UserMongoController {
      * {"orderBy":"name desc"}<br>
      * List
      */
-    @PostMapping("/findSort")
+    @PostMapping("findSort")
     public Result<List<UserMongo>> findSort(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort(userMongo));
     }
@@ -319,7 +319,7 @@ public class UserMongoController {
      * {"orderBy":"name desc","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
      * PageInfo
      */
-    @PostMapping("/findSort2")
+    @PostMapping("findSort2")
     public Result<PageInfo<UserMongo>> findSort2(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort2(userMongo));
     }
@@ -330,7 +330,7 @@ public class UserMongoController {
      * {"name":"a"}<br>
      * PageInfo
      */
-    @PostMapping("/findListExamplePage")
+    @PostMapping("findListExamplePage")
     public Result<PageInfo<UserMongo>> findList(@RequestBody UserMongo userMongo, int page, int size) {
         Example<UserMongo> example = Example.of(userMongo);
         PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
@@ -342,7 +342,7 @@ public class UserMongoController {
      * http://localhost:8080/findByName?name=a&page=1&size=1<br>
      * PageInfo
      */
-    @GetMapping("/findByName")
+    @GetMapping("findByName")
     public Result<PageInfo<UserMongo>> findByName(String name, int page, int size) {
         PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
         return Result.o(userMongoService.findByName(name, pageRequestFix));
@@ -353,7 +353,7 @@ public class UserMongoController {
      * http://localhost:8080/addFollowers?id=1<br>
      * UpdateResult
      */
-    @GetMapping("/addFollowers")
+    @GetMapping("addFollowers")
     public Result<UpdateResult> addFollowers(long id) {
         return Result.o(userMongoService.addFollowers(id));
     }

@@ -27,6 +27,7 @@
     <module>packages</module>
     <module>demo-base</module>
     <module>demo-config</module>
+    <module>demo-dynamic-route</module>
     <module>demo-elastic-search</module>
     <module>demo-just-auth</module>
     <module>demo-java-advanced</module>
@@ -37,8 +38,6 @@
     <module>demo-mqtt</module>
     <module>demo-mqtt-cluster</module>
     <module>demo-mysql</module>
-    <module>demo-mysql2</module>
-    <module>demo-mysql3</module>
     <module>demo-rabbitmq</module>
     <module>demo-redis</module>
     <module>demo-tiny-task</module>

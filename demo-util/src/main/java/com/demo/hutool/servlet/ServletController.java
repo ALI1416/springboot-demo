@@ -21,14 +21,14 @@ import java.util.Map;
  **/
 @RestController
 @Slf4j
-@RequestMapping("hutool/servlet")
+@RequestMapping("servlet")
 public class ServletController {
 
     /**
      * header<br>
-     * http://localhost:8080/hutool/servlet/header
+     * http://localhost:8080/servlet/header
      */
-    @GetMapping("/header")
+    @GetMapping("header")
     public Map<String, String> header(HttpServletRequest request) {
         Map<String, String> header = ServletUtil.getHeaderMap(request);
         log.info(header.toString());
@@ -37,9 +37,9 @@ public class ServletController {
 
     /**
      * ip<br>
-     * http://localhost:8080/hutool/servlet/ip
+     * http://localhost:8080/servlet/ip
      */
-    @GetMapping("/ip")
+    @GetMapping("ip")
     public String ip(HttpServletRequest request) {
         String ip = ServletUtil.getClientIP(request);
         log.info(ip);

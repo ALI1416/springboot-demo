@@ -3,16 +3,26 @@
 <mapper namespace="com.demo.mapper.LoginLogMapper">
 
   <sql id="col">
-    id,ip,user_agent,ip_country,ip_province,ip_city,ip_isp,ua_os,ua_browser,ua_is_mobile,create_time
+    id,ip,user_agent,country,province,city,isp,os,browser,is_mobile,create_time
   </sql>
 
   <insert id="insert" parameterType="LoginLog">
     INSERT
     login_log(
-    id,ip,user_agent,ip_country,ip_province,ip_city,ip_isp,ua_os,ua_browser,ua_is_mobile
+    <include refid="col"/>
     )VALUES(
-    #{id},#{ip},#{userAgent},#{ipCountry},#{ipProvince},#{ipCity},#{ipIsp},#{uaOs},#{uaBrowser},#{uaIsMobile}
+    #{id},#{ip},#{userAgent},#{country},#{province},#{city},#{isp},#{os},#{browser},#{isMobile},CURRENT_TIMESTAMP
     )
   </insert>
+
+  <select id="getLast" resultType="LoginLog">
+    SELECT
+    <include refid="col"/>
+    FROM
+    login_log
+    ORDER BY
+    id desc
+    LIMIT 1
+  </select>
 
 </mapper>

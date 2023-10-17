@@ -5,7 +5,6 @@ import cn.hutool.captcha.LineCaptcha;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,14 +20,13 @@ import javax.servlet.http.HttpServletResponse;
  **/
 @Controller
 @Slf4j
-@RequestMapping("hutool/captcha")
 public class CaptchaController {
 
     /**
      * 获取<br>
-     * http://localhost:8080/hutool/captcha/get
+     * http://localhost:8080/captcha
      */
-    @GetMapping("/get")
+    @GetMapping("captcha")
     public void get(HttpServletResponse response) throws Exception {
         /* 设置请求头为输出图片类型 */
         response.setContentType("image/png");

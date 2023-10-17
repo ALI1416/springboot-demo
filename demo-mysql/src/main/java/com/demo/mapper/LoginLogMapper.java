@@ -22,4 +22,11 @@ public interface LoginLogMapper {
      */
     int insert(LoginLog loginLog);
 
+    /**
+     * 获取最后一条
+     *
+     * @return LoginLog
+     */
+    LoginLog getLast();
+
 }

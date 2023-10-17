@@ -26,7 +26,7 @@ public class IndexController {
      * http://localhost:8080 <br>
      * 发送(QoS=0 不保留)
      */
-    @GetMapping(value = {"", "/", "index"})
+    @GetMapping
     public Result index() {
         mqttTemp.send("topic", "发送(QoS=0 不保留)");
         return Result.o();

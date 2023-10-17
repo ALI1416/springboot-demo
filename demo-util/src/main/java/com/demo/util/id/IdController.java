@@ -4,7 +4,6 @@ import cn.z.id.Id;
 import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,14 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @Slf4j
-@RequestMapping("id")
 public class IdController {
 
     /**
      * 获取<br>
-     * http://localhost:8080/id/get
+     * http://localhost:8080/id
      */
-    @GetMapping("/get")
+    @GetMapping("id")
     public Result<Long> get() {
         long id = Id.next();
         log.info(Long.toString(id));

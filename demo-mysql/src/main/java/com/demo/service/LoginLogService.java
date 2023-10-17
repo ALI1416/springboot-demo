@@ -33,4 +33,13 @@ public class LoginLogService {
         return loginLogDao.insert(loginLog);
     }
 
+    /**
+     * 获取最后一条
+     *
+     * @return LoginLog
+     */
+    public LoginLog getLast() {
+        return loginLogDao.getLast();
+    }
+
 }

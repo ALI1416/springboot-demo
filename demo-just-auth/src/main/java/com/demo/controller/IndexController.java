@@ -40,7 +40,7 @@ public class IndexController {
     /**
      * 授权地址
      */
-    @GetMapping(value = {"", "/"})
+    @GetMapping
     public String render() {
         String authorize = request.authorize(AuthStateUtils.createState());
         log.info(authorize);

@@ -3,6 +3,7 @@ package com.demo.controller;
 import cn.z.tinytoken.T4s;
 import cn.z.tinytoken.entity.TokenInfo;
 import cn.z.tinytoken.entity.TokenInfoExtra;
+import com.demo.entity.pojo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,8 +29,8 @@ public class IndexController {
      * http://localhost:8080/setToken?id=123
      */
     @GetMapping("setToken")
-    public String setToken(long id) {
-        return t4s.setToken(id);
+    public Result<String> setToken(long id) {
+        return Result.o(t4s.setToken(id));
     }
 
     /**
@@ -37,8 +38,8 @@ public class IndexController {
      * http://localhost:8080/getToken
      */
     @GetMapping("getToken")
-    public String getToken() {
-        return t4s.getToken();
+    public Result<String> getToken() {
+        return Result.o(t4s.getToken());
     }
 
     /**
@@ -46,8 +47,8 @@ public class IndexController {
      * http://localhost:8080/getTokenValid
      */
     @GetMapping("getTokenValid")
-    public String getTokenValid() {
-        return t4s.getTokenValid();
+    public Result<String> getTokenValid() {
+        return Result.o(t4s.getTokenValid());
     }
 
     /**
@@ -55,8 +56,8 @@ public class IndexController {
      * http://localhost:8080/getId
      */
     @GetMapping("getId")
-    public Long getId() {
-        return t4s.getId();
+    public Result<Long> getId() {
+        return Result.o(t4s.getId());
     }
 
     /**
@@ -64,8 +65,8 @@ public class IndexController {
      * http://localhost:8080/deleteByToken
      */
     @GetMapping("deleteByToken")
-    public Boolean deleteByToken() {
-        return t4s.deleteByToken();
+    public Result<Boolean> deleteByToken() {
+        return Result.o(t4s.deleteByToken());
     }
 
     /**
@@ -73,8 +74,8 @@ public class IndexController {
      * http://localhost:8080/expire?timeout=100
      */
     @GetMapping("expire")
-    public Boolean expire(long timeout) {
-        return t4s.expire(timeout);
+    public Result<Boolean> expire(long timeout) {
+        return Result.o(t4s.expire(timeout));
     }
 
     /**
@@ -82,8 +83,8 @@ public class IndexController {
      * http://localhost:8080/persist
      */
     @GetMapping("persist")
-    public Boolean persist() {
-        return t4s.persist();
+    public Result<Boolean> persist() {
+        return Result.o(t4s.persist());
     }
 
     /**
@@ -91,8 +92,8 @@ public class IndexController {
      * http://localhost:8080/getInfoByToken
      */
     @GetMapping("getInfoByToken")
-    public TokenInfo getInfoByToken() {
-        return t4s.getInfoByToken();
+    public Result<TokenInfo> getInfoByToken() {
+        return Result.o(t4s.getInfoByToken());
     }
 
     /**
@@ -100,8 +101,8 @@ public class IndexController {
      * http://localhost:8080/getInfoExtraByToken
      */
     @GetMapping("getInfoExtraByToken")
-    public TokenInfoExtra getInfoExtraByToken() {
-        return t4s.getInfoExtraByToken();
+    public Result<TokenInfoExtra> getInfoExtraByToken() {
+        return Result.o(t4s.getInfoExtraByToken());
     }
 
 }
