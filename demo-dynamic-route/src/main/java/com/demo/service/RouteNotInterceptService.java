@@ -163,13 +163,13 @@ public class RouteNotInterceptService {
         // 存在"不拦截路径"
         if (!notIntercept.isEmpty()) {
             // 创建"不拦截-匹配路径"
-            notInterceptMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() == 0 && r.getIsMatch() == 1)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            notInterceptMatch = notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-直接路径"
-            notInterceptDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() == 0 && r.getIsMatch() == 0)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            notInterceptDirect = notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-匹配路径(需要登录)"
-            notInterceptLoginMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() == 1 && r.getIsMatch() == 1)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            notInterceptLoginMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-直接路径(需要登录)"
-            notInterceptLoginDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() == 1 && r.getIsMatch() == 0)).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            notInterceptLoginDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
         }
     }
 

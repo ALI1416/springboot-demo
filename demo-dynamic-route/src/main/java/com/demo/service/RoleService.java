@@ -115,20 +115,6 @@ public class RoleService {
     }
 
     /**
-     * 查询角色和路由，通过用户id
-     *
-     * @param userId userId
-     * @return List RoleVo
-     */
-    public List<RoleVo> findRoleAndRouteByUserId(long userId) {
-        List<RoleVo> roleList = roleDao.findByUserId(userId);
-        for (RoleVo role : roleList) {
-            role.setRouteList(routeDao.findByRoleId(role.getId()));
-        }
-        return roleList;
-    }
-
-    /**
      * 查询是否存在，通过id和创建者id
      *
      * @param id       id

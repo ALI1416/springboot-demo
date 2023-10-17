@@ -135,7 +135,7 @@ public class RouteController extends ControllerBase {
      */
     @GetMapping("refresh")
     public Result<Long> refresh() {
-        return Result.o(routeService.deleteRoute());
+        return Result.o(routeService.deleteRouteCache());
     }
 
     /**
@@ -143,7 +143,7 @@ public class RouteController extends ControllerBase {
      */
     @GetMapping("refreshRoute")
     public Result<Long> refreshRoute(long userId) {
-        return Result.o(routeService.deleteRouteUser(userId));
+        return Result.o(routeService.deleteRouteUserCache(userId));
     }
 
 }

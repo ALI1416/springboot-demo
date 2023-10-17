@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 13/10/2023 18:12:27
+ Date: 17/10/2023 16:56:46
 */
 
 SET NAMES utf8mb4;
@@ -25,10 +25,10 @@ CREATE TABLE `role`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
   `seq` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '顺序',
-  `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id，外键：user.id',
+  `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id：外键user.id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `create_id`(`create_id` ASC) USING BTREE,
-  CONSTRAINT `role_ibfk_1` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `role__create_id` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -49,13 +49,13 @@ INSERT INTO `role` VALUES (7, '测试3', 7, 1);
 DROP TABLE IF EXISTS `role_route`;
 CREATE TABLE `role_route`  (
   `id` bigint NOT NULL COMMENT 'id',
-  `role_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id，外键：role.id，role_id和route_id唯一',
-  `route_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '路由id，外键：route.id，role_id和route_id唯一',
+  `role_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id：外键role.id，唯一role_id和route_id',
+  `route_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '路由id：外键route.id，唯一role_id和route_id',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `role_id_route_id`(`role_id` ASC, `route_id` ASC) USING BTREE,
   INDEX `route_id`(`route_id` ASC) USING BTREE,
-  CONSTRAINT `role_route_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `role_route_ibfk_2` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  UNIQUE INDEX `role_id__route_id`(`role_id` ASC, `route_id` ASC) USING BTREE,
+  CONSTRAINT `role_route__role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `role_route__route_id` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色-路由' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -77,10 +77,10 @@ CREATE TABLE `route`  (
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '路径',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '名称',
   `seq` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '顺序',
-  `parent_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '父id，外键：route.id',
+  `parent_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '父id：外键route.id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `parent_id`(`parent_id` ASC) USING BTREE,
-  CONSTRAINT `route_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `route` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `route__parent_id` FOREIGN KEY (`parent_id`) REFERENCES `route` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '路由' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -150,7 +150,9 @@ CREATE TABLE `route_not_intercept`  (
   `is_match` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '匹配模式：1是0否',
   `need_login` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '需要登录：1是0否',
   `seq` int UNSIGNED NOT NULL DEFAULT 0 COMMENT '顺序',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE,
+  CONSTRAINT `route_not_intercept__is_match` CHECK ((`is_match` = 0) or (`is_match` = 1)),
+  CONSTRAINT `route_not_intercept__need_login` CHECK ((`need_login` = 0) or (`need_login` = 1))
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '路由-不拦截' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -178,12 +180,13 @@ CREATE TABLE `user`  (
   `pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '昵称',
   `is_delete` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '已删除',
-  `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id，外键：user.id',
+  `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id：外键user.id',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `account`(`account` ASC) USING BTREE,
   INDEX `create_id`(`create_id` ASC) USING BTREE,
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `user__create_id` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `user__is_delete` CHECK ((`is_delete` = 0) or (`is_delete` = 1))
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -201,13 +204,13 @@ INSERT INTO `user` VALUES (4, 'test', '$2a$10$Ps8j5ygzWFj4zf09yjl73.5BJ2vrWVyKcM
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
-  `user_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id，外键：user.id，user_id和role_id唯一',
-  `role_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id，外键：role.id，user_id和role_id唯一',
+  `user_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '用户id：外键user.id，唯一user_id和role_id',
+  `role_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '角色id：外键role.id，唯一user_id和role_id',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `user_id_role_id`(`user_id` ASC, `role_id` ASC) USING BTREE,
   INDEX `role_id`(`role_id` ASC) USING BTREE,
-  CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  UNIQUE INDEX `user_id__role_id`(`user_id` ASC, `role_id` ASC) USING BTREE,
+  CONSTRAINT `user_role__role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `user_role__user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户-角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------

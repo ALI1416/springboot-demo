@@ -205,7 +205,7 @@ public class RoleController extends ControllerBase {
         if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(routeService.deleteRouteRole(id) + routeService.deleteRouteUser(userService.findIdByRoleId(id)));
+        return Result.o(routeService.deleteRouteRoleCache(id) + routeService.deleteRouteUserCache(userService.findIdByRoleId(id)));
     }
 
     /**
@@ -213,7 +213,7 @@ public class RoleController extends ControllerBase {
      */
     @GetMapping("refreshNoCheck")
     public Result<Long> refreshNoCheck(long id) {
-        return Result.o(routeService.deleteRouteRole(id) + routeService.deleteRouteUser(userService.findIdByRoleId(id)));
+        return Result.o(routeService.deleteRouteRoleCache(id) + routeService.deleteRouteUserCache(userService.findIdByRoleId(id)));
     }
 
 }

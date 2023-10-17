@@ -34,7 +34,7 @@ CREATE TABLE `login_log`  (
   `is_mobile` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '浏览器标识-是移动端',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
-  CONSTRAINT `is_mobile` CHECK ((`is_mobile` = 0) or (`is_mobile` = 1))
+  CONSTRAINT `login_log__is_mobile` CHECK ((`is_mobile` = 0) or (`is_mobile` = 1))
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -64,10 +64,10 @@ CREATE TABLE `user`  (
   UNIQUE INDEX `account`(`account` ASC) USING BTREE,
   INDEX `create_id`(`create_id` ASC) USING BTREE,
   INDEX `update_id`(`update_id` ASC) USING BTREE,
-  CONSTRAINT `create_id` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `update_id` FOREIGN KEY (`update_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `gender` CHECK ((`gender` = 0) or (`gender` = 1)),
-  CONSTRAINT `is_delete` CHECK ((`is_delete` = 0) or (`is_delete` = 1))
+  CONSTRAINT `user__create_id` FOREIGN KEY (`create_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `user__update_id` FOREIGN KEY (`update_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `user__gender` CHECK ((`gender` = 0) or (`gender` = 1)),
+  CONSTRAINT `user__is_delete` CHECK ((`is_delete` = 0) or (`is_delete` = 1))
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -97,7 +97,7 @@ CREATE TABLE `user_bak`  (
   `version` int UNSIGNED NOT NULL COMMENT '版本',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `ref_id`(`ref_id` ASC) USING BTREE,
-  CONSTRAINT `ref_id` FOREIGN KEY (`ref_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `user_bak__ref_id` FOREIGN KEY (`ref_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户备份' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------

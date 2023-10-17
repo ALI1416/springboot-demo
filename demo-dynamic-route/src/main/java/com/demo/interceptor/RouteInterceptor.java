@@ -69,14 +69,14 @@ public class RouteInterceptor implements HandlerInterceptor {
         if (routeNotInterceptService.isNotInterceptDirect(url)) {
             return true;
         }
-        // 获取"登录者id"
-        Long id = t4s.getId();
+        // 获取"用户id"
+        Long userId = t4s.getId();
         // 抛出"未登录异常"
-        if (id == null) {
+        if (userId == null) {
             throw new GlobalException(ResultEnum.NOT_LOGIN);
         }
         // 是"root"用户
-        if (id == 0L) {
+        if (userId == 0L) {
             return true;
         }
         // 是"不拦截-匹配路径(需要登录)"
@@ -88,26 +88,26 @@ public class RouteInterceptor implements HandlerInterceptor {
             return true;
         }
         // 是"匹配路径"
-        if (isMatcher(id, urlList)) {
+        if (isMatcher(userId, urlList)) {
             return true;
         }
         // 是"直接路径"
-        if (isDirect(id, url)) {
+        if (isDirect(userId, url)) {
             return true;
         }
         // 抛出"无权限异常"
-        throw new GlobalException(ResultEnum.NOT_PERMISSION, "ID[" + id + "],URL[" + url + "]");
+        throw new GlobalException(ResultEnum.NOT_PERMISSION, "ID[" + userId + "],URL[" + url + "]");
     }
 
     /**
      * 是"匹配路径"
      *
-     * @param id      用户id
+     * @param userId  用户id
      * @param urlList URL列表
      * @return 是否
      */
-    private boolean isMatcher(Long id, List<String> urlList) {
-        String key = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
+    private boolean isMatcher(long userId, List<String> urlList) {
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX;
         // 判断值是否存在
         if (Boolean.TRUE.equals(redisTemp.sIsMemberMulti(key, urlList).containsValue(true))) {
             // 存在
@@ -119,7 +119,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             return false;
         } else {
             // 不存在，去添加
-            setUserRoute(id);
+            setUserRoute(userId);
         }
         // 判断值是否存在
         return redisTemp.sIsMemberMulti(key, urlList).containsValue(true);
@@ -128,12 +128,12 @@ public class RouteInterceptor implements HandlerInterceptor {
     /**
      * 是"直接路径"
      *
-     * @param id  用户id
-     * @param url URL
+     * @param userId 用户id
+     * @param url    URL
      * @return 是否
      */
-    private boolean isDirect(Long id, String url) {
-        String key = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
+    private boolean isDirect(long userId, String url) {
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX;
         // 判断值是否存在(setUserRoute已创建)
         return redisTemp.sIsMember(key, url);
     }
@@ -141,17 +141,19 @@ public class RouteInterceptor implements HandlerInterceptor {
     /**
      * 创建用户"匹配路径"和"直接路径"
      *
-     * @param id 用户id
+     * @param userId 用户id
      */
-    private void setUserRoute(Long id) {
-        Set<Object> matcherList = new HashSet<>();
-        Set<Object> directList = new HashSet<>();
+    private void setUserRoute(long userId) {
+        Set<Object> matcherList;
+        Set<Object> directList;
         // 获取该用户的角色
-        List<Long> roleIdList = roleService.findIdByUserId(id);
+        List<Long> roleIdList = roleService.findIdByUserId(userId);
         // 判断是否有角色
         if (roleIdList.isEmpty()) {
             // 不存在，给一个占位符
+            matcherList = new HashSet<>();
             matcherList.add(PLACEHOLDER);
+            directList = new HashSet<>();
             directList.add(PLACEHOLDER);
         } else {
             // 创建角色的"匹配路径"和"直接路径"
@@ -165,26 +167,26 @@ public class RouteInterceptor implements HandlerInterceptor {
                     .collect(Collectors.toList()));
         }
         // 创建该用户的"匹配路径"和"直接路径"
-        String key = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX;
         redisTemp.sAddMulti(key, matcherList);
         redisTemp.expire(key, RedisConstant.ROUTE_EXPIRE);
-        String key2 = RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
+        String key2 = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX;
         redisTemp.sAddMulti(key2, directList);
         redisTemp.expire(key2, RedisConstant.ROUTE_EXPIRE);
     }
 
     /**
-     * 创建"匹配路径"和"直接路径"，通过角色id
+     * 创建"匹配路径"和"直接路径"，通过角色id列表
      *
-     * @param ids 角色id
+     * @param roleIdList 角色id列表
      */
-    private void setRouteByRoleIdList(List<Long> ids) {
-        for (Long id : ids) {
-            String key = RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
+    private void setRouteByRoleIdList(List<Long> roleIdList) {
+        for (Long roleId : roleIdList) {
+            String key = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCHER_SUFFIX;
             // 判断是否存在该角色的"匹配路径"和"直接路径"
             if (Boolean.FALSE.equals(redisTemp.exists(key))) {
                 // 不存在，去创建
-                setRouteByRoleId(id);
+                setRouteByRoleId(roleId);
             }
         }
     }
@@ -192,18 +194,18 @@ public class RouteInterceptor implements HandlerInterceptor {
     /**
      * 创建"匹配路径"和"直接路径"，通过角色id
      *
-     * @param id 角色id
+     * @param roleId 角色id
      */
-    private void setRouteByRoleId(Long id) {
+    private void setRouteByRoleId(long roleId) {
         // 判断是否存在根"匹配路径"
         if (Boolean.FALSE.equals(redisTemp.exists(RedisConstant.ROUTE_MATCHER))) {
             // 不存在，去创建
             setRoute();
         }
         // 获取该角色的路由
-        List<String> routeIdList = routeService.findByRoleId(id) //
+        List<String> routeIdList = routeService.findByRoleId(roleId) //
                 .stream().map(r -> r.getId().toString()).collect(Collectors.toList());
-        // 获取该角色的"匹配路径"(必须去除null)
+        // 获取该角色的"匹配路径"(去除null)
         Collection<Object> routeMatcher = redisTemp.hGetMulti(RedisConstant.ROUTE_MATCHER, routeIdList) //
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // 判断是否有"匹配路径"
@@ -211,7 +213,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             // 不存在，给一个占位符
             routeMatcher.add(PLACEHOLDER);
         }
-        // 获取该角色的"直接路径"(setRoute已创建)(必须去除null)
+        // 获取该角色的"直接路径"(setRoute已创建)(去除null)
         Collection<Object> routeDirect = redisTemp.hGetMulti(RedisConstant.ROUTE_DIRECT, routeIdList) //
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // 判断是否有"直接路径"
@@ -220,11 +222,11 @@ public class RouteInterceptor implements HandlerInterceptor {
             routeDirect.add(PLACEHOLDER);
         }
         // 创建该角色的"匹配路径"
-        String key = RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX;
+        String key = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCHER_SUFFIX;
         redisTemp.sAddMulti(key, routeMatcher);
         redisTemp.expire(key, RedisConstant.ROUTE_EXPIRE);
         // 创建该角色的"直接路径"
-        String key2 = RedisConstant.ROUTE_ROLE_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX;
+        String key2 = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX;
         redisTemp.sAddMulti(key2, routeDirect);
         redisTemp.expire(key2, RedisConstant.ROUTE_EXPIRE);
     }

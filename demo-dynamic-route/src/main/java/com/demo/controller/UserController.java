@@ -47,7 +47,7 @@ public class UserController extends ControllerBase {
         }
         UserVo u = userService.findByAccount(user.getAccount());
         if (u != null) {
-            if (u.getIsDelete() != 0) {
+            if (Boolean.TRUE.equals(u.getIsDelete())) {
                 return Result.e(ResultEnum.ACCOUNT_DISABLE);
             }
             if (BCrypt.check(user.getPwd(), u.getPwd())) {
@@ -130,14 +130,6 @@ public class UserController extends ControllerBase {
     @GetMapping("route")
     public Result<RouteVo> route() {
         return Result.o(routeService.findByUserId(t4s.getId()));
-    }
-
-    /**
-     * 角色和路由
-     */
-    @GetMapping("roleAndRoute")
-    public Result<List<RoleVo>> roleAndRoute() {
-        return Result.o(roleService.findRoleAndRouteByUserId(t4s.getId()));
     }
 
     /**

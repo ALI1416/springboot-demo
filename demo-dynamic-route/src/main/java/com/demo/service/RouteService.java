@@ -151,31 +151,17 @@ public class RouteService {
      */
     public RouteVo findByUserId(long userId) {
         RouteVo route = new RouteVo();
-        if (userId == 0) {
-            List<String> matcherPath = new ArrayList<>();
-            matcherPath.add("/");
-            route.setMatcherPath(matcherPath);
+        // 获取用户拥有的角色id
+        List<Long> roleIdList = roleService.findIdByUserId(userId);
+        // 没有角色
+        if (roleIdList.isEmpty()) {
             return route;
         }
-        route.setMatcherPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
-        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
-        return route;
-    }
-
-    /**
-     * 查询路由id(不包含子路由)，通过用户id
-     *
-     * @param userId userId
-     */
-    public Set<Long> findIdByUserId(long userId) {
-        Set<Long> ids = new HashSet<>();
-        // 获取用户拥有的角色id
-        List<Long> roles = roleService.findIdByUserId(userId);
-        // 获取该角色id的路由id
-        for (Long role : roles) {
-            ids.addAll(findIdByRoleId(role));
-        }
-        return ids;
+        // TODO
+        RouteVo expandedList = findExpandedList();
+        route.setMatcherPath(expandedList.getMatcher().stream().map(RouteVo::getPath).collect(Collectors.toList()));
+        route.setDirectPath(expandedList.getDirect().stream().map(RouteVo::getPath).collect(Collectors.toList()));
+        return expandedList;
     }
 
     /**
@@ -186,10 +172,10 @@ public class RouteService {
     public Set<Long> findIdAndChildrenIdByUserId(long userId) {
         Set<Long> routeIdList = new HashSet<>();
         // 获取用户拥有的角色id
-        List<Long> roleList = roleService.findIdByUserId(userId);
+        List<Long> roleIdList = roleService.findIdByUserId(userId);
         // 获取该角色id的路由和子路由id
-        for (Long role : roleList) {
-            for (Long routeId : findIdByRoleId(role)) {
+        for (Long roleId : roleIdList) {
+            for (Long routeId : findIdByRoleId(roleId)) {
                 routeIdList.add(routeId);
                 routeIdList.addAll(findChildByParentId(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
             }
@@ -233,16 +219,6 @@ public class RouteService {
      */
     public RouteVo findById(long id) {
         return routeDao.findById(id);
-    }
-
-    /**
-     * 查询，通过父id
-     *
-     * @param parentId parentId
-     * @return List RouteVo
-     */
-    public List<RouteVo> findByParentId(long parentId) {
-        return routeDao.findByParentId(parentId);
     }
 
     /**
@@ -297,19 +273,19 @@ public class RouteService {
      *
      * @return 成功条数
      */
-    public Long deleteRoute() {
+    public Long deleteRouteCache() {
         return redisTemp.deleteMulti(redisTemp.scan(RedisConstant.ROUTE_PREFIX + "*"));
     }
 
     /**
      * 删除Redis角色路由，通过角色id<br>
-     * 请手动查询该角色下的所有用户并删除用户路由
+     * 请手动查询该角色下的所有用户并删除Redis用户路由
      *
      * @param roleId roleId
      * @return 成功条数
-     * @see #deleteRouteUser(List)
+     * @see #deleteRouteUserCache(List)
      */
-    public Long deleteRouteRole(long roleId) {
+    public Long deleteRouteRoleCache(long roleId) {
         return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
                 RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }
@@ -318,8 +294,9 @@ public class RouteService {
      * 删除Redis用户路由，通过用户id列表
      *
      * @param userIdList userId
+     * @return 成功条数
      */
-    public Long deleteRouteUser(List<Long> userIdList) {
+    public Long deleteRouteUserCache(List<Long> userIdList) {
         List<String> keys = new ArrayList<>();
         for (Long id : userIdList) {
             keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
@@ -332,8 +309,9 @@ public class RouteService {
      * 删除Redis用户路由，通过用户id
      *
      * @param userId userId
+     * @return 成功条数
      */
-    public Long deleteRouteUser(long userId) {
+    public Long deleteRouteUserCache(long userId) {
         return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
                 RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX);
     }

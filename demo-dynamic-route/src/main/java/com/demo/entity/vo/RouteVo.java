@@ -21,24 +21,24 @@ import java.util.List;
 public class RouteVo extends Route {
 
     /**
-     * 所有子节点
+     * 子节点
      */
     private List<RouteVo> children;
     /**
-     * 是可以匹配的路径
+     * 匹配路径
      */
     private List<RouteVo> matcher;
     /**
-     * 是不可匹配的路径(仅路径)
+     * 直接路径
+     */
+    private List<RouteVo> direct;
+    /**
+     * 匹配路径(仅路径)
      */
     private List<String> directPath;
     /**
-     * 是可以匹配的路径(仅路径)
+     * 直接路径(仅路径)
      */
     private List<String> matcherPath;
-    /**
-     * 是不可匹配的路径
-     */
-    private List<RouteVo> direct;
 
 }

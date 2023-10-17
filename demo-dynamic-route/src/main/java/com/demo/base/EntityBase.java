@@ -27,7 +27,7 @@ public class EntityBase extends ToStringBase {
     /**
      * 已删除
      */
-    private Integer isDelete;
+    private Boolean isDelete;
     /**
      * 创建者id
      */
