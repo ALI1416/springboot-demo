@@ -22,7 +22,7 @@ public class RedisConstant {
     /**
      * 路由-所有"匹配路径"{@value}
      */
-    public static final String ROUTE_MATCHER = ROUTE_PREFIX + "matcher";
+    public static final String ROUTE_MATCH = ROUTE_PREFIX + "match";
     /**
      * 路由-所有"直接路径"{@value}
      */
@@ -38,14 +38,27 @@ public class RedisConstant {
     /**
      * 路由-"匹配路径"后缀{@value}
      */
-    public static final String ROUTE_MATCHER_SUFFIX = ":matcher";
+    public static final String ROUTE_MATCH_SUFFIX = ":match";
     /**
      * 路由-"直接路径"后缀{@value}
      */
     public static final String ROUTE_DIRECT_SUFFIX = ":direct";
     /**
-     * 路由-失效时间(秒){@value}
+     * 路由-失效时间(秒)(2小时){@value}
      */
     public static final int ROUTE_EXPIRE = 2 * 60 * 60;
+
+    /**
+     * 更新前缀{@value}
+     */
+    public static final String UPDATE_PREFIX = "update:";
+    /**
+     * 路由不拦截-更新{@value}
+     */
+    public static final String UPDATE_ROUTE_NOT_INTERCEPT = UPDATE_PREFIX + "routeNotIntercept";
+    /**
+     * 更新cron(2小时){@value}
+     */
+    public static final String UPDATE_CRON = "0 0 0/2 * * *";
 
 }

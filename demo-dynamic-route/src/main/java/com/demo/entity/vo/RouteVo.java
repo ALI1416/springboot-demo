@@ -1,6 +1,7 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.po.Route;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,27 +19,33 @@ import java.util.List;
  **/
 @Getter
 @Setter
+@Schema(description = "路由")
 public class RouteVo extends Route {
 
     /**
      * 子节点
      */
-    private List<RouteVo> children;
+    @Schema(description = "子节点")
+    private List<RouteVo> child;
     /**
      * 匹配路径
      */
-    private List<RouteVo> matcher;
+    @Schema(description = "匹配路径")
+    private List<RouteVo> match;
     /**
      * 直接路径
      */
+    @Schema(description = "直接路径")
     private List<RouteVo> direct;
     /**
      * 匹配路径(仅路径)
      */
-    private List<String> directPath;
+    @Schema(description = "匹配路径(仅路径)")
+    private List<String> matchPath;
     /**
      * 直接路径(仅路径)
      */
-    private List<String> matcherPath;
+    @Schema(description = "直接路径(仅路径)")
+    private List<String> directPath;
 
 }

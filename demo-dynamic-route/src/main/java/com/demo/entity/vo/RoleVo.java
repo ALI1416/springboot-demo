@@ -1,6 +1,7 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.po.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,15 +19,13 @@ import java.util.List;
  **/
 @Getter
 @Setter
+@Schema(description = "角色")
 public class RoleVo extends Role {
 
     /**
-     * 路由列表
-     */
-    private List<RouteVo> routeList;
-    /**
      * 路由id列表
      */
+    @Schema(description = "路由id列表")
     private List<Long> routeIdList;
 
 }

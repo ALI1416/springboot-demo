@@ -19,7 +19,7 @@ public class ControllerBase {
      * 请求参数错误
      */
     public static Result paramIsError() {
-        return Result.e(ResultEnum.PARAM_IS_ERROR);
+        return Result.e(ResultEnum.PARAM_ERROR);
     }
 
     /**

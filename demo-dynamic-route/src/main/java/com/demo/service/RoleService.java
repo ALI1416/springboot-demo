@@ -1,8 +1,8 @@
 package com.demo.service;
 
+import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
-import com.demo.dao.mysql.RouteDao;
 import com.demo.dao.mysql.UserRoleDao;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
@@ -24,10 +24,9 @@ import java.util.List;
  **/
 @Service
 @AllArgsConstructor
-public class RoleService {
+public class RoleService extends ServiceBase {
 
     private final RoleDao roleDao;
-    private final RouteDao routeDao;
     private final UserRoleDao userRoleDao;
     private final RoleRouteDao roleRouteDao;
 
@@ -43,6 +42,17 @@ public class RoleService {
     }
 
     /**
+     * 删除
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean delete(long id) {
+        return execute(() -> userRoleDao.deleteByRoleId(id), () -> roleRouteDao.deleteByRoleId(id), () -> roleDao.delete(id));
+    }
+
+    /**
      * 更新
      *
      * @param role id(必须),name,seq(至少1个)
@@ -51,17 +61,6 @@ public class RoleService {
     @Transactional
     public boolean update(RoleVo role) {
         return roleDao.update(role);
-    }
-
-    /**
-     * 删除
-     *
-     * @param id id
-     * @return 是否成功
-     */
-    @Transactional
-    public boolean delete(long id) {
-        return userRoleDao.deleteByRoleId(id) && roleRouteDao.deleteByRoleId(id) && roleDao.delete(id);
     }
 
     /**
@@ -102,16 +101,6 @@ public class RoleService {
      */
     public RoleVo findById(long id) {
         return roleDao.findById(id);
-    }
-
-    /**
-     * 查询id，通过用户id
-     *
-     * @param userId userId
-     * @return List Long
-     */
-    public List<Long> findIdByUserId(long userId) {
-        return roleDao.findIdByUserId(userId);
     }
 
     /**

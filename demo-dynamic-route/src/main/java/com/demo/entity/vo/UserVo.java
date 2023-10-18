@@ -1,6 +1,7 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.po.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,19 +19,23 @@ import java.util.List;
  **/
 @Getter
 @Setter
+@Schema(description = "用户")
 public class UserVo extends User {
 
     /**
      * 新密码
      */
+    @Schema(description = "新密码")
     private String newPwd;
     /**
      * 角色id列表
      */
+    @Schema(description = "角色id列表")
     private List<Long> roleIdList;
     /**
      * token
      */
+    @Schema(description = "token")
     private String token;
 
 }

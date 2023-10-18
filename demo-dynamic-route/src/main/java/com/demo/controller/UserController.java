@@ -12,6 +12,8 @@ import com.demo.entity.vo.UserVo;
 import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("user")
 @AllArgsConstructor
+@Tag(name = "用户")
 public class UserController extends ControllerBase {
 
     private final T4s t4s;
@@ -38,9 +41,10 @@ public class UserController extends ControllerBase {
     private final RouteService routeService;
 
     /**
-     * 登录
+     * 用户登录
      */
     @PostMapping("login")
+    @Operation(summary = "用户登录", description = "需要登录/account/pwd")
     public Result<UserVo> login(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getPwd())) {
             return paramIsError();
@@ -60,17 +64,19 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 注销
+     * 用户注销
      */
     @GetMapping("logout")
+    @Operation(summary = "用户注销", description = "需要登录")
     public Result<Boolean> logout() {
         return Result.o(t4s.deleteByToken());
     }
 
     /**
-     * 注册
+     * 用户注册
      */
     @PostMapping("register")
+    @Operation(summary = "用户注册", description = "需要account/name/pwd")
     public Result<Long> register(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
             return paramIsError();
@@ -87,55 +93,75 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 修改密码
+     * 用户修改密码
      */
-    @PatchMapping("changePwd")
-    public Result<Boolean> changePwd(@RequestBody UserVo user) {
+    @PatchMapping("updatePwd")
+    @Operation(summary = "用户修改密码", description = "需要登录/pwd/newPwd")
+    public Result<Boolean> updatePwd(@RequestBody UserVo user) {
         if (existNull(user.getPwd(), user.getNewPwd())) {
             return paramIsError();
         }
         user.setId(t4s.getId());
-        User u = userService.info(user.getId());
+        User u = userService.findById(user.getId());
         if (!BCrypt.check(user.getPwd(), u.getPwd())) {
             return Result.e(ResultEnum.PASSWORD_ERROR);
         }
-        return Result.o(userService.changePwd(user));
+        UserVo u2 = new UserVo();
+        u2.setId(user.getId());
+        u2.setPwd(user.getNewPwd());
+        return Result.o(userService.update(u2));
     }
 
     /**
-     * 修改信息(除密码、删除)
+     * 用户修改信息(除密码、删除)
      */
     @PatchMapping("update")
+    @Operation(summary = "用户修改信息(除密码、删除)", description = "需要登录 至少一个account/name")
     public Result<Boolean> update(@RequestBody UserVo user) {
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
-        user.setId(t4s.getId());
-        user.setPwd(null);
-        user.setIsDelete(null);
-        return Result.o(userService.update(user));
+        UserVo u = new UserVo();
+        u.setId(t4s.getId());
+        u.setAccount(user.getAccount());
+        u.setName(u.getName());
+        return Result.o(userService.update(u));
     }
 
     /**
-     * 角色
+     * 获取用户详情
+     */
+    @GetMapping("info")
+    @Operation(summary = "获取用户详情", description = "需要登录")
+    public Result<UserVo> info() {
+        UserVo user = userService.findById(t4s.getId());
+        user.setPwd(null);
+        return Result.o(user);
+    }
+
+    /**
+     * 获取用户角色
      */
     @GetMapping("role")
+    @Operation(summary = "获取用户角色", description = "需要登录")
     public Result<List<RoleVo>> role() {
         return Result.o(roleService.findByUserId(t4s.getId()));
     }
 
     /**
-     * 路由
+     * 获取用户路由
      */
     @GetMapping("route")
+    @Operation(summary = "获取用户路由", description = "需要登录")
     public Result<RouteVo> route() {
         return Result.o(routeService.findByUserId(t4s.getId()));
     }
 
     /**
-     * 头像
+     * 获取用户头像
      */
     @GetMapping("avatar")
+    @Operation(summary = "获取用户头像", description = "需要登录")
     public Result<Long> avatar() {
         return Result.o(t4s.getId());
     }

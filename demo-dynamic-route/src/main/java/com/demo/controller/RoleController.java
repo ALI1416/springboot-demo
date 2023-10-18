@@ -11,6 +11,9 @@ import com.demo.service.RoleRouteService;
 import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("role")
 @AllArgsConstructor
+@Tag(name = "角色")
 public class RoleController extends ControllerBase {
 
     private final T4s t4s;
@@ -39,10 +43,11 @@ public class RoleController extends ControllerBase {
     private final RouteService routeService;
 
     /**
-     * 新增
+     * 创建角色
      */
-    @PostMapping("insert")
-    public Result<Long> insert(@RequestBody RoleVo role) {
+    @PostMapping("create")
+    @Operation(summary = "创建角色", description = "需要登录/name/seq")
+    public Result<Long> create(@RequestBody RoleVo role) {
         if (existNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
@@ -51,9 +56,34 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 更新
+     * 删除角色
+     */
+    @DeleteMapping("delete")
+    @Operation(summary = "删除角色", description = "需要登录")
+    @Parameter(name = "id", description = "角色id")
+    public Result<Boolean> delete(long id) {
+        // 只能管理自己创建的角色
+        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(roleService.delete(id));
+    }
+
+    /**
+     * 删除角色(不校验)
+     */
+    @DeleteMapping("delete/notCheck")
+    @Operation(summary = "删除角色(不校验)")
+    @Parameter(name = "id", description = "角色id")
+    public Result<Boolean> deleteNotCheck(long id) {
+        return Result.o(roleService.delete(id));
+    }
+
+    /**
+     * 修改角色
      */
     @PatchMapping("update")
+    @Operation(summary = "修改角色", description = "需要登录/id 至少一个name/seq")
     public Result<Boolean> update(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
             return paramIsError();
@@ -66,10 +96,11 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 更新(不校验)
+     * 修改角色(不校验)
      */
-    @PatchMapping("updateNoCheck")
-    public Result<Boolean> updateNoCheck(@RequestBody RoleVo role) {
+    @PatchMapping("update/notCheck")
+    @Operation(summary = "修改角色(不校验)", description = "需要id 至少一个name/seq")
+    public Result<Boolean> updateNotCheck(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
@@ -77,30 +108,11 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 删除
+     * 修改角色的路由
      */
-    @DeleteMapping("delete")
-    public Result<Boolean> delete(long id) {
-        // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
-        return Result.o(roleService.delete(id));
-    }
-
-    /**
-     * 删除(不校验)
-     */
-    @DeleteMapping("deleteNoCheck")
-    public Result<Boolean> deleteNoCheck(long id) {
-        return Result.o(roleService.delete(id));
-    }
-
-    /**
-     * 修改路由
-     */
-    @PutMapping("updateRouteIdList")
-    public Result<Boolean> updateRouteIdList(@RequestBody RoleVo role) {
+    @PutMapping("updateRoute")
+    @Operation(summary = "修改角色的路由", description = "需要登录/roleId/routeIdList")
+    public Result<Boolean> updateRoute(@RequestBody RoleVo role) {
         Long roleId = role.getId();
         List<Long> routeIdList = role.getRouteIdList();
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
@@ -108,7 +120,7 @@ public class RoleController extends ControllerBase {
         }
         long userId = t4s.getId();
         // 只能管理自己创建的角色 只能管理自己有权限的路由
-        if (!roleService.findExistByIdAndCreateId(roleId, userId) && !routeService.findIdAndChildrenIdByUserId(userId).containsAll(routeIdList)) {
+        if (!roleService.findExistByIdAndCreateId(roleId, userId) && !routeService.findIdAndChildIdByUserId(userId).containsAll(routeIdList)) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         List<RoleRouteVo> roleRouteList = new ArrayList<>();
@@ -123,10 +135,11 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 修改路由(不校验)
+     * 修改角色的路由(不校验)
      */
-    @PutMapping("updateRouteIdListNoCheck")
-    public Result<Boolean> updateRouteIdListNoCheck(@RequestBody RoleVo role) {
+    @PutMapping("updateRoute/notCheck")
+    @Operation(summary = "修改角色的路由(不校验)", description = "需要roleId/routeIdList")
+    public Result<Boolean> updateRouteNotCheck(@RequestBody RoleVo role) {
         Long roleId = role.getId();
         List<Long> routeIdList = role.getRouteIdList();
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
@@ -144,18 +157,21 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 查询全部(不校验)
+     * 获取所有角色
      */
-    @GetMapping("getAllNoCheck")
-    public Result<List<RoleVo>> getAllNoCheck() {
+    @GetMapping("get")
+    @Operation(summary = "获取所有角色")
+    public Result<List<RoleVo>> get() {
         return Result.o(roleService.findAll());
     }
 
     /**
-     * 获取用户id的角色
+     * 获取用户的角色
      */
-    @GetMapping("findByUserId")
-    public Result<List<RoleVo>> findByUserId(long userId) {
+    @GetMapping("user")
+    @Operation(summary = "获取用户的角色", description = "需要登录")
+    @Parameter(name = "userId", description = "用户id")
+    public Result<List<RoleVo>> user(long userId) {
         // 只能管理自己创建的用户
         if (!userService.findExistByIdAndCreateId(userId, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -164,10 +180,12 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 获取用户id的角色(不校验)
+     * 获取用户的角色(不校验)
      */
-    @GetMapping("findByUserIdNoCheck")
-    public Result<List<RoleVo>> findByUserIdNoCheck(long userId) {
+    @GetMapping("user/notCheck")
+    @Operation(summary = "获取用户的角色(不校验)")
+    @Parameter(name = "userId", description = "用户id")
+    public Result<List<RoleVo>> userNotCheck(long userId) {
         return Result.o(roleService.findByUserId(userId));
     }
 
@@ -175,6 +193,8 @@ public class RoleController extends ControllerBase {
      * 复制角色
      */
     @GetMapping("copy")
+    @Operation(summary = "复制角色", description = "需要登录")
+    @Parameter(name = "id", description = "角色id")
     public Result<Long> copy(long id) {
         // 只能管理自己创建的角色
         if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
@@ -188,8 +208,10 @@ public class RoleController extends ControllerBase {
     /**
      * 复制角色(不校验)
      */
-    @GetMapping("copyNoCheck")
-    public Result<Long> copyNoCheck(long id) {
+    @GetMapping("copy/notCheck")
+    @Operation(summary = "复制角色(不校验)", description = "需要登录")
+    @Parameter(name = "id", description = "角色id")
+    public Result<Long> copyNotCheck(long id) {
         RoleVo role = roleService.findById(id);
         role.setId(Id.next());
         role.setCreateId(t4s.getId());
@@ -197,23 +219,31 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 刷新，通过角色id
+     * 刷新角色缓存
      */
-    @GetMapping("refresh")
-    public Result<Long> refresh(long id) {
+    @GetMapping("refreshCache")
+    @Operation(summary = "刷新角色缓存", description = "需要登录")
+    @Parameter(name = "id", description = "角色id")
+    public Result refreshCache(long id) {
         // 只能管理自己创建的角色
         if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(routeService.deleteRouteRoleCache(id) + routeService.deleteRouteUserCache(userService.findIdByRoleId(id)));
+        routeService.deleteRouteRoleCache(id);
+        routeService.deleteRouteUserCache(userService.findIdByRoleId(id));
+        return Result.o();
     }
 
     /**
-     * 刷新，通过角色id(不校验)
+     * 刷新角色缓存(不校验)
      */
-    @GetMapping("refreshNoCheck")
-    public Result<Long> refreshNoCheck(long id) {
-        return Result.o(routeService.deleteRouteRoleCache(id) + routeService.deleteRouteUserCache(userService.findIdByRoleId(id)));
+    @GetMapping("refreshCache/notCheck")
+    @Operation(summary = "刷新角色缓存(不校验)")
+    @Parameter(name = "id", description = "角色id")
+    public Result refreshCacheNotCheck(long id) {
+        routeService.deleteRouteRoleCache(id);
+        routeService.deleteRouteUserCache(userService.findIdByRoleId(id));
+        return Result.o();
     }
 
 }

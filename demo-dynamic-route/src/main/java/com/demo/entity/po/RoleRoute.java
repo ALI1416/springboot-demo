@@ -1,6 +1,7 @@
 package com.demo.entity.po;
 
 import com.demo.base.EntityBase;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +17,18 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
+@Schema(description = "角色-路由")
 public class RoleRoute extends EntityBase {
 
     /**
      * 角色id
      */
+    @Schema(description = "角色id")
     private Long roleId;
     /**
      * 路由id
      */
+    @Schema(description = "路由id")
     private Long routeId;
 
 }

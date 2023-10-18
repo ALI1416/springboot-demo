@@ -37,7 +37,7 @@ public class User extends ToStringBase {
     /**
      * 出生年
      */
-    @Schema(description = "出生年")
+    @Schema(description = "出生年", minimum = "1900", maximum = "2100")
     private int year;
 
     /**

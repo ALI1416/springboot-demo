@@ -58,6 +58,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/") // 排除首页
                 .excludePathPatterns("/error") // 排除404
                 .excludePathPatterns("/favicon.ico") // 排除图标
+                .excludePathPatterns("/swagger-ui/**") // 排除swagger网页
+                .excludePathPatterns("/v3/**") // 排除swagger接口
+                .excludePathPatterns("/webjars/**") // 排除knife4j网页
+                .excludePathPatterns("/doc.html") // 排除knife4j网页
         ;
     }
 

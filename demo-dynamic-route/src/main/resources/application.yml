@@ -36,3 +36,12 @@ logging:
     com.demo.mapper: trace
   file:
     name: /log/demo-dynamic-route.log
+
+#生产环境关闭API文档
+#springdoc:
+#  api-docs:
+#    enabled: false
+#
+#knife4j:
+#  enable: true
+#  production: true

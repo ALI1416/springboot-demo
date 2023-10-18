@@ -1,6 +1,7 @@
 package com.demo.entity.po;
 
 import com.demo.base.EntityBase;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,19 +17,23 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
+@Schema(description = "用户")
 public class User extends EntityBase {
 
     /**
      * 账号
      */
+    @Schema(description = "账号")
     private String account;
     /**
      * 密码
      */
+    @Schema(description = "密码")
     private String pwd;
     /**
      * 昵称
      */
+    @Schema(description = "昵称")
     private String name;
 
 }

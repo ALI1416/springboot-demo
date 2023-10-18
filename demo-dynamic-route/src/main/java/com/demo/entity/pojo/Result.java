@@ -2,6 +2,7 @@ package com.demo.entity.pojo;
 
 import com.demo.base.ToStringBase;
 import com.demo.constant.ResultEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,25 +18,30 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
+@Schema(description = "统一返回")
 public class Result<T> extends ToStringBase {
 
     /**
      * 是否成功(状态码为0时成功)
      */
+    @Schema(description = "是否成功(状态码为0时成功)")
     private boolean ok;
     /**
      * 状态码
      *
      * @see ResultEnum
      */
+    @Schema(description = "状态码")
     private int code;
     /**
      * 状态信息
      */
+    @Schema(description = "状态信息")
     private String msg;
     /**
      * 数据
      */
+    @Schema(description = "数据")
     private T data;
 
     /**

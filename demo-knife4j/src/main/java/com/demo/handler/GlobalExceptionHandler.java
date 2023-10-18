@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class //
     })
     public Result paramErrorHandler() {
-        return Result.e(ResultEnum.PARAM_IS_ERROR);
+        return Result.e(ResultEnum.PARAM_ERROR);
     }
 
     /**

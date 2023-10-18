@@ -1,6 +1,7 @@
 package com.demo.entity.vo;
 
 import com.demo.entity.po.RoleRoute;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * <h1>角色-路由</h1>
@@ -12,6 +13,7 @@ import com.demo.entity.po.RoleRoute;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
+@Schema(description = "角色-路由")
 public class RoleRouteVo extends RoleRoute {
 
 }

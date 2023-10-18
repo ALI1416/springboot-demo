@@ -13,11 +13,11 @@ logging:
   file:
     name: /log/demo-knife4j.log
 
-#生产环境关闭文档
-#knife4j:
-#  enable: true
-#  production: true
-#
+#生产环境关闭API文档
 #springdoc:
 #  api-docs:
 #    enabled: false
+#
+#knife4j:
+#  enable: true
+#  production: true

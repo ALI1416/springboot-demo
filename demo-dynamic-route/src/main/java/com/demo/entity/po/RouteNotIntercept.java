@@ -1,6 +1,7 @@
 package com.demo.entity.po;
 
 import com.demo.base.EntityBase;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,27 +17,33 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
+@Schema(description = "路由-不拦截")
 public class RouteNotIntercept extends EntityBase {
 
     /**
      * 路径
      */
+    @Schema(description = "路径")
     private String path;
     /**
      * 名称
      */
+    @Schema(description = "名称")
     private String name;
     /**
      * 匹配模式
      */
+    @Schema(description = "匹配模式")
     private Boolean isMatch;
     /**
      * 需要登录
      */
+    @Schema(description = "需要登录")
     private Boolean needLogin;
     /**
      * 顺序
      */
+    @Schema(description = "顺序")
     private Integer seq;
 
 }

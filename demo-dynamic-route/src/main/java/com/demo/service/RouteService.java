@@ -1,20 +1,18 @@
 package com.demo.service;
 
 import cn.z.redis.RedisTemp;
+import cn.z.tool.DeepCopy;
+import com.demo.base.ServiceBase;
 import com.demo.constant.RedisConstant;
+import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
 import com.demo.entity.vo.RouteVo;
-import com.demo.util.RouteUtils;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,13 +27,17 @@ import java.util.stream.Collectors;
  **/
 @Service
 @AllArgsConstructor
-@Slf4j
-public class RouteService {
+public class RouteService extends ServiceBase {
 
     private final RedisTemp redisTemp;
     private final RouteDao routeDao;
     private final RoleRouteDao roleRouteDao;
-    private final RoleService roleService;
+    private final RoleDao roleDao;
+
+    /**
+     * 路由占位符
+     */
+    private static final String PLACEHOLDER = "placeholder";
 
     /**
      * 插入
@@ -71,11 +73,10 @@ public class RouteService {
         try {
             deleteChild(id);
         } catch (Exception e) {
-            log.error("删除自己和子节点失败！id为{}", id);
             return false;
         }
         // 删除自己
-        return (roleRouteDao.deleteByRouteId(id) && routeDao.deleteById(id));
+        return execute(() -> roleRouteDao.deleteByRouteId(id), () -> routeDao.deleteById(id));
     }
 
     /**
@@ -85,19 +86,19 @@ public class RouteService {
      */
     private void deleteChild(long parentId) throws Exception {
         // 获取子节点
-        List<RouteVo> children = routeDao.findByParentId(parentId);
+        List<RouteVo> childList = routeDao.findByParentId(parentId);
         // 递归
-        for (RouteVo child : children) {
+        for (RouteVo child : childList) {
             deleteChild(child.getId());
         }
         // 查询子节点
-        List<Long> ids = children.stream().map(RouteVo::getId).collect(Collectors.toList());
+        List<Long> idList = childList.stream().map(RouteVo::getId).collect(Collectors.toList());
         // 没有子节点，提前退出这个递归
-        if (ids.isEmpty()) {
+        if (idList.isEmpty()) {
             return;
         }
         // 删除子节点
-        if (!(roleRouteDao.deleteByRouteIdList(ids) && routeDao.deleteByIdList(ids))) {
+        if (!execute(() -> roleRouteDao.deleteByRouteIdList(idList), () -> routeDao.deleteByIdList(idList))) {
             throw new Exception();
         }
     }
@@ -116,10 +117,10 @@ public class RouteService {
             return false;
         }
         // 获取子节点
-        List<RouteVo> children = routeDao.findByParentId(id);
+        List<RouteVo> childList = routeDao.findByParentId(id);
         Long parentId = route.getParentId();
         // 更改子节点的父节点
-        for (RouteVo child : children) {
+        for (RouteVo child : childList) {
             RouteVo routeChild = new RouteVo();
             routeChild.setId(child.getId());
             routeChild.setParentId(parentId);
@@ -128,7 +129,7 @@ public class RouteService {
             }
         }
         // 删除自己
-        return (roleRouteDao.deleteByRouteId(id) && routeDao.deleteById(id));
+        return execute(() -> roleRouteDao.deleteByRouteId(id), () -> routeDao.deleteById(id));
     }
 
     /**
@@ -151,17 +152,27 @@ public class RouteService {
      */
     public RouteVo findByUserId(long userId) {
         RouteVo route = new RouteVo();
-        // 获取用户拥有的角色id
-        List<Long> roleIdList = roleService.findIdByUserId(userId);
-        // 没有角色
-        if (roleIdList.isEmpty()) {
+        // root用户
+        if (userId == 0) {
+            List<String> matchPath = new ArrayList<>(1);
+            matchPath.add("/");
+            route.setMatchPath(matchPath);
+            List<String> directPath = new ArrayList<>(1);
+            directPath.add(PLACEHOLDER);
+            route.setDirectPath(directPath);
             return route;
         }
-        // TODO
-        RouteVo expandedList = findExpandedList();
-        route.setMatcherPath(expandedList.getMatcher().stream().map(RouteVo::getPath).collect(Collectors.toList()));
-        route.setDirectPath(expandedList.getDirect().stream().map(RouteVo::getPath).collect(Collectors.toList()));
-        return expandedList;
+        // 从缓存中查询
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX;
+        Set<Object> match = redisTemp.sMembers(key);
+        // 不存在去创建
+        if (match.isEmpty()) {
+            setUserRoute(userId);
+        }
+        match = redisTemp.sMembers(key);
+        route.setMatchPath(match.stream().map(String.class::cast).collect(Collectors.toList()));
+        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
+        return route;
     }
 
     /**
@@ -169,10 +180,10 @@ public class RouteService {
      *
      * @param userId userId
      */
-    public Set<Long> findIdAndChildrenIdByUserId(long userId) {
+    public Set<Long> findIdAndChildIdByUserId(long userId) {
         Set<Long> routeIdList = new HashSet<>();
         // 获取用户拥有的角色id
-        List<Long> roleIdList = roleService.findIdByUserId(userId);
+        List<Long> roleIdList = roleDao.findIdByUserId(userId);
         // 获取该角色id的路由和子路由id
         for (Long roleId : roleIdList) {
             for (Long routeId : findIdByRoleId(roleId)) {
@@ -191,7 +202,7 @@ public class RouteService {
      */
     public List<RouteVo> findChildByParentId(long parentId) {
         List<RouteVo> routeList = new ArrayList<>();
-        findChildren(parentId, routeList);
+        findChild(parentId, routeList);
         return routeList;
     }
 
@@ -201,12 +212,12 @@ public class RouteService {
      * @param parentId  parentId
      * @param routeList routeList
      */
-    private void findChildren(long parentId, List<RouteVo> routeList) {
-        List<RouteVo> children = routeDao.findIdAndParentIdByParentId(parentId);
-        routeList.addAll(children);
-        for (RouteVo child : children) {
+    private void findChild(long parentId, List<RouteVo> routeList) {
+        List<RouteVo> childList = routeDao.findIdAndParentIdByParentId(parentId);
+        routeList.addAll(childList);
+        for (RouteVo child : childList) {
             if (child.getId() != 0) {
-                findChildren(child.getId(), routeList);
+                findChild(child.getId(), routeList);
             }
         }
     }
@@ -222,21 +233,12 @@ public class RouteService {
     }
 
     /**
-     * 查询列表
-     *
-     * @return List RouteVo
-     */
-    public List<RouteVo> findList() {
-        return routeDao.findAll();
-    }
-
-    /**
      * 查询树
      *
      * @return RouteVo
      */
     public RouteVo findTree() {
-        return RouteUtils.list2Tree(routeDao.findAll());
+        return list2Tree(routeDao.findAll());
     }
 
     /**
@@ -244,8 +246,8 @@ public class RouteService {
      *
      * @return RouteVo
      */
-    public RouteVo findExpandedList() {
-        return RouteUtils.tree2ExpandedList(RouteUtils.list2Tree(routeDao.findAll()));
+    public RouteVo findExpandList() {
+        return tree2ExpandList(list2Tree(routeDao.findAll()));
     }
 
     /**
@@ -269,7 +271,7 @@ public class RouteService {
     }
 
     /**
-     * 删除Redis全部路由
+     * 删除Redis全部路由缓存
      *
      * @return 成功条数
      */
@@ -278,7 +280,7 @@ public class RouteService {
     }
 
     /**
-     * 删除Redis角色路由，通过角色id<br>
+     * 删除Redis角色路由缓存，通过角色id<br>
      * 请手动查询该角色下的所有用户并删除Redis用户路由
      *
      * @param roleId roleId
@@ -287,11 +289,11 @@ public class RouteService {
      */
     public Long deleteRouteRoleCache(long roleId) {
         return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
-                RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCHER_SUFFIX);
+                RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX);
     }
 
     /**
-     * 删除Redis用户路由，通过用户id列表
+     * 删除Redis用户路由缓存，通过用户id列表
      *
      * @param userIdList userId
      * @return 成功条数
@@ -300,20 +302,289 @@ public class RouteService {
         List<String> keys = new ArrayList<>();
         for (Long id : userIdList) {
             keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
-            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCHER_SUFFIX);
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCH_SUFFIX);
         }
         return redisTemp.deleteMulti(keys);
     }
 
     /**
-     * 删除Redis用户路由，通过用户id
+     * 删除Redis用户路由缓存，通过用户id
      *
      * @param userId userId
      * @return 成功条数
      */
     public Long deleteRouteUserCache(long userId) {
         return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
-                RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCHER_SUFFIX);
+                RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX);
+    }
+
+    /**
+     * 是"匹配路径"
+     *
+     * @param userId  用户id
+     * @param urlList URL列表
+     * @return 是否
+     */
+    public boolean isMatch(long userId, List<String> urlList) {
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX;
+        // 判断值是否存在
+        if (Boolean.TRUE.equals(redisTemp.sIsMemberMulti(key, urlList).containsValue(true))) {
+            // 存在
+            return true;
+        }
+        // 判断key是否存在
+        if (Boolean.TRUE.equals(redisTemp.exists(key))) {
+            // 存在
+            return false;
+        } else {
+            // 不存在，去添加
+            setUserRoute(userId);
+        }
+        // 判断值是否存在
+        return redisTemp.sIsMemberMulti(key, urlList).containsValue(true);
+    }
+
+    /**
+     * 是"直接路径"
+     *
+     * @param userId 用户id
+     * @param url    URL
+     * @return 是否
+     */
+    public boolean isDirect(long userId, String url) {
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX;
+        // 判断值是否存在(setUserRoute已创建)
+        return redisTemp.sIsMember(key, url);
+    }
+
+    /**
+     * 创建用户"匹配路径"和"直接路径"
+     *
+     * @param userId 用户id
+     */
+    public void setUserRoute(long userId) {
+        Set<Object> matchList;
+        Set<Object> directList;
+        // 获取该用户的角色
+        List<Long> roleIdList = roleDao.findIdByUserId(userId);
+        // 判断是否有角色
+        if (roleIdList.isEmpty()) {
+            // 不存在，给一个占位符
+            matchList = new HashSet<>();
+            matchList.add(PLACEHOLDER);
+            directList = new HashSet<>();
+            directList.add(PLACEHOLDER);
+        } else {
+            // 创建角色的"匹配路径"和"直接路径"
+            setRouteByRoleIdList(roleIdList);
+            // 获取该用户的"匹配路径"和"直接路径"
+            matchList = redisTemp.sUnionAll(roleIdList.stream() //
+                    .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_MATCH_SUFFIX) //
+                    .collect(Collectors.toList()));
+            directList = redisTemp.sUnionAll(roleIdList.stream() //
+                    .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_DIRECT_SUFFIX) //
+                    .collect(Collectors.toList()));
+        }
+        // 创建该用户的"匹配路径"和"直接路径"
+        String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX;
+        redisTemp.sAddMulti(key, matchList);
+        redisTemp.expire(key, RedisConstant.ROUTE_EXPIRE);
+        String key2 = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX;
+        redisTemp.sAddMulti(key2, directList);
+        redisTemp.expire(key2, RedisConstant.ROUTE_EXPIRE);
+    }
+
+    /**
+     * 创建"匹配路径"和"直接路径"，通过角色id列表
+     *
+     * @param roleIdList 角色id列表
+     */
+    public void setRouteByRoleIdList(List<Long> roleIdList) {
+        for (Long roleId : roleIdList) {
+            String key = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX;
+            // 判断是否存在该角色的"匹配路径"和"直接路径"
+            if (Boolean.FALSE.equals(redisTemp.exists(key))) {
+                // 不存在，去创建
+                setRouteByRoleId(roleId);
+            }
+        }
+    }
+
+    /**
+     * 创建"匹配路径"和"直接路径"，通过角色id
+     *
+     * @param roleId 角色id
+     */
+    public void setRouteByRoleId(long roleId) {
+        // 判断是否存在根"匹配路径"
+        if (Boolean.FALSE.equals(redisTemp.exists(RedisConstant.ROUTE_MATCH))) {
+            // 不存在，去创建
+            setRoute();
+        }
+        // 获取该角色的路由
+        List<String> routeIdList = findByRoleId(roleId) //
+                .stream().map(r -> r.getId().toString()).collect(Collectors.toList());
+        // 获取该角色的"匹配路径"(去除null)
+        Collection<Object> routeMatch = redisTemp.hGetMulti(RedisConstant.ROUTE_MATCH, routeIdList) //
+                .stream().filter(Objects::nonNull).collect(Collectors.toList());
+        // 判断是否有"匹配路径"
+        if (routeMatch.isEmpty()) {
+            // 不存在，给一个占位符
+            routeMatch.add(PLACEHOLDER);
+        }
+        // 获取该角色的"直接路径"(setRoute已创建)(去除null)
+        Collection<Object> routeDirect = redisTemp.hGetMulti(RedisConstant.ROUTE_DIRECT, routeIdList) //
+                .stream().filter(Objects::nonNull).collect(Collectors.toList());
+        // 判断是否有"直接路径"
+        if (routeDirect.isEmpty()) {
+            // 不存在，给一个占位符
+            routeDirect.add(PLACEHOLDER);
+        }
+        // 创建该角色的"匹配路径"
+        String key = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX;
+        redisTemp.sAddMulti(key, routeMatch);
+        redisTemp.expire(key, RedisConstant.ROUTE_EXPIRE);
+        // 创建该角色的"直接路径"
+        String key2 = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX;
+        redisTemp.sAddMulti(key2, routeDirect);
+        redisTemp.expire(key2, RedisConstant.ROUTE_EXPIRE);
+    }
+
+    /**
+     * 创建根"匹配路径"和"直接路径"
+     */
+    public void setRoute() {
+        // 获取根"匹配路径"和"直接路径"
+        RouteVo route = findExpandList();
+        // 创建根"匹配路径"和"直接路径"
+        Map<String, String> match = route.getMatch() //
+                .stream().collect(Collectors.toMap(r -> r.getId().toString(), RouteVo::getPath));
+        Map<String, String> direct = route.getDirect() //
+                .stream().collect(Collectors.toMap(r -> r.getId().toString(), RouteVo::getPath));
+        redisTemp.hSetMulti(RedisConstant.ROUTE_MATCH, match);
+        redisTemp.hSetMulti(RedisConstant.ROUTE_DIRECT, direct);
+        redisTemp.expire(RedisConstant.ROUTE_MATCH, RedisConstant.ROUTE_EXPIRE);
+        redisTemp.expire(RedisConstant.ROUTE_DIRECT, RedisConstant.ROUTE_EXPIRE);
+    }
+
+    /**
+     * 列表转树
+     *
+     * @param routeList 路由表
+     * @return 树<br>
+     * 不存在id=0的根节点，返回空对象
+     */
+    private static RouteVo list2Tree(List<RouteVo> routeList) {
+        // 拷贝原始数据
+        List<RouteVo> list = DeepCopy.copy(routeList);
+        // 找到并重置根节点
+        RouteVo root;
+        Optional<RouteVo> first = list.stream().filter(s -> s.getId() == 0).findFirst();
+        if (first.isPresent()) {
+            root = first.get();
+            root.setParentId(-1L);
+            root.setPath("/");
+        } else {
+            return new RouteVo();
+        }
+        // 按父id分组
+        Map<Long, List<RouteVo>> map = list.stream().collect(Collectors.groupingBy(RouteVo::getParentId));
+        // 生成树
+        makeTree(root, map);
+        return root;
+    }
+
+    /**
+     * 生成树
+     *
+     * @param tree 接收的树
+     * @param map  按父id分组的map
+     */
+    private static void makeTree(RouteVo tree, Map<Long, List<RouteVo>> map) {
+        // 找到子节点
+        List<RouteVo> childList = map.get(tree.getId());
+        // 如果有子节点
+        if (childList != null) {
+            // 对子节点进行排序
+            childList = childList.stream().sorted(Comparator.comparing(RouteVo::getSeq)).collect(Collectors.toList());
+            // 子节点生成树
+            for (RouteVo child : childList) {
+                makeTree(child, map);
+            }
+            // 插入子节点
+            tree.setChild(childList);
+        }
+    }
+
+    /**
+     * 树转展开列表
+     *
+     * @param root 树
+     * @return 展开列表
+     */
+    private static RouteVo tree2ExpandList(RouteVo root) {
+        // 创建新的路由表
+        RouteVo route = new RouteVo();
+        List<RouteVo> match = new ArrayList<>();
+        List<RouteVo> direct = new ArrayList<>();
+        route.setMatch(match);
+        route.setDirect(direct);
+        // 拷贝原始数据
+        RouteVo tree = DeepCopy.copy(root);
+        // 找到子节点
+        List<RouteVo> childList = tree.getChild();
+        tree.setChild(null);
+        // 根节点加入路径
+        match.add(tree);
+        if (childList != null) {
+            for (RouteVo child : childList) {
+                // 子节点去展开
+                makeExpandList(route, child, "");
+            }
+        }
+        // 排序
+        route.setMatch(route.getMatch().stream() //
+                .sorted(Comparator.comparing(RouteVo::getSeq)) //
+                .sorted(Comparator.comparing(RouteVo::getParentId)) //
+                .collect(Collectors.toList()));
+        route.setDirect(route.getDirect().stream() //
+                .sorted(Comparator.comparing(RouteVo::getSeq)) //
+                .sorted(Comparator.comparing(RouteVo::getParentId)) //
+                .collect(Collectors.toList()));
+        return route;
+    }
+
+    /**
+     * 生成展开列表
+     *
+     * @param route  接收的列表
+     * @param tree   树
+     * @param prefix 前缀
+     */
+    private static void makeExpandList(RouteVo route, RouteVo tree, String prefix) {
+        // 找到子节点
+        List<RouteVo> childList = tree.getChild();
+        tree.setChild(null);
+        // 节点加入路径
+        if (childList != null) {
+            // 存在子节点
+            prefix = prefix + "/" + tree.getPath();
+            tree.setPath(prefix);
+            route.getMatch().add(tree);
+        } else {
+            // 不存在子节点，且路径不为空
+            if (!tree.getPath().isEmpty()) {
+                prefix = prefix + "/" + tree.getPath();
+            }
+            tree.setPath(prefix);
+            route.getDirect().add(tree);
+        }
+        if (childList != null) {
+            for (RouteVo child : childList) {
+                // 子节点去展开
+                makeExpandList(route, child, prefix);
+            }
+        }
     }
 
 }

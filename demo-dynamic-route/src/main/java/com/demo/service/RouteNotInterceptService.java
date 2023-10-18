@@ -2,6 +2,7 @@ package com.demo.service;
 
 import cn.z.redis.RedisTemp;
 import cn.z.redis.annotation.Subscribe;
+import com.demo.base.ServiceBase;
 import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RouteNotInterceptDao;
 import com.demo.entity.po.RouteNotIntercept;
@@ -11,8 +12,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -27,40 +28,31 @@ import java.util.stream.Collectors;
  **/
 @Service
 @AllArgsConstructor
-public class RouteNotInterceptService {
+public class RouteNotInterceptService extends ServiceBase {
 
     private final RouteNotInterceptDao routeNotInterceptDao;
     private final RedisTemp redisTemp;
 
     /**
-     * 更新"不拦截路径"键名
+     * 本地缓存
      */
-    private static final String UPDATE_NOT_INTERCEPT = "updateNotIntercept";
+    private final RouteNotInterceptVo localCache = new RouteNotInterceptVo();
     /**
-     * 不拦截-匹配路径
+     * 匹配路径
      */
-    private List<String> notInterceptMatch;
+    private List<String> match;
     /**
-     * 不拦截-直接路径
+     * 直接路径
      */
-    private List<String> notInterceptDirect;
+    private List<String> direct;
     /**
-     * 不拦截-匹配路径(需要登录)
+     * 匹配路径(需要登录)
      */
-    private List<String> notInterceptLoginMatch;
+    private List<String> loginMatch;
     /**
-     * 不拦截-直接路径(需要登录)
+     * 直接路径(需要登录)
      */
-    private List<String> notInterceptLoginDirect;
-
-    /**
-     * 查询所有
-     *
-     * @return List RouteNotInterceptVo
-     */
-    public List<RouteNotInterceptVo> findAll() {
-        return routeNotInterceptDao.findAll();
-    }
+    private List<String> loginDirect;
 
     /**
      * 插入
@@ -96,10 +88,28 @@ public class RouteNotInterceptService {
     }
 
     /**
-     * 刷新
+     * 获取本地缓存
+     *
+     * @return RouteNotInterceptVo
      */
-    public void refresh() {
-        redisTemp.broadcast(UPDATE_NOT_INTERCEPT);
+    public RouteNotInterceptVo getLocalCache() {
+        return localCache;
+    }
+
+    /**
+     * 获取所有
+     *
+     * @return List RouteNotInterceptVo
+     */
+    public List<RouteNotInterceptVo> findAll() {
+        return routeNotInterceptDao.findAll();
+    }
+
+    /**
+     * 刷新缓存
+     */
+    public void refreshCache() {
+        redisTemp.broadcast(RedisConstant.UPDATE_ROUTE_NOT_INTERCEPT);
     }
 
     /**
@@ -108,9 +118,9 @@ public class RouteNotInterceptService {
      * @param urlList URL列表
      * @return 是否
      */
-    public boolean isNotInterceptMatch(List<String> urlList) {
+    public boolean isMatch(List<String> urlList) {
         for (String url : urlList) {
-            if (notInterceptMatch.contains(url)) {
+            if (match.contains(url)) {
                 return true;
             }
         }
@@ -123,8 +133,8 @@ public class RouteNotInterceptService {
      * @param url URL
      * @return 是否
      */
-    public boolean isNotInterceptDirect(String url) {
-        return notInterceptDirect.contains(url);
+    public boolean isDirect(String url) {
+        return direct.contains(url);
     }
 
     /**
@@ -133,9 +143,9 @@ public class RouteNotInterceptService {
      * @param urlList URL列表
      * @return 是否
      */
-    public boolean isNotInterceptLoginMatch(List<String> urlList) {
+    public boolean isLoginMatch(List<String> urlList) {
         for (String url : urlList) {
-            if (notInterceptLoginMatch.contains(url)) {
+            if (loginMatch.contains(url)) {
                 return true;
             }
         }
@@ -148,28 +158,34 @@ public class RouteNotInterceptService {
      * @param url URL
      * @return 是否
      */
-    public boolean isNotInterceptLoginDirect(String url) {
-        return notInterceptLoginDirect.contains(url);
+    public boolean isLoginDirect(String url) {
+        return loginDirect.contains(url);
     }
 
     /**
      * 更新"不拦截路径"
      */
-    @Subscribe(UPDATE_NOT_INTERCEPT)
-    @Scheduled(fixedDelay = RedisConstant.ROUTE_EXPIRE, timeUnit = TimeUnit.SECONDS)
-    public void updateNotIntercept() {
+    @PostConstruct
+    @Subscribe(RedisConstant.UPDATE_ROUTE_NOT_INTERCEPT)
+    @Scheduled(cron = RedisConstant.UPDATE_CRON)
+    public void update() {
         // 获取"不拦截路径"
         List<RouteNotInterceptVo> notIntercept = findAll();
         // 存在"不拦截路径"
         if (!notIntercept.isEmpty()) {
             // 创建"不拦截-匹配路径"
-            notInterceptMatch = notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            match = notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-直接路径"
-            notInterceptDirect = notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            direct = notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-匹配路径(需要登录)"
-            notInterceptLoginMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            loginMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
             // 创建"不拦截-直接路径(需要登录)"
-            notInterceptLoginDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            loginDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            // 更新本地缓存
+            localCache.setMatch(match);
+            localCache.setDirect(direct);
+            localCache.setLoginMatch(loginMatch);
+            localCache.setLoginDirect(loginDirect);
         }
     }
 

@@ -27,7 +27,15 @@
     </foreach>
   </delete>
 
-  <delete id="deleteByRoleId">
+  <delete id="deleteByRouteId" parameterType="Long">
+    DELETE
+    FROM
+    role_route
+    WHERE
+    route_id = #{routeId}
+  </delete>
+
+  <delete id="deleteByRoleId" parameterType="Long">
     DELETE
     FROM
     role_route

@@ -2,6 +2,7 @@ package com.demo.service;
 
 import cn.z.id.Id;
 import cn.z.tool.BCrypt;
+import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
 import com.demo.dao.mysql.UserRoleDao;
 import com.demo.entity.vo.UserRoleVo;
@@ -25,7 +26,7 @@ import java.util.List;
  **/
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService extends ServiceBase {
 
     private final UserDao userDao;
     private final UserRoleDao userRoleDao;
@@ -63,20 +64,6 @@ public class UserService {
     }
 
     /**
-     * 修改密码
-     *
-     * @param user id,pwd,newPwd
-     * @return 是否成功
-     */
-    @Transactional
-    public boolean changePwd(UserVo user) {
-        UserVo u = new UserVo();
-        u.setId(user.getId());
-        u.setPwd(BCrypt.encode(user.getNewPwd()));
-        return userDao.update(u);
-    }
-
-    /**
      * 修改用户信息
      *
      * @param user id(必须),account,pwd,name,isDelete(至少1个)
@@ -91,12 +78,12 @@ public class UserService {
     }
 
     /**
-     * 查询用户信息
+     * 查询用户，通过id
      *
      * @param id id
      * @return UserVo
      */
-    public UserVo info(long id) {
+    public UserVo findById(long id) {
         return userDao.findById(id);
     }
 
@@ -169,15 +156,15 @@ public class UserService {
      */
     @Transactional
     public boolean updateRole(UserVo user) {
-        List<UserRoleVo> userRoles = new ArrayList<>();
+        List<UserRoleVo> userRoleList = new ArrayList<>();
         for (Long roleId : user.getRoleIdList()) {
             UserRoleVo u = new UserRoleVo();
             u.setId(Id.next());
             u.setUserId(user.getId());
             u.setRoleId(roleId);
-            userRoles.add(u);
+            userRoleList.add(u);
         }
-        return userRoleDao.deleteByUserId(user.getId()) && userRoleDao.insertList(userRoles);
+        return execute(() -> userRoleDao.deleteByUserId(user.getId()), () -> userRoleDao.insertList(userRoleList));
     }
 
 }

@@ -51,6 +51,11 @@
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
     </dependency>
+    <!--Knife4j-->
+    <dependency>
+      <groupId>com.github.xiaoymin</groupId>
+      <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+    </dependency>
     <!--MySQL-->
     <dependency>
       <groupId>com.mysql</groupId>
@@ -61,13 +66,11 @@
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>redis-spring-boot-temp</artifactId>
-      <version>${redis-spring-boot-temp.version}</version>
     </dependency>
     <!--工具-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>util</artifactId>
-      <version>${util.version}</version>
     </dependency>
   </dependencies>
 
