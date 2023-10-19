@@ -69,6 +69,18 @@ public class RoleDao extends DaoBase {
     }
 
     /**
+     * 是否存在id
+     *
+     * @param id id
+     * @return 是否存在
+     */
+    public boolean existId(long id) {
+        RoleVo role = new RoleVo();
+        role.setId(id);
+        return roleMapper.findExist(role);
+    }
+
+    /**
      * 查询是否存在，通过id和创建者id
      *
      * @param id       id

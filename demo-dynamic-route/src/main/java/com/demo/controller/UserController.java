@@ -124,16 +124,16 @@ public class UserController extends ControllerBase {
         UserVo u = new UserVo();
         u.setId(t4s.getId());
         u.setAccount(user.getAccount());
-        u.setName(u.getName());
+        u.setName(user.getName());
         return Result.o(userService.update(u));
     }
 
     /**
-     * 获取用户详情
+     * 获取用户信息
      */
-    @GetMapping("info")
-    @Operation(summary = "获取用户详情", description = "需要登录")
-    public Result<UserVo> info() {
+    @GetMapping("get")
+    @Operation(summary = "获取用户信息", description = "需要登录")
+    public Result<UserVo> get() {
         UserVo user = userService.findById(t4s.getId());
         user.setPwd(null);
         return Result.o(user);

@@ -145,6 +145,28 @@ public class RouteService extends ServiceBase {
     }
 
     /**
+     * 查询，通过角色id
+     *
+     * @param roleId roleId
+     * @return RouteVo
+     */
+    public RouteVo findByRoleId(long roleId) {
+        RouteVo route = new RouteVo();
+        // 从缓存中查询
+        String key = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX;
+        Set<Object> match = redisTemp.sMembers(key);
+        // 不存在去创建
+        if (match.isEmpty()) {
+            setRouteByRoleId(roleId);
+        }
+        match = redisTemp.sMembers(key);
+        route.setMatchPath(match.stream().map(String.class::cast).collect(Collectors.toList()));
+        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
+                .stream().map(String.class::cast).collect(Collectors.toList()));
+        return route;
+    }
+
+    /**
      * 查询，通过用户id
      *
      * @param userId userId
@@ -171,7 +193,8 @@ public class RouteService extends ServiceBase {
         }
         match = redisTemp.sMembers(key);
         route.setMatchPath(match.stream().map(String.class::cast).collect(Collectors.toList()));
-        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX).stream().map(String.class::cast).collect(Collectors.toList()));
+        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
+                .stream().map(String.class::cast).collect(Collectors.toList()));
         return route;
     }
 
@@ -186,7 +209,7 @@ public class RouteService extends ServiceBase {
         List<Long> roleIdList = roleDao.findIdByUserId(userId);
         // 获取该角色id的路由和子路由id
         for (Long roleId : roleIdList) {
-            for (Long routeId : findIdByRoleId(roleId)) {
+            for (Long routeId : routeDao.findIdByRoleId(roleId)) {
                 routeIdList.add(routeId);
                 routeIdList.addAll(findChildByParentId(routeId).stream().map(RouteVo::getId).collect(Collectors.toList()));
             }
@@ -233,6 +256,15 @@ public class RouteService extends ServiceBase {
     }
 
     /**
+     * 查询所有
+     *
+     * @return List RouteVo
+     */
+    public List<RouteVo> findAll() {
+        return routeDao.findAll();
+    }
+
+    /**
      * 查询树
      *
      * @return RouteVo
@@ -248,26 +280,6 @@ public class RouteService extends ServiceBase {
      */
     public RouteVo findExpandList() {
         return tree2ExpandList(list2Tree(routeDao.findAll()));
-    }
-
-    /**
-     * 查询，通过角色id
-     *
-     * @param roleId roleId
-     * @return List RouteVo
-     */
-    public List<RouteVo> findByRoleId(long roleId) {
-        return routeDao.findByRoleId(roleId);
-    }
-
-    /**
-     * 查询id，通过角色id
-     *
-     * @param roleId roleId
-     * @return List Long
-     */
-    public List<Long> findIdByRoleId(long roleId) {
-        return routeDao.findIdByRoleId(roleId);
     }
 
     /**
@@ -422,8 +434,8 @@ public class RouteService extends ServiceBase {
             setRoute();
         }
         // 获取该角色的路由
-        List<String> routeIdList = findByRoleId(roleId) //
-                .stream().map(r -> r.getId().toString()).collect(Collectors.toList());
+        List<String> routeIdList = routeDao.findIdByRoleId(roleId) //
+                .stream().map(Object::toString).collect(Collectors.toList());
         // 获取该角色的"匹配路径"(去除null)
         Collection<Object> routeMatch = redisTemp.hGetMulti(RedisConstant.ROUTE_MATCH, routeIdList) //
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());

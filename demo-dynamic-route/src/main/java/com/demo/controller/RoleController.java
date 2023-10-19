@@ -72,7 +72,7 @@ public class RoleController extends ControllerBase {
     /**
      * 删除角色(不校验)
      */
-    @DeleteMapping("delete/notCheck")
+    @DeleteMapping("deleteNotCheck")
     @Operation(summary = "删除角色(不校验)")
     @Parameter(name = "id", description = "角色id")
     public Result<Boolean> deleteNotCheck(long id) {
@@ -98,7 +98,7 @@ public class RoleController extends ControllerBase {
     /**
      * 修改角色(不校验)
      */
-    @PatchMapping("update/notCheck")
+    @PatchMapping("updateNotCheck")
     @Operation(summary = "修改角色(不校验)", description = "需要id 至少一个name/seq")
     public Result<Boolean> updateNotCheck(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
@@ -137,7 +137,7 @@ public class RoleController extends ControllerBase {
     /**
      * 修改角色的路由(不校验)
      */
-    @PutMapping("updateRoute/notCheck")
+    @PutMapping("updateRouteNotCheck")
     @Operation(summary = "修改角色的路由(不校验)", description = "需要roleId/routeIdList")
     public Result<Boolean> updateRouteNotCheck(@RequestBody RoleVo role) {
         Long roleId = role.getId();
@@ -182,10 +182,13 @@ public class RoleController extends ControllerBase {
     /**
      * 获取用户的角色(不校验)
      */
-    @GetMapping("user/notCheck")
+    @GetMapping("userNotCheck")
     @Operation(summary = "获取用户的角色(不校验)")
     @Parameter(name = "userId", description = "用户id")
     public Result<List<RoleVo>> userNotCheck(long userId) {
+        if (!userService.existId(userId)) {
+            return Result.e(ResultEnum.USER_NOT_EXIST);
+        }
         return Result.o(roleService.findByUserId(userId));
     }
 
@@ -208,7 +211,7 @@ public class RoleController extends ControllerBase {
     /**
      * 复制角色(不校验)
      */
-    @GetMapping("copy/notCheck")
+    @GetMapping("copyNotCheck")
     @Operation(summary = "复制角色(不校验)", description = "需要登录")
     @Parameter(name = "id", description = "角色id")
     public Result<Long> copyNotCheck(long id) {
@@ -237,7 +240,7 @@ public class RoleController extends ControllerBase {
     /**
      * 刷新角色缓存(不校验)
      */
-    @GetMapping("refreshCache/notCheck")
+    @GetMapping("refreshCacheNotCheck")
     @Operation(summary = "刷新角色缓存(不校验)")
     @Parameter(name = "id", description = "角色id")
     public Result refreshCacheNotCheck(long id) {

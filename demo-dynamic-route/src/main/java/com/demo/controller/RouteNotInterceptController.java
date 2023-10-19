@@ -67,10 +67,10 @@ public class RouteNotInterceptController extends ControllerBase {
     }
 
     /**
-     * 获取所有路由不拦截
+     * 获取路由不拦截
      */
     @GetMapping("get")
-    @Operation(summary = "获取所有路由不拦截")
+    @Operation(summary = "获取路由不拦截")
     public Result<List<RouteNotInterceptVo>> get() {
         return Result.o(routeNotInterceptService.findAll());
     }
@@ -78,9 +78,9 @@ public class RouteNotInterceptController extends ControllerBase {
     /**
      * 获取缓存路由不拦截
      */
-    @GetMapping
+    @GetMapping("list")
     @Operation(summary = "获取缓存路由不拦截")
-    public Result<RouteNotInterceptVo> localCache() {
+    public Result<RouteNotInterceptVo> list() {
         return Result.o(routeNotInterceptService.getLocalCache());
     }
 

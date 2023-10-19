@@ -62,6 +62,18 @@ public class UserDao extends DaoBase {
     }
 
     /**
+     * 是否存在id
+     *
+     * @param id id
+     * @return 是否存在
+     */
+    public boolean existId(long id) {
+        UserVo user = new UserVo();
+        user.setId(id);
+        return userMapper.existUniqueKey(user);
+    }
+
+    /**
      * 查询通过id
      *
      * @param id id

@@ -54,7 +54,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 注销用户token(不校验)
      */
-    @GetMapping("logoutToken/notCheck")
+    @GetMapping("logoutTokenNotCheck")
     @Operation(summary = "注销用户token(不校验)")
     @Parameter(name = "token", description = "用户token")
     public Result<Boolean> logoutTokenNotCheck(String token) {
@@ -78,7 +78,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 注销用户id(不校验)
      */
-    @GetMapping("logoutId/notCheck")
+    @GetMapping("logoutIdNotCheck")
     @Operation(summary = "注销用户id(不校验)")
     @Parameter(name = "id", description = "用户id")
     public Result<Long> logoutIdNotCheck(long id) {
@@ -127,7 +127,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 修改用户信息(不校验)
      */
-    @PatchMapping("update/notCheck")
+    @PatchMapping("updateNotCheck")
     @Operation(summary = "修改用户信息(不校验)", description = "需要id 至少一个account/name/pwd/isDelete")
     public Result<Boolean> updateNotCheck(@RequestBody UserVo user) {
         if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
@@ -158,7 +158,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 修改用户角色(不校验)
      */
-    @PutMapping("updateRole/notCheck")
+    @PutMapping("updateRoleNotCheck")
     @Operation(summary = "修改用户角色(不校验)", description = "需要id/roleIdList")
     public Result<Boolean> updateRoleNotCheck(@RequestBody UserVo user) {
         if (existNull(user.getId(), user.getRoleIdList())) {
@@ -180,7 +180,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 获取拥有指定角色的用户(不校验)
      */
-    @GetMapping("getByRoleId/notCheck")
+    @GetMapping("getByRoleIdNotCheck")
     @Operation(summary = "获取拥有指定角色的用户(不校验)")
     @Parameter(name = "roleId", description = "角色id")
     public Result<List<UserVo>> getByRoleIdNotCheck(long roleId) {
@@ -199,7 +199,7 @@ public class UserManageController extends ControllerBase {
     /**
      * 获取所有用户(不校验)
      */
-    @GetMapping("get/notCheck")
+    @GetMapping("getNotCheck")
     @Operation(summary = "获取所有用户(不校验)")
     public Result<List<UserVo>> getNotCheck() {
         return Result.o(userService.findAll());

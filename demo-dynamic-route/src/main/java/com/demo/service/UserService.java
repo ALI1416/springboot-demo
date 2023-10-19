@@ -44,6 +44,16 @@ public class UserService extends ServiceBase {
     }
 
     /**
+     * 是否存在id
+     *
+     * @param id id
+     * @return 是否存在
+     */
+    public boolean existId(long id) {
+        return userDao.existId(id);
+    }
+
+    /**
      * 是否存在账号
      *
      * @param account account

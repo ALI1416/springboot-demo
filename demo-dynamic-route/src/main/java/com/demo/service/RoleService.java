@@ -104,6 +104,16 @@ public class RoleService extends ServiceBase {
     }
 
     /**
+     * 是否存在id
+     *
+     * @param id id
+     * @return 是否存在
+     */
+    public boolean existId(long id) {
+        return roleDao.existId(id);
+    }
+
+    /**
      * 查询是否存在，通过id和创建者id
      *
      * @param id       id
