@@ -10,6 +10,7 @@
     id,ref_id,account,pwd,name,gender,year,profile,comment,is_delete,create_id,create_time,update_id,update_time,version
   </sql>
 
+  <!-- 插入 -->
   <insert id="insert" parameterType="UserVo">
     INSERT
     user(
@@ -19,6 +20,7 @@
     )
   </insert>
 
+  <!-- 批量插入 -->
   <insert id="batchInsert" parameterType="UserVo">
     INSERT
     user(
@@ -29,20 +31,7 @@
     </foreach>
   </insert>
 
-  <insert id="bak" parameterType="UserBak">
-    INSERT
-    user_bak(
-    <include refid="bak"/>
-    )
-    SELECT
-    #{id},
-    <include refid="col"/>
-    FROM
-    user
-    WHERE
-    id = #{refId}
-  </insert>
-
+  <!-- 更新 -->
   <update id="update" parameterType="UserVo">
     UPDATE
     user
@@ -79,7 +68,49 @@
     id = #{id}
   </update>
 
-  <sql id="findUniqueTemp">
+  <!-- 查询模板 -->
+  <sql id="findTemp">
+    <where>
+      <include refid="com.demo.mapper.BaseMapper.find"/>
+      <if test="account != null">
+        AND account = #{account}
+      </if>
+      <if test="pwd != null">
+        AND pwd = #{pwd},
+      </if>
+      <if test="name != null">
+        AND name = #{name},
+      </if>
+      <if test="gender != null">
+        AND gender = #{gender},
+      </if>
+      <if test="year != null">
+        AND year = #{year},
+      </if>
+      <if test="profile != null">
+        AND profile = #{profile},
+      </if>
+      <if test="comment != null">
+        AND comment = #{comment},
+      </if>
+    </where>
+  </sql>
+
+  <!-- 是否存在 -->
+  <select id="exist" parameterType="UserVo" resultType="Boolean">
+    SELECT EXISTS(SELECT 1
+    FROM
+    user
+    <include refid="findTemp"/>
+    )
+  </select>
+
+  <!-- 查询唯一键 -->
+  <select id="findOne" parameterType="UserVo" resultType="UserVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user
     <where>
       <if test="id != null">
         id = #{id}
@@ -88,55 +119,32 @@
         account = #{account}
       </if>
     </where>
-  </sql>
-
-  <select id="existUniqueKey" parameterType="UserVo" resultType="Boolean">
-    SELECT EXISTS(SELECT 1
-    FROM
-    user
-    <include refid="findUniqueTemp"/>
-    )
   </select>
 
-  <select id="findByUniqueKey" parameterType="UserVo" resultType="UserVo">
-    SELECT
-    <include refid="col"/>
-    FROM
-    user
-    <include refid="findUniqueTemp"/>
-  </select>
-
-  <select id="findExact" parameterType="UserVo" resultType="UserVo">
-    SELECT
-    <include refid="col"/>
-    FROM
-    user
-    <where>
-      <if test="account != null">
-        AND account = #{account}
-      </if>
-      <if test="name != null">
-        AND name = #{name}
-      </if>
-      <if test="gender != null">
-        AND gender = #{gender}
-      </if>
-      <if test="year != null">
-        AND year = #{year}
-      </if>
-      <include refid="com.demo.mapper.BaseMapper.findExact"/>
-    </where>
-  </select>
-
+  <!-- 查询 -->
   <select id="find" parameterType="UserVo" resultType="UserVo">
     SELECT
     <include refid="col"/>
     FROM
     user
+    <include refid="findTemp"/>
+  </select>
+
+  <!-- 模糊查询 -->
+  <select id="findFuzzy" parameterType="UserVo" resultType="UserVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user
     <where>
+      <include refid="com.demo.mapper.BaseMapper.findFuzzy"/>
       <if test="account != null and account != ''">
         <bind name="account1" value="'%'+ account +'%'"/>
         AND account like #{account1}
+      </if>
+      <if test="pwd != null and pwd != ''">
+        <bind name="pwd1" value="'%'+ pwd +'%'"/>
+        AND pwd like #{pwd1}
       </if>
       <if test="name != null and name != ''">
         <bind name="name1" value="'%'+ name +'%'"/>
@@ -149,10 +157,33 @@
         <property name="field" value="year"/>
         <property name="alias" value="year"/>
       </include>
-      <include refid="com.demo.mapper.BaseMapper.find"/>
+      <if test="profile != null and profile != ''">
+        <bind name="profile1" value="'%'+ profile +'%'"/>
+        AND profile like #{profile1}
+      </if>
+      <if test="comment != null and comment != ''">
+        <bind name="comment1" value="'%'+ comment +'%'"/>
+        AND comment like #{comment1}
+      </if>
     </where>
   </select>
 
+  <!-- 备份 -->
+  <insert id="bak" parameterType="UserBak">
+    INSERT
+    user_bak(
+    <include refid="bak"/>
+    )
+    SELECT
+    #{id},
+    <include refid="col"/>
+    FROM
+    user
+    WHERE
+    id = #{refId}
+  </insert>
+
+  <!-- 查询备份 -->
   <select id="findBak" parameterType="Long" resultType="UserBak">
     SELECT
     <include refid="bak"/>

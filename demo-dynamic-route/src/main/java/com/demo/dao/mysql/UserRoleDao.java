@@ -25,13 +25,13 @@ public class UserRoleDao extends DaoBase {
     private final UserRoleMapper userRoleMapper;
 
     /**
-     * 删除，通过用户id
+     * 批量插入
      *
-     * @param userId userId
+     * @param list id,userId,roleId
      * @return 是否成功
      */
-    public boolean deleteByUserId(long userId) {
-        return tryAny(() -> userRoleMapper.deleteByUserId(userId));
+    public boolean insertList(List<UserRoleVo> list) {
+        return tryAny(() -> userRoleMapper.batchInsert(list));
     }
 
     /**
@@ -45,13 +45,13 @@ public class UserRoleDao extends DaoBase {
     }
 
     /**
-     * 插入多个
+     * 删除，通过用户id
      *
-     * @param list id,userId,roleId
+     * @param userId userId
      * @return 是否成功
      */
-    public boolean insertList(List<UserRoleVo> list) {
-        return tryAny(() -> userRoleMapper.insertList(list));
+    public boolean deleteByUserId(long userId) {
+        return tryAny(() -> userRoleMapper.deleteByUserId(userId));
     }
 
 }

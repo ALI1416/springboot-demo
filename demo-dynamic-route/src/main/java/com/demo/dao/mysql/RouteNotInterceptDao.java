@@ -26,15 +26,6 @@ public class RouteNotInterceptDao extends DaoBase {
     private final RouteNotInterceptMapper routeNotInterceptMapper;
 
     /**
-     * 查询所有
-     *
-     * @return List RouteNotInterceptVo
-     */
-    public List<RouteNotInterceptVo> findAll() {
-        return routeNotInterceptMapper.findAll();
-    }
-
-    /**
      * 插入
      *
      * @param routeNotIntercept path,name,isMatch,needLogin,seq
@@ -49,6 +40,16 @@ public class RouteNotInterceptDao extends DaoBase {
     }
 
     /**
+     * 删除
+     *
+     * @param id id
+     * @return 是否成功删除1条
+     */
+    public boolean delete(long id) {
+        return tryEq1(() -> routeNotInterceptMapper.delete(id));
+    }
+
+    /**
      * 更新
      *
      * @param routeNotIntercept id(必须),path,name,isMatch,needLogin,seq(至少1个)
@@ -59,13 +60,12 @@ public class RouteNotInterceptDao extends DaoBase {
     }
 
     /**
-     * 删除
+     * 查询所有
      *
-     * @param id id
-     * @return 是否成功删除1条
+     * @return List RouteNotInterceptVo
      */
-    public boolean delete(long id) {
-        return tryEq1(() -> routeNotInterceptMapper.delete(id));
+    public List<RouteNotInterceptVo> findAll() {
+        return routeNotInterceptMapper.findAll();
     }
 
 }

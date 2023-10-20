@@ -18,27 +18,27 @@ import java.util.List;
 public interface UserRoleMapper {
 
     /**
-     * 删除，通过userId
-     *
-     * @param id userId
-     * @return 执行成功数量
-     */
-    int deleteByUserId(long id);
-
-    /**
-     * 删除，通过roleId
-     *
-     * @param id roleId
-     * @return 执行成功数量
-     */
-    int deleteByRoleId(long id);
-
-    /**
-     * 插入多个
+     * 批量插入
      *
      * @param list id,userId,roleId
      * @return 执行成功数量
      */
-    int insertList(List<UserRoleVo> list);
+    int batchInsert(List<UserRoleVo> list);
+
+    /**
+     * 删除，通过userId
+     *
+     * @param userId userId
+     * @return 执行成功数量
+     */
+    int deleteByUserId(long userId);
+
+    /**
+     * 删除，通过roleId
+     *
+     * @param roleId roleId
+     * @return 执行成功数量
+     */
+    int deleteByRoleId(long roleId);
 
 }

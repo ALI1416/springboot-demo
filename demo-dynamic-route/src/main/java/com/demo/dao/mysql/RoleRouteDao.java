@@ -25,23 +25,13 @@ public class RoleRouteDao extends DaoBase {
     private final RoleRouteMapper roleRouteMapper;
 
     /**
-     * 插入多个
+     * 批量插入
      *
      * @param list id,roleId,routeId
      * @return 是否成功
      */
-    public boolean insertList(List<RoleRouteVo> list) {
-        return tryAny(() -> roleRouteMapper.insertList(list));
-    }
-
-    /**
-     * 删除，通过路由id
-     *
-     * @param routeIdList routeId
-     * @return 是否成功
-     */
-    public boolean deleteByRouteIdList(List<Long> routeIdList) {
-        return tryAny(() -> roleRouteMapper.deleteByRouteIdList(routeIdList));
+    public boolean batchInsert(List<RoleRouteVo> list) {
+        return tryAny(() -> roleRouteMapper.batchInsert(list));
     }
 
     /**
@@ -52,6 +42,16 @@ public class RoleRouteDao extends DaoBase {
      */
     public boolean deleteByRouteId(long routeId) {
         return tryAny(() -> roleRouteMapper.deleteByRouteId(routeId));
+    }
+
+    /**
+     * 删除，通过路由id列表
+     *
+     * @param routeIdList routeId
+     * @return 是否成功
+     */
+    public boolean deleteByRouteIdList(List<Long> routeIdList) {
+        return tryAny(() -> roleRouteMapper.deleteByRouteIdList(routeIdList));
     }
 
     /**

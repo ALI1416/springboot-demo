@@ -6,6 +6,7 @@
     id,name,seq,create_id
   </sql>
 
+  <!-- 插入 -->
   <insert id="insert" parameterType="RoleVo">
     INSERT
     role(
@@ -15,6 +16,7 @@
     )
   </insert>
 
+  <!-- 更新 -->
   <update id="update" parameterType="RoleVo">
     UPDATE
     role
@@ -30,6 +32,7 @@
     id = #{id}
   </update>
 
+  <!-- 删除 -->
   <delete id="delete" parameterType="Long">
     DELETE
     FROM
@@ -38,6 +41,7 @@
     id = #{id}
   </delete>
 
+  <!-- 查询模板 -->
   <sql id="findTemp">
     <where>
       <if test="id != null">
@@ -55,6 +59,16 @@
     </where>
   </sql>
 
+  <!-- 是否存在 -->
+  <select id="exist" parameterType="RoleVo" resultType="Boolean">
+    SELECT EXISTS(SELECT 1
+    FROM
+    role
+    <include refid="findTemp"/>
+    )
+  </select>
+
+  <!-- 查询 -->
   <select id="find" parameterType="Long" resultType="RoleVo">
     SELECT
     <include refid="col"/>
@@ -63,14 +77,7 @@
     <include refid="findTemp"/>
   </select>
 
-  <select id="findExist" parameterType="RoleVo" resultType="Boolean">
-    SELECT EXISTS(SELECT 1
-    FROM
-    role
-    <include refid="findTemp"/>
-    )
-  </select>
-
+  <!-- 查询，通过id -->
   <select id="findById" parameterType="Long" resultType="RoleVo">
     SELECT
     <include refid="col"/>
@@ -80,12 +87,10 @@
     id = #{id}
   </select>
 
-  <select id="findByUserId" parameterType="Long" resultType="RoleVo">
+  <!-- 查询id，通过userId -->
+  <select id="findIdByUserId" parameterType="Long" resultType="Long">
     SELECT
-    r.id,
-    r.name,
-    r.seq,
-    r.create_id
+    r.id
     FROM
     role r
     INNER JOIN user_role ur ON ur.role_id = r.id
@@ -93,9 +98,13 @@
     ur.user_id = #{userId}
   </select>
 
-  <select id="findIdByUserId" parameterType="Long" resultType="Long">
+  <!-- 查询，通过userId -->
+  <select id="findByUserId" parameterType="Long" resultType="RoleVo">
     SELECT
-    r.id
+    r.id,
+    r.name,
+    r.seq,
+    r.create_id
     FROM
     role r
     INNER JOIN user_role ur ON ur.role_id = r.id

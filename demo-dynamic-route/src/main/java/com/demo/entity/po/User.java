@@ -31,9 +31,9 @@ public class User extends EntityBase {
     @Schema(description = "密码")
     private String pwd;
     /**
-     * 昵称
+     * 用户名
      */
-    @Schema(description = "昵称")
+    @Schema(description = "用户名")
     private String name;
 
 }

@@ -27,16 +27,6 @@ public class UserDao extends DaoBase {
     private final UserMapper userMapper;
 
     /**
-     * 备份
-     *
-     * @param refId id
-     * @return 是否成功
-     */
-    public boolean bak(Long refId) {
-        return tryEq1(() -> userMapper.bak(new UserBak(refId)));
-    }
-
-    /**
      * 插入
      *
      * @param user account,pwd,createId
@@ -89,7 +79,7 @@ public class UserDao extends DaoBase {
     /**
      * 更新
      *
-     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
+     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment(至少1个)
      * @return 是否成功
      */
     public boolean update(UserVo user) {
@@ -147,7 +137,7 @@ public class UserDao extends DaoBase {
     public boolean existId(long id) {
         UserVo userVo = new UserVo();
         userVo.setId(id);
-        return userMapper.existUniqueKey(userVo);
+        return userMapper.exist(userVo);
     }
 
     /**
@@ -159,7 +149,7 @@ public class UserDao extends DaoBase {
     public boolean existAccount(String account) {
         UserVo userVo = new UserVo();
         userVo.setAccount(account);
-        return userMapper.existUniqueKey(userVo);
+        return userMapper.exist(userVo);
     }
 
     /**
@@ -171,7 +161,7 @@ public class UserDao extends DaoBase {
     public UserVo findById(long id) {
         UserVo userVo = new UserVo();
         userVo.setId(id);
-        return userMapper.findByUniqueKey(userVo);
+        return userMapper.findOne(userVo);
     }
 
     /**
@@ -183,17 +173,7 @@ public class UserDao extends DaoBase {
     public UserVo findByAccount(String account) {
         UserVo userVo = new UserVo();
         userVo.setAccount(account);
-        return userMapper.findByUniqueKey(userVo);
-    }
-
-    /**
-     * 精确查询
-     *
-     * @param user UserVo
-     * @return List UserVo
-     */
-    public List<UserVo> findExact(UserVo user) {
-        return userMapper.findExact(user);
+        return userMapper.findOne(userVo);
     }
 
     /**
@@ -204,6 +184,26 @@ public class UserDao extends DaoBase {
      */
     public List<UserVo> find(UserVo user) {
         return userMapper.find(user);
+    }
+
+    /**
+     * 模糊查询
+     *
+     * @param user UserVo
+     * @return List UserVo
+     */
+    public List<UserVo> findFuzzy(UserVo user) {
+        return userMapper.findFuzzy(user);
+    }
+
+    /**
+     * 备份
+     *
+     * @param refId id
+     * @return 是否成功
+     */
+    private boolean bak(Long refId) {
+        return tryEq1(() -> userMapper.bak(new UserBak(refId)));
     }
 
     /**

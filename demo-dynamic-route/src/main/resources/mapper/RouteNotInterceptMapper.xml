@@ -6,6 +6,7 @@
     id,path,name,is_match,need_login,seq
   </sql>
 
+  <!-- 插入 -->
   <insert id="insert" parameterType="RouteNotInterceptVo">
     INSERT
     route_not_intercept(
@@ -15,6 +16,7 @@
     )
   </insert>
 
+  <!-- 删除 -->
   <delete id="delete" parameterType="Long">
     DELETE
     FROM
@@ -23,6 +25,7 @@
     id = #{id}
   </delete>
 
+  <!-- 更新 -->
   <update id="update" parameterType="RouteNotInterceptVo">
     UPDATE
     route_not_intercept
@@ -47,6 +50,7 @@
     id = #{id}
   </update>
 
+  <!-- 查询所有 -->
   <select id="findAll" resultType="RouteNotInterceptVo">
     SELECT
     <include refid="col"/>

@@ -71,7 +71,7 @@ public class RoleService extends ServiceBase {
      */
     @Transactional
     public boolean addRouteIdList(List<RoleRouteVo> list) {
-        return roleRouteDao.insertList(list);
+        return roleRouteDao.batchInsert(list);
     }
 
     /**
@@ -114,14 +114,14 @@ public class RoleService extends ServiceBase {
     }
 
     /**
-     * 查询是否存在，通过id和创建者id
+     * 查询id是否为创建者id创建的
      *
      * @param id       id
      * @param createId createId
      * @return 是否存在
      */
-    public boolean findExistByIdAndCreateId(long id, long createId) {
-        return roleDao.findExistByIdAndCreateId(id, createId);
+    public boolean existIdAndCreateId(long id, long createId) {
+        return roleDao.existIdAndCreateId(id, createId);
     }
 
 }

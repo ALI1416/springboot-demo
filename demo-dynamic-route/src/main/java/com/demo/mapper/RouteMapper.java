@@ -25,12 +25,28 @@ public interface RouteMapper {
     int insert(RouteVo route);
 
     /**
-     * 插入多个
+     * 批量插入
      *
      * @param list id,path,name,seq,parentId
      * @return 执行成功数量
      */
-    int insertList(List<RouteVo> list);
+    int batchInsert(List<RouteVo> list);
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return 执行成功数量
+     */
+    int delete(long id);
+
+    /**
+     * 批量删除
+     *
+     * @param idList id
+     * @return 执行成功数量
+     */
+    int batchDelete(List<Long> idList);
 
     /**
      * 更新
@@ -39,22 +55,6 @@ public interface RouteMapper {
      * @return 执行成功数量
      */
     int update(RouteVo route);
-
-    /**
-     * 删除通过id
-     *
-     * @param id id
-     * @return 执行成功数量
-     */
-    int delete(long id);
-
-    /**
-     * 删除多个通过id
-     *
-     * @param idList id
-     * @return 执行成功数量
-     */
-    int deleteByIdList(List<Long> idList);
 
     /**
      * 查询，通过id
@@ -73,28 +73,12 @@ public interface RouteMapper {
     List<RouteVo> find(RouteVo route);
 
     /**
-     * 查询id
-     *
-     * @param route RouteVo
-     * @return List Long
-     */
-    List<Long> findId(RouteVo route);
-
-    /**
      * 查询id和parentId
      *
      * @param route RouteVo
      * @return List RouteVo
      */
     List<RouteVo> findIdAndParentId(RouteVo route);
-
-    /**
-     * 查询，通过roleId
-     *
-     * @param roleId roleId
-     * @return List RouteVo
-     */
-    List<RouteVo> findByRoleId(long roleId);
 
     /**
      * 查询id，通过roleId

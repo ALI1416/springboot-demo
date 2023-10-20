@@ -17,20 +17,12 @@ import java.util.List;
 public interface RoleRouteMapper {
 
     /**
-     * 插入多个
+     * 批量插入
      *
      * @param list id,roleId,routeId
      * @return 执行成功数量
      */
-    int insertList(List<RoleRouteVo> list);
-
-    /**
-     * 删除，通过routeId
-     *
-     * @param routeIdList routeId
-     * @return 执行成功数量
-     */
-    int deleteByRouteIdList(List<Long> routeIdList);
+    int batchInsert(List<RoleRouteVo> list);
 
     /**
      * 删除，通过routeId
@@ -39,6 +31,14 @@ public interface RoleRouteMapper {
      * @return 执行成功数量
      */
     int deleteByRouteId(long routeId);
+
+    /**
+     * 删除，通过routeId列表
+     *
+     * @param routeIdList routeId
+     * @return 执行成功数量
+     */
+    int deleteByRouteIdList(List<Long> routeIdList);
 
     /**
      * 删除，通过roleId

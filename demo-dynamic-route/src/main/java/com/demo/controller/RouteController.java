@@ -101,7 +101,7 @@ public class RouteController extends ControllerBase {
                 r.setParentId(newId);
             }
             routeList.addAll(childList);
-            return Result.o(routeService.insertList(routeList));
+            return Result.o(routeService.batchInsert(routeList));
         } else {
             // 复制自己，不复制子节点
             return Result.o(routeService.insert(route) != 0);

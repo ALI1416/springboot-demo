@@ -6,7 +6,8 @@
     id,user_id,role_id
   </sql>
 
-  <insert id="insertList" parameterType="UserRoleVo">
+  <!-- 批量插入 -->
+  <insert id="batchInsert" parameterType="UserRoleVo">
     INSERT
     user_role(
     <include refid="col"/>
@@ -16,6 +17,7 @@
     </foreach>
   </insert>
 
+  <!-- 删除，通过userId -->
   <delete id="deleteByUserId">
     DELETE
     FROM
@@ -24,6 +26,7 @@
     user_id = #{userId}
   </delete>
 
+  <!-- 删除，通过roleId -->
   <delete id="deleteByRoleId">
     DELETE
     FROM

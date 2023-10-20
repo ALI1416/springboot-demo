@@ -17,13 +17,6 @@ import java.util.List;
 public interface RouteNotInterceptMapper {
 
     /**
-     * 查询所有
-     *
-     * @return List RouteNotInterceptVo
-     */
-    List<RouteNotInterceptVo> findAll();
-
-    /**
      * 插入
      *
      * @param routeNotIntercept id,path,name,isMatch,needLogin,seq
@@ -46,5 +39,12 @@ public interface RouteNotInterceptMapper {
      * @return 执行成功数量
      */
     int update(RouteNotInterceptVo routeNotIntercept);
+
+    /**
+     * 查询所有
+     *
+     * @return List RouteNotInterceptVo
+     */
+    List<RouteNotInterceptVo> findAll();
 
 }

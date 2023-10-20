@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.BaseMapper">
 
-  <!-- 精确查询通用模板 -->
-  <sql id="findExact">
+  <!-- 查询通用模板 -->
+  <sql id="find">
     <if test="id != null">
       AND id = #{id}
     </if>
@@ -62,8 +62,8 @@
     </choose>
   </sql>
 
-  <!-- 查询通用模板 -->
-  <sql id="find">
+  <!-- 模糊查询通用模板 -->
+  <sql id="findFuzzy">
     <if test="id != null">
       AND id = #{id}
     </if>

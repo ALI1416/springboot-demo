@@ -63,7 +63,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "id", description = "角色id")
     public Result<Boolean> delete(long id) {
         // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
+        if (!roleService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.delete(id));
@@ -89,7 +89,7 @@ public class RoleController extends ControllerBase {
             return paramIsError();
         }
         // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(role.getId(), t4s.getId())) {
+        if (!roleService.existIdAndCreateId(role.getId(), t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.update(role));
@@ -120,7 +120,7 @@ public class RoleController extends ControllerBase {
         }
         long userId = t4s.getId();
         // 只能管理自己创建的角色 只能管理自己有权限的路由
-        if (!roleService.findExistByIdAndCreateId(roleId, userId) && !routeService.findIdAndChildIdByUserId(userId).containsAll(routeIdList)) {
+        if (!roleService.existIdAndCreateId(roleId, userId) && !routeService.findIdAndChildIdByUserId(userId).containsAll(routeIdList)) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         List<RoleRouteVo> roleRouteList = new ArrayList<>();
@@ -173,7 +173,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "userId", description = "用户id")
     public Result<List<RoleVo>> user(long userId) {
         // 只能管理自己创建的用户
-        if (!userService.findExistByIdAndCreateId(userId, t4s.getId())) {
+        if (!userService.existIdAndCreateId(userId, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.findByUserId(userId));
@@ -200,7 +200,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "id", description = "角色id")
     public Result<Long> copy(long id) {
         // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
+        if (!roleService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         RoleVo role = roleService.findById(id);
@@ -229,7 +229,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "id", description = "角色id")
     public Result refreshCache(long id) {
         // 只能管理自己创建的角色
-        if (!roleService.findExistByIdAndCreateId(id, t4s.getId())) {
+        if (!roleService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         routeService.deleteRouteRoleCache(id);

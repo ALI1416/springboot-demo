@@ -6,6 +6,7 @@
     id,path,name,seq,parent_id
   </sql>
 
+  <!-- 插入 -->
   <insert id="insert" parameterType="RouteVo">
     INSERT
     route(
@@ -15,7 +16,8 @@
     )
   </insert>
 
-  <insert id="insertList" parameterType="RouteVo">
+  <!-- 批量插入 -->
+  <insert id="batchInsert" parameterType="RouteVo">
     INSERT
     route(
     <include refid="col"/>
@@ -25,6 +27,28 @@
     </foreach>
   </insert>
 
+  <!-- 删除 -->
+  <delete id="delete" parameterType="Long">
+    DELETE
+    FROM
+    route
+    WHERE
+    id = #{id}
+  </delete>
+
+  <!-- 批量删除 -->
+  <delete id="batchDelete" parameterType="Long">
+    DELETE
+    FROM
+    route
+    WHERE
+    id IN
+    <foreach collection="idList" open="(" close=")" separator="," item="id">
+      #{id}
+    </foreach>
+  </delete>
+
+  <!-- 更新 -->
   <update id="update" parameterType="RouteVo">
     UPDATE
     route
@@ -46,25 +70,7 @@
     id = #{id}
   </update>
 
-  <delete id="delete" parameterType="Long">
-    DELETE
-    FROM
-    route
-    WHERE
-    id = #{id}
-  </delete>
-
-  <delete id="deleteByIdList" parameterType="Long">
-    DELETE
-    FROM
-    route
-    WHERE
-    id IN
-    <foreach collection="idList" open="(" close=")" separator="," item="id">
-      #{id}
-    </foreach>
-  </delete>
-
+  <!-- 查询，通过id -->
   <select id="findById" parameterType="Long" resultType="RouteVo">
     SELECT
     <include refid="col"/>
@@ -74,6 +80,7 @@
     id = #{id}
   </select>
 
+  <!-- 查询模板 -->
   <sql id="findTemp">
     <where>
       <if test="id != null">
@@ -91,6 +98,7 @@
     </where>
   </sql>
 
+  <!-- 查询 -->
   <select id="find" parameterType="Long" resultType="RouteVo">
     SELECT
     <include refid="col"/>
@@ -99,14 +107,7 @@
     <include refid="findTemp"/>
   </select>
 
-  <select id="findId" parameterType="Long" resultType="Long">
-    SELECT
-    id
-    FROM
-    route
-    <include refid="findTemp"/>
-  </select>
-
+  <!-- 查询id和parentId -->
   <select id="findIdAndParentId" parameterType="Long" resultType="RouteVo">
     SELECT
     id,parent_id
@@ -115,20 +116,7 @@
     <include refid="findTemp"/>
   </select>
 
-  <select id="findByRoleId" parameterType="Long" resultType="RouteVo">
-    SELECT
-    r.id,
-    r.path,
-    r.name,
-    r.seq,
-    r.parent_id
-    FROM
-    route r
-    INNER JOIN role_route rr ON r.id = rr.route_id
-    WHERE
-    rr.role_id = #{roleId}
-  </select>
-
+  <!-- 查询id，通过roleId -->
   <select id="findIdByRoleId" parameterType="Long" resultType="Long">
     SELECT
     r.id

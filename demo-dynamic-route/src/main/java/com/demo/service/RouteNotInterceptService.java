@@ -163,12 +163,12 @@ public class RouteNotInterceptService extends ServiceBase {
     }
 
     /**
-     * 更新"不拦截路径"
+     * 更新缓存
      */
     @PostConstruct
     @Subscribe(RedisConstant.UPDATE_ROUTE_NOT_INTERCEPT)
     @Scheduled(cron = RedisConstant.UPDATE_CRON)
-    public void update() {
+    public void updateCache() {
         // 获取"不拦截路径"
         List<RouteNotInterceptVo> notIntercept = findAll();
         // 存在"不拦截路径"

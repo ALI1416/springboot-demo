@@ -198,7 +198,7 @@ CREATE TABLE `user`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
   `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '账号：唯一',
   `pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '昵称',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
   `is_delete` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '已删除',
   `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id：外键user.id',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

@@ -64,6 +64,16 @@ public class UserService extends ServiceBase {
     }
 
     /**
+     * 查询用户，通过id
+     *
+     * @param id id
+     * @return UserVo
+     */
+    public UserVo findById(long id) {
+        return userDao.findById(id);
+    }
+
+    /**
      * 查询通过账号
      *
      * @param account account
@@ -85,16 +95,6 @@ public class UserService extends ServiceBase {
             user.setPwd(BCrypt.encode(user.getPwd()));
         }
         return userDao.update(user);
-    }
-
-    /**
-     * 查询用户，通过id
-     *
-     * @param id id
-     * @return UserVo
-     */
-    public UserVo findById(long id) {
-        return userDao.findById(id);
     }
 
     /**
@@ -145,8 +145,8 @@ public class UserService extends ServiceBase {
      * @param createId createId
      * @return 是否
      */
-    public boolean findExistByIdAndCreateId(long id, long createId) {
-        return userDao.findExistByIdAndCreateId(id, createId);
+    public boolean existIdAndCreateId(long id, long createId) {
+        return userDao.existIdAndCreateId(id, createId);
     }
 
     /**

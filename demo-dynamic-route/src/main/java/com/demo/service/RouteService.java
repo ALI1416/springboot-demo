@@ -51,14 +51,14 @@ public class RouteService extends ServiceBase {
     }
 
     /**
-     * 插入多个
+     * 批量插入
      *
      * @param list id,path,name,seq,parentId
      * @return 是否成功
      */
     @Transactional
-    public boolean insertList(List<RouteVo> list) {
-        return routeDao.insertList(list);
+    public boolean batchInsert(List<RouteVo> list) {
+        return routeDao.batchInsert(list);
     }
 
     /**
@@ -98,7 +98,7 @@ public class RouteService extends ServiceBase {
             return;
         }
         // 删除子节点
-        if (!execute(() -> roleRouteDao.deleteByRouteIdList(idList), () -> routeDao.deleteByIdList(idList))) {
+        if (!execute(() -> roleRouteDao.deleteByRouteIdList(idList), () -> routeDao.batchDelete(idList))) {
             throw new Exception();
         }
     }

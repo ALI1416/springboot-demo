@@ -45,7 +45,7 @@ public class UserManageController extends ControllerBase {
         if (id == null) {
             return Result.e(ResultEnum.NOT_LOGIN);
         }
-        if (!userService.findExistByIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.deleteByToken(token));
@@ -69,7 +69,7 @@ public class UserManageController extends ControllerBase {
     @Parameter(name = "id", description = "用户id")
     public Result<Long> logoutId(long id) {
         // 只能管理自己创建的用户
-        if (!userService.findExistByIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.deleteById(id));
@@ -115,7 +115,7 @@ public class UserManageController extends ControllerBase {
             return paramIsError();
         }
         // 只能管理自己创建的用户
-        if (!userService.findExistByIdAndCreateId(user.getId(), t4s.getId())) {
+        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
@@ -149,7 +149,7 @@ public class UserManageController extends ControllerBase {
             return paramIsError();
         }
         // 只能管理自己创建的用户
-        if (!userService.findExistByIdAndCreateId(user.getId(), t4s.getId())) {
+        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(userService.updateRole(user));

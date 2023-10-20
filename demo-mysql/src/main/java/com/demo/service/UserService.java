@@ -72,7 +72,7 @@ public class UserService extends ServiceBase {
     /**
      * 更新
      *
-     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
+     * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment(至少1个)
      * @return 是否成功
      */
     @Transactional
@@ -143,16 +143,6 @@ public class UserService extends ServiceBase {
     }
 
     /**
-     * 精确查询
-     *
-     * @param user UserVo
-     * @return PageInfo UserVo
-     */
-    public PageInfo<UserVo> findExact(UserVo user) {
-        return pagination(user, () -> userDao.findExact(user));
-    }
-
-    /**
      * 查询
      *
      * @param user UserVo
@@ -160,6 +150,16 @@ public class UserService extends ServiceBase {
      */
     public PageInfo<UserVo> find(UserVo user) {
         return pagination(user, () -> userDao.find(user));
+    }
+
+    /**
+     * 模糊查询
+     *
+     * @param user UserVo
+     * @return PageInfo UserVo
+     */
+    public PageInfo<UserVo> findFuzzy(UserVo user) {
+        return pagination(user, () -> userDao.findFuzzy(user));
     }
 
     /**

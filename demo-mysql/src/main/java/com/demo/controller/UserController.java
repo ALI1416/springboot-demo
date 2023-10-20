@@ -125,23 +125,23 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 精确查询<br>
-     * http://localhost:8080/findExact<br>
+     * 查询<br>
+     * http://localhost:8080/find<br>
      * {"pages":1,"rows":2,"createId":0}
      */
     @PostMapping("findExact")
-    public Result<PageInfo<UserVo>> findExact(@RequestBody UserVo user) {
-        return Result.o(userService.findExact(user));
+    public Result<PageInfo<UserVo>> find(@RequestBody UserVo user) {
+        return Result.o(userService.find(user));
     }
 
     /**
-     * 查询<br>
-     * http://localhost:8080/find<br>
+     * 模糊查询<br>
+     * http://localhost:8080/findFuzzy<br>
      * {"pages":1,"rows":2,"account":"a"}
      */
     @PostMapping("find")
-    public Result<PageInfo<UserVo>> find(@RequestBody UserVo user) {
-        return Result.o(userService.find(user));
+    public Result<PageInfo<UserVo>> findFuzzy(@RequestBody UserVo user) {
+        return Result.o(userService.findFuzzy(user));
     }
 
     /**
@@ -150,7 +150,7 @@ public class UserController extends ControllerBase {
      * {"pages":1,"rows":2,"refId":0}
      */
     @PostMapping("findBak")
-    public Result<PageInfo<UserBak>> find(@RequestBody UserBak userBak) {
+    public Result<PageInfo<UserBak>> findBak(@RequestBody UserBak userBak) {
         return Result.o(userService.findBak(userBak));
     }
 

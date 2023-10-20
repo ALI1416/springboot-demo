@@ -34,14 +34,6 @@ public interface UserMapper {
     int batchInsert(List<UserVo> users);
 
     /**
-     * 备份
-     *
-     * @param user id,refId
-     * @return 执行成功数量
-     */
-    int bak(UserBak user);
-
-    /**
      * 更新
      *
      * @param user id,updateId(必须),account,pwd,name,gender,year,profile,comment,isDelete(至少1个)
@@ -50,28 +42,20 @@ public interface UserMapper {
     int update(UserVo user);
 
     /**
-     * 是否存在唯一键
+     * 是否存在
      *
-     * @param user id,account(至少1个)
+     * @param user UserVo
      * @return 是否存在
      */
-    boolean existUniqueKey(UserVo user);
+    boolean exist(UserVo user);
 
     /**
-     * 是否存在唯一键
+     * 查询唯一键
      *
      * @param user id,account(至少1个)
      * @return UserVo
      */
-    UserVo findByUniqueKey(UserVo user);
-
-    /**
-     * 精确查询
-     *
-     * @param user UserVo
-     * @return List UserVo
-     */
-    List<UserVo> findExact(UserVo user);
+    UserVo findOne(UserVo user);
 
     /**
      * 查询
@@ -80,6 +64,22 @@ public interface UserMapper {
      * @return List UserVo
      */
     List<UserVo> find(UserVo user);
+
+    /**
+     * 模糊查询
+     *
+     * @param user UserVo
+     * @return List UserVo
+     */
+    List<UserVo> findFuzzy(UserVo user);
+
+    /**
+     * 备份
+     *
+     * @param user id,refId
+     * @return 执行成功数量
+     */
+    int bak(UserBak user);
 
     /**
      * 查询备份

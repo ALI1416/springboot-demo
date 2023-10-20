@@ -6,6 +6,7 @@
     id,account,pwd,name,is_delete,create_id,create_time
   </sql>
 
+  <!-- 插入 -->
   <insert id="insert" parameterType="UserVo">
     INSERT
     user(
@@ -15,6 +16,7 @@
     )
   </insert>
 
+  <!-- 更新 -->
   <update id="update" parameterType="UserVo">
     UPDATE
     user
@@ -36,77 +38,7 @@
     id = #{id}
   </update>
 
-  <sql id="findUniqueTemp">
-    <where>
-      <if test="id != null">
-        id = #{id}
-      </if>
-      <if test="account != null">
-        account = #{account}
-      </if>
-    </where>
-  </sql>
-
-  <select id="existUniqueKey" parameterType="UserVo" resultType="Boolean">
-    SELECT EXISTS(SELECT 1
-    FROM
-    user
-    <include refid="findUniqueTemp"/>
-    )
-  </select>
-
-  <select id="findByUniqueKey" parameterType="UserVo" resultType="UserVo">
-    SELECT
-    <include refid="col"/>
-    FROM
-    user
-    <include refid="findUniqueTemp"/>
-  </select>
-
-  <select id="findIdByRoleId" parameterType="Long" resultType="Long">
-    SELECT
-    u.id
-    FROM
-    user u
-    INNER JOIN user_role ur ON ur.user_id = u.id
-    WHERE
-    ur.role_id = #{roleId}
-  </select>
-
-  <select id="findByRoleId" parameterType="Long" resultType="UserVo">
-    SELECT
-    u.id,
-    u.account,
-    u.pwd,
-    u.name,
-    u.is_delete,
-    u.create_id,
-    u.create_time
-    FROM
-    user u
-    INNER JOIN user_role ur ON ur.user_id = u.id
-    WHERE
-    ur.role_id = #{roleId}
-  </select>
-
-  <select id="findByRoleIdAndCreateId" resultType="UserVo">
-    SELECT
-    u.id,
-    u.account,
-    u.pwd,
-    u.name,
-    u.is_delete,
-    u.create_id,
-    u.create_time
-    FROM
-    user u
-    INNER JOIN user_role ur ON ur.user_id = u.id
-    WHERE
-    ur.role_id = #{roleId}
-    AND
-    u.create_id = #{createId}
-  </select>
-
+  <!-- 查询模板 -->
   <sql id="findTemp">
     <where>
       <if test="id != null">
@@ -133,6 +65,16 @@
     </where>
   </sql>
 
+  <!-- 是否存在 -->
+  <select id="exist" parameterType="UserVo" resultType="Boolean">
+    SELECT EXISTS(SELECT 1
+    FROM
+    user
+    <include refid="findTemp"/>
+    )
+  </select>
+
+  <!-- 查询 -->
   <select id="find" parameterType="UserVo" resultType="UserVo">
     SELECT
     <include refid="col"/>
@@ -141,12 +83,67 @@
     <include refid="findTemp"/>
   </select>
 
-  <select id="findExist" parameterType="UserVo" resultType="Boolean">
-    SELECT EXISTS(SELECT 1
+  <!-- 查询唯一键 -->
+  <select id="findOne" parameterType="UserVo" resultType="UserVo">
+    SELECT
+    <include refid="col"/>
     FROM
     user
-    <include refid="findTemp"/>
-    )
+    <where>
+      <if test="id != null">
+        id = #{id}
+      </if>
+      <if test="account != null">
+        account = #{account}
+      </if>
+    </where>
+  </select>
+
+  <!-- 查询id，通过roleId -->
+  <select id="findIdByRoleId" parameterType="Long" resultType="Long">
+    SELECT
+    u.id
+    FROM
+    user u
+    INNER JOIN user_role ur ON ur.user_id = u.id
+    WHERE
+    ur.role_id = #{roleId}
+  </select>
+
+  <!-- 查询，通过roleId -->
+  <select id="findByRoleId" parameterType="Long" resultType="UserVo">
+    SELECT
+    u.id,
+    u.account,
+    u.pwd,
+    u.name,
+    u.is_delete,
+    u.create_id,
+    u.create_time
+    FROM
+    user u
+    INNER JOIN user_role ur ON ur.user_id = u.id
+    WHERE
+    ur.role_id = #{roleId}
+  </select>
+
+  <!-- 查询，通过roleId和createId -->
+  <select id="findByRoleIdAndCreateId" resultType="UserVo">
+    SELECT
+    u.id,
+    u.account,
+    u.pwd,
+    u.name,
+    u.is_delete,
+    u.create_id,
+    u.create_time
+    FROM
+    user u
+    INNER JOIN user_role ur ON ur.user_id = u.id
+    WHERE
+    ur.role_id = #{roleId}
+    AND
+    u.create_id = #{createId}
   </select>
 
 </mapper>

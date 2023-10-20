@@ -49,12 +49,12 @@ public interface RoleMapper {
     List<RoleVo> find(RoleVo role);
 
     /**
-     * 查询是否存在
+     * 是否存在
      *
      * @param role RoleVo
      * @return 是否存在
      */
-    boolean findExist(RoleVo role);
+    boolean exist(RoleVo role);
 
     /**
      * 查询，通过id
@@ -65,19 +65,19 @@ public interface RoleMapper {
     RoleVo findById(long id);
 
     /**
-     * 查询，通过userId
-     *
-     * @param userId userId
-     * @return List RoleVo
-     */
-    List<RoleVo> findByUserId(long userId);
-
-    /**
      * 查询id，通过userId
      *
      * @param userId userId
      * @return List Long
      */
     List<Long> findIdByUserId(long userId);
+
+    /**
+     * 查询，通过userId
+     *
+     * @param userId userId
+     * @return List RoleVo
+     */
+    List<RoleVo> findByUserId(long userId);
 
 }

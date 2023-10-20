@@ -40,23 +40,13 @@ public class RouteDao extends DaoBase {
     }
 
     /**
-     * 插入多个
+     * 批量插入
      *
      * @param list id,path,name,seq,parentId
      * @return 是否成功
      */
-    public boolean insertList(List<RouteVo> list) {
-        return tryAny(() -> routeMapper.insertList(list));
-    }
-
-    /**
-     * 更新
-     *
-     * @param route id(必须),path,name,seq,parentId(至少1个)
-     * @return 是否成功更新1条
-     */
-    public boolean update(RouteVo route) {
-        return tryEq1(() -> routeMapper.update(route));
+    public boolean batchInsert(List<RouteVo> list) {
+        return tryAny(() -> routeMapper.batchInsert(list));
     }
 
     /**
@@ -70,17 +60,27 @@ public class RouteDao extends DaoBase {
     }
 
     /**
-     * 删除多个
+     * 批量删除
      *
      * @param list id
      * @return 是否成功
      */
-    public boolean deleteByIdList(List<Long> list) {
-        return tryAny(() -> routeMapper.deleteByIdList(list));
+    public boolean batchDelete(List<Long> list) {
+        return tryAny(() -> routeMapper.batchDelete(list));
     }
 
     /**
-     * 查询通过id
+     * 更新
+     *
+     * @param route id(必须),path,name,seq,parentId(至少1个)
+     * @return 是否成功更新1条
+     */
+    public boolean update(RouteVo route) {
+        return tryEq1(() -> routeMapper.update(route));
+    }
+
+    /**
+     * 查询，通过id
      *
      * @param id id
      * @return RouteVo
@@ -120,16 +120,6 @@ public class RouteDao extends DaoBase {
      */
     public List<RouteVo> findAll() {
         return routeMapper.find(null);
-    }
-
-    /**
-     * 查询，通过角色id
-     *
-     * @param roleId roleId
-     * @return List RouteVo
-     */
-    public List<RouteVo> findByRoleId(long roleId) {
-        return routeMapper.findByRoleId(roleId);
     }
 
     /**

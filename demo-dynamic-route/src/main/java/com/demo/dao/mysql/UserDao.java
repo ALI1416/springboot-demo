@@ -50,18 +50,6 @@ public class UserDao extends DaoBase {
     }
 
     /**
-     * 是否存在账号
-     *
-     * @param account account
-     * @return 是否存在
-     */
-    public boolean existAccount(String account) {
-        UserVo user = new UserVo();
-        user.setAccount(account);
-        return userMapper.existUniqueKey(user);
-    }
-
-    /**
      * 是否存在id
      *
      * @param id id
@@ -70,7 +58,33 @@ public class UserDao extends DaoBase {
     public boolean existId(long id) {
         UserVo user = new UserVo();
         user.setId(id);
-        return userMapper.existUniqueKey(user);
+        return userMapper.exist(user);
+    }
+
+    /**
+     * 是否存在账号
+     *
+     * @param account account
+     * @return 是否存在
+     */
+    public boolean existAccount(String account) {
+        UserVo user = new UserVo();
+        user.setAccount(account);
+        return userMapper.exist(user);
+    }
+
+    /**
+     * 是否存在id和创建者id
+     *
+     * @param id       id
+     * @param createId createId
+     * @return 是否存在
+     */
+    public boolean existIdAndCreateId(long id, long createId) {
+        UserVo user = new UserVo();
+        user.setId(id);
+        user.setCreateId(createId);
+        return userMapper.exist(user);
     }
 
     /**
@@ -82,7 +96,7 @@ public class UserDao extends DaoBase {
     public UserVo findById(long id) {
         UserVo user = new UserVo();
         user.setId(id);
-        return userMapper.findByUniqueKey(user);
+        return userMapper.findOne(user);
     }
 
     /**
@@ -94,7 +108,28 @@ public class UserDao extends DaoBase {
     public UserVo findByAccount(String account) {
         UserVo user = new UserVo();
         user.setAccount(account);
-        return userMapper.findByUniqueKey(user);
+        return userMapper.findOne(user);
+    }
+
+    /**
+     * 查询，通过创建者id
+     *
+     * @param createId createId
+     * @return List UserVo
+     */
+    public List<UserVo> findByCreateId(long createId) {
+        UserVo user = new UserVo();
+        user.setCreateId(createId);
+        return userMapper.find(user);
+    }
+
+    /**
+     * 查询全部
+     *
+     * @return List UserVo
+     */
+    public List<UserVo> findAll() {
+        return userMapper.find(null);
     }
 
     /**
@@ -126,41 +161,6 @@ public class UserDao extends DaoBase {
      */
     public List<UserVo> findByRoleIdAndCreateId(long roleId, long createId) {
         return userMapper.findByRoleIdAndCreateId(roleId, createId);
-    }
-
-    /**
-     * 查询，通过创建者id
-     *
-     * @param createId createId
-     * @return List UserVo
-     */
-    public List<UserVo> findByCreateId(long createId) {
-        UserVo user = new UserVo();
-        user.setCreateId(createId);
-        return userMapper.find(user);
-    }
-
-    /**
-     * 查询是否存在，通过id和创建者id
-     *
-     * @param id       id
-     * @param createId createId
-     * @return 是否存在
-     */
-    public boolean findExistByIdAndCreateId(long id, long createId) {
-        UserVo user = new UserVo();
-        user.setId(id);
-        user.setCreateId(createId);
-        return userMapper.findExist(user);
-    }
-
-    /**
-     * 查询全部
-     *
-     * @return List UserVo
-     */
-    public List<UserVo> findAll() {
-        return userMapper.find(null);
     }
 
 }

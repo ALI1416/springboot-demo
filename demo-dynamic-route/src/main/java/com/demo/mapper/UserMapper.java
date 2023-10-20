@@ -34,20 +34,28 @@ public interface UserMapper {
     int update(UserVo user);
 
     /**
-     * 是否存在唯一键
+     * 是否存在
      *
-     * @param user id,account(至少1个)
+     * @param user UserVo
      * @return 是否存在
      */
-    boolean existUniqueKey(UserVo user);
+    boolean exist(UserVo user);
 
     /**
-     * 查找唯一键
+     * 查询
+     *
+     * @param user UserVo
+     * @return List UserVo
+     */
+    List<UserVo> find(UserVo user);
+
+    /**
+     * 查询唯一键
      *
      * @param user id,account(至少1个)
      * @return UserVo
      */
-    UserVo findByUniqueKey(UserVo user);
+    UserVo findOne(UserVo user);
 
     /**
      * 查询id，通过roleId
@@ -73,21 +81,5 @@ public interface UserMapper {
      * @return List UserVo
      */
     List<UserVo> findByRoleIdAndCreateId(@Param("roleId") long roleId, @Param("createId") long createId);
-
-    /**
-     * 查询
-     *
-     * @param user UserVo
-     * @return List UserVo
-     */
-    List<UserVo> find(UserVo user);
-
-    /**
-     * 查询是否存在
-     *
-     * @param user UserVo
-     * @return 是否存在
-     */
-    boolean findExist(UserVo user);
 
 }
