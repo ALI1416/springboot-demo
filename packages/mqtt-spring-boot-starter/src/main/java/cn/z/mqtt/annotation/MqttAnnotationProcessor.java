@@ -139,11 +139,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     /**
      * 所有数字和字母
      */
-    private static final String NUMBER_ALL_LETTER = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    /**
-     * 所有数字和字母个数
-     */
-    private static final int NUMBER_ALL_LETTER_LENGTH = NUMBER_ALL_LETTER.length();
+    private static final char[] NUMBER_ALL_LETTER = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
     /**
      * 获取随机客户端ID
@@ -151,7 +147,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     private String getRandomClientId() {
         StringBuilder sb = new StringBuilder("mqtt_");
         for (int i = 0; i < 5; i++) {
-            sb.append(NUMBER_ALL_LETTER.charAt(RANDOM.nextInt(NUMBER_ALL_LETTER_LENGTH)));
+            sb.append(NUMBER_ALL_LETTER[RANDOM.nextInt(62)]);
         }
         return sb.toString();
     }
