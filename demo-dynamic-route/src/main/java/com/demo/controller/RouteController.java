@@ -41,7 +41,7 @@ public class RouteController extends ControllerBase {
      * 创建路由
      */
     @PostMapping("create")
-    @Operation(summary = "创建路由", description = "需要path/name/seq/parentId")
+    @Operation(summary = "创建路由", description = "需要path/name/seq/parentId<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody RouteVo route) {
         if (existNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
             return paramIsError();
@@ -75,36 +75,6 @@ public class RouteController extends ControllerBase {
         } else {
             // 删除自己，不删除子节点，移动子节点到上一级
             return Result.o(routeService.deleteAndMoveChild(id));
-        }
-    }
-
-    /**
-     * 复制到父路由下
-     */
-    @GetMapping("copy")
-    @Operation(summary = "复制到父路由下")
-    @Parameter(name = "id", description = "路由id")
-    @Parameter(name = "parentId", description = "父id")
-    @Parameter(name = "copyChild", description = "true复制自己和所有子节点 false复制自己，不复制子节点")
-    public Result<Boolean> copy(long id, long parentId, boolean copyChild) {
-        RouteVo route = routeService.findById(id);
-        long newId = Id.next();
-        route.setId(newId);
-        route.setParentId(parentId);
-        if (copyChild) {
-            // 复制自己和所有子节点
-            List<RouteVo> routeList = new ArrayList<>();
-            routeList.add(route);
-            List<RouteVo> childList = routeService.findChildByParentId(id);
-            for (RouteVo r : childList) {
-                r.setId(Id.next());
-                r.setParentId(newId);
-            }
-            routeList.addAll(childList);
-            return Result.o(routeService.batchInsert(routeList));
-        } else {
-            // 复制自己，不复制子节点
-            return Result.o(routeService.insert(route) != 0);
         }
     }
 

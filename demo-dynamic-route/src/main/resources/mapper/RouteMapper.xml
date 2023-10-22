@@ -107,15 +107,6 @@
     <include refid="findTemp"/>
   </select>
 
-  <!-- 查询id和parentId -->
-  <select id="findIdAndParentId" parameterType="Long" resultType="RouteVo">
-    SELECT
-    id,parent_id
-    FROM
-    route
-    <include refid="findTemp"/>
-  </select>
-
   <!-- 查询id，通过roleId -->
   <select id="findIdByRoleId" parameterType="Long" resultType="Long">
     SELECT

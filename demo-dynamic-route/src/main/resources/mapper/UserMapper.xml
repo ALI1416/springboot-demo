@@ -138,12 +138,15 @@
     u.create_id,
     u.create_time
     FROM
-    user u
-    INNER JOIN user_role ur ON ur.user_id = u.id
+    user_role ur
+    INNER JOIN user u ON ur.user_id = u.id
+    INNER JOIN role r ON ur.role_id = r.id
     WHERE
     ur.role_id = #{roleId}
     AND
     u.create_id = #{createId}
+    AND
+    r.create_id = #{createId}
   </select>
 
 </mapper>

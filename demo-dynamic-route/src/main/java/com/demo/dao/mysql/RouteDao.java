@@ -90,18 +90,6 @@ public class RouteDao extends DaoBase {
     }
 
     /**
-     * 查询id和父id，通过父id
-     *
-     * @param parentId parentId
-     * @return List RouteVo
-     */
-    public List<RouteVo> findIdAndParentIdByParentId(long parentId) {
-        RouteVo route = new RouteVo();
-        route.setParentId(parentId);
-        return routeMapper.findIdAndParentId(route);
-    }
-
-    /**
      * 查询，通过父id
      *
      * @param parentId parentId

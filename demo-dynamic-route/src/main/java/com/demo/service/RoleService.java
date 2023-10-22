@@ -84,6 +84,16 @@ public class RoleService extends ServiceBase {
     }
 
     /**
+     * 查询，通过创建者id
+     *
+     * @param createId createId
+     * @return List RoleVo
+     */
+    public List<RoleVo> findByCreateId(long createId) {
+        return roleDao.findByCreateId(createId);
+    }
+
+    /**
      * 查询，通过用户id
      *
      * @param userId userId

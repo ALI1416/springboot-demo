@@ -73,14 +73,6 @@ public interface RouteMapper {
     List<RouteVo> find(RouteVo route);
 
     /**
-     * 查询id和parentId
-     *
-     * @param route RouteVo
-     * @return List RouteVo
-     */
-    List<RouteVo> findIdAndParentId(RouteVo route);
-
-    /**
      * 查询id，通过roleId
      *
      * @param roleId roleId

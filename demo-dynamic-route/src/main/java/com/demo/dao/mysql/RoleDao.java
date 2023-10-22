@@ -69,6 +69,18 @@ public class RoleDao extends DaoBase {
     }
 
     /**
+     * 查询，通过创建者id
+     *
+     * @param createId createId
+     * @return List RoleVo
+     */
+    public List<RoleVo> findByCreateId(long createId) {
+        RoleVo role = new RoleVo();
+        role.setCreateId(createId);
+        return roleMapper.find(role);
+    }
+
+    /**
      * 是否存在id
      *
      * @param id id

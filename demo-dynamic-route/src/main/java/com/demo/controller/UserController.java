@@ -76,7 +76,7 @@ public class UserController extends ControllerBase {
      * 用户注册
      */
     @PostMapping("register")
-    @Operation(summary = "用户注册", description = "需要account/name/pwd")
+    @Operation(summary = "用户注册", description = "需要account/name/pwd<br>响应：成功id/失败0")
     public Result<Long> register(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
             return paramIsError();
@@ -86,9 +86,6 @@ public class UserController extends ControllerBase {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
         long id = userService.register(user);
-        if (id == 0L) {
-            return Result.e(ResultEnum.REGISTER_FAIL);
-        }
         return Result.o(id);
     }
 

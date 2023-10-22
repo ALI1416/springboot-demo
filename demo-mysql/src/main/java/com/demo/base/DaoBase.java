@@ -1,5 +1,6 @@
 package com.demo.base;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.function.BooleanSupplier;
@@ -15,6 +16,7 @@ import java.util.function.IntSupplier;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
+@Slf4j
 public class DaoBase {
 
     /**
@@ -59,6 +61,7 @@ public class DaoBase {
                 return false;
             }
         } catch (Exception e) {
+            log.error("tryEq1", e);
             // 捕获到异常
             if (exception) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -110,6 +113,7 @@ public class DaoBase {
                 return false;
             }
         } catch (Exception e) {
+            log.error("tryEqTrue", e);
             // 捕获到异常
             if (exception) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -142,6 +146,7 @@ public class DaoBase {
         try {
             function.run();
         } catch (Exception e) {
+            log.error("tryAny", e);
             // 捕获到异常
             if (exception) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

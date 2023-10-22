@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 19/10/2023 18:06:31
+ Date: 22/10/2023 15:48:33
 */
 
 SET NAMES utf8mb4;
@@ -73,9 +73,9 @@ INSERT INTO `role_route` VALUES (4000, 4, 3001);
 INSERT INTO `role_route` VALUES (4001, 4, 3002);
 INSERT INTO `role_route` VALUES (4002, 4, 3004);
 INSERT INTO `role_route` VALUES (4003, 4, 3006);
-INSERT INTO `role_route` VALUES (4004, 4, 3009);
-INSERT INTO `role_route` VALUES (4005, 4, 3011);
-INSERT INTO `role_route` VALUES (4006, 4, 3013);
+INSERT INTO `role_route` VALUES (4004, 4, 3008);
+INSERT INTO `role_route` VALUES (4006, 4, 3010);
+INSERT INTO `role_route` VALUES (4007, 4, 3012);
 INSERT INTO `role_route` VALUES (5000, 5, 4000);
 INSERT INTO `role_route` VALUES (5001, 5, 5000);
 
@@ -110,46 +110,44 @@ INSERT INTO `route` VALUES (1007, 'role', '获取用户角色', 6, 1000);
 INSERT INTO `route` VALUES (1008, 'route', '获取用户路由', 7, 1000);
 INSERT INTO `route` VALUES (1009, 'avatar', '获取用户头像', 8, 1000);
 INSERT INTO `route` VALUES (2000, 'userManage', '用户管理', 1, 0);
-INSERT INTO `route` VALUES (2001, 'logoutToken', '注销用户token', 0, 2000);
-INSERT INTO `route` VALUES (2002, 'logoutTokenNotCheck', '注销用户token(不校验)', 1, 2000);
-INSERT INTO `route` VALUES (2003, 'logoutId', '注销用户id', 2, 2000);
-INSERT INTO `route` VALUES (2004, 'logoutIdNotCheck', '注销用户id(不校验)', 3, 2000);
+INSERT INTO `route` VALUES (2001, 'logoutTokenLimit', '注销用户token(限制)', 0, 2000);
+INSERT INTO `route` VALUES (2002, 'logoutToken', '注销用户token', 1, 2000);
+INSERT INTO `route` VALUES (2003, 'logoutIdLimit', '注销用户id(限制)', 2, 2000);
+INSERT INTO `route` VALUES (2004, 'logoutId', '注销用户id', 3, 2000);
 INSERT INTO `route` VALUES (2005, 'create', '创建用户', 4, 2000);
-INSERT INTO `route` VALUES (2006, 'update', '修改用户信息', 5, 2000);
-INSERT INTO `route` VALUES (2007, 'updateNotCheck', '修改用户信息(不校验)', 6, 2000);
-INSERT INTO `route` VALUES (2008, 'updateRole', '修改用户角色', 7, 2000);
-INSERT INTO `route` VALUES (2009, 'updateRoleNotCheck', '修改用户角色(不校验)', 8, 2000);
-INSERT INTO `route` VALUES (2010, 'getByRoleId', '获取拥有指定角色的用户', 9, 2000);
-INSERT INTO `route` VALUES (2011, 'getByRoleIdNotCheck', '获取拥有指定角色的用户(不校验)', 10, 2000);
-INSERT INTO `route` VALUES (2012, 'get', '获取所有用户', 11, 2000);
-INSERT INTO `route` VALUES (2013, 'getNotCheck', '获取所有用户(不校验)', 12, 2000);
+INSERT INTO `route` VALUES (2006, 'updateLimit', '修改用户信息(限制)', 5, 2000);
+INSERT INTO `route` VALUES (2007, 'update', '修改用户信息', 6, 2000);
+INSERT INTO `route` VALUES (2008, 'updateRoleLimit', '修改用户角色(限制)', 7, 2000);
+INSERT INTO `route` VALUES (2009, 'updateRole', '修改用户角色', 8, 2000);
+INSERT INTO `route` VALUES (2010, 'getByRoleIdLimit', '获取拥有指定角色的用户(限制)', 9, 2000);
+INSERT INTO `route` VALUES (2011, 'getByRoleId', '获取拥有指定角色的用户', 10, 2000);
+INSERT INTO `route` VALUES (2012, 'getLimit', '获取所有用户(限制)', 11, 2000);
+INSERT INTO `route` VALUES (2013, 'get', '获取所有用户', 12, 2000);
 INSERT INTO `route` VALUES (3000, 'role', '角色', 2, 0);
 INSERT INTO `route` VALUES (3001, 'create', '创建角色', 0, 3000);
-INSERT INTO `route` VALUES (3002, 'delete', '删除角色', 1, 3000);
-INSERT INTO `route` VALUES (3003, 'deleteNotCheck', '删除角色(不校验)', 2, 3000);
-INSERT INTO `route` VALUES (3004, 'update', '修改角色', 3, 3000);
-INSERT INTO `route` VALUES (3005, 'updateNotCheck', '修改角色(不校验)', 4, 3000);
-INSERT INTO `route` VALUES (3006, 'updateRoute', '修改角色的路由', 5, 3000);
-INSERT INTO `route` VALUES (3007, 'updateRouteNotCheck', '修改角色的路由(不校验)', 6, 3000);
-INSERT INTO `route` VALUES (3008, 'get', '获取所有角色', 7, 3000);
-INSERT INTO `route` VALUES (3009, 'user', '获取用户的角色', 8, 3000);
-INSERT INTO `route` VALUES (3010, 'userNotCheck', '获取用户的角色(不校验)', 9, 3000);
-INSERT INTO `route` VALUES (3011, 'copy', '复制角色', 10, 3000);
-INSERT INTO `route` VALUES (3012, 'copyNotCheck', '复制角色(不校验)', 11, 3000);
+INSERT INTO `route` VALUES (3002, 'deleteLimit', '删除角色(限制)', 1, 3000);
+INSERT INTO `route` VALUES (3003, 'delete', '删除角色', 2, 3000);
+INSERT INTO `route` VALUES (3004, 'updateLimit', '修改角色(限制)', 3, 3000);
+INSERT INTO `route` VALUES (3005, 'update', '修改角色', 4, 3000);
+INSERT INTO `route` VALUES (3006, 'updateRouteLimit', '修改角色的路由(限制)', 5, 3000);
+INSERT INTO `route` VALUES (3007, 'updateRoute', '修改角色的路由', 6, 3000);
+INSERT INTO `route` VALUES (3008, 'getLimit', '获取所有角色(限制)', 7, 3000);
+INSERT INTO `route` VALUES (3009, 'get', '获取所有角色', 8, 3000);
+INSERT INTO `route` VALUES (3010, 'userLimit', '获取用户的角色(限制)', 9, 3000);
+INSERT INTO `route` VALUES (3011, 'user', '获取用户的角色', 10, 3000);
+INSERT INTO `route` VALUES (3012, 'refreshCacheLimit', '刷新角色缓存(限制)', 11, 3000);
 INSERT INTO `route` VALUES (3013, 'refreshCache', '刷新角色缓存', 12, 3000);
-INSERT INTO `route` VALUES (3014, 'refreshCacheNotCheck', '刷新角色缓存(不校验)', 13, 3000);
 INSERT INTO `route` VALUES (4000, 'route', '路由', 3, 0);
 INSERT INTO `route` VALUES (4001, 'create', '创建路由', 0, 4000);
 INSERT INTO `route` VALUES (4002, 'update', '修改路由', 1, 4000);
 INSERT INTO `route` VALUES (4003, 'delete', '删除路由', 2, 4000);
-INSERT INTO `route` VALUES (4004, 'copy', '复制到父路由下', 3, 4000);
-INSERT INTO `route` VALUES (4005, 'role', '获取角色路由', 4, 4000);
-INSERT INTO `route` VALUES (4006, 'user', '获取用户路由', 5, 4000);
-INSERT INTO `route` VALUES (4007, 'get', '获取路由列表', 6, 4000);
-INSERT INTO `route` VALUES (4008, 'tree', '获取路由树', 7, 4000);
-INSERT INTO `route` VALUES (4009, 'list', '获取展开后的路由列表', 8, 4000);
-INSERT INTO `route` VALUES (4010, 'refreshCache', '刷新路由缓存', 9, 4000);
-INSERT INTO `route` VALUES (4011, 'refreshRouteCache', '刷新用户的路由缓存', 10, 4000);
+INSERT INTO `route` VALUES (4004, 'role', '获取角色路由', 3, 4000);
+INSERT INTO `route` VALUES (4005, 'user', '获取用户路由', 4, 4000);
+INSERT INTO `route` VALUES (4006, 'get', '获取路由列表', 5, 4000);
+INSERT INTO `route` VALUES (4007, 'tree', '获取路由树', 6, 4000);
+INSERT INTO `route` VALUES (4008, 'list', '获取展开后的路由列表', 7, 4000);
+INSERT INTO `route` VALUES (4009, 'refreshCache', '刷新路由缓存', 8, 4000);
+INSERT INTO `route` VALUES (4010, 'refreshRouteCache', '刷新用户的路由缓存', 9, 4000);
 INSERT INTO `route` VALUES (5000, 'routeNotIntercept', '路由不拦截', 4, 0);
 INSERT INTO `route` VALUES (5001, 'create', '创建路由不拦截', 0, 5000);
 INSERT INTO `route` VALUES (5002, 'delete', '删除路由不拦截', 1, 5000);

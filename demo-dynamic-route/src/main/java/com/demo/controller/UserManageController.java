@@ -34,12 +34,12 @@ public class UserManageController extends ControllerBase {
     private final UserService userService;
 
     /**
-     * 注销用户token
+     * 注销用户token(限制)
      */
-    @GetMapping("logoutToken")
-    @Operation(summary = "注销用户token", description = "需要登录")
+    @GetMapping("logoutTokenLimit")
+    @Operation(summary = "注销用户token(限制)", description = "需要登录")
     @Parameter(name = "token", description = "用户token")
-    public Result<Boolean> logoutToken(String token) {
+    public Result<Boolean> logoutTokenLimit(String token) {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
@@ -52,22 +52,22 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 注销用户token(不校验)
+     * 注销用户token
      */
-    @GetMapping("logoutTokenNotCheck")
-    @Operation(summary = "注销用户token(不校验)")
+    @GetMapping("logoutToken")
+    @Operation(summary = "注销用户token")
     @Parameter(name = "token", description = "用户token")
-    public Result<Boolean> logoutTokenNotCheck(String token) {
+    public Result<Boolean> logoutToken(String token) {
         return Result.o(t4s.deleteByToken(token));
     }
 
     /**
-     * 注销用户id
+     * 注销用户id(限制)
      */
-    @GetMapping("logoutId")
-    @Operation(summary = "注销用户id", description = "需要登录")
+    @GetMapping("logoutIdLimit")
+    @Operation(summary = "注销用户id(限制)", description = "需要登录<br>响应：注销成功个数")
     @Parameter(name = "id", description = "用户id")
-    public Result<Long> logoutId(long id) {
+    public Result<Long> logoutIdLimit(long id) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -76,12 +76,12 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 注销用户id(不校验)
+     * 注销用户id
      */
-    @GetMapping("logoutIdNotCheck")
-    @Operation(summary = "注销用户id(不校验)")
+    @GetMapping("logoutId")
+    @Operation(summary = "注销用户id", description = "响应：注销成功个数")
     @Parameter(name = "id", description = "用户id")
-    public Result<Long> logoutIdNotCheck(long id) {
+    public Result<Long> logoutId(long id) {
         return Result.o(t4s.deleteById(id));
     }
 
@@ -89,7 +89,7 @@ public class UserManageController extends ControllerBase {
      * 创建用户
      */
     @PostMapping("create")
-    @Operation(summary = "创建用户", description = "需要登录/account/name/pwd")
+    @Operation(summary = "创建用户", description = "需要登录/account/name/pwd<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
             return paramIsError();
@@ -99,24 +99,36 @@ public class UserManageController extends ControllerBase {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
         long id = userService.register(user);
-        if (id == 0L) {
-            return Result.e(ResultEnum.REGISTER_FAIL);
-        }
         return Result.o(id);
+    }
+
+    /**
+     * 修改用户信息(限制)
+     */
+    @PatchMapping("updateLimit")
+    @Operation(summary = "修改用户信息(限制)", description = "需要登录/id 至少一个account/name/pwd/isDelete")
+    public Result<Boolean> updateLimit(@RequestBody UserVo user) {
+        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
+            return paramIsError();
+        }
+        // 只能管理自己创建的用户
+        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
+            return Result.e(ResultEnum.ACCOUNT_EXIST);
+        }
+        return Result.o(userService.update(user));
     }
 
     /**
      * 修改用户信息
      */
     @PatchMapping("update")
-    @Operation(summary = "修改用户信息", description = "需要登录/id 至少一个account/name/pwd/isDelete")
+    @Operation(summary = "修改用户信息", description = "需要id 至少一个account/name/pwd/isDelete")
     public Result<Boolean> update(@RequestBody UserVo user) {
         if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
             return paramIsError();
-        }
-        // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
@@ -125,83 +137,68 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 修改用户信息(不校验)
+     * 修改用户角色(限制)
      */
-    @PatchMapping("updateNotCheck")
-    @Operation(summary = "修改用户信息(不校验)", description = "需要id 至少一个account/name/pwd/isDelete")
-    public Result<Boolean> updateNotCheck(@RequestBody UserVo user) {
-        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
+    @PutMapping("updateRoleLimit")
+    @Operation(summary = "修改用户角色(限制)", description = "需要登录/id/roleIdList")
+    public Result<Boolean> updateRoleLimit(@RequestBody UserVo user) {
+        if (existNull(user.getId(), user.getRoleIdList())) {
             return paramIsError();
         }
-        if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
-            return Result.e(ResultEnum.ACCOUNT_EXIST);
+        // 只能管理自己创建的用户
+        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(userService.update(user));
+        return Result.o(userService.updateRole(user));
     }
 
     /**
      * 修改用户角色
      */
     @PutMapping("updateRole")
-    @Operation(summary = "修改用户角色", description = "需要登录/id/roleIdList")
+    @Operation(summary = "修改用户角色", description = "需要id/roleIdList")
     public Result<Boolean> updateRole(@RequestBody UserVo user) {
         if (existNull(user.getId(), user.getRoleIdList())) {
             return paramIsError();
-        }
-        // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(userService.updateRole(user));
     }
 
     /**
-     * 修改用户角色(不校验)
+     * 获取拥有指定角色的用户(限制)
      */
-    @PutMapping("updateRoleNotCheck")
-    @Operation(summary = "修改用户角色(不校验)", description = "需要id/roleIdList")
-    public Result<Boolean> updateRoleNotCheck(@RequestBody UserVo user) {
-        if (existNull(user.getId(), user.getRoleIdList())) {
-            return paramIsError();
-        }
-        return Result.o(userService.updateRole(user));
+    @GetMapping("getByRoleIdLimit")
+    @Operation(summary = "获取拥有指定角色的用户(限制)", description = "需要登录")
+    @Parameter(name = "roleId", description = "角色id")
+    public Result<List<UserVo>> getByRoleIdLimit(long roleId) {
+        return Result.o(userService.findByRoleIdAndCreateId(roleId, t4s.getId()));
     }
 
     /**
      * 获取拥有指定角色的用户
      */
     @GetMapping("getByRoleId")
-    @Operation(summary = "获取拥有指定角色的用户", description = "需要登录")
+    @Operation(summary = "获取拥有指定角色的用户")
     @Parameter(name = "roleId", description = "角色id")
     public Result<List<UserVo>> getByRoleId(long roleId) {
-        return Result.o(userService.findByRoleIdAndCreateId(roleId, t4s.getId()));
+        return Result.o(userService.findByRoleId(roleId));
     }
 
     /**
-     * 获取拥有指定角色的用户(不校验)
+     * 获取所有用户(限制)
      */
-    @GetMapping("getByRoleIdNotCheck")
-    @Operation(summary = "获取拥有指定角色的用户(不校验)")
-    @Parameter(name = "roleId", description = "角色id")
-    public Result<List<UserVo>> getByRoleIdNotCheck(long roleId) {
-        return Result.o(userService.findByRoleId(roleId));
+    @GetMapping("getLimit")
+    @Operation(summary = "获取所有用户(限制)", description = "需要登录")
+    public Result<List<UserVo>> getLimit() {
+        return Result.o(userService.findByCreateId(t4s.getId()));
     }
 
     /**
      * 获取所有用户
      */
     @GetMapping("get")
-    @Operation(summary = "获取所有用户", description = "需要登录")
+    @Operation(summary = "获取所有用户")
     public Result<List<UserVo>> get() {
-        return Result.o(userService.findByCreateId(t4s.getId()));
-    }
-
-    /**
-     * 获取所有用户(不校验)
-     */
-    @GetMapping("getNotCheck")
-    @Operation(summary = "获取所有用户(不校验)")
-    public Result<List<UserVo>> getNotCheck() {
         return Result.o(userService.findAll());
     }
 

@@ -46,7 +46,7 @@ public class RoleController extends ControllerBase {
      * 创建角色
      */
     @PostMapping("create")
-    @Operation(summary = "创建角色", description = "需要登录/name/seq")
+    @Operation(summary = "创建角色", description = "需要登录/name/seq<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody RoleVo role) {
         if (existNull(role.getName(), role.getSeq())) {
             return paramIsError();
@@ -56,12 +56,12 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 删除角色
+     * 删除角色(限制)
      */
-    @DeleteMapping("delete")
-    @Operation(summary = "删除角色", description = "需要登录")
+    @DeleteMapping("deleteLimit")
+    @Operation(summary = "删除角色(限制)", description = "需要登录")
     @Parameter(name = "id", description = "角色id")
-    public Result<Boolean> delete(long id) {
+    public Result<Boolean> deleteLimit(long id) {
         // 只能管理自己创建的角色
         if (!roleService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -70,21 +70,21 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 删除角色(不校验)
+     * 删除角色
      */
-    @DeleteMapping("deleteNotCheck")
-    @Operation(summary = "删除角色(不校验)")
+    @DeleteMapping("delete")
+    @Operation(summary = "删除角色")
     @Parameter(name = "id", description = "角色id")
-    public Result<Boolean> deleteNotCheck(long id) {
+    public Result<Boolean> delete(long id) {
         return Result.o(roleService.delete(id));
     }
 
     /**
-     * 修改角色
+     * 修改角色(限制)
      */
-    @PatchMapping("update")
-    @Operation(summary = "修改角色", description = "需要登录/id 至少一个name/seq")
-    public Result<Boolean> update(@RequestBody RoleVo role) {
+    @PatchMapping("updateLimit")
+    @Operation(summary = "修改角色(限制)", description = "需要登录/id 至少一个name/seq")
+    public Result<Boolean> updateLimit(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
@@ -96,11 +96,11 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 修改角色(不校验)
+     * 修改角色
      */
-    @PatchMapping("updateNotCheck")
-    @Operation(summary = "修改角色(不校验)", description = "需要id 至少一个name/seq")
-    public Result<Boolean> updateNotCheck(@RequestBody RoleVo role) {
+    @PatchMapping("update")
+    @Operation(summary = "修改角色", description = "需要id 至少一个name/seq")
+    public Result<Boolean> update(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
@@ -108,11 +108,11 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 修改角色的路由
+     * 修改角色的路由(限制)
      */
-    @PutMapping("updateRoute")
-    @Operation(summary = "修改角色的路由", description = "需要登录/roleId/routeIdList")
-    public Result<Boolean> updateRoute(@RequestBody RoleVo role) {
+    @PutMapping("updateRouteLimit")
+    @Operation(summary = "修改角色的路由(限制)", description = "需要登录/id/routeIdList")
+    public Result<Boolean> updateRouteLimit(@RequestBody RoleVo role) {
         Long roleId = role.getId();
         List<Long> routeIdList = role.getRouteIdList();
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
@@ -135,11 +135,11 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 修改角色的路由(不校验)
+     * 修改角色的路由
      */
-    @PutMapping("updateRouteNotCheck")
-    @Operation(summary = "修改角色的路由(不校验)", description = "需要roleId/routeIdList")
-    public Result<Boolean> updateRouteNotCheck(@RequestBody RoleVo role) {
+    @PutMapping("updateRoute")
+    @Operation(summary = "修改角色的路由", description = "需要id/routeIdList")
+    public Result<Boolean> updateRoute(@RequestBody RoleVo role) {
         Long roleId = role.getId();
         List<Long> routeIdList = role.getRouteIdList();
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
@@ -157,6 +157,15 @@ public class RoleController extends ControllerBase {
     }
 
     /**
+     * 获取所有角色(限制)
+     */
+    @GetMapping("getLimit")
+    @Operation(summary = "获取所有角色(限制)", description = "需要登录")
+    public Result<List<RoleVo>> getLimit() {
+        return Result.o(roleService.findByCreateId(t4s.getId()));
+    }
+
+    /**
      * 获取所有角色
      */
     @GetMapping("get")
@@ -166,12 +175,12 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 获取用户的角色
+     * 获取用户的角色(限制)
      */
-    @GetMapping("user")
-    @Operation(summary = "获取用户的角色", description = "需要登录")
+    @GetMapping("userLimit")
+    @Operation(summary = "获取用户的角色(限制)", description = "需要登录")
     @Parameter(name = "userId", description = "用户id")
-    public Result<List<RoleVo>> user(long userId) {
+    public Result<List<RoleVo>> userLimit(long userId) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(userId, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -180,12 +189,12 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 获取用户的角色(不校验)
+     * 获取用户的角色
      */
-    @GetMapping("userNotCheck")
-    @Operation(summary = "获取用户的角色(不校验)")
+    @GetMapping("user")
+    @Operation(summary = "获取用户的角色")
     @Parameter(name = "userId", description = "用户id")
-    public Result<List<RoleVo>> userNotCheck(long userId) {
+    public Result<List<RoleVo>> user(long userId) {
         if (!userService.existId(userId)) {
             return Result.e(ResultEnum.USER_NOT_EXIST);
         }
@@ -193,41 +202,12 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 复制角色
+     * 刷新角色缓存(限制)
      */
-    @GetMapping("copy")
-    @Operation(summary = "复制角色", description = "需要登录")
+    @GetMapping("refreshCacheLimit")
+    @Operation(summary = "刷新角色缓存(限制)", description = "需要登录")
     @Parameter(name = "id", description = "角色id")
-    public Result<Long> copy(long id) {
-        // 只能管理自己创建的角色
-        if (!roleService.existIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
-        RoleVo role = roleService.findById(id);
-        role.setId(Id.next());
-        return Result.o(roleService.insert(role));
-    }
-
-    /**
-     * 复制角色(不校验)
-     */
-    @GetMapping("copyNotCheck")
-    @Operation(summary = "复制角色(不校验)", description = "需要登录")
-    @Parameter(name = "id", description = "角色id")
-    public Result<Long> copyNotCheck(long id) {
-        RoleVo role = roleService.findById(id);
-        role.setId(Id.next());
-        role.setCreateId(t4s.getId());
-        return Result.o(roleService.insert(role));
-    }
-
-    /**
-     * 刷新角色缓存
-     */
-    @GetMapping("refreshCache")
-    @Operation(summary = "刷新角色缓存", description = "需要登录")
-    @Parameter(name = "id", description = "角色id")
-    public Result refreshCache(long id) {
+    public Result refreshCacheLimit(long id) {
         // 只能管理自己创建的角色
         if (!roleService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -238,12 +218,12 @@ public class RoleController extends ControllerBase {
     }
 
     /**
-     * 刷新角色缓存(不校验)
+     * 刷新角色缓存
      */
-    @GetMapping("refreshCacheNotCheck")
-    @Operation(summary = "刷新角色缓存(不校验)")
+    @GetMapping("refreshCache")
+    @Operation(summary = "刷新角色缓存")
     @Parameter(name = "id", description = "角色id")
-    public Result refreshCacheNotCheck(long id) {
+    public Result refreshCache(long id) {
         routeService.deleteRouteRoleCache(id);
         routeService.deleteRouteUserCache(userService.findIdByRoleId(id));
         return Result.o();
