@@ -44,7 +44,7 @@ public class UserController extends ControllerBase {
      * 用户登录
      */
     @PostMapping("login")
-    @Operation(summary = "用户登录", description = "需要登录/account/pwd")
+    @Operation(summary = "用户登录", description = "需要account/pwd")
     public Result<UserVo> login(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getPwd())) {
             return paramIsError();

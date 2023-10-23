@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import cn.z.tinytoken.T4s;
+import cn.z.tinytoken.entity.TokenInfo;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
@@ -32,58 +33,6 @@ public class UserManageController extends ControllerBase {
 
     private final T4s t4s;
     private final UserService userService;
-
-    /**
-     * 注销用户token(限制)
-     */
-    @GetMapping("logoutTokenLimit")
-    @Operation(summary = "注销用户token(限制)", description = "需要登录")
-    @Parameter(name = "token", description = "用户token")
-    public Result<Boolean> logoutTokenLimit(String token) {
-        // 只能管理自己创建的用户
-        Long id = t4s.getId(token);
-        if (id == null) {
-            return Result.e(ResultEnum.NOT_LOGIN);
-        }
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
-        return Result.o(t4s.deleteByToken(token));
-    }
-
-    /**
-     * 注销用户token
-     */
-    @GetMapping("logoutToken")
-    @Operation(summary = "注销用户token")
-    @Parameter(name = "token", description = "用户token")
-    public Result<Boolean> logoutToken(String token) {
-        return Result.o(t4s.deleteByToken(token));
-    }
-
-    /**
-     * 注销用户id(限制)
-     */
-    @GetMapping("logoutIdLimit")
-    @Operation(summary = "注销用户id(限制)", description = "需要登录<br>响应：注销成功个数")
-    @Parameter(name = "id", description = "用户id")
-    public Result<Long> logoutIdLimit(long id) {
-        // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
-        return Result.o(t4s.deleteById(id));
-    }
-
-    /**
-     * 注销用户id
-     */
-    @GetMapping("logoutId")
-    @Operation(summary = "注销用户id", description = "响应：注销成功个数")
-    @Parameter(name = "id", description = "用户id")
-    public Result<Long> logoutId(long id) {
-        return Result.o(t4s.deleteById(id));
-    }
 
     /**
      * 创建用户
@@ -200,6 +149,116 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "获取所有用户")
     public Result<List<UserVo>> get() {
         return Result.o(userService.findAll());
+    }
+
+    /**
+     * 注销用户token(限制)
+     */
+    @GetMapping("logoutTokenLimit")
+    @Operation(summary = "注销用户token(限制)", description = "需要登录")
+    @Parameter(name = "token", description = "用户token")
+    public Result<Boolean> logoutTokenLimit(String token) {
+        // 只能管理自己创建的用户
+        Long id = t4s.getId(token);
+        if (id == null) {
+            return Result.e(ResultEnum.NOT_LOGIN);
+        }
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(t4s.deleteByToken(token));
+    }
+
+    /**
+     * 注销用户token
+     */
+    @GetMapping("logoutToken")
+    @Operation(summary = "注销用户token")
+    @Parameter(name = "token", description = "用户token")
+    public Result<Boolean> logoutToken(String token) {
+        return Result.o(t4s.deleteByToken(token));
+    }
+
+    /**
+     * 注销用户id(限制)
+     */
+    @GetMapping("logoutIdLimit")
+    @Operation(summary = "注销用户id(限制)", description = "需要登录<br>响应：注销成功个数")
+    @Parameter(name = "id", description = "用户id")
+    public Result<Long> logoutIdLimit(long id) {
+        // 只能管理自己创建的用户
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(t4s.deleteById(id));
+    }
+
+    /**
+     * 注销用户id
+     */
+    @GetMapping("logoutId")
+    @Operation(summary = "注销用户id", description = "响应：注销成功个数")
+    @Parameter(name = "id", description = "用户id")
+    public Result<Long> logoutId(long id) {
+        return Result.o(t4s.deleteById(id));
+    }
+
+    /**
+     * 获取用户token信息
+     */
+    @GetMapping("getInfoByToken")
+    @Operation(summary = "获取用户token信息")
+    @Parameter(name = "token", description = "用户token")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<? extends TokenInfo> getInfoByToken(String token, @RequestParam(required = false, defaultValue = "false") boolean extra) {
+        if (extra) {
+            return Result.o(t4s.getInfoExtraByToken(token));
+        } else {
+            return Result.o(t4s.getInfoByToken(token));
+        }
+    }
+
+    /**
+     * 获取用户id信息
+     */
+    @GetMapping("getInfoById")
+    @Operation(summary = "获取用户id信息")
+    @Parameter(name = "id", description = "用户id")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<List<? extends TokenInfo>> getInfoByToken(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
+        if (extra) {
+            return Result.o(t4s.getInfoExtraById(id));
+        } else {
+            return Result.o(t4s.getInfoById(id));
+        }
+    }
+
+    /**
+     * 获取用户所有信息
+     */
+    @GetMapping("getInfo")
+    @Operation(summary = "获取用户所有信息")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<List<? extends TokenInfo>> getInfo(@RequestParam(required = false, defaultValue = "false") boolean extra) {
+        if (extra) {
+            return Result.o(t4s.getInfoExtra());
+        } else {
+            return Result.o(t4s.getInfo());
+        }
+    }
+
+    /**
+     * 获取不过期用户信息
+     */
+    @GetMapping("getInfoPersist")
+    @Operation(summary = "获取用户不过期信息")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<List<? extends TokenInfo>> getInfoPersist(@RequestParam(required = false, defaultValue = "false") boolean extra) {
+        if (extra) {
+            return Result.o(t4s.getInfoExtraPersist());
+        } else {
+            return Result.o(t4s.getInfoPersist());
+        }
     }
 
 }
