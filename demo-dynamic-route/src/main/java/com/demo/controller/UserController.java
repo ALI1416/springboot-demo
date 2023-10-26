@@ -85,8 +85,7 @@ public class UserController extends ControllerBase {
         if (userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
-        long id = userService.register(user);
-        return Result.o(id);
+        return Result.o(userService.register(user));
     }
 
     /**

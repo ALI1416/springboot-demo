@@ -40,7 +40,12 @@ public class RouteNotInterceptController extends ControllerBase {
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
-        return Result.o(routeNotInterceptService.insert(routeNotIntercept));
+        long ok = routeNotInterceptService.insert(routeNotIntercept);
+        // 刷新缓存
+        if (ok > 0) {
+            routeNotInterceptService.refreshCache();
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -50,7 +55,12 @@ public class RouteNotInterceptController extends ControllerBase {
     @Operation(summary = "删除路由不拦截")
     @Parameter(name = "id", description = "路由不拦截id")
     public Result<Boolean> delete(long id) {
-        return Result.o(routeNotInterceptService.delete(id));
+        boolean ok = routeNotInterceptService.delete(id);
+        // 刷新缓存
+        if (ok) {
+            routeNotInterceptService.refreshCache();
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -63,7 +73,12 @@ public class RouteNotInterceptController extends ControllerBase {
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramIsError();
         }
-        return Result.o(routeNotInterceptService.update(routeNotIntercept));
+        boolean ok = routeNotInterceptService.update(routeNotIntercept);
+        // 刷新缓存
+        if (ok) {
+            routeNotInterceptService.refreshCache();
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -82,16 +97,6 @@ public class RouteNotInterceptController extends ControllerBase {
     @Operation(summary = "获取缓存路由不拦截")
     public Result<RouteNotInterceptVo> list() {
         return Result.o(routeNotInterceptService.getLocalCache());
-    }
-
-    /**
-     * 刷新缓存路由不拦截
-     */
-    @GetMapping("refreshCache")
-    @Operation(summary = "刷新缓存路由不拦截")
-    public Result refreshCache() {
-        routeNotInterceptService.refreshCache();
-        return Result.o();
     }
 
 }

@@ -83,6 +83,15 @@
     <include refid="findTemp"/>
   </select>
 
+  <!-- 查询id -->
+  <select id="findId" parameterType="UserVo" resultType="Long">
+    SELECT
+    id
+    FROM
+    user
+    <include refid="findTemp"/>
+  </select>
+
   <!-- 查询唯一键 -->
   <select id="findOne" parameterType="UserVo" resultType="UserVo">
     SELECT

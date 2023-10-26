@@ -66,7 +66,12 @@ public class RoleController extends ControllerBase {
         if (!roleService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(roleService.delete(id));
+        boolean ok = roleService.delete(id);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteRoleAndUserCacheByRoleId(id);
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -76,7 +81,12 @@ public class RoleController extends ControllerBase {
     @Operation(summary = "删除角色")
     @Parameter(name = "id", description = "角色id")
     public Result<Boolean> delete(long id) {
-        return Result.o(roleService.delete(id));
+        boolean ok = roleService.delete(id);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteRoleAndUserCacheByRoleId(id);
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -131,7 +141,12 @@ public class RoleController extends ControllerBase {
             roleRoute.setRouteId(id);
             roleRouteList.add(roleRoute);
         }
-        return Result.o(roleRouteService.deleteByRoleId(roleId) && roleService.addRouteIdList(roleRouteList));
+        boolean ok = roleRouteService.deleteByRoleId(roleId) && roleService.addRouteIdList(roleRouteList);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteRoleAndUserCacheByRoleId(roleId);
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -153,7 +168,12 @@ public class RoleController extends ControllerBase {
             roleRoute.setRouteId(id);
             roleRouteList.add(roleRoute);
         }
-        return Result.o(roleRouteService.deleteByRoleId(roleId) && roleService.addRouteIdList(roleRouteList));
+        boolean ok = roleRouteService.deleteByRoleId(roleId) && roleService.addRouteIdList(roleRouteList);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteRoleAndUserCacheByRoleId(roleId);
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -199,34 +219,6 @@ public class RoleController extends ControllerBase {
             return Result.e(ResultEnum.USER_NOT_EXIST);
         }
         return Result.o(roleService.findByUserId(userId));
-    }
-
-    /**
-     * 刷新角色缓存(限制)
-     */
-    @GetMapping("refreshCacheLimit")
-    @Operation(summary = "刷新角色缓存(限制)", description = "需要登录")
-    @Parameter(name = "id", description = "角色id")
-    public Result refreshCacheLimit(long id) {
-        // 只能管理自己创建的角色
-        if (!roleService.existIdAndCreateId(id, t4s.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
-        }
-        routeService.deleteRouteRoleCache(id);
-        routeService.deleteRouteUserCache(userService.findIdByRoleId(id));
-        return Result.o();
-    }
-
-    /**
-     * 刷新角色缓存
-     */
-    @GetMapping("refreshCache")
-    @Operation(summary = "刷新角色缓存")
-    @Parameter(name = "id", description = "角色id")
-    public Result refreshCache(long id) {
-        routeService.deleteRouteRoleCache(id);
-        routeService.deleteRouteUserCache(userService.findIdByRoleId(id));
-        return Result.o();
     }
 
 }

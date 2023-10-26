@@ -2,10 +2,12 @@ package com.demo.controller;
 
 import cn.z.tinytoken.T4s;
 import cn.z.tinytoken.entity.TokenInfo;
+import cn.z.tinytoken.entity.TokenInfoExtra;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
+import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -13,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +36,7 @@ public class UserManageController extends ControllerBase {
 
     private final T4s t4s;
     private final UserService userService;
+    private final RouteService routeService;
 
     /**
      * 创建用户
@@ -47,8 +51,7 @@ public class UserManageController extends ControllerBase {
         if (userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
-        long id = userService.register(user);
-        return Result.o(id);
+        return Result.o(userService.register(user));
     }
 
     /**
@@ -98,7 +101,12 @@ public class UserManageController extends ControllerBase {
         if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(userService.updateRole(user));
+        boolean ok = userService.updateRole(user);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteUserCacheByUserId(user.getId());
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -110,7 +118,12 @@ public class UserManageController extends ControllerBase {
         if (existNull(user.getId(), user.getRoleIdList())) {
             return paramIsError();
         }
-        return Result.o(userService.updateRole(user));
+        boolean ok = userService.updateRole(user);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteUserCacheByUserId(user.getId());
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -161,7 +174,7 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
-            return Result.e(ResultEnum.NOT_LOGIN);
+            return Result.e(ResultEnum.USER_NOT_LOGIN);
         }
         if (!userService.existIdAndCreateId(id, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -204,6 +217,29 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
+     * 获取用户token信息(限制)
+     */
+    @GetMapping("getInfoByTokenLimit")
+    @Operation(summary = "获取用户token信息(限制)")
+    @Parameter(name = "token", description = "用户token")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<? extends TokenInfo> getInfoByTokenLimit(String token, @RequestParam(required = false, defaultValue = "false") boolean extra) {
+        // 只能管理自己创建的用户
+        Long id = t4s.getId(token);
+        if (id == null) {
+            return Result.e(ResultEnum.USER_NOT_LOGIN);
+        }
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        if (extra) {
+            return Result.o(t4s.getInfoExtraByToken(token));
+        } else {
+            return Result.o(t4s.getInfoByToken(token));
+        }
+    }
+
+    /**
      * 获取用户token信息
      */
     @GetMapping("getInfoByToken")
@@ -215,6 +251,25 @@ public class UserManageController extends ControllerBase {
             return Result.o(t4s.getInfoExtraByToken(token));
         } else {
             return Result.o(t4s.getInfoByToken(token));
+        }
+    }
+
+    /**
+     * 获取用户id信息(限制)
+     */
+    @GetMapping("getInfoByIdLimit")
+    @Operation(summary = "获取用户id信息(限制)")
+    @Parameter(name = "id", description = "用户id")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<List<? extends TokenInfo>> getInfoByTokenLimit(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
+        // 只能管理自己创建的用户
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        if (extra) {
+            return Result.o(t4s.getInfoExtraById(id));
+        } else {
+            return Result.o(t4s.getInfoById(id));
         }
     }
 
@@ -234,16 +289,68 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取用户所有信息
+     * 获取所有用户信息(限制)
+     */
+    @GetMapping("getInfoLimit")
+    @Operation(summary = "获取所有用户信息(限制)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<List<? extends TokenInfo>> getInfoLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
+        List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
+        if (extra) {
+            List<TokenInfoExtra> list = new ArrayList<>();
+            for (Long userId : userIdList) {
+                list.addAll(t4s.getInfoExtraById(userId));
+            }
+            return Result.o(list);
+        } else {
+            List<TokenInfo> list = new ArrayList<>();
+            for (Long userId : userIdList) {
+                list.addAll(t4s.getInfoById(userId));
+            }
+            return Result.o(list);
+        }
+    }
+
+    /**
+     * 获取所有用户信息
      */
     @GetMapping("getInfo")
-    @Operation(summary = "获取用户所有信息")
+    @Operation(summary = "获取所有用户信息")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfo(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {
             return Result.o(t4s.getInfoExtra());
         } else {
             return Result.o(t4s.getInfo());
+        }
+    }
+
+    /**
+     * 获取不过期用户信息(限制)
+     */
+    @GetMapping("getInfoPersistLimit")
+    @Operation(summary = "获取用户不过期信息(限制)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    public Result<List<? extends TokenInfo>> getInfoPersistLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
+        List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
+        if (extra) {
+            List<TokenInfoExtra> list = new ArrayList<>();
+            List<TokenInfoExtra> persistList = t4s.getInfoExtraPersist();
+            for (TokenInfoExtra info : persistList) {
+                if (userIdList.contains(info.getId())) {
+                    list.add(info);
+                }
+            }
+            return Result.o(list);
+        } else {
+            List<TokenInfo> list = new ArrayList<>();
+            List<TokenInfo> persistList = t4s.getInfoPersist();
+            for (TokenInfo info : persistList) {
+                if (userIdList.contains(info.getId())) {
+                    list.add(info);
+                }
+            }
+            return Result.o(list);
         }
     }
 

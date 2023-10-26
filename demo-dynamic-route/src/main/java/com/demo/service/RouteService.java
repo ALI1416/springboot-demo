@@ -7,6 +7,7 @@ import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
+import com.demo.dao.mysql.UserDao;
 import com.demo.entity.vo.RouteVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class RouteService extends ServiceBase {
     private final RouteDao routeDao;
     private final RoleRouteDao roleRouteDao;
     private final RoleDao roleDao;
+    private final UserDao userDao;
 
     /**
      * 路由占位符
@@ -101,35 +103,6 @@ public class RouteService extends ServiceBase {
         if (!execute(() -> roleRouteDao.deleteByRouteIdList(idList), () -> routeDao.batchDelete(idList))) {
             throw new Exception();
         }
-    }
-
-    /**
-     * 删除自己，并且移动子节点到该节点的父节点
-     *
-     * @param id id
-     * @return 是否成功
-     */
-    @Transactional
-    public boolean deleteAndMoveChild(long id) {
-        // 获取自己
-        RouteVo route = routeDao.findById(id);
-        if (route == null) {
-            return false;
-        }
-        // 获取子节点
-        List<RouteVo> childList = routeDao.findByParentId(id);
-        Long parentId = route.getParentId();
-        // 更改子节点的父节点
-        for (RouteVo child : childList) {
-            RouteVo routeChild = new RouteVo();
-            routeChild.setId(child.getId());
-            routeChild.setParentId(parentId);
-            if (!routeDao.update(routeChild)) {
-                return false;
-            }
-        }
-        // 删除自己
-        return execute(() -> roleRouteDao.deleteByRouteId(id), () -> routeDao.deleteById(id));
     }
 
     /**
@@ -284,49 +257,37 @@ public class RouteService extends ServiceBase {
 
     /**
      * 删除Redis全部路由缓存
-     *
-     * @return 成功条数
      */
-    public Long deleteRouteCache() {
-        return redisTemp.deleteMulti(redisTemp.scan(RedisConstant.ROUTE_PREFIX + "*"));
+    public void deleteRouteCache() {
+        redisTemp.deleteMulti(redisTemp.scan(RedisConstant.ROUTE_PREFIX + "*"));
     }
 
     /**
-     * 删除Redis角色路由缓存，通过角色id<br>
-     * 请手动查询该角色下的所有用户并删除Redis用户路由
+     * 删除Redis角色和用户缓存，通过角色id
      *
      * @param roleId roleId
-     * @return 成功条数
-     * @see #deleteRouteUserCache(List)
      */
-    public Long deleteRouteRoleCache(long roleId) {
-        return redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+    public void deleteRoleAndUserCacheByRoleId(long roleId) {
+        // 角色
+        redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
                 RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX);
-    }
-
-    /**
-     * 删除Redis用户路由缓存，通过用户id列表
-     *
-     * @param userIdList userId
-     * @return 成功条数
-     */
-    public Long deleteRouteUserCache(List<Long> userIdList) {
+        // 用户
+        List<Long> userIdList = userDao.findIdByRoleId(roleId);
         List<String> keys = new ArrayList<>();
-        for (Long id : userIdList) {
-            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_DIRECT_SUFFIX);
-            keys.add(RedisConstant.ROUTE_USER_PREFIX + id + RedisConstant.ROUTE_MATCH_SUFFIX);
+        for (Long userId : userIdList) {
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX);
+            keys.add(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX);
         }
-        return redisTemp.deleteMulti(keys);
+        redisTemp.deleteMulti(keys);
     }
 
     /**
-     * 删除Redis用户路由缓存，通过用户id
+     * 删除Redis用户缓存，通过用户id
      *
      * @param userId userId
-     * @return 成功条数
      */
-    public Long deleteRouteUserCache(long userId) {
-        return redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+    public void deleteUserCacheByUserId(long userId) {
+        redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
                 RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX);
     }
 

@@ -128,6 +128,16 @@ public class UserService extends ServiceBase {
     }
 
     /**
+     * 查询id，通过创建者id
+     *
+     * @param createId createId
+     * @return List Long
+     */
+    public List<Long> findIdByCreateId(long createId) {
+        return userDao.findIdByCreateId(createId);
+    }
+
+    /**
      * 查询，通过角色id和创建者id
      *
      * @param roleId   roleId

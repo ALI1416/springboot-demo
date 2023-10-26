@@ -50,6 +50,14 @@ public interface UserMapper {
     List<UserVo> find(UserVo user);
 
     /**
+     * 查询id
+     *
+     * @param user UserVo
+     * @return List Long
+     */
+    List<Long> findId(UserVo user);
+
+    /**
      * 查询唯一键
      *
      * @param user id,account(至少1个)

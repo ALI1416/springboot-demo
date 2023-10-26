@@ -1,6 +1,5 @@
 package com.demo.controller;
 
-import cn.z.id.Id;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.Result;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +44,12 @@ public class RouteController extends ControllerBase {
         if (existNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
             return paramIsError();
         }
-        return Result.o(routeService.insert(route));
+        long ok = routeService.insert(route);
+        // 刷新缓存
+        if (ok > 0) {
+            routeService.deleteRouteCache();
+        }
+        return Result.o(ok);
     }
 
     /**
@@ -58,24 +61,27 @@ public class RouteController extends ControllerBase {
         if (isNull(route.getId()) && !allNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
             return paramIsError();
         }
-        return Result.o(routeService.update(route));
+        boolean ok = routeService.update(route);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteRouteCache();
+        }
+        return Result.o(ok);
     }
 
     /**
-     * 删除路由
+     * 删除路由和子路由
      */
     @DeleteMapping("delete")
-    @Operation(summary = "删除路由")
+    @Operation(summary = "删除路由和子路由")
     @Parameter(name = "id", description = "路由id")
-    @Parameter(name = "deleteChild", description = "true删除自己和所有子节点 false删除自己，不删除子节点，移动子节点到上一级")
-    public Result<Boolean> delete(long id, boolean deleteChild) {
-        if (deleteChild) {
-            // 删除自己和所有子节点
-            return Result.o(routeService.deleteAndChild(id));
-        } else {
-            // 删除自己，不删除子节点，移动子节点到上一级
-            return Result.o(routeService.deleteAndMoveChild(id));
+    public Result<Boolean> delete(long id) {
+        boolean ok = routeService.deleteAndChild(id);
+        // 刷新缓存
+        if (ok) {
+            routeService.deleteRouteCache();
         }
+        return Result.o(ok);
     }
 
     /**
@@ -129,27 +135,6 @@ public class RouteController extends ControllerBase {
     @Operation(summary = "获取展开后的路由列表")
     public Result<RouteVo> list() {
         return Result.o(routeService.findExpandList());
-    }
-
-    /**
-     * 刷新路由缓存
-     */
-    @GetMapping("refreshCache")
-    @Operation(summary = "刷新路由缓存")
-    public Result refreshCache() {
-        routeService.deleteRouteCache();
-        return Result.o();
-    }
-
-    /**
-     * 刷新用户的路由缓存
-     */
-    @GetMapping("refreshRouteCache")
-    @Operation(summary = "刷新用户的路由缓存")
-    @Parameter(name = "userId", description = "用户id")
-    public Result refreshRouteCache(long userId) {
-        routeService.deleteRouteUserCache(userId);
-        return Result.o();
     }
 
 }

@@ -124,6 +124,18 @@ public class UserDao extends DaoBase {
     }
 
     /**
+     * 查询id，通过创建者id
+     *
+     * @param createId createId
+     * @return List Long
+     */
+    public List<Long> findIdByCreateId(long createId) {
+        UserVo user = new UserVo();
+        user.setCreateId(createId);
+        return userMapper.findId(user);
+    }
+
+    /**
      * 查询全部
      *
      * @return List UserVo

@@ -61,7 +61,7 @@ public class RouteNotInterceptService extends ServiceBase {
      * @return ok:id,e:0
      */
     @Transactional
-    public Long insert(RouteNotInterceptVo routeNotIntercept) {
+    public long insert(RouteNotInterceptVo routeNotIntercept) {
         return routeNotInterceptDao.insert(routeNotIntercept);
     }
 
