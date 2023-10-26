@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 22/10/2023 15:48:33
+ Date: 26/10/2023 16:38:56
 */
 
 SET NAMES utf8mb4;
@@ -68,6 +68,10 @@ INSERT INTO `role_route` VALUES (2003, 2, 2006);
 INSERT INTO `role_route` VALUES (2004, 2, 2008);
 INSERT INTO `role_route` VALUES (2005, 2, 2010);
 INSERT INTO `role_route` VALUES (2006, 2, 2012);
+INSERT INTO `role_route` VALUES (2007, 2, 2014);
+INSERT INTO `role_route` VALUES (2008, 2, 2016);
+INSERT INTO `role_route` VALUES (2009, 2, 2018);
+INSERT INTO `role_route` VALUES (2010, 2, 2020);
 INSERT INTO `role_route` VALUES (3000, 3, 3000);
 INSERT INTO `role_route` VALUES (4000, 4, 3001);
 INSERT INTO `role_route` VALUES (4001, 4, 3002);
@@ -75,7 +79,6 @@ INSERT INTO `role_route` VALUES (4002, 4, 3004);
 INSERT INTO `role_route` VALUES (4003, 4, 3006);
 INSERT INTO `role_route` VALUES (4004, 4, 3008);
 INSERT INTO `role_route` VALUES (4006, 4, 3010);
-INSERT INTO `role_route` VALUES (4007, 4, 3012);
 INSERT INTO `role_route` VALUES (5000, 5, 4000);
 INSERT INTO `role_route` VALUES (5001, 5, 5000);
 
@@ -123,6 +126,14 @@ INSERT INTO `route` VALUES (2010, 'logoutTokenLimit', '注销用户token(限制)
 INSERT INTO `route` VALUES (2011, 'logoutToken', '注销用户token', 10, 2000);
 INSERT INTO `route` VALUES (2012, 'logoutIdLimit', '注销用户id(限制)', 11, 2000);
 INSERT INTO `route` VALUES (2013, 'logoutId', '注销用户id', 12, 2000);
+INSERT INTO `route` VALUES (2014, 'getInfoByTokenLimit', '获取用户token信息(限制)', 13, 2000);
+INSERT INTO `route` VALUES (2015, 'getInfoByToken', '获取用户token信息', 14, 2000);
+INSERT INTO `route` VALUES (2016, 'getInfoByIdLimit', '获取用户id信息(限制)', 15, 2000);
+INSERT INTO `route` VALUES (2017, 'getInfoById', '获取用户id信息', 16, 2000);
+INSERT INTO `route` VALUES (2018, 'getInfoLimit', '获取所有用户信息(限制)', 17, 2000);
+INSERT INTO `route` VALUES (2019, 'getInfo', '获取所有用户信息', 18, 2000);
+INSERT INTO `route` VALUES (2020, 'getInfoPersistLimit', '获取不过期用户信息(限制)', 19, 2000);
+INSERT INTO `route` VALUES (2021, 'getInfoPersist', '获取不过期用户信息', 20, 2000);
 INSERT INTO `route` VALUES (3000, 'role', '角色', 2, 0);
 INSERT INTO `route` VALUES (3001, 'create', '创建角色', 0, 3000);
 INSERT INTO `route` VALUES (3002, 'deleteLimit', '删除角色(限制)', 1, 3000);
@@ -135,26 +146,21 @@ INSERT INTO `route` VALUES (3008, 'getLimit', '获取所有角色(限制)', 7, 3
 INSERT INTO `route` VALUES (3009, 'get', '获取所有角色', 8, 3000);
 INSERT INTO `route` VALUES (3010, 'userLimit', '获取用户的角色(限制)', 9, 3000);
 INSERT INTO `route` VALUES (3011, 'user', '获取用户的角色', 10, 3000);
-INSERT INTO `route` VALUES (3012, 'refreshCacheLimit', '刷新角色缓存(限制)', 11, 3000);
-INSERT INTO `route` VALUES (3013, 'refreshCache', '刷新角色缓存', 12, 3000);
 INSERT INTO `route` VALUES (4000, 'route', '路由', 3, 0);
 INSERT INTO `route` VALUES (4001, 'create', '创建路由', 0, 4000);
 INSERT INTO `route` VALUES (4002, 'update', '修改路由', 1, 4000);
-INSERT INTO `route` VALUES (4003, 'delete', '删除路由', 2, 4000);
+INSERT INTO `route` VALUES (4003, 'delete', '删除路由和子路由', 2, 4000);
 INSERT INTO `route` VALUES (4004, 'role', '获取角色路由', 3, 4000);
 INSERT INTO `route` VALUES (4005, 'user', '获取用户路由', 4, 4000);
 INSERT INTO `route` VALUES (4006, 'get', '获取路由列表', 5, 4000);
 INSERT INTO `route` VALUES (4007, 'tree', '获取路由树', 6, 4000);
 INSERT INTO `route` VALUES (4008, 'list', '获取展开后的路由列表', 7, 4000);
-INSERT INTO `route` VALUES (4009, 'refreshCache', '刷新路由缓存', 8, 4000);
-INSERT INTO `route` VALUES (4010, 'refreshRouteCache', '刷新用户的路由缓存', 9, 4000);
 INSERT INTO `route` VALUES (5000, 'routeNotIntercept', '路由不拦截', 4, 0);
 INSERT INTO `route` VALUES (5001, 'create', '创建路由不拦截', 0, 5000);
 INSERT INTO `route` VALUES (5002, 'delete', '删除路由不拦截', 1, 5000);
 INSERT INTO `route` VALUES (5003, 'update', '修改路由不拦截', 2, 5000);
 INSERT INTO `route` VALUES (5004, 'get', '获取路由不拦截', 3, 5000);
 INSERT INTO `route` VALUES (5005, 'list', '获取缓存路由不拦截', 4, 5000);
-INSERT INTO `route` VALUES (5006, 'refreshCache', '刷新缓存路由不拦截', 5, 5000);
 
 -- ----------------------------
 -- Table structure for route_not_intercept
