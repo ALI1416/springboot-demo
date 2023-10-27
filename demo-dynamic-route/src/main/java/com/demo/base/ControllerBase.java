@@ -37,8 +37,8 @@ public class ControllerBase {
      * @param objects 多个对象
      */
     public static boolean existNull(Object... objects) {
-        for (Object obj : objects) {
-            if (obj == null) {
+        for (Object object : objects) {
+            if (object == null) {
                 return true;
             }
         }
@@ -51,8 +51,8 @@ public class ControllerBase {
      * @param objects 多个对象
      */
     public static boolean allNull(Object... objects) {
-        for (Object obj : objects) {
-            if (obj != null) {
+        for (Object object : objects) {
+            if (object != null) {
                 return false;
             }
         }
