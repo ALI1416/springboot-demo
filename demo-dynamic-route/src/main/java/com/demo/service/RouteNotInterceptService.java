@@ -6,6 +6,7 @@ import com.demo.base.ServiceBase;
 import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RouteNotInterceptDao;
 import com.demo.entity.po.RouteNotIntercept;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -99,10 +100,10 @@ public class RouteNotInterceptService extends ServiceBase {
     /**
      * 获取所有
      *
-     * @return List RouteNotInterceptVo
+     * @return PageInfo RouteNotInterceptVo
      */
-    public List<RouteNotInterceptVo> findAll() {
-        return routeNotInterceptDao.findAll();
+    public PageInfo<RouteNotInterceptVo> findAll(Integer pages, Integer rows, String orderBy) {
+        return pagination(routeNotInterceptDao::findAll, pages, rows, orderBy);
     }
 
     /**
@@ -170,7 +171,7 @@ public class RouteNotInterceptService extends ServiceBase {
     @Scheduled(cron = RedisConstant.UPDATE_CRON)
     public void updateCache() {
         // 获取"不拦截路径"
-        List<RouteNotInterceptVo> notIntercept = findAll();
+        List<RouteNotInterceptVo> notIntercept = routeNotInterceptDao.findAll();
         // 存在"不拦截路径"
         if (!notIntercept.isEmpty()) {
             // 创建"不拦截-匹配路径"

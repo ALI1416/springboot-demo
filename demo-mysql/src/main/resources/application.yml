@@ -14,13 +14,6 @@ spring:
     hikari:
       max-lifetime: 60000
 
-logging:
-  level:
-    root: info
-    com.demo.mapper: trace
-  file:
-    name: /log/demo-mysql.log
-
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.demo.entity
@@ -34,3 +27,10 @@ id:
 
 ip2region:
   resource-path: /file/ip2region/ip2region.zdb
+
+logging:
+  level:
+    root: info
+    com.demo.mapper: trace
+  file:
+    name: /log/demo-mysql.log

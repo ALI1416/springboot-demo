@@ -2,6 +2,7 @@ package com.demo.controller;
 
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
 import com.demo.service.RoleService;
@@ -115,8 +116,8 @@ public class RouteController extends ControllerBase {
      */
     @GetMapping("get")
     @Operation(summary = "获取路由列表")
-    public Result<List<RouteVo>> get() {
-        return Result.o(routeService.findAll());
+    public Result<PageInfo<RouteVo>> get(Integer pages, Integer rows, String orderBy) {
+        return Result.o(routeService.findAll(pages, rows, orderBy));
     }
 
     /**

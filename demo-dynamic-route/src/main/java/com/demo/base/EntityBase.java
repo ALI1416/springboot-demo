@@ -42,6 +42,16 @@ public class EntityBase extends ToStringBase {
      */
     @Schema(description = "创建时间")
     private Timestamp createTime;
+    /**
+     * 更新者id
+     */
+    @Schema(description = "更新者id")
+    private Long updateId;
+    /**
+     * 更新时间
+     */
+    @Schema(description = "更新时间")
+    private Timestamp updateTime;
 
     /* ==================== vo ==================== */
     /**
@@ -54,6 +64,16 @@ public class EntityBase extends ToStringBase {
      */
     @Schema(description = "创建时间-结束")
     private Timestamp createTimeEnd;
+    /**
+     * 更新时间-结束
+     */
+    @Schema(description = "更新时间-否定")
+    private Timestamp updateTimeEnd;
+    /**
+     * 更新时间-否定
+     */
+    @Schema(description = "更新时间-结束")
+    private Boolean updateTimeNot;
 
     /* -------------------- 分页 -------------------- */
     /**

@@ -1,4 +1,4 @@
-package com.demo.entity.mongo;
+package com.demo.entity.po;
 
 import com.demo.base.MongoEntityBase;
 import lombok.Getter;
@@ -22,45 +22,44 @@ import java.sql.Timestamp;
  **/
 @Getter
 @Setter
-// @Document()注解是声明为MongoDB文档，collection是别名
 @Document(collection = "user")
-// @CompoundIndex()注解是指明复合索引，def是排序字段
 @CompoundIndex(def = "{'follower': 1 , 'following': -1 }")
 public class UserMongo extends MongoEntityBase {
 
     /**
-     * 用户名<br>
-     * 索引使用@Indexed()注解，默认升序
-     * 降序用@Indexed(direction = IndexDirection.DESCENDING)
+     * 用户名
      */
     @Indexed()
     private String name;
-
     /**
-     * 关注人数<br>
-     * 别名使用@Field()注解
+     * 关注人数
      */
     @Field("follower")
     private Integer followers;
-
     /**
      * 粉丝人数
      */
     private Integer following;
-
     /**
      * 时间
      */
     private Timestamp date;
 
+    /**
+     * 构造函数
+     */
     public UserMongo() {
     }
 
-    public UserMongo(UserMongo mongo) {
-        this.name = mongo.name;
-        this.followers = mongo.followers;
-        this.following = mongo.following;
-        this.date = mongo.date;
+    /**
+     * 构造函数
+     */
+    public UserMongo(UserMongo userMongo) {
+        super(userMongo);
+        this.name = userMongo.name;
+        this.followers = userMongo.followers;
+        this.following = userMongo.following;
+        this.date = userMongo.date;
     }
 
 }

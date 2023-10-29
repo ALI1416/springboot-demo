@@ -45,19 +45,36 @@ public class PageInfo<T> extends ToStringBase {
      */
     private final List<T> data;
 
-    public PageInfo(List<T> list) {
-        data = list;
-        row = list.size();
+    /**
+     * 构造函数
+     *
+     * @param data 数据
+     */
+    public PageInfo(List<T> data) {
+        this.data = data;
+        row = data.size();
         rows = row;
         total = row;
         page = 1;
         pages = row == 0 ? 0 : 1;
     }
 
-    public PageInfo(Page<T> p) {
-        this(p.getContent(), p.getPageable(), p.getTotalElements());
+    /**
+     * 构造函数
+     *
+     * @param page 分页
+     */
+    public PageInfo(Page<T> page) {
+        this(page.getContent(), page.getPageable(), page.getTotalElements());
     }
 
+    /**
+     * 构造函数
+     *
+     * @param data     数据
+     * @param pageable Pageable
+     * @param total    总条数
+     */
     public PageInfo(List<T> data, Pageable pageable, long total) {
         this.data = data;
         this.total = total;

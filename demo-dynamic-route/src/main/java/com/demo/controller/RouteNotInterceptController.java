@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import com.demo.base.ControllerBase;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import com.demo.service.RouteNotInterceptService;
@@ -9,8 +10,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * <h1>路由不拦截</h1>
@@ -86,8 +85,8 @@ public class RouteNotInterceptController extends ControllerBase {
      */
     @GetMapping("get")
     @Operation(summary = "获取路由不拦截")
-    public Result<List<RouteNotInterceptVo>> get() {
-        return Result.o(routeNotInterceptService.findAll());
+    public Result<PageInfo<RouteNotInterceptVo>> get(Integer pages, Integer rows, String orderBy) {
+        return Result.o(routeNotInterceptService.findAll(pages, rows, orderBy));
     }
 
     /**

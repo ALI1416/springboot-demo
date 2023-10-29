@@ -4,6 +4,7 @@ import cn.z.id.Id;
 import cn.z.tinytoken.T4s;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
@@ -181,8 +182,8 @@ public class RoleController extends ControllerBase {
      */
     @GetMapping("getLimit")
     @Operation(summary = "获取所有角色(限制)", description = "需要登录")
-    public Result<List<RoleVo>> getLimit() {
-        return Result.o(roleService.findByCreateId(t4s.getId()));
+    public Result<PageInfo<RoleVo>> getLimit(Integer pages, Integer rows, String orderBy) {
+        return Result.o(roleService.findByCreateId(t4s.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -190,8 +191,8 @@ public class RoleController extends ControllerBase {
      */
     @GetMapping("get")
     @Operation(summary = "获取所有角色")
-    public Result<List<RoleVo>> get() {
-        return Result.o(roleService.findAll());
+    public Result<PageInfo<RoleVo>> get(Integer pages, Integer rows, String orderBy) {
+        return Result.o(roleService.findAll(pages, rows, orderBy));
     }
 
     /**
@@ -200,12 +201,12 @@ public class RoleController extends ControllerBase {
     @GetMapping("userLimit")
     @Operation(summary = "获取用户的角色(限制)", description = "需要登录")
     @Parameter(name = "userId", description = "用户id")
-    public Result<List<RoleVo>> userLimit(long userId) {
+    public Result<PageInfo<RoleVo>> userLimit(long userId, Integer pages, Integer rows, String orderBy) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(userId, t4s.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(roleService.findByUserId(userId));
+        return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));
     }
 
     /**
@@ -214,11 +215,11 @@ public class RoleController extends ControllerBase {
     @GetMapping("user")
     @Operation(summary = "获取用户的角色")
     @Parameter(name = "userId", description = "用户id")
-    public Result<List<RoleVo>> user(long userId) {
+    public Result<PageInfo<RoleVo>> user(long userId, Integer pages, Integer rows, String orderBy) {
         if (!userService.existId(userId)) {
             return Result.e(ResultEnum.USER_NOT_EXIST);
         }
-        return Result.o(roleService.findByUserId(userId));
+        return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));
     }
 
 }

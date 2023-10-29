@@ -1,7 +1,6 @@
 package com.demo.controller;
 
-import cn.z.clock.Clock;
-import com.demo.entity.mongo.UserMongo;
+import com.demo.entity.po.UserMongo;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.PageRequestFix;
 import com.demo.entity.pojo.Result;
@@ -31,82 +30,97 @@ public class UserMongoController {
 
     private final UserMongoService userMongoService;
 
+    // 通用JPA方法
+
     /**
-     * <h3>插入一个，id已存在会失败</h3>
+     * 插入<br>
      * http://localhost:8080/insert<br>
-     * {"id":1,"name":"a","followers":10,"following":20}<br>
-     * 返回 true<br>
-     * 再次插入 返回 false
+     * {"name":"a","followers":10,"following":20}
      */
     @PostMapping("insert")
-    public Result<Boolean> insert(@RequestBody UserMongoVo userMongo) {
-        userMongo.setDate(Clock.timestamp());
+    public Result<Long> insert(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.insert(userMongo));
     }
 
     /**
-     * <h3>插入多个，id存在会失败，后面不再插入</h3>
-     * http://localhost:8080/insertList<br>
-     * [{"id":2,"name":"a","followers":10,"following":20},{"id":3,"name":"a","followers":10,"following":20}]<br>
-     * 返回 true<br>
-     * [{"id":4,"name":"a","followers":10,"following":20},{"id":2,"name":"a","followers":10,"following":20},{"id":5,"name":"a","followers":10,"following":20}]<br>
-     * 返回 false 只插入了id=4<br>
+     * 批量插入<br>
+     * http://localhost:8080/batchInsert<br>
+     * [{"name":"ab","followers":10,"following":20},{"name":"ac","followers":10,"following":20}]
      */
-    @PostMapping("insertList")
-    public Result<Boolean> insertList(@RequestBody List<UserMongo> userMongoList) {
-        return Result.o(userMongoService.insertList(userMongoList));
+    @PostMapping("batchInsert")
+    public Result<Boolean> batchInsert(@RequestBody List<UserMongoVo> userMongoList) {
+        return Result.o(userMongoService.batchInsert(userMongoList));
     }
 
     /**
-     * <h3>保存一个，id已存在会更新，不存在会插入</h3>
+     * 插入或更新<br>
      * http://localhost:8080/save<br>
-     * {"id":1,"name":"a","followers":10,"following":20}<br>
-     * id=1已存在会更新，不存在会插入
+     * {"id":1,"name":"a","followers":10,"following":20}
      */
     @PutMapping("save")
-    public Result save(@RequestBody UserMongoVo userMongo) {
-        userMongoService.save(userMongo);
-        return Result.o();
+    public Result<Boolean> save(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.save(userMongo));
     }
 
     /**
-     * <h3>保存多个，id已存在会更新，不存在会插入</h3>
-     * http://localhost:8080/saveList<br>
-     * [{"id":2,"name":"a","followers":10,"following":20},{"id":3,"name":"a","followers":10,"following":20}]<br>
-     * 已存在会更新，不存在会插入
+     * 批量插入或更新<br>
+     * http://localhost:8080/batchSave<br>
+     * [{"id":2,"name":"a","followers":10,"following":20},{"id":3,"name":"a","followers":10,"following":20}]
      */
-    @PutMapping("saveList")
-    public Result saveList(@RequestBody List<UserMongo> userMongoList) {
-        userMongoService.saveList(userMongoList);
-        return Result.o();
+    @PutMapping("batchSave")
+    public Result<Boolean> batchSave(@RequestBody List<UserMongoVo> userMongoList) {
+        return Result.o(userMongoService.batchSave(userMongoList));
     }
 
     /**
-     * <h3>是否存在id</h3>
-     * http://localhost:8080/existsById?id=1<br>
-     * id=1存在true不存在false
+     * 删除<br>
+     * http://localhost:8080/delete?id=1
      */
-    @GetMapping("existsById")
-    public Result<Boolean> existsById(long id) {
-        return Result.o(userMongoService.existsById(id));
+    @DeleteMapping("delete")
+    public Result<Boolean> delete(long id) {
+        return Result.o(userMongoService.delete(id));
     }
 
     /**
-     * <h3>是否存在</h3>
-     * http://localhost:8080/exists<br>
-     * {"name":"a"}<br>
-     * name=a存在true不存在false
+     * 批量删除<br>
+     * http://localhost:8080/batchDelete<br>
+     * [1,2,3]
      */
-    @PostMapping("exists")
-    public Result<Boolean> exists(@RequestBody UserMongo userMongo) {
-        Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoService.exists(example));
+    @DeleteMapping("batchDelete")
+    public Result<Boolean> batchDelete(@RequestBody List<Long> idList) {
+        return Result.o(userMongoService.batchDelete(idList));
     }
 
     /**
-     * <h3>记录总数</h3>
-     * http://localhost:8080/countAll<br>
-     * 返回记录总数
+     * 全部删除
+     */
+    @DeleteMapping("deleteAll")
+    public Result<Boolean> deleteAll() {
+        return Result.o(userMongoService.deleteAll());
+    }
+
+    /**
+     * 是否存在id<br>
+     * http://localhost:8080/existId?id=1
+     */
+    @GetMapping("existId")
+    public Result<Boolean> existId(long id) {
+        return Result.o(userMongoService.existId(id));
+    }
+
+    /**
+     * 是否存在<br>
+     * http://localhost:8080/exist<br>
+     * {"name":"a"}
+     */
+    @PostMapping("exist")
+    public Result<Boolean> exist(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.exist(userMongo));
+    }
+
+    /**
+     * 记录总数<br>
+     * http://localhost:8080/countAll
      */
     @GetMapping("countAll")
     public Result<Long> countAll() {
@@ -114,73 +128,18 @@ public class UserMongoController {
     }
 
     /**
-     * <h3>记录总数</h3>
+     * 记录总数<br>
      * http://localhost:8080/count<br>
-     * {"name":"a"}<br>
-     * name=a的记录总数
+     * {"name":"a"}
      */
     @PostMapping("count")
-    public Result<Long> count(@RequestBody UserMongo userMongo) {
-        Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoService.count(example));
+    public Result<Long> count(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.count(userMongo));
     }
 
     /**
-     * <h3>删除，通过id，不存在不会报错</h3>
-     * http://localhost:8080/deleteById?id=1
-     */
-    @DeleteMapping("deleteById")
-    public Result deleteById(long id) {
-        userMongoService.deleteById(id);
-        return Result.o();
-    }
-
-    /**
-     * <h3>删除，通过实体里的id，不存在不会报错</h3>
-     * http://localhost:8080/delete<br>
-     * {"id":1}
-     */
-    @PostMapping("delete")
-    public Result delete(@RequestBody UserMongoVo userMongo) {
-        userMongoService.delete(userMongo);
-        return Result.o();
-    }
-
-    /**
-     * <h3>删除多个，通过id，不存在不会报错</h3>
-     * http://localhost:8080/deleteListById<br>
-     * [1,2,3]
-     */
-    @DeleteMapping("deleteListById")
-    public Result deleteListById(@RequestBody List<Long> idList) {
-        userMongoService.deleteListById(idList);
-        return Result.o();
-    }
-
-    /**
-     * <h3>删除多个，通过实体里的id，不存在不会报错</h3>
-     * http://localhost:8080/deleteList<br>
-     * [{"id":1},{"id":2},{"id":3}]
-     */
-    @DeleteMapping("deleteList")
-    public Result deleteList(@RequestBody List<UserMongo> userMongoList) {
-        userMongoService.deleteList(userMongoList);
-        return Result.o();
-    }
-
-    /**
-     * <h3>删除所有</h3>
-     */
-    @DeleteMapping("deleteAll")
-    public Result deleteAll() {
-        userMongoService.deleteAll();
-        return Result.o();
-    }
-
-    /**
-     * <h3>查找，通过id</h3>
-     * http://localhost:8080/findById?id=1<br>
-     * 存在:实体;不存在:null
+     * 查询，通过id<br>
+     * http://localhost:8080/findById?id=1
      */
     @GetMapping("findById")
     public Result<UserMongo> findById(long id) {
@@ -188,32 +147,28 @@ public class UserMongoController {
     }
 
     /**
-     * <h3>查找第一个</h3>
+     * 查询第一个<br>
      * http://localhost:8080/findOne<br>
-     * {"name":"a"}<br>
-     * 存在:实体;不存在:null
+     * {"name":"a"}
      */
     @PostMapping("findOne")
-    public Result<UserMongo> findOne(@RequestBody UserMongo userMongo) {
-        Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoService.findOne(example));
+    public Result<UserMongo> findOne(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.findOne(userMongo));
     }
 
     /**
-     * <h3>查找多个，通过id</h3>
-     * http://localhost:8080/findListById<br>
-     * [1,2,3]<br>
-     * 存在:[实体];不存在:[]
+     * 查询多个，通过id<br>
+     * http://localhost:8080/findByIdList<br>
+     * [1,2,3]
      */
-    @PostMapping("findListById")
-    public Result<List<UserMongo>> findListById(@RequestBody List<Long> idList) {
-        return Result.o(userMongoService.findListById(idList));
+    @PostMapping("findByIdList")
+    public Result<List<UserMongo>> findByIdList(@RequestBody List<Long> idList) {
+        return Result.o(userMongoService.findByIdList(idList));
     }
 
     /**
-     * <h3>查找所有</h3>
-     * http://localhost:8080/findAll<br>
-     * [实体]
+     * 查询所有<br>
+     * http://localhost:8080/findAll
      */
     @GetMapping("findAll")
     public Result<List<UserMongo>> findAll() {
@@ -221,66 +176,27 @@ public class UserMongoController {
     }
 
     /**
-     * <h3>查找所有，根据指定字段倒序</h3>
-     * http://localhost:8080/findListSort?field=name<br>
-     * 根据name倒序的[实体]
+     * 排序查询<br>
+     * http://localhost:8080/findSort<br>
+     * {"orderBy":"name desc"}<br>
      */
-    @GetMapping("findListSort")
-    public Result<List<UserMongo>> findList(String field) {
-        Sort sort = Sort.by(Sort.Order.desc(field));
-        return Result.o(userMongoService.findList(sort));
+    @PostMapping("findSort")
+    public Result<List<UserMongo>> findSort(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.findSort(userMongo));
     }
 
     /**
-     * <h3>查找所有，根据Example</h3>
-     * http://localhost:8080/findListExample<br>
-     * {"name":"a"}<br>
-     * name=a的[实体]
-     */
-    @PostMapping("findListExample")
-    public Result<List<UserMongo>> findList(@RequestBody UserMongo userMongo) {
-        Example<UserMongo> example = Example.of(userMongo);
-        return Result.o(userMongoService.findList(example));
-    }
-
-    /**
-     * <h3>查找所有，根据Example和指定字段倒序</h3>
-     * http://localhost:8080/findListExampleSort?field=id<br>
-     * {"name":"a"}<br>
-     * name=a并且按照id倒序的[实体]
-     */
-    @PostMapping("findListExampleSort")
-    public Result<List<UserMongo>> findList(@RequestBody UserMongo userMongo, String field) {
-        Example<UserMongo> example = Example.of(userMongo);
-        Sort sort = Sort.by(Sort.Order.desc(field));
-        return Result.o(userMongoService.findList(example, sort));
-    }
-
-    /**
-     * <h3>查找所有，分页</h3>
-     * http://localhost:8080/findListPage?page=1&size=1<br>
+     * 查询所有，分页<br>
+     * http://localhost:8080/findPage?page=1&size=1<br>
      * PageInfo
      */
-    @GetMapping("findListPage")
-    public Result<PageInfo<UserMongo>> findList(int page, int size) {
-        PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
-        return Result.o(userMongoService.findList(pageRequestFix));
-    }
+    // @GetMapping("findPage")
+    // public Result<PageInfo<UserMongo>> findList(int page, int size) {
+    //     return Result.o(userMongoService.findPage(pageRequestFix));
+    // }
 
     /**
-     * <h3>查找所有，分页，根据指定字段倒序</h3>
-     * http://localhost:8080/findListPageSort?page=1&size=1&field=id<br>
-     * PageInfo
-     */
-    @GetMapping("findListPageSort")
-    public Result<PageInfo<UserMongo>> findListSort(int page, int size, String field) {
-        Sort sort = Sort.by(Sort.Order.desc(field));
-        PageRequestFix pageRequestFix = PageRequestFix.of(page, size, sort);
-        return Result.o(userMongoService.findList(pageRequestFix));
-    }
-
-    /**
-     * <h3>分页查找</h3>
+     * 分页查询<br>
      * http://localhost:8080/findPage<br>
      * {"pages":"1","rows":"2","orderBy":"name desc"}<br>
      * PageInfo
@@ -291,10 +207,9 @@ public class UserMongoController {
     }
 
     /**
-     * <h3>分页查找</h3>
+     * 分页查询<br>
      * http://localhost:8080/findPage2<br>
      * {"pages":"1","rows":"10","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
-     * {"pages":"1","rows":"10","paramQueryList":[{"field":"date","value":"2023-03-09","value2":"2023-03-10","type":"timestamp","operator":"bt"}]}<br>
      * PageInfo
      */
     @PostMapping("findPage2")
@@ -303,42 +218,42 @@ public class UserMongoController {
     }
 
     /**
-     * <h3>排序查找</h3>
+     * 排序查询<br>
      * http://localhost:8080/findSort<br>
      * {"orderBy":"name desc"}<br>
      * List
      */
     @PostMapping("findSort")
-    public Result<List<UserMongo>> findSort(@RequestBody UserMongoVo userMongo) {
+    public Result<List<UserMongo>> findSort3(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort(userMongo));
     }
 
     /**
-     * <h3>排序查找2</h3>
+     * 排序查询2<br>
      * http://localhost:8080/findSort2<br>
      * {"orderBy":"name desc","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
      * PageInfo
      */
-    @PostMapping("findSort2")
-    public Result<PageInfo<UserMongo>> findSort2(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.findSort2(userMongo));
-    }
+    // @PostMapping("findSort2")
+    // public Result<PageInfo<UserMongo>> findSort2(@RequestBody UserMongoVo userMongo) {
+    //     return Result.o(userMongoService.findSort2(userMongo));
+    // }
 
     /**
-     * <h3>查找所有，根据Example和分页</h3>
+     * 查询所有，根据Example和分页<br>
      * http://localhost:8080/findListPage?page=1&size=1<br>
      * {"name":"a"}<br>
      * PageInfo
      */
-    @PostMapping("findListExamplePage")
-    public Result<PageInfo<UserMongo>> findList(@RequestBody UserMongo userMongo, int page, int size) {
-        Example<UserMongo> example = Example.of(userMongo);
-        PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
-        return Result.o(userMongoService.findList(example, pageRequestFix));
-    }
+    // @PostMapping("findListExamplePage")
+    // public Result<PageInfo<UserMongo>> findList(@RequestBody UserMongo userMongo, int page, int size) {
+    //     Example<UserMongo> example = Example.of(userMongo);
+    //     PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
+    //     return Result.o(userMongoService.findList(example, pageRequestFix));
+    // }
 
     /**
-     * <h3>根据名字查询并分页</h3>
+     * 根据名字查询并分页<br>
      * http://localhost:8080/findByName?name=a&page=1&size=1<br>
      * PageInfo
      */

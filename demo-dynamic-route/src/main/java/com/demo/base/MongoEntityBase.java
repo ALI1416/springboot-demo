@@ -73,26 +73,4 @@ public class MongoEntityBase extends ToStringBase {
     @Transient
     private String orderBy;
 
-    /**
-     * 构造函数
-     */
-    public MongoEntityBase() {
-    }
-
-    /**
-     * 构造函数
-     */
-    public MongoEntityBase(MongoEntityBase base) {
-        this.id = base.id;
-        this.createTime = base.createTime;
-        this.updateTime = base.updateTime;
-        this.createTimeEnd = base.createTimeEnd;
-        this.createTimeNot = base.createTimeNot;
-        this.updateTimeEnd = base.updateTimeEnd;
-        this.updateTimeNot = base.updateTimeNot;
-        this.pages = base.pages;
-        this.rows = base.rows;
-        this.orderBy = base.orderBy;
-    }
-
 }

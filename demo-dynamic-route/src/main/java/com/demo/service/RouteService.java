@@ -8,6 +8,7 @@ import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
 import com.demo.dao.mysql.UserDao;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -231,10 +232,10 @@ public class RouteService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @return List RouteVo
+     * @return PageInfo RouteVo
      */
-    public List<RouteVo> findAll() {
-        return routeDao.findAll();
+    public PageInfo<RouteVo> findAll(Integer pages, Integer rows, String orderBy) {
+        return pagination(routeDao::findAll, pages, rows, orderBy);
     }
 
     /**

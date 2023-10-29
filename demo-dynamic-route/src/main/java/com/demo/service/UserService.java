@@ -5,6 +5,7 @@ import cn.z.tool.BCrypt;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.UserDao;
 import com.demo.dao.mysql.UserRoleDao;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.UserRoleVo;
 import com.demo.entity.vo.UserVo;
 import lombok.AllArgsConstructor;
@@ -111,20 +112,20 @@ public class UserService extends ServiceBase {
      * 查询，通过角色id
      *
      * @param roleId roleId
-     * @return List UserVo
+     * @return PageInfo UserVo
      */
-    public List<UserVo> findByRoleId(long roleId) {
-        return userDao.findByRoleId(roleId);
+    public PageInfo<UserVo> findByRoleId(long roleId, Integer pages, Integer rows, String orderBy) {
+        return pagination(() -> userDao.findByRoleId(roleId), pages, rows, orderBy);
     }
 
     /**
      * 查询，通过创建者id
      *
      * @param createId createId
-     * @return List UserVo
+     * @return PageInfo UserVo
      */
-    public List<UserVo> findByCreateId(long createId) {
-        return userDao.findByCreateId(createId);
+    public PageInfo<UserVo> findByCreateId(long createId, Integer pages, Integer rows, String orderBy) {
+        return pagination(() -> userDao.findByCreateId(createId), pages, rows, orderBy);
     }
 
     /**
@@ -142,10 +143,10 @@ public class UserService extends ServiceBase {
      *
      * @param roleId   roleId
      * @param createId createId
-     * @return List UserVo
+     * @return PageInfo UserVo
      */
-    public List<UserVo> findByRoleIdAndCreateId(long roleId, long createId) {
-        return userDao.findByRoleIdAndCreateId(roleId, createId);
+    public PageInfo<UserVo> findByRoleIdAndCreateId(long roleId, long createId, Integer pages, Integer rows, String orderBy) {
+        return pagination(() -> userDao.findByRoleIdAndCreateId(roleId, createId), pages, rows, orderBy);
     }
 
     /**
@@ -162,10 +163,10 @@ public class UserService extends ServiceBase {
     /**
      * 查询全部
      *
-     * @return List UserVo
+     * @return PageInfo UserVo
      */
-    public List<UserVo> findAll() {
-        return userDao.findAll();
+    public PageInfo<UserVo> findAll(Integer pages, Integer rows, String orderBy) {
+        return pagination(() -> userDao.findAll(), pages, rows, orderBy);
     }
 
     /**

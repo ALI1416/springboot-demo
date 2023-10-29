@@ -19,6 +19,7 @@
     <module>redis-spring-boot-temp</module>
     <module>websocket-spring-boot-temp</module>
     <module>minio-spring-boot-starter</module>
+    <module>mongo-spring-boot-temp</module>
     <module>mqtt-spring-boot-starter</module>
     <module>elastic-search-spring-boot-starter</module>
     <module>util</module>
@@ -95,6 +96,9 @@
     <!--Minio SpringBoot启动器-->
     <!--cn.404z:minio-spring-boot-starter-->
     <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
+    <!--MongoDB SpringBoot启动器-->
+    <!--cn.404z:mongo-spring-boot-starter-->
+    <mongo-spring-boot-starter.version>1.0.0</mongo-spring-boot-starter.version>
     <!--MQTT SpringBoot启动器-->
     <!--cn.404z:mqtt-spring-boot-starter-->
     <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
@@ -163,6 +167,12 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-data-redis</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--MongoDB-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb</artifactId>
         <version>${springboot.version}</version>
       </dependency>
       <!--SpringBoot WebSocket-->
@@ -255,6 +265,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>minio-spring-boot-starter</artifactId>
         <version>${minio-spring-boot-starter.version}</version>
+      </dependency>
+      <!--MongoDB SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mongo-spring-boot-starter</artifactId>
+        <version>${mongo-spring-boot-starter.version}</version>
       </dependency>
       <!--MQTT SpringBoot启动器-->
       <dependency>

@@ -5,6 +5,7 @@ import cn.z.tinytoken.entity.TokenInfo;
 import cn.z.tinytoken.entity.TokenInfoExtra;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.RouteService;
@@ -132,8 +133,8 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getByRoleIdLimit")
     @Operation(summary = "获取拥有指定角色的用户(限制)", description = "需要登录")
     @Parameter(name = "roleId", description = "角色id")
-    public Result<List<UserVo>> getByRoleIdLimit(long roleId) {
-        return Result.o(userService.findByRoleIdAndCreateId(roleId, t4s.getId()));
+    public Result<PageInfo<UserVo>> getByRoleIdLimit(long roleId, Integer pages, Integer rows, String orderBy) {
+        return Result.o(userService.findByRoleIdAndCreateId(roleId, t4s.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -142,8 +143,8 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getByRoleId")
     @Operation(summary = "获取拥有指定角色的用户")
     @Parameter(name = "roleId", description = "角色id")
-    public Result<List<UserVo>> getByRoleId(long roleId) {
-        return Result.o(userService.findByRoleId(roleId));
+    public Result<PageInfo<UserVo>> getByRoleId(long roleId, Integer pages, Integer rows, String orderBy) {
+        return Result.o(userService.findByRoleId(roleId, pages, rows, orderBy));
     }
 
     /**
@@ -151,8 +152,8 @@ public class UserManageController extends ControllerBase {
      */
     @GetMapping("getLimit")
     @Operation(summary = "获取所有用户(限制)", description = "需要登录")
-    public Result<List<UserVo>> getLimit() {
-        return Result.o(userService.findByCreateId(t4s.getId()));
+    public Result<PageInfo<UserVo>> getLimit(Integer pages, Integer rows, String orderBy) {
+        return Result.o(userService.findByCreateId(t4s.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -160,15 +161,15 @@ public class UserManageController extends ControllerBase {
      */
     @GetMapping("get")
     @Operation(summary = "获取所有用户")
-    public Result<List<UserVo>> get() {
-        return Result.o(userService.findAll());
+    public Result<PageInfo<UserVo>> get(Integer pages, Integer rows, String orderBy) {
+        return Result.o(userService.findAll(pages, rows, orderBy));
     }
 
     /**
-     * 注销用户token(限制)
+     * 注销用户token认证(限制)
      */
     @GetMapping("logoutTokenLimit")
-    @Operation(summary = "注销用户token(限制)", description = "需要登录")
+    @Operation(summary = "注销用户token认证(限制)", description = "需要登录")
     @Parameter(name = "token", description = "用户token")
     public Result<Boolean> logoutTokenLimit(String token) {
         // 只能管理自己创建的用户
@@ -183,20 +184,20 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 注销用户token
+     * 注销用户token认证
      */
     @GetMapping("logoutToken")
-    @Operation(summary = "注销用户token")
+    @Operation(summary = "注销用户token认证")
     @Parameter(name = "token", description = "用户token")
     public Result<Boolean> logoutToken(String token) {
         return Result.o(t4s.deleteByToken(token));
     }
 
     /**
-     * 注销用户id(限制)
+     * 注销用户id认证(限制)
      */
     @GetMapping("logoutIdLimit")
-    @Operation(summary = "注销用户id(限制)", description = "需要登录<br>响应：注销成功个数")
+    @Operation(summary = "注销用户id认证(限制)", description = "需要登录<br>响应：注销成功个数")
     @Parameter(name = "id", description = "用户id")
     public Result<Long> logoutIdLimit(long id) {
         // 只能管理自己创建的用户
@@ -207,20 +208,20 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 注销用户id
+     * 注销用户id认证
      */
     @GetMapping("logoutId")
-    @Operation(summary = "注销用户id", description = "响应：注销成功个数")
+    @Operation(summary = "注销用户id认证", description = "响应：注销成功个数")
     @Parameter(name = "id", description = "用户id")
     public Result<Long> logoutId(long id) {
         return Result.o(t4s.deleteById(id));
     }
 
     /**
-     * 获取用户token信息(限制)
+     * 获取用户token认证信息(限制)
      */
     @GetMapping("getInfoByTokenLimit")
-    @Operation(summary = "获取用户token信息(限制)")
+    @Operation(summary = "获取用户token认证信息(限制)")
     @Parameter(name = "token", description = "用户token")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<? extends TokenInfo> getInfoByTokenLimit(String token, @RequestParam(required = false, defaultValue = "false") boolean extra) {
@@ -240,10 +241,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取用户token信息
+     * 获取用户token认证信息
      */
     @GetMapping("getInfoByToken")
-    @Operation(summary = "获取用户token信息")
+    @Operation(summary = "获取用户token认证信息")
     @Parameter(name = "token", description = "用户token")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<? extends TokenInfo> getInfoByToken(String token, @RequestParam(required = false, defaultValue = "false") boolean extra) {
@@ -255,10 +256,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取用户id信息(限制)
+     * 获取用户id认证信息(限制)
      */
     @GetMapping("getInfoByIdLimit")
-    @Operation(summary = "获取用户id信息(限制)")
+    @Operation(summary = "获取用户id认证信息(限制)")
     @Parameter(name = "id", description = "用户id")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfoByTokenLimit(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
@@ -274,10 +275,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取用户id信息
+     * 获取用户id认证信息
      */
     @GetMapping("getInfoById")
-    @Operation(summary = "获取用户id信息")
+    @Operation(summary = "获取用户id认证信息")
     @Parameter(name = "id", description = "用户id")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfoByToken(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
@@ -289,10 +290,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取所有用户信息(限制)
+     * 获取所有用户认证信息(限制)
      */
     @GetMapping("getInfoLimit")
-    @Operation(summary = "获取所有用户信息(限制)")
+    @Operation(summary = "获取所有用户认证信息(限制)")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfoLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
@@ -312,10 +313,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取所有用户信息
+     * 获取所有用户认证信息
      */
     @GetMapping("getInfo")
-    @Operation(summary = "获取所有用户信息")
+    @Operation(summary = "获取所有用户认证信息")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfo(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {
@@ -326,10 +327,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取不过期用户信息(限制)
+     * 获取不过期用户认证信息(限制)
      */
     @GetMapping("getInfoPersistLimit")
-    @Operation(summary = "获取用户不过期信息(限制)")
+    @Operation(summary = "获取用户不过期认证信息(限制)")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfoPersistLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
@@ -355,10 +356,10 @@ public class UserManageController extends ControllerBase {
     }
 
     /**
-     * 获取不过期用户信息
+     * 获取不过期用户认证信息
      */
     @GetMapping("getInfoPersist")
-    @Operation(summary = "获取用户不过期信息")
+    @Operation(summary = "获取用户不过期认证信息")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
     public Result<List<? extends TokenInfo>> getInfoPersist(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {

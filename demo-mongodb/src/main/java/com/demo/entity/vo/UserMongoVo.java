@@ -1,12 +1,10 @@
 package com.demo.entity.vo;
 
-import com.demo.entity.mongo.UserMongo;
-import com.demo.entity.pojo.ParamQuery;
+import com.demo.entity.po.UserMongo;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * <h1>用户Mongo</h1>
@@ -30,9 +28,5 @@ public class UserMongoVo extends UserMongo {
      * 时间-否定
      */
     private Boolean dateNot;
-    /**
-     * 查询参数列表
-     */
-    private List<ParamQuery> paramQueryList;
 
 }

@@ -149,7 +149,7 @@ public class UserService extends ServiceBase {
      * @return PageInfo UserVo
      */
     public PageInfo<UserVo> find(UserVo user) {
-        return pagination(user, () -> userDao.find(user));
+        return pagination(() -> userDao.find(user), user.getPages(), user.getRows(), user.getOrderBy());
     }
 
     /**
@@ -159,7 +159,7 @@ public class UserService extends ServiceBase {
      * @return PageInfo UserVo
      */
     public PageInfo<UserVo> findFuzzy(UserVo user) {
-        return pagination(user, () -> userDao.findFuzzy(user));
+        return pagination(() -> userDao.findFuzzy(user), user.getPages(), user.getRows(), user.getOrderBy());
     }
 
     /**
@@ -169,7 +169,7 @@ public class UserService extends ServiceBase {
      * @return PageInfo UserBak
      */
     public PageInfo<UserBak> findBak(UserBak user) {
-        return pagination(user, () -> userDao.findBak(user.getRefId()));
+        return pagination(() -> userDao.findBak(user.getRefId()), user.getPages(), user.getRows(), user.getOrderBy());
     }
 
 }

@@ -2,7 +2,9 @@ package com.demo.entity.pojo;
 
 import com.demo.base.ToStringBase;
 import com.github.pagehelper.Page;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,31 +19,38 @@ import java.util.List;
  * @since 1.0.0
  **/
 @Getter
+@Schema(description = "分页详情")
 public class PageInfo<T> extends ToStringBase {
 
     /**
      * 总页数
      */
+    @Schema(description = "总页数")
     private final int pages;
     /**
      * 每页条数
      */
+    @Schema(description = "每页条数")
     private final int rows;
     /**
      * 当前页码
      */
+    @Schema(description = "当前页码")
     private final int page;
     /**
      * 当前页条数
      */
+    @Schema(description = "当前页条数")
     private final int row;
     /**
      * 总条数
      */
+    @Schema(description = "总条数")
     private final long total;
     /**
      * 数据
      */
+    @Schema(description = "数据")
     private final List<T> data;
 
     /**
@@ -70,6 +79,33 @@ public class PageInfo<T> extends ToStringBase {
         row = page.size();
         total = page.getTotal();
         data = page;
+    }
+
+    /**
+     * 构造函数
+     *
+     * @param page 分页
+     */
+    public PageInfo(org.springframework.data.domain.Page<T> page) {
+        this(page.getContent(), page.getPageable(), page.getTotalElements());
+    }
+
+    /**
+     * 构造函数
+     *
+     * @param data     数据
+     * @param pageable Pageable
+     * @param total    总条数
+     */
+    public PageInfo(List<T> data, Pageable pageable, long total) {
+        this.data = data;
+        this.total = total;
+        row = data.size();
+        rows = pageable.getPageSize();
+        // 当前页码修正(从1开始)
+        page = pageable.getPageNumber() + 1;
+        // 总页数=总条数/每页条数
+        pages = total == 0 ? 0 : ((int) ((total - 1) / rows) + 1);
     }
 
 }

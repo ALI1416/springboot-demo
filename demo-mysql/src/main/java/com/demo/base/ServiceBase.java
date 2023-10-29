@@ -21,32 +21,31 @@ import java.util.function.Supplier;
 public class ServiceBase {
 
     /**
-     * 分页
+     * <h2>分页查询</h2>
+     * 默认页码：pages == null<br>
+     * 默认每页条数：rows == null || rows <= 0<br>
+     * 默认排序：orderBy == null<br>
+     * 全部查询，不排序：pages == 0 && orderBy == ""<br>
+     * 全部查询，排序：pages == 0 && orderBy != ""<br>
+     * 分页查询，不排序：pages != 0 && orderBy == ""<br>
+     * 分页查询，排序：pages != 0 && orderBy != ""
      *
      * @param <T>      数据类型
-     * @param base     实体层基类<br>
-     *                 默认页码：pages == null<br>
-     *                 默认每页条数：rows == null || rows <= 0<br>
-     *                 默认排序：orderBy == null<br>
-     *                 全部查询，不排序：pages == 0 && orderBy == ""<br>
-     *                 全部查询，排序：pages == 0 && orderBy != ""<br>
-     *                 分页查询，不排序：pages != 0 && orderBy == ""<br>
-     *                 分页查询，排序：pages != 0 && orderBy != ""<br>
      * @param function 函数
+     * @param pages    页码
+     * @param rows     每页条数
+     * @param orderBy  排序
      * @return PageInfo
      */
-    public static <T> PageInfo<T> pagination(EntityBase base, Supplier<List<T>> function) {
-        Integer pages = base.getPages();
+    public static <T> PageInfo<T> pagination(Supplier<List<T>> function, Integer pages, Integer rows, String orderBy) {
         // 默认页码
         if (pages == null) {
             pages = Constant.PAGE_DEFAULT_PAGES;
         }
-        Integer rows = base.getRows();
         // 默认每页条数
         if (rows == null || rows <= 0) {
             rows = Constant.PAGE_DEFAULT_ROWS;
         }
-        String orderBy = base.getOrderBy();
         // 默认排序
         if (orderBy == null) {
             orderBy = Constant.PAGE_DEFAULT_ORDER_BY;

@@ -2,17 +2,17 @@ package com.demo.service;
 
 import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.UserMongoDao;
-import com.demo.entity.mongo.UserMongo;
+import com.demo.entity.po.UserMongo;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <h1>用户Mongo</h1>
@@ -30,42 +30,75 @@ public class UserMongoService extends ServiceBase {
 
     private final UserMongoDao userMongoDao;
 
+    // 通用JPA方法
+
     /**
-     * 插入一个，id已存在会失败
+     * 插入
      *
-     * @param userMongo 实体，必须有id
+     * @param userMongo UserMongoVo
+     * @return ok:id,e:0
+     */
+    public long insert(UserMongoVo userMongo) {
+        return userMongoDao.insert(new UserMongo(userMongo));
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param userMongoList UserMongoVo
      * @return 是否成功
      */
-    public boolean insert(UserMongoVo userMongo) {
-        return userMongoDao.insert(userMongo);
+    public boolean batchInsert(List<UserMongoVo> userMongoList) {
+        return userMongoDao.batchInsert(userMongoList.stream().map(UserMongo::new).collect(Collectors.toList()));
     }
 
     /**
-     * 插入多个，id存在会失败，后面不再插入
+     * 插入或更新
      *
-     * @param userMongo 实体，必须有id
+     * @param userMongo UserMongoVo
      * @return 是否成功
      */
-    public boolean insertList(List<UserMongo> userMongo) {
-        return userMongoDao.insertList(userMongo);
+    public boolean save(UserMongoVo userMongo) {
+        return userMongoDao.save(new UserMongo(userMongo));
     }
 
     /**
-     * 保存一个，id已存在会更新，不存在会插入
+     * 批量插入或更新
      *
-     * @param userMongo 实体，必须有id
+     * @param userMongoList UserMongoVo
+     * @return 是否成功
      */
-    public void save(UserMongoVo userMongo) {
-        userMongoDao.save(userMongo);
+    public boolean batchSave(List<UserMongoVo> userMongoList) {
+        return userMongoDao.batchSave(userMongoList.stream().map(UserMongo::new).collect(Collectors.toList()));
     }
 
     /**
-     * 保存多个，id已存在会更新，不存在会插入
+     * 删除
      *
-     * @param userMongo 实体，必须有id
+     * @param id id
+     * @return 是否成功
      */
-    public void saveList(List<UserMongo> userMongo) {
-        userMongoDao.saveList(userMongo);
+    public boolean delete(Long id) {
+        return userMongoDao.delete(id);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param idList id
+     * @return 是否成功
+     */
+    public boolean batchDelete(List<Long> idList) {
+        return userMongoDao.batchDelete(idList);
+    }
+
+    /**
+     * 全部删除
+     *
+     * @return 是否成功
+     */
+    public boolean deleteAll() {
+        return userMongoDao.deleteAll();
     }
 
     /**
@@ -74,18 +107,33 @@ public class UserMongoService extends ServiceBase {
      * @param id id
      * @return 是否存在
      */
-    public boolean existsById(long id) {
-        return userMongoDao.existsById(id);
+    public boolean existId(long id) {
+        return userMongoDao.existId(id);
+    }
+
+    private static Criteria getCriteria(UserMongoVo userMongo) {
+        Criteria criteria = new Criteria();
+        if (userMongo.getName() != null) {
+            criteria.and("name").is(userMongo.getName());
+        }
+        if (userMongo.getFollowers() != null) {
+            criteria.and("follower").is(userMongo.getFollowers());
+        }
+        if (userMongo.getFollowing() != null) {
+            criteria.and("following").is(userMongo.getFollowing());
+        }
+        buildRange(criteria, "date", userMongo.getDate(), userMongo.getDateEnd(), userMongo.getDateNot());
+        return criteria;
     }
 
     /**
      * 是否存在
      *
-     * @param example Example
+     * @param userMongo UserMongoVo
      * @return 是否存在
      */
-    public boolean exists(Example<UserMongo> example) {
-        return userMongoDao.exists(example);
+    public boolean exist(UserMongoVo userMongo) {
+        return userMongoDao.exist(getCriteria(userMongo));
     }
 
     /**
@@ -100,186 +148,105 @@ public class UserMongoService extends ServiceBase {
     /**
      * 记录总数
      *
-     * @param example Example
+     * @param userMongo UserMongoVo
      * @return 记录总数
      */
-    public long count(Example<UserMongo> example) {
-        return userMongoDao.count(example);
+    public long count(UserMongoVo userMongo) {
+        return userMongoDao.count(getCriteria(userMongo));
     }
 
     /**
-     * 删除，通过id，不存在不会报错
+     * 查询，通过id
      *
      * @param id id
-     */
-    public void deleteById(Long id) {
-        userMongoDao.deleteById(id);
-    }
-
-    /**
-     * 删除，通过实体里的id，不存在不会报错
-     *
-     * @param userMongo 实体，必须有id
-     */
-    public void delete(UserMongoVo userMongo) {
-        userMongoDao.delete(userMongo);
-    }
-
-    /**
-     * 删除多个，通过id，不存在不会报错
-     *
-     * @param ids ids
-     */
-    public void deleteListById(List<Long> ids) {
-        userMongoDao.deleteListById(ids);
-    }
-
-    /**
-     * 删除多个，通过实体里的id，不存在不会报错
-     *
-     * @param userMongo 实体，必须有id
-     */
-    public void deleteList(List<UserMongo> userMongo) {
-        userMongoDao.deleteList(userMongo);
-    }
-
-    /**
-     * 删除所有
-     */
-    public void deleteAll() {
-        userMongoDao.deleteAll();
-    }
-
-    /**
-     * 查找，通过id
-     *
-     * @param id id
-     * @return 存在:实体;不存在:null
+     * @return UserMongo
      */
     public UserMongo findById(Long id) {
         return userMongoDao.findById(id);
     }
 
     /**
-     * 查找第一个
+     * 查询第一个
      *
-     * @param example Example
-     * @return 存在:实体;不存在:null
+     * @param userMongo UserMongoVo
+     * @return UserMongo
      */
-    public UserMongo findOne(Example<UserMongo> example) {
-        return userMongoDao.findOne(example);
+    public UserMongo findOne(UserMongoVo userMongo) {
+        return userMongoDao.findOne(getCriteria(userMongo));
     }
 
     /**
-     * 查找多个，通过id
+     * 查询多个，通过id
      *
-     * @param ids ids
-     * @return 存在:[实体];不存在:[]
+     * @param idList id
+     * @return List UserMongo
      */
-    public List<UserMongo> findListById(List<Long> ids) {
-        return userMongoDao.findListById(ids);
+    public List<UserMongo> findByIdList(List<Long> idList) {
+        return userMongoDao.findByIdList(idList);
     }
 
     /**
-     * 查找所有
+     * 查询所有
      *
-     * @return [实体]
+     * @return List UserMongo
      */
     public List<UserMongo> findAll() {
         return userMongoDao.findAll();
     }
 
     /**
-     * 查找所有
-     *
-     * @param sort Sort
-     * @return [实体]
-     */
-    public List<UserMongo> findList(Sort sort) {
-        return userMongoDao.findSort(sort);
-    }
-
-    /**
-     * 查询所有
-     *
-     * @param example Example
-     * @return [实体]
-     */
-    public List<UserMongo> findList(Example<UserMongo> example) {
-        return userMongoDao.findList(example);
-    }
-
-    /**
-     * 查询所有
-     *
-     * @param example Example
-     * @param sort    Sort
-     * @return [实体]
-     */
-    public List<UserMongo> findList(Example<UserMongo> example, Sort sort) {
-        return userMongoDao.findList(example, sort);
-    }
-
-    /**
-     * 查询所有
-     *
-     * @param pageable Pageable
-     * @return PageInfo
-     */
-    public PageInfo<UserMongo> findList(Pageable pageable) {
-        return userMongoDao.findPage(pageable);
-    }
-
-    /**
-     * 分页查询
-     *
-     * @param userMongo UserMongo
-     * @return PageInfo
-     */
-    public PageInfo<UserMongo> findPage(UserMongoVo userMongo) {
-        return userMongoDao.findPage(buildPage(userMongo));
-    }
-
-    /**
-     * 分页查询2
-     *
-     * @param userMongo UserMongo
-     * @return PageInfo
-     */
-    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo) {
-        return userMongoDao.findPage2(userMongo, buildPage(userMongo));
-    }
-
-    /**
      * 排序查询
      *
-     * @param userMongo UserMongo
-     * @return List
+     * @param userMongo UserMongoVo
+     * @return List UserMongo
      */
     public List<UserMongo> findSort(UserMongoVo userMongo) {
         return userMongoDao.findSort(buildSort(userMongo.getOrderBy()));
     }
 
     /**
-     * 排序查询2
+     * 分页查询
+     *
+     * @param userMongo UserMongoVo
+     * @return PageInfo UserMongo
+     */
+    public PageInfo<UserMongo> findPage(UserMongoVo userMongo) {
+        return new PageInfo<>(userMongoDao.findPage(buildPage(userMongo.getPages(), userMongo.getRows(), userMongo.getOrderBy())));
+    }
+
+    // 拓展JPA方法
+
+    /**
+     * 条件查询
+     *
+     * @param userMongo UserMongoVo
+     * @return List
+     */
+    public List<UserMongo> find(UserMongoVo userMongo) {
+        return userMongoDao.find(getCriteria(userMongo));
+    }
+
+    /**
+     * 条件和排序查询
+     *
+     * @param userMongo UserMongoVo
+     * @return List
+     */
+    public List<UserMongo> findSort2(UserMongoVo userMongo) {
+        return userMongoDao.findSort(getCriteria(userMongo), buildSort(userMongo.getOrderBy()));
+    }
+
+    /**
+     * 条件和分页查询
      *
      * @param userMongo UserMongo
      * @return PageInfo
      */
-    public PageInfo<UserMongo> findSort2(UserMongoVo userMongo) {
-        return new PageInfo<>(userMongoDao.findSort2(userMongo, buildSort(userMongo.getOrderBy())));
+    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo) {
+        return userMongoDao.findPage(getCriteria(userMongo), buildPage(userMongo.getPages(), userMongo.getRows(), userMongo.getOrderBy()));
     }
 
-    /**
-     * 查询所有
-     *
-     * @param example  Example
-     * @param pageable Pageable
-     * @return PageInfo
-     */
-    public PageInfo<UserMongo> findList(Example<UserMongo> example, Pageable pageable) {
-        return new PageInfo<>(userMongoDao.findList(example, pageable));
-    }
+    // 自定义JPA方法
 
     /**
      * 根据名字查询并分页
@@ -291,6 +258,8 @@ public class UserMongoService extends ServiceBase {
     public PageInfo<UserMongo> findByName(String name, Pageable pageable) {
         return new PageInfo<>(userMongoDao.findByName(name, pageable));
     }
+
+    // MongoTemplate方法
 
     /**
      * 关注+1

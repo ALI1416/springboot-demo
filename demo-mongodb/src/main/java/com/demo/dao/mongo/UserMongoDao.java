@@ -1,14 +1,15 @@
 package com.demo.dao.mongo;
 
+import cn.z.clock.Clock;
+import cn.z.id.Id;
+import cn.z.mongo.MongoTemp;
 import com.demo.base.DaoBase;
-import com.demo.entity.mongo.UserMongo;
+import com.demo.entity.po.UserMongo;
 import com.demo.entity.pojo.PageInfo;
-import com.demo.entity.vo.UserMongoVo;
 import com.demo.repo.UserMongoRepo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,57 +38,107 @@ public class UserMongoDao extends DaoBase {
 
     private final UserMongoRepo userMongoRepo;
     private final MongoTemplate mongoTemplate;
+    private final MongoTemp mongoTemp;
 
     // 通用JPA方法
 
     /**
-     * 插入一个，id已存在会失败
+     * 插入
      *
-     * @param userMongo 实体，必须有id
-     * @return 是否成功
+     * @param userMongo UserMongo
+     * @return ok:id,e:0
      */
-    public boolean insert(UserMongo userMongo) {
-        try {
-            userMongoRepo.insert(userMongo);
-            return true;
-        } catch (Exception e) {
-            log.error("id已存在", e);
-            return false;
+    public long insert(UserMongo userMongo) {
+        userMongo.setId(Id.next());
+        userMongo.setDate(Clock.timestamp());
+        if (tryAnyNoTransaction(() -> userMongoRepo.insert(userMongo))) {
+            return userMongo.getId();
+        } else {
+            return 0L;
         }
     }
 
     /**
-     * 插入多个，id存在会失败，后面不再插入
+     * 批量插入
      *
-     * @param userMongo 实体，必须有id
+     * @param userMongoList UserMongo
      * @return 是否成功
      */
-    public boolean insertList(List<UserMongo> userMongo) {
-        try {
-            userMongoRepo.insert(userMongo);
-            return true;
-        } catch (Exception e) {
-            log.error("id已存在", e);
-            return false;
+    public boolean batchInsert(List<UserMongo> userMongoList) {
+        for (UserMongo userMongo : userMongoList) {
+            userMongo.setId(Id.next());
+            userMongo.setDate(Clock.timestamp());
         }
+        return tryAnyNoTransaction(() -> userMongoRepo.insert(userMongoList));
     }
 
     /**
-     * 保存一个，id已存在会更新，不存在会插入
+     * 插入或更新
      *
-     * @param userMongo 实体，必须有id
+     * @param userMongo UserMongo
+     * @return 是否成功
      */
-    public void save(UserMongo userMongo) {
-        userMongoRepo.save(userMongo);
+    public boolean save(UserMongo userMongo) {
+        return tryAnyNoTransaction(() -> userMongoRepo.save(userMongo));
     }
 
     /**
-     * 保存多个，id已存在会更新，不存在会插入
+     * 批量插入或更新
      *
-     * @param userMongo 实体，必须有id
+     * @param userMongoList UserMongo
+     * @return 是否成功
      */
-    public void saveList(List<UserMongo> userMongo) {
-        userMongoRepo.saveAll(userMongo);
+    public boolean batchSave(List<UserMongo> userMongoList) {
+        return tryAnyNoTransaction(() -> userMongoRepo.saveAll(userMongoList));
+    }
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    public boolean delete(long id) {
+        return tryAnyNoTransaction(() -> userMongoRepo.deleteById(id));
+    }
+
+    /**
+     * 删除，通过实体里的id
+     *
+     * @param userMongo UserMongo
+     * @return 是否成功
+     */
+    public boolean deleteById(UserMongo userMongo) {
+        return tryAnyNoTransaction(() -> userMongoRepo.delete(userMongo));
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param idList id
+     * @return 是否成功
+     */
+    public boolean batchDelete(List<Long> idList) {
+        return tryAnyNoTransaction(() -> userMongoRepo.deleteAllById(idList));
+    }
+
+    /**
+     * 批量删除，通过实体里的id
+     *
+     * @param userMongoList UserMongo
+     * @return 是否成功
+     */
+    public boolean batchDeleteById(List<UserMongo> userMongoList) {
+        return tryAnyNoTransaction(() -> userMongoRepo.deleteAll(userMongoList));
+    }
+
+    /**
+     * 全部删除
+     *
+     * @return 是否成功
+     */
+    public boolean deleteAll() {
+        return tryAnyNoTransaction(userMongoRepo::deleteAll);
     }
 
     /**
@@ -96,18 +147,18 @@ public class UserMongoDao extends DaoBase {
      * @param id id
      * @return 是否存在
      */
-    public boolean existsById(long id) {
+    public boolean existId(long id) {
         return userMongoRepo.existsById(id);
     }
 
     /**
      * 是否存在
      *
-     * @param example Example
+     * @param criteria Criteria
      * @return 是否存在
      */
-    public boolean exists(Example<UserMongo> example) {
-        return userMongoRepo.exists(example);
+    public boolean exist(Criteria criteria) {
+        return mongoTemplate.exists(Query.query(criteria), UserMongo.class);
     }
 
     /**
@@ -122,90 +173,47 @@ public class UserMongoDao extends DaoBase {
     /**
      * 记录总数
      *
-     * @param example Example
+     * @param criteria Criteria
      * @return 记录总数
      */
-    public long count(Example<UserMongo> example) {
-        return userMongoRepo.count(example);
+    public long count(Criteria criteria) {
+        return mongoTemplate.count(Query.query(criteria), UserMongo.class);
     }
 
     /**
-     * 删除，通过id，不存在不会报错
+     * 查询，通过id
      *
      * @param id id
-     */
-    public void deleteById(long id) {
-        userMongoRepo.deleteById(id);
-    }
-
-    /**
-     * 删除，通过实体里的id，不存在不会报错
-     *
-     * @param userMongo 实体，必须有id
-     */
-    public void delete(UserMongo userMongo) {
-        userMongoRepo.delete(userMongo);
-    }
-
-    /**
-     * 删除多个，通过id，不存在不会报错
-     *
-     * @param ids ids
-     */
-    public void deleteListById(List<Long> ids) {
-        userMongoRepo.deleteAllById(ids);
-    }
-
-    /**
-     * 删除多个，通过实体里的id，不存在不会报错
-     *
-     * @param userMongo 实体，必须有id
-     */
-    public void deleteList(List<UserMongo> userMongo) {
-        userMongoRepo.deleteAll(userMongo);
-    }
-
-    /**
-     * 删除所有
-     */
-    public void deleteAll() {
-        userMongoRepo.deleteAll();
-    }
-
-    /**
-     * 查找，通过id
-     *
-     * @param id id
-     * @return 存在:实体;不存在:null
+     * @return UserMongo
      */
     public UserMongo findById(long id) {
         return userMongoRepo.findById(id).orElse(null);
     }
 
     /**
-     * 查找第一个
+     * 查询第一个
      *
-     * @param example Example
-     * @return 存在:实体;不存在:null
+     * @param criteria Criteria
+     * @return UserMongo
      */
-    public UserMongo findOne(Example<UserMongo> example) {
-        return userMongoRepo.findOne(example).orElse(null);
+    public UserMongo findOne(Criteria criteria) {
+        return mongoTemplate.findOne(Query.query(criteria), UserMongo.class);
     }
 
     /**
-     * 查找多个，通过id
+     * 查询多个，通过id
      *
-     * @param ids ids
-     * @return 存在:[实体];不存在:[]
+     * @param idList id
+     * @return List UserMongo
      */
-    public List<UserMongo> findListById(List<Long> ids) {
-        return (List<UserMongo>) userMongoRepo.findAllById(ids);
+    public List<UserMongo> findByIdList(List<Long> idList) {
+        return (List<UserMongo>) userMongoRepo.findAllById(idList);
     }
 
     /**
-     * 查找所有
+     * 查询所有
      *
-     * @return [实体]
+     * @return List UserMongo
      */
     public List<UserMongo> findAll() {
         return userMongoRepo.findAll();
@@ -215,96 +223,54 @@ public class UserMongoDao extends DaoBase {
      * 排序查询
      *
      * @param sort Sort
-     * @return [实体]
+     * @return List UserMongo
      */
     public List<UserMongo> findSort(Sort sort) {
         return userMongoRepo.findAll(sort);
     }
 
     /**
-     * 查询所有
-     *
-     * @param example Example
-     * @return [实体]
-     */
-    public List<UserMongo> findList(Example<UserMongo> example) {
-        return userMongoRepo.findAll(example);
-    }
-
-    /**
-     * 查询所有
-     *
-     * @param example Example
-     * @param sort    Sort
-     * @return [实体]
-     */
-    public List<UserMongo> findList(Example<UserMongo> example, Sort sort) {
-        return userMongoRepo.findAll(example, sort);
-    }
-
-    /**
      * 分页查询
      *
      * @param pageable Pageable
-     * @return PageInfo
+     * @return PageInfo UserMongo
      */
-    public PageInfo<UserMongo> findPage(Pageable pageable) {
-        return new PageInfo<>(userMongoRepo.findAll(pageable));
+    public Page<UserMongo> findPage(Pageable pageable) {
+        return userMongoRepo.findAll(pageable);
+    }
+
+    // 拓展JPA方法
+
+    /**
+     * 条件查询
+     *
+     * @param criteria Criteria
+     * @return List UserMongo
+     */
+    public List<UserMongo> find(Criteria criteria) {
+        return find(mongoTemplate, UserMongo.class, criteria);
     }
 
     /**
-     * 分页查询
+     * 条件和排序查询
      *
+     * @param criteria Criteria
+     * @param sort     Sort
+     * @return List UserMongo
+     */
+    public List<UserMongo> findSort(Criteria criteria, Sort sort) {
+        return sort(mongoTemplate, UserMongo.class, criteria, sort);
+    }
+
+    /**
+     * 条件和分页查询
+     *
+     * @param criteria Criteria
      * @param pageable Pageable
-     * @return PageInfo
+     * @return PageInfo UserMongo
      */
-    public PageInfo<UserMongo> findPage2(UserMongoVo userMongo, Pageable pageable) {
-        Criteria criteria = new Criteria();
-        if (userMongo.getName() != null) {
-            criteria.and("name").is(userMongo.getName());
-        }
-        if (userMongo.getFollowers() != null) {
-            criteria.and("follower").is(userMongo.getFollowers());
-        }
-        if (userMongo.getFollowing() != null) {
-            criteria.and("following").is(userMongo.getFollowing());
-        }
-        buildParamQuery(criteria, userMongo.getParamQueryList());
-        buildRange(criteria, "date", userMongo.getDate(), userMongo.getDateEnd(), userMongo.getDateNot());
-        return find(mongoTemplate, UserMongo.class, criteria, pageable);
-    }
-
-    /**
-     * 排序查询
-     *
-     * @param sort Sort
-     * @return Page
-     */
-    public List<UserMongo> findSort2(UserMongoVo userMongo, Sort sort) {
-        Criteria criteria = new Criteria();
-        if (userMongo.getName() != null) {
-            criteria.and("name").is(userMongo.getName());
-        }
-        if (userMongo.getFollowers() != null) {
-            criteria.and("follower").is(userMongo.getFollowers());
-        }
-        if (userMongo.getFollowing() != null) {
-            criteria.and("following").is(userMongo.getFollowing());
-        }
-        buildParamQuery(criteria, userMongo.getParamQueryList());
-        buildRange(criteria, "date", userMongo.getDate(), userMongo.getDateEnd(), userMongo.getDateNot());
-        return mongoTemplate.find(Query.query(criteria).with(sort), UserMongo.class);
-    }
-
-    /**
-     * 查询所有
-     *
-     * @param example  Example
-     * @param pageable Pageable
-     * @return Page
-     */
-    public Page<UserMongo> findList(Example<UserMongo> example, Pageable pageable) {
-        return userMongoRepo.findAll(example, pageable);
+    public PageInfo<UserMongo> findPage(Criteria criteria, Pageable pageable) {
+        return pagination(mongoTemplate, UserMongo.class, criteria, pageable);
     }
 
     // 自定义JPA方法

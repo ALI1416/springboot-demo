@@ -1,17 +1,10 @@
 package com.demo.config;
 
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.CustomConversions;
 import org.springframework.data.convert.ReadingConverter;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
-import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
-import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -28,17 +21,6 @@ import java.util.Date;
  **/
 @Configuration
 public class MongoDbConfig {
-
-    /**
-     * 映射转换器(去除_class字段)
-     */
-    // @Bean
-    public MappingMongoConverter removeFieldClass(MongoDatabaseFactory factory, MongoMappingContext context, BeanFactory beanFactory) {
-        MappingMongoConverter mappingConverter = new MappingMongoConverter(new DefaultDbRefResolver(factory), context);
-        mappingConverter.setCustomConversions(beanFactory.getBean(CustomConversions.class));
-        mappingConverter.setTypeMapper(new DefaultMongoTypeMapper(null));
-        return mappingConverter;
-    }
 
     /**
      * 自定义转换器(Date转Timestamp)

@@ -30,6 +30,14 @@ tiny-token:
   prefix: tinytoken
   timeout: 2592000
 
+id:
+  machine-id: 0
+  machine-bits: 8
+  sequence-bits: 12
+
+ip2region:
+  resource-path: /file/ip2region/ip2region.zdb
+
 logging:
   level:
     root: info

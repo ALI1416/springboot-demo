@@ -22,7 +22,7 @@ public class Constant {
     /**
      * 分页-默认每页条数{@value}
      */
-    public static final int PAGE_DEFAULT_ROWS = 5;
+    public static final int PAGE_DEFAULT_ROWS = 10;
     /**
      * 分页-默认排序{@value}
      */
