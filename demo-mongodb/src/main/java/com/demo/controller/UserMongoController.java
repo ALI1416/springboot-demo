@@ -8,8 +8,6 @@ import com.demo.entity.vo.UserMongoVo;
 import com.demo.service.UserMongoService;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -223,7 +221,7 @@ public class UserMongoController {
      * {"orderBy":"name desc"}<br>
      * List
      */
-    @PostMapping("findSort")
+    @PostMapping("findSort3")
     public Result<List<UserMongo>> findSort3(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findSort(userMongo));
     }
