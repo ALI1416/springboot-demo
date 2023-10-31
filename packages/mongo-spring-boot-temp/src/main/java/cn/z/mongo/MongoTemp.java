@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.IndexDefinition;
 import org.springframework.data.mongodb.core.index.IndexInfo;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.Collection;
 import java.util.List;
@@ -218,6 +219,94 @@ public class MongoTemp {
     }
 
     /**
+     * 是否存在
+     *
+     * @param query 查询
+     * @param clazz 对象
+     * @return 是否存在
+     */
+    public boolean exist(Query query, Class<?> clazz) {
+        return mongoTemplate.exists(query, clazz);
+    }
+
+    /**
+     * 是否存在
+     *
+     * @param query          查询
+     * @param collectionName 集合名
+     * @return 是否存在
+     */
+    public boolean exist(Query query, String collectionName) {
+        return mongoTemplate.exists(query, collectionName);
+    }
+
+    /**
+     * 是否存在
+     *
+     * @param query          查询
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 是否存在
+     */
+    public boolean exist(Query query, Class<?> clazz, String collectionName) {
+        return mongoTemplate.exists(query, clazz, collectionName);
+    }
+
+    /**
+     * 总数
+     *
+     * @param clazz 对象
+     * @return 总数
+     */
+    public long count(Class<?> clazz) {
+        return mongoTemplate.estimatedCount(clazz);
+    }
+
+    /**
+     * 总数
+     *
+     * @param collectionName 集合名
+     * @return 总数
+     */
+    public long count(String collectionName) {
+        return mongoTemplate.estimatedCount(collectionName);
+    }
+
+    /**
+     * 总数
+     *
+     * @param query 查询
+     * @param clazz 对象
+     * @return 总数
+     */
+    public long count(Query query, Class<?> clazz) {
+        return mongoTemplate.count(query, clazz);
+    }
+
+    /**
+     * 总数
+     *
+     * @param query          查询
+     * @param collectionName 集合名
+     * @return 总数
+     */
+    public long count(Query query, String collectionName) {
+        return mongoTemplate.count(query, collectionName);
+    }
+
+    /**
+     * 总数
+     *
+     * @param query          查询
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 总数
+     */
+    public long count(Query query, Class<?> clazz, String collectionName) {
+        return mongoTemplate.count(query, clazz, collectionName);
+    }
+
+    /**
      * 插入
      *
      * @param <T>    数据类型
@@ -302,7 +391,7 @@ public class MongoTemp {
      * 删除
      *
      * @param <T>    数据类型
-     * @param entity 实体
+     * @param entity 实体(需要id)
      * @return 删除结果
      */
     public <T> DeleteResult delete(T entity) {
@@ -313,12 +402,170 @@ public class MongoTemp {
      * 删除
      *
      * @param <T>            数据类型
-     * @param entity         实体
+     * @param entity         实体(需要id)
      * @param collectionName 集合名
      * @return 删除结果
      */
     public <T> DeleteResult delete(T entity, String collectionName) {
         return mongoTemplate.remove(entity, collectionName);
+    }
+
+    /**
+     * 删除
+     *
+     * @param query 查询
+     * @param clazz 对象
+     * @return 删除结果
+     */
+    public DeleteResult delete(Query query, Class<?> clazz) {
+        return mongoTemplate.remove(query, clazz);
+    }
+
+    /**
+     * 删除
+     *
+     * @param query          查询
+     * @param collectionName 集合名
+     * @return 删除结果
+     */
+    public DeleteResult delete(Query query, String collectionName) {
+        return mongoTemplate.remove(query, collectionName);
+    }
+
+    /**
+     * 删除
+     *
+     * @param query          查询
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 删除结果
+     */
+    public DeleteResult delete(Query query, Class<?> clazz, String collectionName) {
+        return mongoTemplate.remove(query, clazz, collectionName);
+    }
+
+    /**
+     * 查询并删除
+     *
+     * @param query 查询
+     * @param clazz 对象
+     * @return 实体数组
+     */
+    public <T> List<T> findAndDelete(Query query, Class<T> clazz) {
+        return mongoTemplate.findAllAndRemove(query, clazz);
+    }
+
+    /**
+     * 查询并删除
+     *
+     * @param query          查询
+     * @param collectionName 集合名
+     * @return 实体数组
+     */
+    public <T> List<T> findAndDelete(Query query, String collectionName) {
+        return mongoTemplate.findAllAndRemove(query, collectionName);
+    }
+
+    /**
+     * 查询并删除
+     *
+     * @param query          查询
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 实体数组
+     */
+    public <T> List<T> findAndDelete(Query query, Class<T> clazz, String collectionName) {
+        return mongoTemplate.findAllAndRemove(query, clazz, collectionName);
+    }
+
+    /**
+     * 查询第一个
+     *
+     * @param query 查询
+     * @param clazz 对象
+     * @return 实体
+     */
+    public <T> T findOne(Query query, Class<T> clazz) {
+        return mongoTemplate.findOne(query, clazz);
+    }
+
+    /**
+     * 查询第一个
+     *
+     * @param query          查询
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 实体
+     */
+    public <T> T findOne(Query query, Class<T> clazz, String collectionName) {
+        return mongoTemplate.findOne(query, clazz, collectionName);
+    }
+
+    /**
+     * 查询通过id
+     *
+     * @param id    id
+     * @param clazz 对象
+     * @return 实体
+     */
+    public <T> T findById(Object id, Class<T> clazz) {
+        return mongoTemplate.findById(id, clazz);
+    }
+
+    /**
+     * 查询通过id
+     *
+     * @param id             id
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 实体
+     */
+    public <T> T findById(Object id, Class<T> clazz, String collectionName) {
+        return mongoTemplate.findById(id, clazz, collectionName);
+    }
+
+    /**
+     * 查询
+     *
+     * @param query 查询
+     * @param clazz 对象
+     * @return 实体数组
+     */
+    public <T> List<T> find(Query query, Class<T> clazz) {
+        return mongoTemplate.find(query, clazz);
+    }
+
+    /**
+     * 查询
+     *
+     * @param query          查询
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 实体数组
+     */
+    public <T> List<T> find(Query query, Class<T> clazz, String collectionName) {
+        return mongoTemplate.find(query, clazz, collectionName);
+    }
+
+    /**
+     * 查询
+     *
+     * @param clazz 对象
+     * @return 实体数组
+     */
+    public <T> List<T> find(Class<T> clazz) {
+        return mongoTemplate.findAll(clazz);
+    }
+
+    /**
+     * 查询
+     *
+     * @param clazz          对象
+     * @param collectionName 集合名
+     * @return 实体数组
+     */
+    public <T> List<T> find(Class<T> clazz, String collectionName) {
+        return mongoTemplate.findAll(clazz, collectionName);
     }
 
 }

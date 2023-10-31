@@ -2,6 +2,7 @@ package com.demo.base;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
 import java.sql.Timestamp;
@@ -24,6 +25,7 @@ public class MongoEntityBase extends ToStringBase {
     /**
      * id
      */
+    @Id
     private Long id;
     /**
      * 创建时间
