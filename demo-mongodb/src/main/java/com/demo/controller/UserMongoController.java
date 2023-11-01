@@ -28,7 +28,47 @@ public class UserMongoController {
 
     private final UserMongoService userMongoService;
 
-    // 通用JPA方法
+    /* ==================== 存在、总数操作 ==================== */
+
+    /**
+     * 是否存在id<br>
+     * http://localhost:8080/existId?id=1
+     */
+    @GetMapping("existId")
+    public Result<Boolean> existId(long id) {
+        return Result.o(userMongoService.existId(id));
+    }
+
+    /**
+     * 是否存在<br>
+     * http://localhost:8080/exist<br>
+     * {"name":"a"}
+     */
+    @PostMapping("exist")
+    public Result<Boolean> exist(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.exist(userMongo));
+    }
+
+    /**
+     * 记录总数<br>
+     * http://localhost:8080/count
+     */
+    @GetMapping("count")
+    public Result<Long> count() {
+        return Result.o(userMongoService.count());
+    }
+
+    /**
+     * 记录总数<br>
+     * http://localhost:8080/count2<br>
+     * {"name":"a"}
+     */
+    @PostMapping("count2")
+    public Result<Long> count(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.count(userMongo));
+    }
+
+    /* ==================== 插入、插入或更新操作 ==================== */
 
     /**
      * 插入<br>
@@ -60,15 +100,7 @@ public class UserMongoController {
         return Result.o(userMongoService.save(userMongo));
     }
 
-    /**
-     * 批量插入或更新<br>
-     * http://localhost:8080/batchSave<br>
-     * [{"id":2,"name":"a","followers":10,"following":20},{"id":3,"name":"a","followers":10,"following":20}]
-     */
-    @PutMapping("batchSave")
-    public Result<Boolean> batchSave(@RequestBody List<UserMongoVo> userMongoList) {
-        return Result.o(userMongoService.batchSave(userMongoList));
-    }
+    /* ==================== 删除操作 ==================== */
 
     /**
      * 删除<br>
@@ -90,50 +122,45 @@ public class UserMongoController {
     }
 
     /**
-     * 全部删除
-     */
-    @DeleteMapping("deleteAll")
-    public Result<Boolean> deleteAll() {
-        return Result.o(userMongoService.deleteAll());
-    }
-
-    /**
-     * 是否存在id<br>
-     * http://localhost:8080/existId?id=1
-     */
-    @GetMapping("existId")
-    public Result<Boolean> existId(long id) {
-        return Result.o(userMongoService.existId(id));
-    }
-
-    /**
-     * 是否存在<br>
-     * http://localhost:8080/exist<br>
+     * 删除<br>
+     * http://localhost:8080/delete2<br>
      * {"name":"a"}
      */
-    @PostMapping("exist")
-    public Result<Boolean> exist(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.exist(userMongo));
+    @PutMapping("delete2")
+    public Result<Boolean> delete(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.delete(userMongo));
+    }
+
+    /* ==================== 更新操作 ==================== */
+
+    /**
+     * 关注+1
+     * http://localhost:8080/addFollowers1?id=1
+     */
+    @GetMapping("addFollowers1")
+    public Result<UpdateResult> addFollowers1(long id) {
+        return Result.o(userMongoService.addFollowers1(id));
     }
 
     /**
-     * 记录总数<br>
-     * http://localhost:8080/countAll
+     * 关注+2
+     * http://localhost:8080/addFollowers2?id=1
      */
-    @GetMapping("countAll")
-    public Result<Long> countAll() {
-        return Result.o(userMongoService.countAll());
+    @GetMapping("addFollowers2")
+    public Result<UpdateResult> addFollowers2(long id) {
+        return Result.o(userMongoService.addFollowers2(id));
     }
 
     /**
-     * 记录总数<br>
-     * http://localhost:8080/count<br>
-     * {"name":"a"}
+     * 关注+3
+     * http://localhost:8080/addFollowers3
      */
-    @PostMapping("count")
-    public Result<Long> count(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.count(userMongo));
+    @GetMapping("addFollowers3")
+    public Result<UpdateResult> addFollowers3() {
+        return Result.o(userMongoService.addFollowers3());
     }
+
+    /* ==================== 查询操作 ==================== */
 
     /**
      * 查询，通过id<br>
@@ -259,16 +286,6 @@ public class UserMongoController {
     public Result<PageInfo<UserMongo>> findByName(String name, int page, int size) {
         PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
         return Result.o(userMongoService.findByName(name, pageRequestFix));
-    }
-
-    /**
-     * 关注+1
-     * http://localhost:8080/addFollowers?id=1<br>
-     * UpdateResult
-     */
-    @GetMapping("addFollowers")
-    public Result<UpdateResult> addFollowers(long id) {
-        return Result.o(userMongoService.addFollowers(id));
     }
 
 }

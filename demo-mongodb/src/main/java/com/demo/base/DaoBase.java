@@ -53,16 +53,12 @@ public class DaoBase {
      */
     public static boolean tryEqTrueNoTransaction(BooleanSupplier function) {
         try {
-            if (function.getAsBoolean()) {
-                // 结果必须为true
-                return false;
-            }
+            return function.getAsBoolean();
         } catch (Exception e) {
             log.error("tryEqTrueNoTransaction", e);
             // 必须无异常
             return false;
         }
-        return true;
     }
 
     /**

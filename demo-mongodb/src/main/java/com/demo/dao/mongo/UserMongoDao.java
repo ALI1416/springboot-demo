@@ -6,6 +6,7 @@ import cn.z.mongo.MongoTemp;
 import com.demo.base.DaoBase;
 import com.demo.entity.po.UserMongo;
 import com.demo.entity.pojo.PageInfo;
+import com.demo.entity.vo.UserMongoVo;
 import com.demo.repo.UserMongoRepo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
@@ -36,110 +37,13 @@ import java.util.List;
 @Slf4j
 public class UserMongoDao extends DaoBase {
 
+    private static final Class<UserMongoVo> CLAZZ = UserMongoVo.class;
+
     private final UserMongoRepo userMongoRepo;
     private final MongoTemplate mongoTemplate;
     private final MongoTemp mongoTemp;
 
-    // 通用JPA方法
-
-    /**
-     * 插入
-     *
-     * @param userMongo UserMongo
-     * @return ok:id,e:0
-     */
-    public long insert(UserMongo userMongo) {
-        userMongo.setId(Id.next());
-        userMongo.setDate(Clock.timestamp());
-        if (tryAnyNoTransaction(() -> userMongoRepo.insert(userMongo))) {
-            return userMongo.getId();
-        } else {
-            return 0L;
-        }
-    }
-
-    /**
-     * 批量插入
-     *
-     * @param userMongoList UserMongo
-     * @return 是否成功
-     */
-    public boolean batchInsert(List<UserMongo> userMongoList) {
-        for (UserMongo userMongo : userMongoList) {
-            userMongo.setId(Id.next());
-            userMongo.setDate(Clock.timestamp());
-        }
-        return tryAnyNoTransaction(() -> userMongoRepo.insert(userMongoList));
-    }
-
-    /**
-     * 插入或更新
-     *
-     * @param userMongo UserMongo
-     * @return 是否成功
-     */
-    public boolean save(UserMongo userMongo) {
-        return tryAnyNoTransaction(() -> userMongoRepo.save(userMongo));
-    }
-
-    /**
-     * 批量插入或更新
-     *
-     * @param userMongoList UserMongo
-     * @return 是否成功
-     */
-    public boolean batchSave(List<UserMongo> userMongoList) {
-        return tryAnyNoTransaction(() -> userMongoRepo.saveAll(userMongoList));
-    }
-
-    /**
-     * 删除
-     *
-     * @param id id
-     * @return 是否成功
-     */
-    public boolean delete(long id) {
-        return tryAnyNoTransaction(() -> userMongoRepo.deleteById(id));
-    }
-
-    /**
-     * 删除，通过实体里的id
-     *
-     * @param userMongo UserMongo
-     * @return 是否成功
-     */
-    public boolean deleteById(UserMongo userMongo) {
-        return tryAnyNoTransaction(() -> userMongoRepo.delete(userMongo));
-    }
-
-    /**
-     * 批量删除
-     *
-     * @param idList id
-     * @return 是否成功
-     */
-    public boolean batchDelete(List<Long> idList) {
-        return tryAnyNoTransaction(() -> userMongoRepo.deleteAllById(idList));
-    }
-
-    /**
-     * 批量删除，通过实体里的id
-     *
-     * @param userMongoList UserMongo
-     * @return 是否成功
-     */
-    public boolean batchDeleteById(List<UserMongo> userMongoList) {
-        return tryAnyNoTransaction(() -> userMongoRepo.deleteAll(userMongoList));
-    }
-
-    /**
-     * 全部删除
-     *
-     * @return 是否成功
-     */
-    public boolean deleteAll() {
-        return tryAnyNoTransaction(userMongoRepo::deleteAll);
-    }
+    /* ==================== 存在、总数操作 ==================== */
 
     /**
      * 是否存在id
@@ -148,7 +52,7 @@ public class UserMongoDao extends DaoBase {
      * @return 是否存在
      */
     public boolean existId(long id) {
-        return userMongoRepo.existsById(id);
+        return mongoTemp.exist(Query.query(Criteria.where("id").is(id)), CLAZZ);
     }
 
     /**
@@ -158,27 +62,141 @@ public class UserMongoDao extends DaoBase {
      * @return 是否存在
      */
     public boolean exist(Criteria criteria) {
-        return mongoTemplate.exists(Query.query(criteria), UserMongo.class);
+        return mongoTemp.exist(Query.query(criteria), CLAZZ);
     }
 
     /**
-     * 记录总数
+     * 总数
      *
-     * @return 记录总数
+     * @return 总数
      */
-    public long countAll() {
-        return userMongoRepo.count();
+    public long count() {
+        return mongoTemp.count(CLAZZ);
     }
 
     /**
-     * 记录总数
+     * 总数
      *
      * @param criteria Criteria
-     * @return 记录总数
+     * @return 总数
      */
     public long count(Criteria criteria) {
-        return mongoTemplate.count(Query.query(criteria), UserMongo.class);
+        return mongoTemp.count(Query.query(criteria), CLAZZ);
     }
+
+    /* ==================== 插入、插入或更新操作 ==================== */
+
+    /**
+     * 插入
+     *
+     * @param userMongo UserMongoVo
+     * @return ok:id,e:0
+     */
+    public long insert(UserMongoVo userMongo) {
+        userMongo.setId(Id.next());
+        userMongo.setDate(Clock.timestamp());
+        if (tryAnyNoTransaction(() -> mongoTemp.insert(userMongo))) {
+            return userMongo.getId();
+        } else {
+            return 0L;
+        }
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param userMongoList UserMongoVo
+     * @return 是否成功
+     */
+    public boolean batchInsert(List<UserMongoVo> userMongoList) {
+        for (UserMongoVo userMongo : userMongoList) {
+            userMongo.setId(Id.next());
+            userMongo.setDate(Clock.timestamp());
+        }
+        return tryAnyNoTransaction(() -> mongoTemp.batchInsert(userMongoList));
+    }
+
+    /**
+     * 插入或更新
+     *
+     * @param userMongo UserMongo
+     * @return 是否成功
+     */
+    public boolean save(UserMongoVo userMongo) {
+        return tryAnyNoTransaction(() -> mongoTemp.save(userMongo));
+    }
+
+    /* ==================== 删除操作 ==================== */
+
+    /**
+     * 删除
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    public boolean delete(long id) {
+        UserMongoVo userMongo = new UserMongoVo();
+        userMongo.setId(id);
+        return tryEqTrueNoTransaction(() -> mongoTemp.deleteById(userMongo));
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param idList id
+     * @return 是否成功
+     */
+    public boolean batchDelete(List<Long> idList) {
+        return tryAnyNoTransaction(() -> mongoTemp.delete(Query.query(Criteria.where("id").in(idList)), CLAZZ));
+    }
+
+    /**
+     * 删除
+     *
+     * @param criteria Criteria
+     * @return 是否成功
+     */
+    public boolean delete(Criteria criteria) {
+        return tryAnyNoTransaction(() -> mongoTemp.delete(Query.query(criteria), CLAZZ));
+    }
+
+    /* ==================== 更新操作 ==================== */
+
+    /**
+     * 关注+1
+     *
+     * @param id id
+     * @return UpdateResult
+     */
+    public UpdateResult addFollowers1(long id) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        Update update = new Update().inc("follower", 1);
+        return mongoTemp.updateOne(query, update, CLAZZ);
+    }
+
+    /**
+     * 关注+2
+     *
+     * @param id id
+     * @return UpdateResult
+     */
+    public UpdateResult addFollowers2(long id) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        Update update = new Update().inc("follower", 2);
+        return mongoTemp.upsert(query, update, CLAZZ);
+    }
+
+    /**
+     * 关注+3
+     *
+     * @return UpdateResult
+     */
+    public UpdateResult addFollowers3() {
+        Update update = new Update().inc("follower", 3);
+        return mongoTemp.update(new Query(), update, CLAZZ);
+    }
+
+    /* ==================== 查询操作 ==================== */
 
     /**
      * 查询，通过id
@@ -286,18 +304,6 @@ public class UserMongoDao extends DaoBase {
         return userMongoRepo.findByName(name, pageable);
     }
 
-    // MongoTemplate方法
-
-    /**
-     * 关注+1
-     *
-     * @param id id
-     */
-    public UpdateResult addFollowers(long id) {
-        Query query = Query.query(Criteria.where("_id").is(id));
-        Update update = new Update();
-        update.inc("follower", 1);
-        return mongoTemplate.updateFirst(query, update, UserMongo.class);
-    }
+    /* ==================== 查询并修改、替换、删除操作 ==================== */
 
 }
