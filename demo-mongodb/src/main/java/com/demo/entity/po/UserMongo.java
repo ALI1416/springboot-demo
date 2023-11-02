@@ -45,21 +45,4 @@ public class UserMongo extends MongoEntityBase {
      */
     private Timestamp date;
 
-    /**
-     * 构造函数
-     */
-    public UserMongo() {
-    }
-
-    /**
-     * 构造函数
-     */
-    public UserMongo(UserMongo userMongo) {
-        super(userMongo);
-        this.name = userMongo.name;
-        this.followers = userMongo.followers;
-        this.following = userMongo.following;
-        this.date = userMongo.date;
-    }
-
 }

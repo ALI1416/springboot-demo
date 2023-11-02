@@ -1,8 +1,6 @@
 package com.demo.controller;
 
 import com.demo.entity.po.UserMongo;
-import com.demo.entity.pojo.PageInfo;
-import com.demo.entity.pojo.PageRequestFix;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserMongoVo;
 import com.demo.service.UserMongoService;
@@ -134,7 +132,7 @@ public class UserMongoController {
     /* ==================== 更新操作 ==================== */
 
     /**
-     * 关注+1
+     * 关注+1<br>
      * http://localhost:8080/addFollowers1?id=1
      */
     @GetMapping("addFollowers1")
@@ -143,7 +141,7 @@ public class UserMongoController {
     }
 
     /**
-     * 关注+2
+     * 关注+2(不存在新增)<br>
      * http://localhost:8080/addFollowers2?id=1
      */
     @GetMapping("addFollowers2")
@@ -152,7 +150,7 @@ public class UserMongoController {
     }
 
     /**
-     * 关注+3
+     * 关注+3(全部)<br>
      * http://localhost:8080/addFollowers3
      */
     @GetMapping("addFollowers3")
@@ -187,105 +185,8 @@ public class UserMongoController {
      * [1,2,3]
      */
     @PostMapping("findByIdList")
-    public Result<List<UserMongo>> findByIdList(@RequestBody List<Long> idList) {
+    public Result<List<UserMongoVo>> findByIdList(@RequestBody List<Long> idList) {
         return Result.o(userMongoService.findByIdList(idList));
-    }
-
-    /**
-     * 查询所有<br>
-     * http://localhost:8080/findAll
-     */
-    @GetMapping("findAll")
-    public Result<List<UserMongo>> findAll() {
-        return Result.o(userMongoService.findAll());
-    }
-
-    /**
-     * 排序查询<br>
-     * http://localhost:8080/findSort<br>
-     * {"orderBy":"name desc"}<br>
-     */
-    @PostMapping("findSort")
-    public Result<List<UserMongo>> findSort(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.findSort(userMongo));
-    }
-
-    /**
-     * 查询所有，分页<br>
-     * http://localhost:8080/findPage?page=1&size=1<br>
-     * PageInfo
-     */
-    // @GetMapping("findPage")
-    // public Result<PageInfo<UserMongo>> findList(int page, int size) {
-    //     return Result.o(userMongoService.findPage(pageRequestFix));
-    // }
-
-    /**
-     * 分页查询<br>
-     * http://localhost:8080/findPage<br>
-     * {"pages":"1","rows":"2","orderBy":"name desc"}<br>
-     * PageInfo
-     */
-    @PostMapping("findPage")
-    public Result<PageInfo<UserMongo>> findPage(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.findPage(userMongo));
-    }
-
-    /**
-     * 分页查询<br>
-     * http://localhost:8080/findPage2<br>
-     * {"pages":"1","rows":"10","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
-     * PageInfo
-     */
-    @PostMapping("findPage2")
-    public Result<PageInfo<UserMongo>> findPage2(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.findPage2(userMongo));
-    }
-
-    /**
-     * 排序查询<br>
-     * http://localhost:8080/findSort<br>
-     * {"orderBy":"name desc"}<br>
-     * List
-     */
-    @PostMapping("findSort3")
-    public Result<List<UserMongo>> findSort3(@RequestBody UserMongoVo userMongo) {
-        return Result.o(userMongoService.findSort(userMongo));
-    }
-
-    /**
-     * 排序查询2<br>
-     * http://localhost:8080/findSort2<br>
-     * {"orderBy":"name desc","date":"2022-01-05","dateEnd":"2022-01-06"}<br>
-     * PageInfo
-     */
-    // @PostMapping("findSort2")
-    // public Result<PageInfo<UserMongo>> findSort2(@RequestBody UserMongoVo userMongo) {
-    //     return Result.o(userMongoService.findSort2(userMongo));
-    // }
-
-    /**
-     * 查询所有，根据Example和分页<br>
-     * http://localhost:8080/findListPage?page=1&size=1<br>
-     * {"name":"a"}<br>
-     * PageInfo
-     */
-    // @PostMapping("findListExamplePage")
-    // public Result<PageInfo<UserMongo>> findList(@RequestBody UserMongo userMongo, int page, int size) {
-    //     Example<UserMongo> example = Example.of(userMongo);
-    //     PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
-    //     return Result.o(userMongoService.findList(example, pageRequestFix));
-    // }
-
-    /**
-     * 根据名字查询并分页<br>
-     * http://localhost:8080/findByName?name=a&page=1&size=1<br>
-     * PageInfo
-     */
-    @GetMapping("findByName")
-    public Result<PageInfo<UserMongo>> findByName(String name, int page, int size) {
-        PageRequestFix pageRequestFix = PageRequestFix.of(page, size);
-        return Result.o(userMongoService.findByName(name, pageRequestFix));
     }
 
 }

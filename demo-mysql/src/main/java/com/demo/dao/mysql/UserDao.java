@@ -202,7 +202,7 @@ public class UserDao extends DaoBase {
      * @param refId id
      * @return 是否成功
      */
-    private boolean bak(Long refId) {
+    private boolean bak(long refId) {
         return tryEq1(() -> userMapper.bak(new UserBak(refId)));
     }
 

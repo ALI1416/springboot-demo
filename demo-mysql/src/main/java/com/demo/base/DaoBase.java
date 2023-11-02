@@ -54,21 +54,20 @@ public class DaoBase {
     public static boolean tryEq1(IntSupplier function, boolean exception, boolean inconformity) {
         try {
             if (function.getAsInt() != 1) {
-                // 结果不为1
                 if (inconformity) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 }
                 return false;
+            } else {
+                return true;
             }
         } catch (Exception e) {
             log.error("tryEq1", e);
-            // 捕获到异常
             if (exception) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             return false;
         }
-        return true;
     }
 
     /**
@@ -105,22 +104,21 @@ public class DaoBase {
      */
     public static boolean tryEqTrue(BooleanSupplier function, boolean exception, boolean inconformity) {
         try {
-            if (function.getAsBoolean()) {
-                // 结果不为true
+            if (!function.getAsBoolean()) {
                 if (inconformity) {
                     TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 }
                 return false;
+            } else {
+                return true;
             }
         } catch (Exception e) {
             log.error("tryEqTrue", e);
-            // 捕获到异常
             if (exception) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             return false;
         }
-        return true;
     }
 
     /**
@@ -145,15 +143,14 @@ public class DaoBase {
     public static boolean tryAny(Runnable function, boolean exception) {
         try {
             function.run();
+            return true;
         } catch (Exception e) {
             log.error("tryAny", e);
-            // 捕获到异常
             if (exception) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             }
             return false;
         }
-        return true;
     }
 
 }

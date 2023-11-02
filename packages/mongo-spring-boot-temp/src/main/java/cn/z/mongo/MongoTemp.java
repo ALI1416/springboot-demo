@@ -4,6 +4,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,9 +14,7 @@ import org.springframework.data.mongodb.core.index.IndexInfo;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.UpdateDefinition;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <h1>MongoDB模板</h1>
@@ -591,31 +591,6 @@ public class MongoTemp {
     // region 查询操作
 
     /**
-     * 查询第一个
-     *
-     * @param <T>   集合类型
-     * @param query 查询
-     * @param clazz 集合类型
-     * @return 实体
-     */
-    public <T> T findOne(Query query, Class<T> clazz) {
-        return mongoTemplate.findOne(query, clazz);
-    }
-
-    /**
-     * 查询第一个
-     *
-     * @param <T>            集合类型
-     * @param query          查询
-     * @param clazz          集合类型
-     * @param collectionName 集合名
-     * @return 实体
-     */
-    public <T> T findOne(Query query, Class<T> clazz, String collectionName) {
-        return mongoTemplate.findOne(query, clazz, collectionName);
-    }
-
-    /**
      * 查询通过id
      *
      * @param <T>   集合类型
@@ -638,6 +613,31 @@ public class MongoTemp {
      */
     public <T> T findById(Object id, Class<T> clazz, String collectionName) {
         return mongoTemplate.findById(id, clazz, collectionName);
+    }
+
+    /**
+     * 查询第一个
+     *
+     * @param <T>   集合类型
+     * @param query 查询
+     * @param clazz 集合类型
+     * @return 实体
+     */
+    public <T> T findOne(Query query, Class<T> clazz) {
+        return mongoTemplate.findOne(query, clazz);
+    }
+
+    /**
+     * 查询第一个
+     *
+     * @param <T>            集合类型
+     * @param query          查询
+     * @param clazz          集合类型
+     * @param collectionName 集合名
+     * @return 实体
+     */
+    public <T> T findOne(Query query, Class<T> clazz, String collectionName) {
+        return mongoTemplate.findOne(query, clazz, collectionName);
     }
 
     /**
@@ -742,6 +742,24 @@ public class MongoTemp {
      */
     public <T> List<T> find(Class<T> clazz, String collectionName) {
         return mongoTemplate.findAll(clazz, collectionName);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param <T>   集合类型
+     * @param query Query
+     * @param clazz 集合类型
+     * @return Map.Entry 总数,实体数组
+     */
+    public <T> Map.Entry<Long, List<T>> findPage(Query query, Class<T> clazz) {
+        List<T> list = mongoTemplate.find(query, clazz);
+        if (query.getLimit() == 0) {
+            // 分页查询
+            return new AbstractMap.SimpleEntry<>(mongoTemplate.count(query, clazz), list);
+        }
+        // 全部查询
+        return new AbstractMap.SimpleEntry<>((long) list.size(), list);
     }
 
     // endregion
