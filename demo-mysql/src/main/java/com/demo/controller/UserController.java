@@ -125,33 +125,33 @@ public class UserController extends ControllerBase {
     }
 
     /**
-     * 查询<br>
-     * http://localhost:8080/find<br>
+     * 分页查询<br>
+     * http://localhost:8080/findPage<br>
      * {"pages":1,"rows":2,"createId":0}
      */
-    @PostMapping("findExact")
-    public Result<PageInfo<UserVo>> find(@RequestBody UserVo user) {
-        return Result.o(userService.find(user));
+    @PostMapping("findPage")
+    public Result<PageInfo<UserVo>> findPage(@RequestBody UserVo user) {
+        return Result.o(userService.findPage(user));
     }
 
     /**
-     * 模糊查询<br>
-     * http://localhost:8080/findFuzzy<br>
+     * 分页模糊查询<br>
+     * http://localhost:8080/findFuzzyPage<br>
      * {"pages":1,"rows":2,"account":"a"}
      */
-    @PostMapping("find")
-    public Result<PageInfo<UserVo>> findFuzzy(@RequestBody UserVo user) {
-        return Result.o(userService.findFuzzy(user));
+    @PostMapping("findFuzzyPage")
+    public Result<PageInfo<UserVo>> findFuzzyPage(@RequestBody UserVo user) {
+        return Result.o(userService.findFuzzyPage(user));
     }
 
     /**
-     * 查询备份<br>
-     * http://localhost:8080/findBak<br>
+     * 分页查询备份<br>
+     * http://localhost:8080/findBakPage<br>
      * {"pages":1,"rows":2,"refId":0}
      */
-    @PostMapping("findBak")
-    public Result<PageInfo<UserBak>> findBak(@RequestBody UserBak userBak) {
-        return Result.o(userService.findBak(userBak));
+    @PostMapping("findBakPage")
+    public Result<PageInfo<UserBak>> findBakPage(@RequestBody UserBak userBak) {
+        return Result.o(userService.findBakPage(userBak));
     }
 
 }

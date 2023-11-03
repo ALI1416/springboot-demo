@@ -33,6 +33,16 @@ public class LoginLogDao extends DaoBase {
     }
 
     /**
+     * 删除，通过id
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    public boolean deleteById(long id) {
+        return tryEq1(() -> loginLogMapper.deleteById(id));
+    }
+
+    /**
      * 获取最后一条
      *
      * @return LoginLog

@@ -1,6 +1,6 @@
 package com.demo.controller;
 
-import com.demo.entity.po.UserMongo;
+import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserMongoVo;
 import com.demo.service.UserMongoService;
@@ -165,7 +165,7 @@ public class UserMongoController {
      * http://localhost:8080/findById?id=1
      */
     @GetMapping("findById")
-    public Result<UserMongo> findById(long id) {
+    public Result<UserMongoVo> findById(long id) {
         return Result.o(userMongoService.findById(id));
     }
 
@@ -175,8 +175,17 @@ public class UserMongoController {
      * {"name":"a"}
      */
     @PostMapping("findOne")
-    public Result<UserMongo> findOne(@RequestBody UserMongoVo userMongo) {
+    public Result<UserMongoVo> findOne(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findOne(userMongo));
+    }
+
+    /**
+     * 查询姓名的不同值<br>
+     * http://localhost:8080/findDistinctName
+     */
+    @PostMapping("findDistinctName")
+    public Result<List<String>> findDistinctName() {
+        return Result.o(userMongoService.findDistinctName());
     }
 
     /**
@@ -187,6 +196,16 @@ public class UserMongoController {
     @PostMapping("findByIdList")
     public Result<List<UserMongoVo>> findByIdList(@RequestBody List<Long> idList) {
         return Result.o(userMongoService.findByIdList(idList));
+    }
+
+    /**
+     * 分页查询<br>
+     * http://localhost:8080/findPage<br>
+     * {"pages":1,"rows":2,"name":"a"}
+     */
+    @PostMapping("findPage")
+    public Result<PageInfo<UserMongoVo>> findPage(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.findPage(userMongo));
     }
 
 }

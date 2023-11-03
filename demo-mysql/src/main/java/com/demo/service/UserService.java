@@ -143,32 +143,32 @@ public class UserService extends ServiceBase {
     }
 
     /**
-     * 查询
+     * 分页查询
      *
      * @param user UserVo
      * @return PageInfo UserVo
      */
-    public PageInfo<UserVo> find(UserVo user) {
+    public PageInfo<UserVo> findPage(UserVo user) {
         return pagination(() -> userDao.find(user), user.getPages(), user.getRows(), user.getOrderBy());
     }
 
     /**
-     * 模糊查询
+     * 分页模糊查询
      *
      * @param user UserVo
      * @return PageInfo UserVo
      */
-    public PageInfo<UserVo> findFuzzy(UserVo user) {
+    public PageInfo<UserVo> findFuzzyPage(UserVo user) {
         return pagination(() -> userDao.findFuzzy(user), user.getPages(), user.getRows(), user.getOrderBy());
     }
 
     /**
-     * 查询备份
+     * 分页查询备份
      *
      * @param user UserBak
      * @return PageInfo UserBak
      */
-    public PageInfo<UserBak> findBak(UserBak user) {
+    public PageInfo<UserBak> findBakPage(UserBak user) {
         return pagination(() -> userDao.findBak(user.getRefId()), user.getPages(), user.getRows(), user.getOrderBy());
     }
 

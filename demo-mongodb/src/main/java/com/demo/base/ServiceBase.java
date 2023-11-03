@@ -1,17 +1,14 @@
 package com.demo.base;
 
+import cn.z.mongo.entity.Pageable;
 import com.demo.constant.Constant;
-import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.PageRequestFix;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 /**
  * <h1>服务层基类</h1>
@@ -26,7 +23,7 @@ import java.util.function.Supplier;
 public class ServiceBase {
 
     /**
-     * <h2>分页查询</h2>
+     * <h2>构建分页</h2>
      * 默认页码：pages == null<br>
      * 默认每页条数：rows == null || rows <= 0<br>
      * 默认排序：orderBy == null<br>
@@ -35,14 +32,12 @@ public class ServiceBase {
      * 分页查询，不排序：pages != 0 && orderBy == ""<br>
      * 分页查询，排序：pages != 0 && orderBy != ""
      *
-     * @param <T>      数据类型
-     * @param function 函数
-     * @param pages    页码
-     * @param rows     每页条数
-     * @param orderBy  排序
-     * @return PageInfo
+     * @param pages   页码
+     * @param rows    每页条数
+     * @param orderBy 排序
+     * @return Pageable
      */
-    public static <T> PageInfo<T> pagination(Supplier<Map.Entry<Long, List<T>>> function, Integer pages, Integer rows, String orderBy) {
+    public static Pageable buildPage(Integer pages, Integer rows, String orderBy) {
         // 默认页码
         if (pages == null) {
             pages = Constant.PAGE_DEFAULT_PAGES;
@@ -55,27 +50,23 @@ public class ServiceBase {
         if (orderBy == null) {
             orderBy = Constant.PAGE_DEFAULT_ORDER_BY;
         }
-        Page<T> page = null;
         if (pages == 0) {
-            if (!orderBy.isEmpty()) {
+            if (orderBy.isEmpty()) {
+                // 全部查询，不排序
+                return new Pageable(null, null);
+            } else {
                 // 全部查询，排序
-                Sort orders = buildSort(orderBy);
+                return new Pageable(null, buildSort(orderBy));
             }
         } else {
             if (orderBy.isEmpty()) {
                 // 分页查询，不排序
-                PageRequestFix pageRequestFix = PageRequestFix.of(pages, rows);
-
+                return new Pageable(PageRequestFix.of(pages, rows), null);
             } else {
                 // 分页查询，排序
-                PageRequestFix pageRequestFix = PageRequestFix.of(pages, rows, buildSort(orderBy));
+                return new Pageable(PageRequestFix.of(pages, rows, buildSort(orderBy)), null);
             }
         }
-        // 全部查询，不排序
-        // if (page == null) {
-        //     return new PageInfo<>(function.get());
-        // }
-        return new PageInfo<>(page);
     }
 
     /**

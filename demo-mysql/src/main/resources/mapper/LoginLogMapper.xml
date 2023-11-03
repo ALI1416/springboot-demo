@@ -6,6 +6,7 @@
     id,ip,user_agent,country,province,city,isp,os,browser,is_mobile,create_time
   </sql>
 
+  <!-- 插入 -->
   <insert id="insert" parameterType="LoginLog">
     INSERT
     login_log(
@@ -15,6 +16,16 @@
     )
   </insert>
 
+  <!-- 删除，通过id -->
+  <delete id="deleteById" parameterType="Long">
+    DELETE
+    FROM
+    login_log
+    WHERE
+    id = #{id}
+  </delete>
+
+  <!-- 获取最后一条 -->
   <select id="getLast" resultType="LoginLog">
     SELECT
     <include refid="col"/>

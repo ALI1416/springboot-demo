@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import java.util.List;
 
 /**
- * <h1>分页</h1>
+ * <h1>MongoDB分页</h1>
  *
  * <p>
  * createDate 2023/11/02 17:08:31
@@ -42,45 +42,38 @@ public class Page<T> {
     private final List<T> list;
 
     /**
-     * 构造函数(未分页)
-     *
-     * @param data 数据列表
-     */
-    public Page(List<T> data) {
-        // 总页数(从1开始)
-        pages = 1;
-        // 当前页码(从1开始)
-        page = 1;
-        // 当前页条数
-        row = data.size();
-        // 总条数
-        total = row;
-        // 每页条数
-        rows = row;
-        // 数据列表
-        list = data;
-    }
-
-    /**
-     * 构造函数(MongoDB自定义分页)
+     * 构造函数
      *
      * @param query Query
      * @param data  数据列表
      * @param count 总条数
      */
-    public Page(Query query, List<T> data, long count) {
-        // 每页条数
-        rows = query.getLimit();
-        // 当前页码(从1开始)=跳过条数/每页条数
-        page = (int) (query.getSkip() / rows);
+    public Page(Query query, List<T> data, Long count) {
         // 当前页条数
         row = data.size();
-        // 总条数
-        total = count;
-        // 总页数(从1开始)=总条数/每页条数
-        pages = total == 0 ? 1 : ((int) ((total - 1) / rows) + 1);
         // 数据列表
         list = data;
+        if (count == null) {
+            /* 全部查询 */
+            // 总页数(从1开始)
+            pages = 1;
+            // 当前页码(从1开始)
+            page = 1;
+            // 总条数
+            total = row;
+            // 每页条数
+            rows = row;
+        } else {
+            /* 分页查询 */
+            // 每页条数
+            rows = query.getLimit();
+            // 当前页码(从1开始)=跳过条数/每页条数
+            page = (int) (query.getSkip() / rows) + 1;
+            // 总条数
+            total = count;
+            // 总页数(从1开始)=总条数/每页条数
+            pages = total == 0 ? 1 : ((int) ((total - 1) / rows) + 1);
+        }
     }
 
     public int getPages() {

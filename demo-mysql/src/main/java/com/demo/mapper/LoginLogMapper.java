@@ -23,6 +23,14 @@ public interface LoginLogMapper {
     int insert(LoginLog loginLog);
 
     /**
+     * 删除，通过id
+     *
+     * @param id id
+     * @return 执行成功数量
+     */
+    int deleteById(long id);
+
+    /**
      * 获取最后一条
      *
      * @return LoginLog

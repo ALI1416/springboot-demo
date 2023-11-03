@@ -1,14 +1,12 @@
 package com.demo.service;
 
+import cn.z.mongo.entity.Pageable;
 import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.UserMongoDao;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -224,15 +222,15 @@ public class UserMongoService extends ServiceBase {
     }
 
     /**
-     * 查询
+     * 分页查询
      *
      * @param userMongo UserMongoVo
-     * @return List UserMongoVo
+     * @return PageInfo UserMongoVo
      */
-    // public PageInfo<UserMongoVo> find(UserMongoVo userMongo) {
-    //     Query query = Query.query(getCriteria(userMongo));
-    //     PageInfo<UserMongoVo> pagination = pagination(() - userMongoDao.find(query), () -> userMongoDao.count(query), userMongo.getPages(), userMongo.getRows(), userMongo.getOrderBy());
-    //     return pagination;
-    // }
+    public PageInfo<UserMongoVo> findPage(UserMongoVo userMongo) {
+        Query query = Query.query(getCriteria(userMongo));
+        Pageable pageable = buildPage(userMongo.getPages(), userMongo.getRows(), userMongo.getOrderBy());
+        return new PageInfo<>(userMongoDao.findPage(query, pageable));
+    }
 
 }

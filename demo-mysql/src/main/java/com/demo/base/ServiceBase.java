@@ -50,14 +50,19 @@ public class ServiceBase {
         if (orderBy == null) {
             orderBy = Constant.PAGE_DEFAULT_ORDER_BY;
         }
-        Page<T> page = null;
         if (pages == 0) {
-            if (!orderBy.isEmpty()) {
+            if (orderBy.isEmpty()) {
+                // 全部查询，不排序
+                return new PageInfo<>(function.get());
+            } else {
                 // 全部查询，排序
                 PageMethod.orderBy(orderBy);
-                page = PageMethod.getLocalPage();
+                Page<T> page = PageMethod.getLocalPage();
+                function.get();
+                return new PageInfo<>((List<T>) page);
             }
         } else {
+            Page<T> page;
             if (orderBy.isEmpty()) {
                 // 分页查询，不排序
                 page = PageMethod.startPage(pages, rows);
@@ -65,13 +70,9 @@ public class ServiceBase {
                 // 分页查询，排序
                 page = PageMethod.startPage(pages, rows, orderBy);
             }
+            function.get();
+            return new PageInfo<>(page);
         }
-        List<T> list = function.get();
-        // 全部查询，不排序
-        if (page == null) {
-            return new PageInfo<>(list);
-        }
-        return new PageInfo<>(page);
     }
 
 }

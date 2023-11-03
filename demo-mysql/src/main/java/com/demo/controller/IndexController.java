@@ -5,6 +5,7 @@ import com.demo.entity.po.LoginLog;
 import com.demo.entity.pojo.Result;
 import com.demo.service.LoginLogService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,8 @@ public class IndexController {
     private final LoginLogService loginLogService;
 
     /**
-     * 首页
+     * 首页<br>
+     * http://localhost:8080
      */
     @GetMapping
     public Result<LoginLog> index() {
@@ -41,7 +43,17 @@ public class IndexController {
     }
 
     /**
-     * 获取最后一条
+     * 删除，通过id<br>
+     * http://localhost:8080/deleteById?id=1
+     */
+    @DeleteMapping("deleteById")
+    public Result<Boolean> deleteById(long id) {
+        return Result.o(loginLogService.deleteById(id));
+    }
+
+    /**
+     * 获取最后一条<br>
+     * http://localhost:8080/getLast
      */
     @GetMapping("getLast")
     public Result<LoginLog> getLast() {

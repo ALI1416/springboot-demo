@@ -3,6 +3,8 @@ package com.demo.dao.mongo;
 import cn.z.clock.Clock;
 import cn.z.id.Id;
 import cn.z.mongo.MongoTemp;
+import cn.z.mongo.entity.Page;
+import cn.z.mongo.entity.Pageable;
 import com.demo.base.DaoBase;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
@@ -238,11 +240,12 @@ public class UserMongoDao extends DaoBase {
     /**
      * 分页查询
      *
-     * @param query Query
-     * @return List UserMongoVo
+     * @param query    Query
+     * @param pageable Pageable
+     * @return Page UserMongoVo
      */
-    public List<UserMongoVo> findPage(Query query) {
-        return mongoTemp.findPage(query, CLAZZ);
+    public Page<UserMongoVo> findPage(Query query, Pageable pageable) {
+        return mongoTemp.findPage(query, pageable, CLAZZ);
     }
 
     /* ==================== 查询并修改、替换、删除操作 ==================== */

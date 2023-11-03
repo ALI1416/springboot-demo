@@ -34,6 +34,17 @@ public class LoginLogService {
     }
 
     /**
+     * 删除，通过id
+     *
+     * @param id id
+     * @return 是否成功
+     */
+    @Transactional
+    public boolean deleteById(long id) {
+        return loginLogDao.deleteById(id);
+    }
+
+    /**
      * 获取最后一条
      *
      * @return LoginLog

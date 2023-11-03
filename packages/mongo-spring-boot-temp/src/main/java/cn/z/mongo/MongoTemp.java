@@ -1,11 +1,11 @@
 package cn.z.mongo;
 
+import cn.z.mongo.entity.Page;
+import cn.z.mongo.entity.Pageable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -14,7 +14,9 @@ import org.springframework.data.mongodb.core.index.IndexInfo;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.UpdateDefinition;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <h1>MongoDB模板</h1>
@@ -747,19 +749,27 @@ public class MongoTemp {
     /**
      * 分页查询
      *
-     * @param <T>   集合类型
-     * @param query Query
-     * @param clazz 集合类型
-     * @return Map.Entry 总数,实体数组
+     * @param <T>      集合类型
+     * @param query    Query
+     * @param pageable Pageable
+     * @param clazz    集合类型
+     * @return Page
      */
-    public <T> Map.Entry<Long, List<T>> findPage(Query query, Class<T> clazz) {
-        List<T> list = mongoTemplate.find(query, clazz);
-        if (query.getLimit() == 0) {
-            // 分页查询
-            return new AbstractMap.SimpleEntry<>(mongoTemplate.count(query, clazz), list);
+    public <T> Page<T> findPage(Query query, Pageable pageable, Class<T> clazz) {
+        // 分页查询
+        if (pageable.getPageable() != null) {
+            long count = mongoTemplate.count(query, clazz);
+            List<T> list = mongoTemplate.find(query.with(pageable.getPageable()), clazz);
+            return new Page<>(query, list, count);
+        }
+        // 排序查询
+        if (pageable.getSort() != null) {
+            List<T> list = mongoTemplate.find(query.with(pageable.getSort()), clazz);
+            return new Page<>(query, list, null);
         }
         // 全部查询
-        return new AbstractMap.SimpleEntry<>((long) list.size(), list);
+        List<T> list = mongoTemplate.find(query, clazz);
+        return new Page<>(query, list, null);
     }
 
     // endregion
