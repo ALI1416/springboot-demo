@@ -124,7 +124,7 @@ public class UserMongoController {
      * http://localhost:8080/delete2<br>
      * {"name":"a"}
      */
-    @PutMapping("delete2")
+    @DeleteMapping("delete2")
     public Result<Boolean> delete(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.delete(userMongo));
     }
@@ -183,7 +183,7 @@ public class UserMongoController {
      * 查询姓名的不同值<br>
      * http://localhost:8080/findDistinctName
      */
-    @PostMapping("findDistinctName")
+    @GetMapping("findDistinctName")
     public Result<List<String>> findDistinctName() {
         return Result.o(userMongoService.findDistinctName());
     }
@@ -199,6 +199,16 @@ public class UserMongoController {
     }
 
     /**
+     * 查询<br>
+     * http://localhost:8080/find<br>
+     * {"name":"a"}
+     */
+    @PostMapping("find")
+    public Result<List<UserMongoVo>> find(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.find(userMongo));
+    }
+
+    /**
      * 分页查询<br>
      * http://localhost:8080/findPage<br>
      * {"pages":1,"rows":2,"name":"a"}
@@ -206,6 +216,35 @@ public class UserMongoController {
     @PostMapping("findPage")
     public Result<PageInfo<UserMongoVo>> findPage(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.findPage(userMongo));
+    }
+
+    /* ==================== 查询并修改、替换、删除操作 ==================== */
+
+    /**
+     * 获取关注并+4<br>
+     * http://localhost:8080/getAndAddFollowers4?id=1
+     */
+    @GetMapping("getAndAddFollowers4")
+    public Result<UserMongoVo> getAndAddFollowers4(long id) {
+        return Result.o(userMongoService.getAndAddFollowers4(id));
+    }
+
+    /**
+     * 获取关注并设置为1<br>
+     * http://localhost:8080/getAndSetFollowers1?id=1
+     */
+    @GetMapping("getAndSetFollowers1")
+    public Result<UserMongoVo> getAndSetFollowers1(long id) {
+        return Result.o(userMongoService.getAndSetFollowers1(id));
+    }
+
+    /**
+     * 获取关注并删除<br>
+     * http://localhost:8080/getFollowersAndDelete?id=1
+     */
+    @GetMapping("getFollowersAndDelete")
+    public Result<UserMongoVo> getFollowersAndDelete(long id) {
+        return Result.o(userMongoService.getFollowersAndDelete(id));
     }
 
 }

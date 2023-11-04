@@ -75,7 +75,7 @@ public class ServiceBase {
      * @param orderBy 排序
      * @return Sort
      */
-    private static Sort buildSort(String orderBy) {
+    public static Sort buildSort(String orderBy) {
         // 排序转为List<Sort.Order>
         List<Sort.Order> orderList = new ArrayList<>();
         // 取出每个字段的排序

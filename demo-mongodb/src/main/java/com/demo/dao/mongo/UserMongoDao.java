@@ -250,4 +250,41 @@ public class UserMongoDao extends DaoBase {
 
     /* ==================== 查询并修改、替换、删除操作 ==================== */
 
+    /**
+     * 获取关注并+4
+     *
+     * @param id id
+     * @return UserMongoVo
+     */
+    public UserMongoVo getAndAddFollowers4(long id) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        Update update = new Update().inc("follower", 4);
+        return mongoTemp.findOneAndUpdate(query, update, CLAZZ);
+    }
+
+    /**
+     * 获取关注并设置为1
+     *
+     * @param id id
+     * @return UserMongoVo
+     */
+    public UserMongoVo getAndSetFollowers1(long id) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        UserMongoVo userMongo = mongoTemp.findOne(query, CLAZZ);
+        userMongo.setId(null);
+        userMongo.setFollowers(1);
+        return mongoTemp.findOneAndReplace(query, userMongo);
+    }
+
+    /**
+     * 获取关注并删除
+     *
+     * @param id id
+     * @return UserMongoVo
+     */
+    public UserMongoVo getFollowersAndDelete(long id) {
+        Query query = Query.query(Criteria.where("id").is(id));
+        return mongoTemp.findOneAndDelete(query, CLAZZ);
+    }
+
 }

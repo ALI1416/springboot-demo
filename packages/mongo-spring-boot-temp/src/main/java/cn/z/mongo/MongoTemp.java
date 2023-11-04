@@ -57,9 +57,9 @@ public class MongoTemp {
     }
 
     /**
-     * 获取所有集合名
+     * 获取集合名
      *
-     * @return 所有集合名
+     * @return 集合名
      */
     public Set<String> getCollectionName() {
         return mongoTemplate.getCollectionNames();
@@ -147,12 +147,12 @@ public class MongoTemp {
     }
 
     /**
-     * 获取集合所有索引
+     * 获取集合所有索引信息
      *
      * @param clazz 集合类型
-     * @return 所有索引
+     * @return 所有索引信息
      */
-    public List<IndexInfo> getCollectionIndex(Class<?> clazz) {
+    public List<IndexInfo> getCollectionIndexInfo(Class<?> clazz) {
         return mongoTemplate.indexOps(clazz).getIndexInfo();
     }
 
@@ -176,7 +176,7 @@ public class MongoTemp {
     }
 
     /**
-     * 删除集合所有索引
+     * 删除集合索引
      *
      * @param collectionName 集合名
      */
@@ -702,6 +702,29 @@ public class MongoTemp {
      * 查询
      *
      * @param <T>   集合类型
+     * @param clazz 集合类型
+     * @return 实体数组
+     */
+    public <T> List<T> find(Class<T> clazz) {
+        return mongoTemplate.findAll(clazz);
+    }
+
+    /**
+     * 查询
+     *
+     * @param <T>            集合类型
+     * @param clazz          集合类型
+     * @param collectionName 集合名
+     * @return 实体数组
+     */
+    public <T> List<T> find(Class<T> clazz, String collectionName) {
+        return mongoTemplate.findAll(clazz, collectionName);
+    }
+
+    /**
+     * 查询
+     *
+     * @param <T>   集合类型
      * @param query 查询
      * @param clazz 集合类型
      * @return 实体数组
@@ -721,29 +744,6 @@ public class MongoTemp {
      */
     public <T> List<T> find(Query query, Class<T> clazz, String collectionName) {
         return mongoTemplate.find(query, clazz, collectionName);
-    }
-
-    /**
-     * 查询
-     *
-     * @param <T>   集合类型
-     * @param clazz 集合类型
-     * @return 实体数组
-     */
-    public <T> List<T> find(Class<T> clazz) {
-        return mongoTemplate.findAll(clazz);
-    }
-
-    /**
-     * 查询
-     *
-     * @param <T>            集合类型
-     * @param clazz          集合类型
-     * @param collectionName 集合名
-     * @return 实体数组
-     */
-    public <T> List<T> find(Class<T> clazz, String collectionName) {
-        return mongoTemplate.findAll(clazz, collectionName);
     }
 
     /**
@@ -769,6 +769,33 @@ public class MongoTemp {
         }
         // 全部查询
         List<T> list = mongoTemplate.find(query, clazz);
+        return new Page<>(query, list, null);
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param <T>            集合类型
+     * @param query          Query
+     * @param pageable       Pageable
+     * @param clazz          集合类型
+     * @param collectionName 集合名
+     * @return Page
+     */
+    public <T> Page<T> findPage(Query query, Pageable pageable, Class<T> clazz, String collectionName) {
+        // 分页查询
+        if (pageable.getPageable() != null) {
+            long count = mongoTemplate.count(query, clazz, collectionName);
+            List<T> list = mongoTemplate.find(query.with(pageable.getPageable()), clazz, collectionName);
+            return new Page<>(query, list, count);
+        }
+        // 排序查询
+        if (pageable.getSort() != null) {
+            List<T> list = mongoTemplate.find(query.with(pageable.getSort()), clazz, collectionName);
+            return new Page<>(query, list, null);
+        }
+        // 全部查询
+        List<T> list = mongoTemplate.find(query, clazz, collectionName);
         return new Page<>(query, list, null);
     }
 

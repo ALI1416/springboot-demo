@@ -1,10 +1,9 @@
 package com.demo.dao.mongo;
 
+import cn.z.mongo.MongoTemp;
 import com.demo.base.DaoBase;
-import com.demo.repo.LoginLogRepo;
+import com.demo.entity.vo.LoginLogVo;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,11 +18,9 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @AllArgsConstructor
-@Slf4j
 public class LoginLogDao extends DaoBase {
 
-    private final LoginLogRepo loginLogRepo;
-    private final MongoTemplate mongoTemplate;
-
+    private static final Class<LoginLogVo> CLAZZ = LoginLogVo.class;
+    private final MongoTemp mongoTemp;
 
 }

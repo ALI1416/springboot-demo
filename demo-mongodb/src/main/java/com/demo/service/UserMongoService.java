@@ -222,6 +222,17 @@ public class UserMongoService extends ServiceBase {
     }
 
     /**
+     * 查询
+     *
+     * @param userMongo UserMongoVo
+     * @return List UserMongoVo
+     */
+    public List<UserMongoVo> find(UserMongoVo userMongo) {
+        Query query = Query.query(getCriteria(userMongo));
+        return userMongoDao.find(query);
+    }
+
+    /**
      * 分页查询
      *
      * @param userMongo UserMongoVo
@@ -231,6 +242,38 @@ public class UserMongoService extends ServiceBase {
         Query query = Query.query(getCriteria(userMongo));
         Pageable pageable = buildPage(userMongo.getPages(), userMongo.getRows(), userMongo.getOrderBy());
         return new PageInfo<>(userMongoDao.findPage(query, pageable));
+    }
+
+    /* ==================== 查询并修改、替换、删除操作 ==================== */
+
+    /**
+     * 获取关注并+4
+     *
+     * @param id id
+     * @return UserMongoVo
+     */
+    public UserMongoVo getAndAddFollowers4(long id) {
+        return userMongoDao.getAndAddFollowers4(id);
+    }
+
+    /**
+     * 获取关注并设置为1
+     *
+     * @param id id
+     * @return UserMongoVo
+     */
+    public UserMongoVo getAndSetFollowers1(long id) {
+        return userMongoDao.getAndSetFollowers1(id);
+    }
+
+    /**
+     * 获取关注并删除
+     *
+     * @param id id
+     * @return UserMongoVo
+     */
+    public UserMongoVo getFollowersAndDelete(long id) {
+        return userMongoDao.getFollowersAndDelete(id);
     }
 
 }
