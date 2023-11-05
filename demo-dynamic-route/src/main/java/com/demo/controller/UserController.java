@@ -10,6 +10,7 @@ import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.RouteVo;
 import com.demo.entity.vo.UserVo;
+import com.demo.service.LoginLogService;
 import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
@@ -17,6 +18,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <h1>用户</h1>
@@ -34,10 +37,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "用户")
 public class UserController extends ControllerBase {
 
+    private final HttpServletRequest request;
     private final T4s t4s;
     private final UserService userService;
     private final RoleService roleService;
     private final RouteService routeService;
+    private final LoginLogService loginLogService;
 
     /**
      * 用户登录
@@ -56,6 +61,8 @@ public class UserController extends ControllerBase {
             if (BCrypt.check(user.getPwd(), u.getPwd())) {
                 u.setPwd(null);
                 u.setToken(t4s.setToken(u.getId()));
+                // 登录日志
+                loginLogService.insert(u.getId(), u.getToken(), request);
                 return Result.o(u);
             }
         }

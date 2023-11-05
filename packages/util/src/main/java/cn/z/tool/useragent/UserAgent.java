@@ -49,7 +49,7 @@ public class UserAgent {
     /**
      * 是移动端
      */
-    private boolean mobile;
+    private Boolean isMobile;
 
     public String getEngine() {
         return engine;
@@ -107,12 +107,12 @@ public class UserAgent {
         this.platform = platform;
     }
 
-    public boolean isMobile() {
-        return mobile;
+    public Boolean getMobile() {
+        return isMobile;
     }
 
-    public void setMobile(boolean mobile) {
-        this.mobile = mobile;
+    public void setMobile(Boolean mobile) {
+        isMobile = mobile;
     }
 
     @Override
@@ -125,7 +125,7 @@ public class UserAgent {
                 ", os='" + os + '\'' +
                 ", osVersion='" + osVersion + '\'' +
                 ", platform='" + platform + '\'' +
-                ", mobile=" + mobile +
+                ", isMobile=" + isMobile +
                 '}';
     }
 

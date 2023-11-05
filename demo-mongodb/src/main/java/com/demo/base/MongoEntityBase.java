@@ -28,9 +28,17 @@ public class MongoEntityBase extends ToStringBase {
     @Id
     private Long id;
     /**
+     * 创建者id
+     */
+    private Long createId;
+    /**
      * 创建时间
      */
     private Timestamp createTime;
+    /**
+     * 更新者id
+     */
+    private Long updateId;
     /**
      * 更新时间
      */

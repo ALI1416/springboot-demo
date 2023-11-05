@@ -1,9 +1,12 @@
 package com.demo.dao.mongo;
 
 import cn.z.mongo.MongoTemp;
+import cn.z.mongo.entity.Page;
+import cn.z.mongo.entity.Pageable;
 import com.demo.base.DaoBase;
 import com.demo.entity.vo.LoginLogVo;
 import lombok.AllArgsConstructor;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,5 +25,30 @@ public class LoginLogDao extends DaoBase {
 
     private static final Class<LoginLogVo> CLAZZ = LoginLogVo.class;
     private final MongoTemp mongoTemp;
+
+    /**
+     * 插入
+     *
+     * @param loginLog LoginLogVo
+     * @return ok:id,e:0
+     */
+    public long insert(LoginLogVo loginLog) {
+        if (tryAnyNoTransaction(() -> mongoTemp.insert(loginLog))) {
+            return loginLog.getId();
+        } else {
+            return 0L;
+        }
+    }
+
+    /**
+     * 分页查询
+     *
+     * @param query    Query
+     * @param pageable Pageable
+     * @return Page LoginLogVo
+     */
+    public Page<LoginLogVo> findPage(Query query, Pageable pageable) {
+        return mongoTemp.findPage(query, pageable, CLAZZ);
+    }
 
 }

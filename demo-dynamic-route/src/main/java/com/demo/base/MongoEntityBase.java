@@ -1,5 +1,6 @@
 package com.demo.base;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -26,14 +27,27 @@ public class MongoEntityBase extends ToStringBase {
      * id
      */
     @Id
+    @Schema(description = "id")
     private Long id;
+    /**
+     * 创建者id
+     */
+    @Schema(description = "创建者id")
+    private Long createId;
     /**
      * 创建时间
      */
+    @Schema(description = "创建时间")
     private Timestamp createTime;
+    /**
+     * 更新者id
+     */
+    @Schema(description = "更新者id")
+    private Long updateId;
     /**
      * 更新时间
      */
+    @Schema(description = "更新时间")
     private Timestamp updateTime;
 
     /* ==================== vo ==================== */
@@ -41,21 +55,25 @@ public class MongoEntityBase extends ToStringBase {
      * 创建时间-结束
      */
     @Transient
+    @Schema(description = "创建时间-结束")
     private Timestamp createTimeEnd;
     /**
      * 创建时间-否定
      */
     @Transient
+    @Schema(description = "创建时间-否定")
     private Boolean createTimeNot;
     /**
      * 更新时间-结束
      */
     @Transient
+    @Schema(description = "更新时间-结束")
     private Timestamp updateTimeEnd;
     /**
      * 更新时间-否定
      */
     @Transient
+    @Schema(description = "更新时间-否定")
     private Boolean updateTimeNot;
 
     /* -------------------- 分页 -------------------- */
@@ -63,16 +81,19 @@ public class MongoEntityBase extends ToStringBase {
      * 分页-页码
      */
     @Transient
+    @Schema(description = "分页-页码")
     private Integer pages;
     /**
      * 分页-每页条数
      */
     @Transient
+    @Schema(description = "分页-每页条数")
     private Integer rows;
     /**
      * 分页-排序
      */
     @Transient
+    @Schema(description = "分页-排序")
     private String orderBy;
 
 }

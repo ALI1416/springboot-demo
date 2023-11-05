@@ -29,7 +29,7 @@ public class UserMongoService extends ServiceBase {
 
     private final UserMongoDao userMongoDao;
 
-    private static Criteria getCriteria(UserMongoVo userMongo) {
+    private static Criteria buildCriteria(UserMongoVo userMongo) {
         Criteria criteria = new Criteria();
         if (userMongo.getName() != null) {
             criteria.and("name").is(userMongo.getName());
@@ -63,7 +63,7 @@ public class UserMongoService extends ServiceBase {
      * @return 是否存在
      */
     public boolean exist(UserMongoVo userMongo) {
-        return userMongoDao.exist(Query.query(getCriteria(userMongo)));
+        return userMongoDao.exist(Query.query(buildCriteria(userMongo)));
     }
 
     /**
@@ -82,7 +82,7 @@ public class UserMongoService extends ServiceBase {
      * @return 总数
      */
     public long count(UserMongoVo userMongo) {
-        return userMongoDao.count(Query.query(getCriteria(userMongo)));
+        return userMongoDao.count(Query.query(buildCriteria(userMongo)));
     }
 
     /* ==================== 插入、插入或更新操作 ==================== */
@@ -146,7 +146,7 @@ public class UserMongoService extends ServiceBase {
      * @return 是否成功
      */
     public boolean delete(UserMongoVo userMongo) {
-        return userMongoDao.delete(Query.query(getCriteria(userMongo)));
+        return userMongoDao.delete(Query.query(buildCriteria(userMongo)));
     }
 
     /* ==================== 更新操作 ==================== */
@@ -199,7 +199,7 @@ public class UserMongoService extends ServiceBase {
      * @return UserMongoVo
      */
     public UserMongoVo findOne(UserMongoVo userMongo) {
-        return userMongoDao.findOne(Query.query(getCriteria(userMongo)));
+        return userMongoDao.findOne(Query.query(buildCriteria(userMongo)));
     }
 
     /**
@@ -228,7 +228,7 @@ public class UserMongoService extends ServiceBase {
      * @return List UserMongoVo
      */
     public List<UserMongoVo> find(UserMongoVo userMongo) {
-        Query query = Query.query(getCriteria(userMongo));
+        Query query = Query.query(buildCriteria(userMongo));
         return userMongoDao.find(query);
     }
 
@@ -239,7 +239,7 @@ public class UserMongoService extends ServiceBase {
      * @return PageInfo UserMongoVo
      */
     public PageInfo<UserMongoVo> findPage(UserMongoVo userMongo) {
-        Query query = Query.query(getCriteria(userMongo));
+        Query query = Query.query(buildCriteria(userMongo));
         Pageable pageable = buildPage(userMongo.getPages(), userMongo.getRows(), userMongo.getOrderBy());
         return new PageInfo<>(userMongoDao.findPage(query, pageable));
     }

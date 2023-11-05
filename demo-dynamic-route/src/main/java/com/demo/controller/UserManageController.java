@@ -7,7 +7,9 @@ import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
+import com.demo.entity.vo.LoginLogVo;
 import com.demo.entity.vo.UserVo;
+import com.demo.service.LoginLogService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +40,7 @@ public class UserManageController extends ControllerBase {
     private final T4s t4s;
     private final UserService userService;
     private final RouteService routeService;
+    private final LoginLogService loginLogService;
 
     /**
      * 创建用户
@@ -367,6 +370,28 @@ public class UserManageController extends ControllerBase {
         } else {
             return Result.o(t4s.getInfoPersist());
         }
+    }
+
+    /**
+     * 获取用户登录日志(限制)
+     */
+    @PostMapping("getLoginLogLimit")
+    @Operation(summary = "获取用户登录日志(限制)", description = "需要登录/createId(查询指定用户)")
+    public Result<PageInfo<LoginLogVo>> getLoginLogLimit(@RequestBody LoginLogVo loginLog) {
+        // 只能管理自己创建的用户
+        if (loginLog.getCreateId() == null || !userService.existIdAndCreateId(loginLog.getCreateId(), t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(loginLogService.findPage(loginLog));
+    }
+
+    /**
+     * 获取用户登录日志
+     */
+    @PostMapping("getLoginLog")
+    @Operation(summary = "获取用户登录日志")
+    public Result<PageInfo<LoginLogVo>> getLoginLog(@RequestBody LoginLogVo loginLog) {
+        return Result.o(loginLogService.findPage(loginLog));
     }
 
 }

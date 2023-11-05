@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 26/10/2023 16:38:56
+ Date: 05/11/2023 15:15:10
 */
 
 SET NAMES utf8mb4;
@@ -79,6 +79,7 @@ INSERT INTO `role_route` VALUES (4002, 4, 3004);
 INSERT INTO `role_route` VALUES (4003, 4, 3006);
 INSERT INTO `role_route` VALUES (4004, 4, 3008);
 INSERT INTO `role_route` VALUES (4006, 4, 3010);
+INSERT INTO `role_route` VALUES (4007, 4, 3012);
 INSERT INTO `role_route` VALUES (5000, 5, 4000);
 INSERT INTO `role_route` VALUES (5001, 5, 5000);
 
@@ -146,6 +147,8 @@ INSERT INTO `route` VALUES (3008, 'getLimit', '获取所有角色(限制)', 7, 3
 INSERT INTO `route` VALUES (3009, 'get', '获取所有角色', 8, 3000);
 INSERT INTO `route` VALUES (3010, 'userLimit', '获取用户的角色(限制)', 9, 3000);
 INSERT INTO `route` VALUES (3011, 'user', '获取用户的角色', 10, 3000);
+INSERT INTO `route` VALUES (3012, 'getLoginLogLimit', '获取用户登录日志(限制)', 11, 3000);
+INSERT INTO `route` VALUES (3013, 'getLoginLog', '获取用户登录日志', 12, 3000);
 INSERT INTO `route` VALUES (4000, 'route', '路由', 3, 0);
 INSERT INTO `route` VALUES (4001, 'create', '创建路由', 0, 4000);
 INSERT INTO `route` VALUES (4002, 'update', '修改路由', 1, 4000);

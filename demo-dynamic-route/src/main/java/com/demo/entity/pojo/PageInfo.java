@@ -4,7 +4,6 @@ import com.demo.base.ToStringBase;
 import com.github.pagehelper.Page;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -23,89 +22,94 @@ import java.util.List;
 public class PageInfo<T> extends ToStringBase {
 
     /**
-     * 总页数
+     * 总页数(从1开始)
      */
-    @Schema(description = "总页数")
+    @Schema(description = "总页数(从1开始)")
     private final int pages;
     /**
-     * 每页条数
+     * 当前页码(从1开始)
      */
-    @Schema(description = "每页条数")
-    private final int rows;
-    /**
-     * 当前页码
-     */
-    @Schema(description = "当前页码")
+    @Schema(description = "当前页码(从1开始)")
     private final int page;
-    /**
-     * 当前页条数
-     */
-    @Schema(description = "当前页条数")
-    private final int row;
     /**
      * 总条数
      */
     @Schema(description = "总条数")
     private final long total;
     /**
-     * 数据
+     * 每页条数
      */
-    @Schema(description = "数据")
-    private final List<T> data;
+    @Schema(description = "每页条数")
+    private final int rows;
+    /**
+     * 当前页条数
+     */
+    @Schema(description = "当前页条数")
+    private final int row;
+    /**
+     * 数据列表
+     */
+    @Schema(description = "数据列表")
+    private final List<T> list;
 
     /**
-     * 构造函数
+     * 构造函数(未分页)
      *
-     * @param data 数据
+     * @param data 数据列表
      */
     public PageInfo(List<T> data) {
-        this.data = data;
-        row = data.size();
-        rows = row;
-        total = row;
+        // 总页数(从1开始)
+        pages = 1;
+        // 当前页码(从1开始)
         page = 1;
-        pages = row == 0 ? 0 : 1;
-    }
-
-    /**
-     * 构造函数
-     *
-     * @param page 分页
-     */
-    public PageInfo(Page<T> page) {
-        pages = page.getPages();
-        rows = page.getPageSize();
-        this.page = page.getPageNum();
-        row = page.size();
-        total = page.getTotal();
-        data = page;
-    }
-
-    /**
-     * 构造函数
-     *
-     * @param page 分页
-     */
-    public PageInfo(org.springframework.data.domain.Page<T> page) {
-        this(page.getContent(), page.getPageable(), page.getTotalElements());
-    }
-
-    /**
-     * 构造函数
-     *
-     * @param data     数据
-     * @param pageable Pageable
-     * @param total    总条数
-     */
-    public PageInfo(List<T> data, Pageable pageable, long total) {
-        this.data = data;
-        this.total = total;
+        // 当前页条数
         row = data.size();
-        rows = pageable.getPageSize();
-        // 当前页码修正(从1开始)
-        page = pageable.getPageNumber() + 1;
-        // 总页数=总条数/每页条数
-        pages = total == 0 ? 0 : ((int) ((total - 1) / rows) + 1);
+        // 总条数
+        total = row;
+        // 每页条数
+        rows = row;
+        // 数据列表
+        list = data;
+    }
+
+    /**
+     * 构造函数(PageHelper分页)
+     *
+     * @param data PageHelper分页
+     */
+    public PageInfo(Page<T> data) {
+        // 当前页码(从1开始)
+        page = data.getPageNum();
+        // 总条数
+        total = data.getTotal();
+        // 每页条数
+        rows = data.getPageSize();
+        // 总页数(从1开始)=总条数/每页条数
+        pages = total == 0 ? 1 : ((int) ((total - 1) / rows) + 1);
+        // 当前页条数
+        row = data.size();
+        // 数据列表
+        list = data;
+    }
+
+    /**
+     * 构造函数(MongoDB分页)
+     *
+     * @param data MongoDB分页
+     */
+    public PageInfo(cn.z.mongo.entity.Page<T> data) {
+        // 总页数(从1开始)
+        pages = data.getPages();
+        // 当前页码(从1开始)
+        page = data.getPage();
+        // 总条数
+        total = data.getTotal();
+        // 每页条数
+        rows = data.getRows();
+        // 当前页条数
+        row = data.getRow();
+        // 数据列表
+        list = data.getList();
     }
 
 }

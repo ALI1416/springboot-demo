@@ -13,6 +13,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       max-lifetime: 60000
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: mongodb://127.0.0.1:27017/demo
   redis:
     database: 0
     host: 127.0.0.1
