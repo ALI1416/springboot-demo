@@ -226,7 +226,7 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getInfoByTokenLimit")
     @Operation(summary = "获取用户token认证信息(限制)")
     @Parameter(name = "token", description = "用户token")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<? extends TokenInfo> getInfoByTokenLimit(String token, @RequestParam(required = false, defaultValue = "false") boolean extra) {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
@@ -249,7 +249,7 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getInfoByToken")
     @Operation(summary = "获取用户token认证信息")
     @Parameter(name = "token", description = "用户token")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<? extends TokenInfo> getInfoByToken(String token, @RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {
             return Result.o(t4s.getInfoExtraByToken(token));
@@ -264,7 +264,7 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getInfoByIdLimit")
     @Operation(summary = "获取用户id认证信息(限制)")
     @Parameter(name = "id", description = "用户id")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoByTokenLimit(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(id, t4s.getId())) {
@@ -283,7 +283,7 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getInfoById")
     @Operation(summary = "获取用户id认证信息")
     @Parameter(name = "id", description = "用户id")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoByToken(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {
             return Result.o(t4s.getInfoExtraById(id));
@@ -297,7 +297,7 @@ public class UserManageController extends ControllerBase {
      */
     @GetMapping("getInfoLimit")
     @Operation(summary = "获取所有用户认证信息(限制)")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
         if (extra) {
@@ -320,7 +320,7 @@ public class UserManageController extends ControllerBase {
      */
     @GetMapping("getInfo")
     @Operation(summary = "获取所有用户认证信息")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfo(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {
             return Result.o(t4s.getInfoExtra());
@@ -334,7 +334,7 @@ public class UserManageController extends ControllerBase {
      */
     @GetMapping("getInfoPersistLimit")
     @Operation(summary = "获取用户不过期认证信息(限制)")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoPersistLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
         if (extra) {
@@ -363,12 +363,116 @@ public class UserManageController extends ControllerBase {
      */
     @GetMapping("getInfoPersist")
     @Operation(summary = "获取用户不过期认证信息")
-    @Parameter(name = "extra", description = "是否查询拓展信息(默认false)")
+    @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoPersist(@RequestParam(required = false, defaultValue = "false") boolean extra) {
         if (extra) {
             return Result.o(t4s.getInfoExtraPersist());
         } else {
             return Result.o(t4s.getInfoPersist());
+        }
+    }
+
+    /**
+     * 设置用户token过期时间(限制)
+     */
+    @GetMapping("setExpireByTokenLimit")
+    @Operation(summary = "设置用户token过期时间(限制)")
+    @Parameter(name = "token", description = "用户token")
+    @Parameter(name = "timeout", description = "过期时间(默认:默认值)")
+    public Result<Boolean> setExpireByTokenLimit(String token, @RequestParam(required = false, defaultValue = "-1") long timeout) {
+        // 只能管理自己创建的用户
+        Long id = t4s.getId(token);
+        if (id == null) {
+            return Result.e(ResultEnum.USER_NOT_LOGIN);
+        }
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        if (timeout == -1) {
+            return Result.o(t4s.expire(token));
+        } else {
+            return Result.o(t4s.expire(token, timeout));
+        }
+    }
+
+    /**
+     * 设置用户token过期时间
+     */
+    @GetMapping("setExpireByToken")
+    @Operation(summary = "设置用户token过期时间")
+    @Parameter(name = "token", description = "用户token")
+    @Parameter(name = "timeout", description = "过期时间(默认:默认值)")
+    public Result<Boolean> setExpireByToken(String token, @RequestParam(required = false, defaultValue = "-1") long timeout) {
+        if (timeout == -1) {
+            return Result.o(t4s.expire(token));
+        } else {
+            return Result.o(t4s.expire(token, timeout));
+        }
+    }
+
+    /**
+     * 设置用户token永不过期(限制)
+     */
+    @GetMapping("setPersistByTokenLimit")
+    @Operation(summary = "设置用户token永不过期(限制)")
+    @Parameter(name = "token", description = "用户token")
+    public Result<Boolean> setPersistByTokenLimit(String token) {
+        // 只能管理自己创建的用户
+        Long id = t4s.getId(token);
+        if (id == null) {
+            return Result.e(ResultEnum.USER_NOT_LOGIN);
+        }
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        return Result.o(t4s.persist(token));
+    }
+
+    /**
+     * 设置用户token永不过期
+     */
+    @GetMapping("setPersistByToken")
+    @Operation(summary = "设置用户token永不过期")
+    @Parameter(name = "token", description = "用户token")
+    public Result<Boolean> setPersistByToken(String token) {
+        return Result.o(t4s.persist(token));
+    }
+
+    /**
+     * 设置用户token拓展内容(限制)
+     */
+    @GetMapping("setExtraByTokenLimit")
+    @Operation(summary = "设置用户token拓展内容(限制)")
+    @Parameter(name = "token", description = "用户token")
+    @Parameter(name = "extra", description = "拓展内容(默认:清除)")
+    public Result<Boolean> setExtraByTokenLimit(String token, @RequestParam(required = false, defaultValue = "") String extra) {
+        // 只能管理自己创建的用户
+        Long id = t4s.getId(token);
+        if (id == null) {
+            return Result.e(ResultEnum.USER_NOT_LOGIN);
+        }
+        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+        }
+        if (extra.isEmpty()) {
+            return Result.o(t4s.clearExtra(token));
+        } else {
+            return Result.o(t4s.setExtra(token, extra));
+        }
+    }
+
+    /**
+     * 设置用户token拓展内容
+     */
+    @GetMapping("setExtraByToken")
+    @Operation(summary = "设置用户token拓展内容")
+    @Parameter(name = "token", description = "用户token")
+    @Parameter(name = "extra", description = "拓展内容(默认:清除)")
+    public Result<Boolean> setExtraByToken(String token, @RequestParam(required = false, defaultValue = "") String extra) {
+        if (extra.isEmpty()) {
+            return Result.o(t4s.clearExtra(token));
+        } else {
+            return Result.o(t4s.setExtra(token, extra));
         }
     }
 

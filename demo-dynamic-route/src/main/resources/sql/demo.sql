@@ -11,7 +11,7 @@
  Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 05/11/2023 15:15:10
+ Date: 08/11/2023 16:54:32
 */
 
 SET NAMES utf8mb4;
@@ -72,6 +72,10 @@ INSERT INTO `role_route` VALUES (2007, 2, 2014);
 INSERT INTO `role_route` VALUES (2008, 2, 2016);
 INSERT INTO `role_route` VALUES (2009, 2, 2018);
 INSERT INTO `role_route` VALUES (2010, 2, 2020);
+INSERT INTO `role_route` VALUES (2011, 2, 2022);
+INSERT INTO `role_route` VALUES (2012, 2, 2024);
+INSERT INTO `role_route` VALUES (2013, 2, 2026);
+INSERT INTO `role_route` VALUES (2014, 2, 2028);
 INSERT INTO `role_route` VALUES (3000, 3, 3000);
 INSERT INTO `role_route` VALUES (4000, 4, 3001);
 INSERT INTO `role_route` VALUES (4001, 4, 3002);
@@ -79,7 +83,6 @@ INSERT INTO `role_route` VALUES (4002, 4, 3004);
 INSERT INTO `role_route` VALUES (4003, 4, 3006);
 INSERT INTO `role_route` VALUES (4004, 4, 3008);
 INSERT INTO `role_route` VALUES (4006, 4, 3010);
-INSERT INTO `role_route` VALUES (4007, 4, 3012);
 INSERT INTO `role_route` VALUES (5000, 5, 4000);
 INSERT INTO `role_route` VALUES (5001, 5, 5000);
 
@@ -135,6 +138,14 @@ INSERT INTO `route` VALUES (2018, 'getInfoLimit', '获取所有用户认证信�
 INSERT INTO `route` VALUES (2019, 'getInfo', '获取所有用户认证信息', 18, 2000);
 INSERT INTO `route` VALUES (2020, 'getInfoPersistLimit', '获取不过期用户认证信息(限制)', 19, 2000);
 INSERT INTO `route` VALUES (2021, 'getInfoPersist', '获取不过期用户认证信息', 20, 2000);
+INSERT INTO `route` VALUES (2022, 'setExpireByTokenLimit', '设置用户token过期时间(限制)', 21, 2000);
+INSERT INTO `route` VALUES (2023, 'setExpireByToken', '设置用户token过期时间', 22, 2000);
+INSERT INTO `route` VALUES (2024, 'setPersistByTokenLimit', '设置用户token永不过期(限制)', 23, 2000);
+INSERT INTO `route` VALUES (2025, 'setPersistByToken', '设置用户token永不过期', 24, 2000);
+INSERT INTO `route` VALUES (2026, 'setExtraByTokenLimit', '设置用户token拓展内容(限制)', 25, 2000);
+INSERT INTO `route` VALUES (2027, 'setExtraByToken', '设置用户token拓展内容', 26, 2000);
+INSERT INTO `route` VALUES (2028, 'getLoginLogLimit', '获取用户登录日志(限制)', 27, 2000);
+INSERT INTO `route` VALUES (2029, 'getLoginLog', '获取用户登录日志', 28, 2000);
 INSERT INTO `route` VALUES (3000, 'role', '角色', 2, 0);
 INSERT INTO `route` VALUES (3001, 'create', '创建角色', 0, 3000);
 INSERT INTO `route` VALUES (3002, 'deleteLimit', '删除角色(限制)', 1, 3000);
@@ -147,8 +158,6 @@ INSERT INTO `route` VALUES (3008, 'getLimit', '获取所有角色(限制)', 7, 3
 INSERT INTO `route` VALUES (3009, 'get', '获取所有角色', 8, 3000);
 INSERT INTO `route` VALUES (3010, 'userLimit', '获取用户的角色(限制)', 9, 3000);
 INSERT INTO `route` VALUES (3011, 'user', '获取用户的角色', 10, 3000);
-INSERT INTO `route` VALUES (3012, 'getLoginLogLimit', '获取用户登录日志(限制)', 11, 3000);
-INSERT INTO `route` VALUES (3013, 'getLoginLog', '获取用户登录日志', 12, 3000);
 INSERT INTO `route` VALUES (4000, 'route', '路由', 3, 0);
 INSERT INTO `route` VALUES (4001, 'create', '创建路由', 0, 4000);
 INSERT INTO `route` VALUES (4002, 'update', '修改路由', 1, 4000);
