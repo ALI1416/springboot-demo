@@ -132,7 +132,7 @@ public class LoginLog extends EntityBase {
                 browser = "";
             }
             // 浏览器标识-是移动端
-            isMobile = userAgentInfo.isMobile();
+            isMobile = userAgentInfo.getMobile();
         }
     }
 
