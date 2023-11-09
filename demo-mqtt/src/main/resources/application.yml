@@ -11,7 +11,7 @@ mqtt:
   uri: tcp://127.0.0.1:1883
   connection-timeout: 30
   keep-alive-interval: 60
-  clean-session: false
+  clean-session: true
   automatic-reconnect: true
 
 logging:

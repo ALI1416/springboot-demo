@@ -1,5 +1,6 @@
 package com.demo.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -8,6 +9,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -27,7 +29,15 @@ import java.util.List;
  **/
 @Configuration
 @EnableWebSocketMessageBroker
+@AllArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    // private final SubProtocolWebSocketHandler subProtocolWebSocketHandler;
+
+    /**
+     * 关闭连接消息
+     */
+    public static final Message<byte[]> DISCONNECT_MESSAGE = MessageBuilder.createMessage(new byte[0], StompHeaderAccessor.create(StompCommand.DISCONNECT).getMessageHeaders());
 
     /**
      * 前缀
@@ -59,17 +69,32 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                // 不是stomp协议
                 if (accessor == null) {
                     return null;
                 }
-                // 首次连接设置用户名
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    List<String> username = accessor.getNativeHeader("username");
-                    if (username == null || username.isEmpty()) {
-                        return null;
+                StompCommand command = accessor.getCommand();
+                // 没有command命令
+                if (command == null) {
+                    return null;
+                }
+                switch (command) {
+                    // 首次连接
+                    case CONNECT: {
+                        List<String> usernameList = accessor.getNativeHeader("username");
+                        // 没有用户名
+                        if (usernameList == null || usernameList.isEmpty()) {
+                            return null;
+                        }
+                        String username = usernameList.get(0);
+                        if (username == null || username.isEmpty()) {
+                            return null;
+                        }
+                        // 设置用户名
+                        accessor.setUser(() -> username);
+                        break;
                     }
-                    accessor.setUser(() -> username.get(0));
-                    return message;
+                    default:
                 }
                 return message;
             }
