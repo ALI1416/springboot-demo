@@ -3,17 +3,22 @@ package com.demo.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.GenericMessage;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <h1>WebSocket配置</h1>
@@ -44,9 +49,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        ThreadPoolTaskScheduler heartbeat = new ThreadPoolTaskScheduler();
+        heartbeat.setPoolSize(1);
+        heartbeat.setThreadNamePrefix("ws-heartbeat-");
+        heartbeat.initialize();
         registry.setApplicationDestinationPrefixes("/app") // 客户端--->服务端
                 .setUserDestinationPrefix("/user/") // 客户端<--->客户端
                 .enableSimpleBroker("/topic", "/queue") // 服务端--->客户端(广播、队列)
+                .setHeartbeatValue(new long[]{10000, 10000}) // 心跳
+                .setTaskScheduler(heartbeat) // 心跳定时器
         ;
     }
 
@@ -60,20 +71,45 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (accessor == null) {
-                    return null;
+                    return getDisconnectMessage(message);
                 }
-                // 首次连接设置用户名
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    List<String> username = accessor.getNativeHeader("username");
-                    if (username == null || username.isEmpty()) {
-                        return null;
-                    }
-                    accessor.setUser(() -> username.get(0));
+                StompCommand command = accessor.getCommand();
+                // 心跳
+                if (command == null) {
                     return message;
+                }
+                switch (command) {
+                    // 首次连接
+                    case CONNECT: {
+                        List<String> usernameList = accessor.getNativeHeader("username");
+                        // 没有用户名
+                        if (usernameList == null || usernameList.isEmpty()) {
+                            return getDisconnectMessage(message);
+                        }
+                        String username = usernameList.get(0);
+                        if (username == null || username.isEmpty()) {
+                            return getDisconnectMessage(message);
+                        }
+                        // 设置用户名
+                        accessor.setUser(() -> username);
+                        break;
+                    }
+                    default:
                 }
                 return message;
             }
         });
+    }
+
+    /**
+     * 获取关闭连接消息
+     */
+    private Message<?> getDisconnectMessage(Message<?> message) {
+        Map<String, Object> headers = new HashMap<>(3);
+        headers.put("simpMessageType", SimpMessageType.DISCONNECT);
+        headers.put("stompCommand", StompCommand.DISCONNECT);
+        headers.put("simpSessionId", message.getHeaders().get("simpSessionId"));
+        return new GenericMessage<>(new byte[0], headers);
     }
 
 }

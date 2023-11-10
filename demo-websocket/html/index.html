@@ -12,9 +12,11 @@
 <body>
 <div>
   <h3>配置</h3>
-  <label for="urlText">URL：</label><input id="urlText" type="text" value="ws://127.0.0.1:8080/ws">
+  <label for="urlText">URL：</label>
+  <input id="urlText" type="text" value="ws://127.0.0.1:8080/ws">
   <br>
-  <label for="usernameText">用户名：</label><input id="usernameText" type="text" size="10" value="ali">
+  <label for="usernameText">用户名：</label>
+  <input id="usernameText" type="text" size="10" value="ali">
   <button id="connectBtn">连接</button>
   <h4>连接错误信息：</h4>
   <textarea id="errorMsg" readonly cols="30" rows="3"></textarea>
@@ -24,12 +26,21 @@
   <input id="broadcastText" type="text" value="发送广播">
   <button id="broadcastBtn" disabled>发送</button>
   <h4>广播消息：</h4>
+  <label for="broadcastSubscribeText">订阅地址：</label>
+  <input id="broadcastSubscribeText" type="text" value="/topic/broadcast">
+  <br>
   <textarea id="broadcastMsg" readonly cols="30" rows="3"></textarea>
   <h4>广播消息2：</h4>
+  <label for="broadcast2SubscribeText">订阅地址：</label>
+  <input id="broadcast2SubscribeText" type="text" value="/topic/broadcast2">
+  <br>
   <textarea id="broadcast2Msg" readonly cols="30" rows="3"></textarea>
 </div>
 <div>
   <h3>订阅形式</h3>
+  <label for="subscribeText">订阅地址：</label>
+  <input id="subscribeText" type="text" value="/app/subscribe/订阅消息">
+  <br>
   <textarea id="subscribeMsg" readonly cols="30" rows="3"></textarea>
 </div>
 <div>
@@ -40,6 +51,9 @@
   <input id="userText" type="text" value="发送到用户">
   <button id="userBtn" disabled>发送</button>
   <h4>用户消息：</h4>
+  <label for="userSubscribeText">订阅地址：</label>
+  <input id="userSubscribeText" type="text" value="/user/queue/sendToUser">
+  <br>
   <textarea id="userMsg" readonly cols="30" rows="3"></textarea>
 </div>
 </body>
@@ -49,11 +63,15 @@
   const connectBtn = document.getElementById('connectBtn')
   const errorMsg = document.getElementById('errorMsg')
   const broadcastText = document.getElementById('broadcastText')
+  const broadcastSubscribeText = document.getElementById('broadcastSubscribeText')
   const broadcastBtn = document.getElementById('broadcastBtn')
   const broadcastMsg = document.getElementById('broadcastMsg')
   const broadcast2Msg = document.getElementById('broadcast2Msg')
+  const broadcast2SubscribeText = document.getElementById('broadcast2SubscribeText')
   const subscribeMsg = document.getElementById('subscribeMsg')
+  const subscribeText = document.getElementById('subscribeText')
   const userSendUsernameText = document.getElementById('userSendUsernameText')
+  const userSubscribeText = document.getElementById('userSubscribeText')
   const userText = document.getElementById('userText')
   const userBtn = document.getElementById('userBtn')
   const userMsg = document.getElementById('userMsg')
@@ -90,19 +108,19 @@
   function connectCallback() {
     connectStatus(true)
     // 广播消息
-    stomp.subscribe('/topic/broadcast', function (res) {
+    stomp.subscribe(broadcastSubscribeText.value, function (res) {
       broadcastMsg.value = res.body + '\n' + broadcastMsg.value
     })
     // 广播消息2
-    stomp.subscribe('/topic/broadcast2', function (res) {
+    stomp.subscribe(broadcast2SubscribeText.value, function (res) {
       broadcast2Msg.value = res.body + '\n' + broadcast2Msg.value
     })
     // 订阅消息
-    stomp.subscribe('/app/subscribe/订阅消息', function (res) {
+    stomp.subscribe(subscribeText.value, function (res) {
       subscribeMsg.value = res.body + '\n' + subscribeMsg.value
     })
     // 用户消息
-    stomp.subscribe('/user/queue/sendToUser', function (res) {
+    stomp.subscribe(userSubscribeText.value, function (res) {
       userMsg.value = res.body + '\n' + userMsg.value
     })
   }

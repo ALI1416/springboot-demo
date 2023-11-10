@@ -1,21 +1,24 @@
 package com.demo.config;
 
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.messaging.support.GenericMessage;
 import org.springframework.messaging.support.MessageHeaderAccessor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <h1>WebSocket配置</h1>
@@ -29,15 +32,7 @@ import java.util.List;
  **/
 @Configuration
 @EnableWebSocketMessageBroker
-@AllArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    // private final SubProtocolWebSocketHandler subProtocolWebSocketHandler;
-
-    /**
-     * 关闭连接消息
-     */
-    public static final Message<byte[]> DISCONNECT_MESSAGE = MessageBuilder.createMessage(new byte[0], StompHeaderAccessor.create(StompCommand.DISCONNECT).getMessageHeaders());
 
     /**
      * 前缀
@@ -54,9 +49,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        ThreadPoolTaskScheduler heartbeat = new ThreadPoolTaskScheduler();
+        heartbeat.setPoolSize(1);
+        heartbeat.setThreadNamePrefix("ws-heartbeat-");
+        heartbeat.initialize();
         registry.setApplicationDestinationPrefixes("/app") // 客户端--->服务端
                 .setUserDestinationPrefix("/user/") // 客户端<--->客户端
                 .enableSimpleBroker("/topic", "/queue") // 服务端--->客户端(广播、队列)
+                .setHeartbeatValue(new long[]{10000, 10000}) // 心跳
+                .setTaskScheduler(heartbeat) // 心跳定时器
         ;
     }
 
@@ -69,14 +70,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                // 不是stomp协议
                 if (accessor == null) {
-                    return null;
+                    return getDisconnectMessage(message);
                 }
                 StompCommand command = accessor.getCommand();
-                // 没有command命令
+                // 心跳
                 if (command == null) {
-                    return null;
+                    return message;
                 }
                 switch (command) {
                     // 首次连接
@@ -84,11 +84,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         List<String> usernameList = accessor.getNativeHeader("username");
                         // 没有用户名
                         if (usernameList == null || usernameList.isEmpty()) {
-                            return null;
+                            return getDisconnectMessage(message);
                         }
                         String username = usernameList.get(0);
                         if (username == null || username.isEmpty()) {
-                            return null;
+                            return getDisconnectMessage(message);
                         }
                         // 设置用户名
                         accessor.setUser(() -> username);
@@ -99,6 +99,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 return message;
             }
         });
+    }
+
+    /**
+     * 获取关闭连接消息
+     */
+    private Message<?> getDisconnectMessage(Message<?> message) {
+        Map<String, Object> headers = new HashMap<>(3);
+        headers.put("simpMessageType", SimpMessageType.DISCONNECT);
+        headers.put("stompCommand", StompCommand.DISCONNECT);
+        headers.put("simpSessionId", message.getHeaders().get("simpSessionId"));
+        return new GenericMessage<>(new byte[0], headers);
     }
 
 }
