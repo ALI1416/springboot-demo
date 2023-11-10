@@ -8,8 +8,6 @@ import cn.z.minio.entity.*;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.DeleteObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +19,10 @@ import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <h1>Minio模板</h1>
@@ -35,10 +36,6 @@ import java.util.*;
  **/
 public class MinioTemp {
 
-    /**
-     * 日志实例
-     */
-    private static final Logger log = LoggerFactory.getLogger(MinioTemp.class);
     /**
      * Minio客户端
      */
@@ -71,8 +68,7 @@ public class MinioTemp {
         try {
             return Bucket.toList(minioClient.listBuckets());
         } catch (Exception e) {
-            log.error("[获取所有储存桶]异常！", e);
-            return new ArrayList<>(0);
+            throw new MinioException(e);
         }
     }
 
@@ -88,8 +84,7 @@ public class MinioTemp {
                     BucketExistsArgs.builder().bucket(bucket).build() //
             );
         } catch (Exception e) {
-            log.error("[是否存在储存桶]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -97,17 +92,14 @@ public class MinioTemp {
      * 创建储存桶
      *
      * @param bucket 储存桶
-     * @return 是否成功
      */
-    public boolean bucketCreate(String bucket) {
+    public void bucketCreate(String bucket) {
         try {
             minioClient.makeBucket( //
                     MakeBucketArgs.builder().bucket(bucket).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[创建储存桶]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -115,17 +107,14 @@ public class MinioTemp {
      * 删除储存桶
      *
      * @param bucket 储存桶
-     * @return 是否成功
      */
-    public boolean bucketDelete(String bucket) {
+    public void bucketDelete(String bucket) {
         try {
             minioClient.removeBucket( //
                     RemoveBucketArgs.builder().bucket(bucket).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[删除储存桶]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -146,8 +135,7 @@ public class MinioTemp {
                     GetBucketTagsArgs.builder().bucket(bucket).build() //
             ).get();
         } catch (Exception e) {
-            log.error("[获取储存桶的标签]异常！", e);
-            return new HashMap<>(0);
+            throw new MinioException(e);
         }
     }
 
@@ -156,17 +144,14 @@ public class MinioTemp {
      *
      * @param bucket 储存桶
      * @param tagMap Map
-     * @return 是否成功
      */
-    public boolean bucketTagSet(String bucket, Map<String, String> tagMap) {
+    public void bucketTagSet(String bucket, Map<String, String> tagMap) {
         try {
             minioClient.setBucketTags( //
                     SetBucketTagsArgs.builder().bucket(bucket).tags(tagMap).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[设置储存桶的标签]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -176,15 +161,13 @@ public class MinioTemp {
      * @param bucket 储存桶
      * @return 是否成功
      */
-    public boolean bucketTagDelete(String bucket) {
+    public void bucketTagDelete(String bucket) {
         try {
             minioClient.deleteBucketTags( //
                     DeleteBucketTagsArgs.builder().bucket(bucket).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[删除储存桶的全部标签]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -205,8 +188,7 @@ public class MinioTemp {
                     ListObjectsArgs.builder().bucket(bucket).build() //
             ));
         } catch (Exception e) {
-            log.error("[获取根路径的所有对象]异常！", e);
-            return new ArrayList<>(0);
+            throw new MinioException(e);
         }
     }
 
@@ -223,8 +205,7 @@ public class MinioTemp {
                     ListObjectsArgs.builder().bucket(bucket).prefix(path + "/").build() //
             ));
         } catch (Exception e) {
-            log.error("[获取指定路径的所有对象]异常！", e);
-            return new ArrayList<>(0);
+            throw new MinioException(e);
         }
     }
 
@@ -241,8 +222,7 @@ public class MinioTemp {
                     StatObjectArgs.builder().bucket(bucket).object(path).build() //
             ));
         } catch (Exception e) {
-            log.error("[获取对象状态]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -259,8 +239,7 @@ public class MinioTemp {
                     GetObjectArgs.builder().bucket(bucket).object(path).build() //
             ));
         } catch (Exception e) {
-            log.error("[获取对象]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -285,8 +264,7 @@ public class MinioTemp {
             );
             return true;
         } catch (Exception e) {
-            log.info("[显示对象]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -325,8 +303,7 @@ public class MinioTemp {
             );
             return true;
         } catch (Exception e) {
-            log.info("[下载对象]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -336,17 +313,14 @@ public class MinioTemp {
      * @param bucket    储存桶
      * @param path      路径
      * @param localPath 本地路径
-     * @return 是否成功
      */
-    public boolean objectDownloadLocal(String bucket, String path, String localPath) {
+    public void objectDownloadLocal(String bucket, String path, String localPath) {
         try {
             minioClient.downloadObject( //
                     DownloadObjectArgs.builder().bucket(bucket).object(path).filename(localPath).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[下载对象到本地]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -379,8 +353,7 @@ public class MinioTemp {
                     ).build() //
             ));
         } catch (Exception e) {
-            log.error("[复制对象]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -402,8 +375,7 @@ public class MinioTemp {
                     ComposeObjectArgs.builder().bucket(bucket).object(newPath).sources(list).build() //
             ));
         } catch (Exception e) {
-            log.error("[合并分片对象]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -412,17 +384,14 @@ public class MinioTemp {
      *
      * @param bucket 储存桶
      * @param path   路径
-     * @return 是否成功
      */
-    public boolean objectDelete(String bucket, String path) {
+    public void objectDelete(String bucket, String path) {
         try {
             minioClient.removeObject( //
                     RemoveObjectArgs.builder().bucket(bucket).object(path).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[删除对象]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -443,8 +412,7 @@ public class MinioTemp {
                     RemoveObjectsArgs.builder().bucket(bucket).objects(list).build() //
             ));
         } catch (Exception e) {
-            log.error("[删除对象列表]异常！", e);
-            return new ArrayList<>(0);
+            throw new MinioException(e);
         }
     }
 
@@ -480,8 +448,7 @@ public class MinioTemp {
                             .build() //
             ));
         } catch (Exception e) {
-            log.error("[上传对象]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -512,8 +479,7 @@ public class MinioTemp {
             try {
                 inputStreamList.add(multipartFile.getInputStream());
             } catch (Exception e) {
-                log.error("[上传对象数组]添加文件异常！", e);
-                return null;
+                throw new MinioException(e);
             }
         }
         List<SnowballObject> list = new ArrayList<>();
@@ -530,8 +496,7 @@ public class MinioTemp {
                     UploadSnowballObjectsArgs.builder().bucket(bucket).objects(list).build() //
             ));
         } catch (Exception e) {
-            log.error("[上传对象数组]异常！", e);
-            return null;
+            throw new MinioException(e);
         } finally {
             for (InputStream inputStream : inputStreamList) {
                 try {
@@ -559,8 +524,7 @@ public class MinioTemp {
                             .build() //
             ));
         } catch (Exception e) {
-            log.error("[创建文件夹]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -582,8 +546,7 @@ public class MinioTemp {
                             .build() //
             ));
         } catch (Exception e) {
-            log.error("[从本地上传对象]异常！", e);
-            return null;
+            throw new MinioException(e);
         }
     }
 
@@ -605,8 +568,7 @@ public class MinioTemp {
                     GetObjectTagsArgs.builder().bucket(bucket).object(path).build() //
             ).get();
         } catch (Exception e) {
-            log.error("[获取对象的标签]异常！", e);
-            return new HashMap<>(0);
+            throw new MinioException(e);
         }
     }
 
@@ -617,15 +579,13 @@ public class MinioTemp {
      * @param path   路径
      * @return 是否成功
      */
-    public boolean objectTagSet(String bucket, String path, Map<String, String> tags) {
+    public void objectTagSet(String bucket, String path, Map<String, String> tags) {
         try {
             minioClient.setObjectTags( //
                     SetObjectTagsArgs.builder().bucket(bucket).object(path).tags(tags).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[设置对象的标签]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -634,17 +594,14 @@ public class MinioTemp {
      *
      * @param bucket 储存桶
      * @param path   路径
-     * @return 是否成功
      */
-    public boolean objectTagDelete(String bucket, String path) {
+    public void objectTagDelete(String bucket, String path) {
         try {
             minioClient.deleteObjectTags( //
                     DeleteObjectTagsArgs.builder().bucket(bucket).object(path).build() //
             );
-            return true;
         } catch (Exception e) {
-            log.error("[删除对象的全部标签]异常！", e);
-            return false;
+            throw new MinioException(e);
         }
     }
 
@@ -672,8 +629,7 @@ public class MinioTemp {
                             .build() //
             );
         } catch (Exception e) {
-            log.error("[获取删除对象的URL]异常！", e);
-            return "";
+            throw new MinioException(e);
         }
     }
 
@@ -698,8 +654,7 @@ public class MinioTemp {
                             .build() //
             );
         } catch (Exception e) {
-            log.error("[获取修改对象的URL]异常！", e);
-            return "";
+            throw new MinioException(e);
         }
     }
 
@@ -722,8 +677,7 @@ public class MinioTemp {
                             .build() //
             );
         } catch (Exception e) {
-            log.error("[获取下载对象的URL]异常！", e);
-            return "";
+            throw new MinioException(e);
         }
     }
 

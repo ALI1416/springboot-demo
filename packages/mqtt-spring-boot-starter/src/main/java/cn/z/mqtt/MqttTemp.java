@@ -1,9 +1,6 @@
 package cn.z.mqtt;
 
 import cn.z.mqtt.annotation.MqttAnnotationProcessor;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 
@@ -18,11 +15,6 @@ import java.nio.charset.StandardCharsets;
  * @since 1.0.0
  **/
 public class MqttTemp {
-
-    /**
-     * 日志实例
-     */
-    private static final Logger log = LoggerFactory.getLogger(MqttTemp.class);
 
     /**
      * MQTT注解处理
@@ -82,8 +74,8 @@ public class MqttTemp {
     public void send(String topic, byte[] msg, int qos, boolean retain) {
         try {
             mqttAnnotationProcessor.getMqttClient().publish(topic, msg, qos, retain);
-        } catch (MqttException e) {
-            log.error("发送失败", e);
+        } catch (Exception e) {
+            throw new MqttException(e);
         }
     }
 

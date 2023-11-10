@@ -6,8 +6,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
-import javax.mail.MessagingException;
-
 /**
  * <h1>邮件模板</h1>
  *
@@ -92,8 +90,8 @@ public class MailTemp {
             message.setTo(to);
             message.setSubject(subject);
             message.setText(text, true);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new MailException(e);
         }
         javaMailSender.send(message.getMimeMessage());
     }

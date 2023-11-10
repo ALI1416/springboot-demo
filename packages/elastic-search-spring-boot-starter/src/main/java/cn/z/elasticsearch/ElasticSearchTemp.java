@@ -18,8 +18,6 @@ import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -38,10 +36,6 @@ import java.util.Map;
  **/
 public class ElasticSearchTemp {
 
-    /**
-     * 日志实例
-     */
-    private static final Logger log = LoggerFactory.getLogger(ElasticSearchTemp.class);
     /**
      * ElasticSearch客户端
      */
@@ -72,8 +66,7 @@ public class ElasticSearchTemp {
         try {
             return new CreateIndexResponse(elasticSearchClient.indices().create(c -> c.index(index)));
         } catch (Exception e) {
-            log.error("[创建索引]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -88,8 +81,7 @@ public class ElasticSearchTemp {
         try {
             return new CreateIndexResponse(elasticSearchClient.indices().create(c -> c.index(index).mappings(mapping)));
         } catch (Exception e) {
-            log.error("[创建特殊索引]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -103,8 +95,7 @@ public class ElasticSearchTemp {
         try {
             return new BooleanResponse(elasticSearchClient.indices().exists(c -> c.index(index)));
         } catch (Exception e) {
-            log.error("[存在索引]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -118,8 +109,7 @@ public class ElasticSearchTemp {
         try {
             return new DeleteIndexResponse(elasticSearchClient.indices().delete(c -> c.index(index)));
         } catch (Exception e) {
-            log.error("[删除索引]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -137,8 +127,7 @@ public class ElasticSearchTemp {
         try {
             return new IndexResponse(elasticSearchClient.index(c -> c.index(index).document(data)));
         } catch (Exception e) {
-            log.error("[创建或更新文档(随机ID)]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -154,8 +143,7 @@ public class ElasticSearchTemp {
         try {
             return new IndexResponse(elasticSearchClient.index(c -> c.index(index).id(id).document(data)));
         } catch (Exception e) {
-            log.error("[创建或更新文档]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -170,8 +158,7 @@ public class ElasticSearchTemp {
         try {
             return new DeleteResponse(elasticSearchClient.delete(c -> c.index(index).id(id)));
         } catch (Exception e) {
-            log.error("[删除文档]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -186,8 +173,7 @@ public class ElasticSearchTemp {
         try {
             return new BooleanResponse(elasticSearchClient.exists(c -> c.index(index).id(id)));
         } catch (Exception e) {
-            log.error("[存在文档]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -204,8 +190,7 @@ public class ElasticSearchTemp {
         try {
             return new GetResponse<>(elasticSearchClient.get(c -> c.index(index).id(id), clazz));
         } catch (Exception e) {
-            log.error("[获取文档]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -227,8 +212,7 @@ public class ElasticSearchTemp {
         try {
             return new BulkResponse(elasticSearchClient.bulk(builder.build()));
         } catch (Exception e) {
-            log.error("[批量创建或更新文档(随机ID)]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -246,8 +230,7 @@ public class ElasticSearchTemp {
         try {
             return new BulkResponse(elasticSearchClient.bulk(builder.build()));
         } catch (Exception e) {
-            log.error("[批量创建或更新文档]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -266,8 +249,7 @@ public class ElasticSearchTemp {
         try {
             return new BulkResponse(elasticSearchClient.bulk(builder.build()));
         } catch (Exception e) {
-            log.error("[批量删除文档]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -295,8 +277,7 @@ public class ElasticSearchTemp {
         try {
             return new SearchResponse<>(elasticSearchClient.search(builder.build(), clazz));
         } catch (Exception e) {
-            log.error("[搜索]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 
@@ -315,8 +296,7 @@ public class ElasticSearchTemp {
         try {
             return new AnalyzeResponse(elasticSearchClient.indices().analyze(builder.build()));
         } catch (Exception e) {
-            log.error("[分析]异常！", e);
-            return null;
+            throw new ElasticSearchException(e);
         }
     }
 

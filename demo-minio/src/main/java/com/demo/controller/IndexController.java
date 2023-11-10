@@ -55,8 +55,9 @@ public class IndexController {
      * http://localhost:8080/bucketCreate?bucket=test
      */
     @GetMapping("bucketCreate")
-    public Result<Boolean> createBucket(String bucket) {
-        return Result.o(minioTemp.bucketCreate(bucket));
+    public Result createBucket(String bucket) {
+        minioTemp.bucketCreate(bucket);
+        return Result.o();
     }
 
     /**
@@ -64,8 +65,9 @@ public class IndexController {
      * http://localhost:8080/bucketDelete?bucket=test
      */
     @GetMapping("bucketDelete")
-    public Result<Boolean> bucketDelete(String bucket) {
-        return Result.o(minioTemp.bucketDelete(bucket));
+    public Result bucketDelete(String bucket) {
+        minioTemp.bucketDelete(bucket);
+        return Result.o();
     }
 
     /**
@@ -82,11 +84,12 @@ public class IndexController {
      * http://localhost:8080/bucketTagSet?bucket=test
      */
     @GetMapping("bucketTagSet")
-    public Result<Boolean> bucketTagSet(String bucket) {
+    public Result bucketTagSet(String bucket) {
         Map<String, String> tags = new HashMap<>(2);
         tags.put("a", "aa");
         tags.put("b", "bb");
-        return Result.o(minioTemp.bucketTagSet(bucket, tags));
+        minioTemp.bucketTagSet(bucket, tags);
+        return Result.o();
     }
 
     /**
@@ -94,8 +97,9 @@ public class IndexController {
      * http://localhost:8080/bucketTagDelete?bucket=test
      */
     @GetMapping("bucketTagDelete")
-    public Result<Boolean> bucketTagDelete(String bucket) {
-        return Result.o(minioTemp.bucketTagDelete(bucket));
+    public Result bucketTagDelete(String bucket) {
+        minioTemp.bucketTagDelete(bucket);
+        return Result.o();
     }
 
     /**
@@ -217,8 +221,9 @@ public class IndexController {
      * http://localhost:8080/objectDelete?bucket=test&path=a.txt
      */
     @GetMapping("objectDelete")
-    public Result<Boolean> objectDelete(String bucket, String path) {
-        return Result.o(minioTemp.objectDelete(bucket, path));
+    public Result objectDelete(String bucket, String path) {
+        minioTemp.objectDelete(bucket, path);
+        return Result.o();
     }
 
     /**
@@ -298,11 +303,12 @@ public class IndexController {
      * http://localhost:8080/objectTagSet?bucket=test&path=a.txt
      */
     @GetMapping("objectTagSet")
-    public Result<Boolean> objectTagSet(String bucket, String path) {
+    public Result objectTagSet(String bucket, String path) {
         Map<String, String> tags = new HashMap<>(2);
         tags.put("a", "aa");
         tags.put("b", "bb");
-        return Result.o(minioTemp.objectTagSet(bucket, path, tags));
+        minioTemp.objectTagSet(bucket, path, tags);
+        return Result.o();
     }
 
     /**
@@ -310,8 +316,9 @@ public class IndexController {
      * http://localhost:8080/objectTagDelete?bucket=test&path=a.txt
      */
     @GetMapping("objectTagDelete")
-    public Result<Boolean> objectTagDelete(String bucket, String path) {
-        return Result.o(minioTemp.objectTagDelete(bucket, path));
+    public Result objectTagDelete(String bucket, String path) {
+        minioTemp.objectTagDelete(bucket, path);
+        return Result.o();
     }
 
     /**
