@@ -16,20 +16,27 @@
   <input id="urlText" type="text" value="ws://127.0.0.1:8080/ws">
   <br>
   <label for="usernameText">用户名：</label>
-  <input id="usernameText" type="text" size="10" value="ali">
+  <input id="usernameText" type="text" value="ali">
   <button id="connectBtn">连接</button>
   <h4>连接错误信息：</h4>
-  <textarea id="errorMsg" readonly cols="30" rows="3"></textarea>
+  <textarea id="errorMsg" readonly cols="50" rows="5"></textarea>
 </div>
 <div>
   <h3>角色形式</h3>
-  <span>发送到用户：</span>
-  <input id="userSendUsernameText" type="text" size="10" value="ali">
+  <label for="userSendText">发送地址：</label>
+  <input id="userSendText" type="text" value="/app/sendToUser/">
   <br>
+  <label for="userSendUsernameText">发送用户：</label>
+  <input id="userSendUsernameText" type="text" value="ali">
+  <br>
+  <label for="userText">发送内容：</label>
   <input id="userText" type="text" value="发送到用户">
   <button id="userBtn" disabled>发送</button>
   <h4>用户消息：</h4>
-  <textarea id="userMsg" readonly cols="30" rows="3"></textarea>
+  <label for="userSubscribeText">订阅地址：</label>
+  <input id="userSubscribeText" type="text" value="/user/queue/sendToUser">
+  <br>
+  <textarea id="userMsg" readonly cols="50" rows="5"></textarea>
 </div>
 </body>
 <script>
@@ -37,7 +44,9 @@
   const usernameText = document.getElementById('usernameText')
   const connectBtn = document.getElementById('connectBtn')
   const errorMsg = document.getElementById('errorMsg')
+  const userSendText = document.getElementById('userSendText')
   const userSendUsernameText = document.getElementById('userSendUsernameText')
+  const userSubscribeText = document.getElementById('userSubscribeText')
   const userText = document.getElementById('userText')
   const userBtn = document.getElementById('userBtn')
   const userMsg = document.getElementById('userMsg')
@@ -74,7 +83,7 @@
   function connectCallback() {
     connectStatus(true)
     // 用户消息
-    stomp.subscribe('/user/queue/sendToUser', function (res) {
+    stomp.subscribe(userSubscribeText.value, function (res) {
       userMsg.value = res.body + '\n' + userMsg.value
     })
   }
@@ -117,7 +126,7 @@
    * 发送用户消息
    */
   userBtn.addEventListener('click', function () {
-    stomp.send('/app/sendToUser/' + userSendUsernameText.value, {}, userText.value)
+    stomp.send(userSendText.value + userSendUsernameText.value, {}, userText.value)
   })
 
 </script>

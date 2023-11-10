@@ -57,11 +57,12 @@ public class WsController {
     /**
      * 用户模式
      */
-    // 返回类型为void时，不会转发
+    // 接收来自用户发送到/app/sendToUser/{user}的消息，返回类型为void，不会转发
     @MessageMapping("/sendToUser/{user}")
     public void sendToUser(@DestinationVariable String user, String msg, Principal principal) {
         String data = "sendToUser:用户[" + principal.getName() + "]发送给用户[" + user + "]消息[" + msg + "]";
         log.info(data);
+        // 手动发送给用户
         webSocketTemp.send("/queue/sendToUser", user, data);
     }
 
