@@ -27,8 +27,9 @@ public class IndexController {
      * 发送(QoS=0 不保留)
      */
     @GetMapping
-    public Result<Boolean> index() {
-        return Result.o(mqttTemp.send("topic", "发送(QoS=0 不保留)"));
+    public Result index() {
+        mqttTemp.send("topic", "发送(QoS=0 不保留)");
+        return Result.o();
     }
 
     /**
@@ -36,8 +37,9 @@ public class IndexController {
      * 发送(QoS=0 不保留)
      */
     @GetMapping("topic")
-    public Result<Boolean> topic(String topic) {
-        return Result.o(mqttTemp.send(topic, "发送(QoS=0 不保留)"));
+    public Result topic(String topic) {
+        mqttTemp.send("a+", "发送(QoS=0 不保留)");
+        return Result.o();
     }
 
     /**
@@ -45,8 +47,9 @@ public class IndexController {
      * 发送(不保留)
      */
     @GetMapping("topicAndQos")
-    public Result<Boolean> topicAndQos(String topic, int qos) {
-        return Result.o(mqttTemp.send(topic, "发送(不保留)", qos));
+    public Result topicAndQos(String topic, int qos) {
+        mqttTemp.send(topic, "发送(不保留)", qos);
+        return Result.o();
     }
 
     /**
@@ -54,8 +57,9 @@ public class IndexController {
      * 发送
      */
     @GetMapping("topicAndQosAndRetain")
-    public Result<Boolean> topicAndQosAndRetain(String topic, int qos, boolean retain) {
-        return Result.o(mqttTemp.send(topic, "发送", qos, retain));
+    public Result topicAndQosAndRetain(String topic, int qos, boolean retain) {
+        mqttTemp.send(topic, "发送", qos, retain);
+        return Result.o();
     }
 
 }
