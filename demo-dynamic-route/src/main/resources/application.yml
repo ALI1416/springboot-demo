@@ -31,7 +31,8 @@ mybatis:
     map-underscore-to-camel-case: true
 
 tiny-token:
-  prefix: tinytoken
+  prefix-header: token
+  prefix-redis: tinytoken
   timeout: 2592000
 
 id:

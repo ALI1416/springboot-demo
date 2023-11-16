@@ -14,7 +14,8 @@ spring:
     timeout: 10s
 
 tiny-token:
-  prefix: tinytoken
+  prefix-header: token
+  prefix-redis: tinytoken
   timeout: 2592000
 
 logging:

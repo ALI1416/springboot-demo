@@ -22,8 +22,10 @@ spring:
 #  port: 8081
 
 tiny-task:
-  prefix: tinytask
-  timeout: 5
+  prefix-redis: tinytask
+  prefix-rabbit: tinytask
+  timeout-redis: 5
+  timeout-rabbit: 5
 
 logging:
   level:
