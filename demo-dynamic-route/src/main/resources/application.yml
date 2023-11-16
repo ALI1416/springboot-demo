@@ -15,8 +15,12 @@ spring:
       max-lifetime: 60000
   data:
     mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: demo2
+      # username:
+      # password:
       auto-index-creation: true
-      uri: mongodb://127.0.0.1:27017/demo
   redis:
     database: 0
     host: 127.0.0.1
