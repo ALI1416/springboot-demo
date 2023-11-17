@@ -76,7 +76,10 @@ public class LoginLog extends EntityBase {
      * @param request HttpServletRequest
      */
     public void setIpInfo(HttpServletRequest request) {
-        String ipString = request.getRemoteAddr();
+        String ipString = request.getHeader("X-Real-IP");
+        if (ipString == null) {
+            ipString = request.getRemoteAddr();
+        }
         ip = ipString;
         try {
             Region region = Ip2Region.parse(ipString);

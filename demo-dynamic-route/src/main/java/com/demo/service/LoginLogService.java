@@ -47,17 +47,24 @@ public class LoginLogService extends ServiceBase {
         loginLog.setToken(token);
         loginLog.setCreateId(createId);
         loginLog.setCreateTime(Clock.timestamp());
-        String ip = request.getRemoteAddr();
-        loginLog.setIp(ip);
-        try {
-            loginLog.setIpInfo(Ip2Region.parse(ip));
-        } catch (Exception ignored) {
+        String ip = request.getHeader("X-Real-IP");
+        if (ip == null) {
+            ip = request.getRemoteAddr();
+        }
+        if (ip != null) {
+            loginLog.setIp(ip);
+            try {
+                loginLog.setIpInfo(Ip2Region.parse(ip));
+            } catch (Exception ignored) {
+            }
         }
         String userAgent = request.getHeader("User-Agent");
-        loginLog.setUserAgent(userAgent);
-        try {
-            loginLog.setUserAgentInfo(UserAgent.parse(userAgent));
-        } catch (Exception ignored) {
+        if (userAgent != null) {
+            loginLog.setUserAgent(userAgent);
+            try {
+                loginLog.setUserAgentInfo(UserAgent.parse(userAgent));
+            } catch (Exception ignored) {
+            }
         }
         return loginLogDao.insert(loginLog);
     }
