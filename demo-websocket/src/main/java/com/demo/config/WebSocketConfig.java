@@ -1,16 +1,10 @@
 package com.demo.config;
 
-import com.alibaba.fastjson2.JSON;
+import cn.z.spring.tool.FastJsonMessageConverter;
 import com.demo.constant.FormatConstant;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.GenericTypeResolver;
-import org.springframework.core.MethodParameter;
-import org.springframework.http.MediaType;
-import org.springframework.lang.Nullable;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.converter.AbstractMessageConverter;
 import org.springframework.messaging.converter.ByteArrayMessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.converter.StringMessageConverter;
@@ -27,8 +21,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +73,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public boolean configureMessageConverters(List<MessageConverter> converters) {
         converters.add(new StringMessageConverter());
         converters.add(new ByteArrayMessageConverter());
-        converters.add(new MappingFastJsonMessageConverter());
+        converters.add(new FastJsonMessageConverter(FormatConstant.DATE, FormatConstant.JSON_READER_FEATURE, FormatConstant.JSON_WRITER_FEATURE));
         return false;
     }
 
@@ -134,101 +126,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         headers.put("stompCommand", StompCommand.DISCONNECT);
         headers.put("simpSessionId", message.getHeaders().get("simpSessionId"));
         return new GenericMessage<>(new byte[0], headers);
-    }
-
-    /**
-     * WebSocket消息转换器
-     */
-    public static class MappingFastJsonMessageConverter extends AbstractMessageConverter {
-
-        public MappingFastJsonMessageConverter() {
-            super(MediaType.APPLICATION_JSON_UTF8);
-        }
-
-        /**
-         * 支持转换的类
-         *
-         * @param clazz 类
-         * @return 支持转换所有类
-         */
-        @Override
-        protected boolean supports(Class<?> clazz) {
-            return true;
-        }
-
-        /**
-         * 消息转对象
-         *
-         * @param message        消息
-         * @param targetClass    目标类
-         * @param conversionHint 额外对象
-         * @return 对象
-         */
-        @Override
-        protected Object convertFromInternal(Message<?> message, Class<?> targetClass, Object conversionHint) {
-            Type resolvedType = getResolvedType(targetClass, conversionHint);
-            Object payload = message.getPayload();
-            if (payload instanceof byte[]) {
-                // byte[]类型消息
-                return JSON.parseObject((byte[]) payload, resolvedType, FormatConstant.DATE, FormatConstant.JSON_READER_FEATURE);
-            } else {
-                // 字符串类型消息
-                return JSON.parseObject((String) payload, resolvedType, FormatConstant.DATE, FormatConstant.JSON_READER_FEATURE);
-            }
-        }
-
-        /**
-         * 对象转消息
-         *
-         * @param payload        对象
-         * @param headers        消息头
-         * @param conversionHint 额外对象
-         * @return 消息
-         */
-        @Override
-        protected Object convertToInternal(Object payload, MessageHeaders headers, Object conversionHint) {
-            if (byte[].class == getSerializedPayloadClass()) {
-                // 转为byte[]类型消息
-                if (payload instanceof String) {
-                    // 字符串类型对象
-                    return ((String) payload).getBytes(StandardCharsets.UTF_8);
-                } else {
-                    // byte[]类型消息
-                    return JSON.toJSONBytes(payload, FormatConstant.DATE, FormatConstant.JSON_WRITER_FEATURE);
-                }
-            } else {
-                // 转为字符串类型消息
-                if (payload instanceof String) {
-                    // 字符串类型对象
-                    return payload;
-                } else {
-                    // byte[]类型消息
-                    return JSON.toJSONString(payload, FormatConstant.DATE, FormatConstant.JSON_WRITER_FEATURE);
-                }
-            }
-        }
-
-        /**
-         * 获取解析类型
-         *
-         * @param targetClass    目标类
-         * @param conversionHint 额外对象
-         * @return 解析后的类型
-         */
-        static Type getResolvedType(Class<?> targetClass, @Nullable Object conversionHint) {
-            if (conversionHint instanceof MethodParameter) {
-                MethodParameter param = (MethodParameter) conversionHint;
-                param = param.nestedIfOptional();
-                if (Message.class.isAssignableFrom(param.getParameterType())) {
-                    param = param.nested();
-                }
-                Type genericParameterType = param.getNestedGenericParameterType();
-                Class<?> contextClass = param.getContainingClass();
-                return GenericTypeResolver.resolveType(genericParameterType, contextClass);
-            }
-            return targetClass;
-        }
-
     }
 
 }

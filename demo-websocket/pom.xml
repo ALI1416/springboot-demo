@@ -37,6 +37,11 @@
       <groupId>cn.404z</groupId>
       <artifactId>websocket-spring-boot-temp</artifactId>
     </dependency>
+    <!--SpringBoot工具-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util-spring-boot</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

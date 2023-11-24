@@ -31,6 +31,11 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2-extension-spring5</artifactId>
     </dependency>
+    <!--SpringBoot工具-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util-spring-boot</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
