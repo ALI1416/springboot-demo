@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import cn.z.redis.RedisTemp;
-import cn.z.websocket.WebSocketTemp;
+import com.demo.constant.RedisConstant;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -25,18 +25,26 @@ import java.security.Principal;
 @Slf4j
 public class WsController {
 
-    public static final String REDIS_WEBSOCKET_BROADCAST_PREFIX = "WebSocketBroadcast:";
-
     private final RedisTemp redisTemp;
 
     /**
-     * WebSocket接收用户发给用户的消息
+     * 广播模式
+     */
+    @MessageMapping("/broadcast")
+    public void broadcast(String msg, Principal principal) {
+        String data = "广播模式:用户[" + principal.getName() + "]发送广播消息[" + msg + "]";
+        log.info(data);
+        redisTemp.broadcast(RedisConstant.WS_BROADCAST_PREFIX + "/topic/broadcast", data);
+    }
+
+    /**
+     * 用户模式
      */
     @MessageMapping("/sendToUser/{user}")
     public void sendToUser(@DestinationVariable String user, String msg, Principal principal) {
-        String data = "sendToUser:用户[" + principal.getName() + "]发送给用户[" + user + "]消息[" + msg + "]";
+        String data = "用户模式:用户[" + principal.getName() + "]发送给用户[" + user + "]消息[" + msg + "]";
         log.info(data);
-        redisTemp.broadcast(REDIS_WEBSOCKET_BROADCAST_PREFIX + user, data);
+        redisTemp.broadcast(RedisConstant.WS_USER_PREFIX + "/queue/sendToUser:" + user, data);
     }
 
 }

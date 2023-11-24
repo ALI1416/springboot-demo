@@ -22,6 +22,20 @@
   <textarea id="errorMsg" readonly cols="50" rows="5"></textarea>
 </div>
 <div>
+  <h3>广播形式</h3>
+  <label for="broadcastSendText">发送地址：</label>
+  <input id="broadcastSendText" type="text" value="/app/broadcast">
+  <br>
+  <label for="broadcastText">发送内容：</label>
+  <input id="broadcastText" type="text" value="发送广播">
+  <button id="broadcastBtn" disabled>发送</button>
+  <h4>广播消息：</h4>
+  <label for="broadcastSubscribeText">订阅地址：</label>
+  <input id="broadcastSubscribeText" type="text" value="/topic/broadcast">
+  <br>
+  <textarea id="broadcastMsg" readonly cols="50" rows="5"></textarea>
+</div>
+<div>
   <h3>角色形式</h3>
   <label for="userSendText">发送地址：</label>
   <input id="userSendText" type="text" value="/app/sendToUser/">
@@ -43,6 +57,11 @@
   const urlText = document.getElementById('urlText')
   const usernameText = document.getElementById('usernameText')
   const connectBtn = document.getElementById('connectBtn')
+  const broadcastSendText = document.getElementById('broadcastSendText')
+  const broadcastText = document.getElementById('broadcastText')
+  const broadcastSubscribeText = document.getElementById('broadcastSubscribeText')
+  const broadcastBtn = document.getElementById('broadcastBtn')
+  const broadcastMsg = document.getElementById('broadcastMsg')
   const errorMsg = document.getElementById('errorMsg')
   const userSendText = document.getElementById('userSendText')
   const userSendUsernameText = document.getElementById('userSendUsernameText')
@@ -82,6 +101,10 @@
    */
   function connectCallback() {
     connectStatus(true)
+    // 广播消息
+    stomp.subscribe(broadcastSubscribeText.value, function (res) {
+      broadcastMsg.value = res.body + '\n' + broadcastMsg.value
+    })
     // 用户消息
     stomp.subscribe(userSubscribeText.value, function (res) {
       userMsg.value = res.body + '\n' + userMsg.value
@@ -112,15 +135,24 @@
    * 改变连接状态显示
    */
   function connectStatus(status) {
+    connectBtn.removeAttribute('disabled')
+    broadcastBtn.removeAttribute('disabled')
     if (status) {
       connectBtn.innerText = '断开'
-      connectBtn.removeAttribute('disabled')
       userBtn.removeAttribute('disabled')
     } else {
       connectBtn.innerText = '连接'
+      broadcastBtn.setAttribute('disabled', 'true')
       userBtn.setAttribute('disabled', 'true')
     }
   }
+
+  /**
+   * 发送广播消息
+   */
+  broadcastBtn.addEventListener('click', function () {
+    stomp.send(broadcastSendText.value, {}, broadcastText.value)
+  })
 
   /**
    * 发送用户消息
