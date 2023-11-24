@@ -1,8 +1,14 @@
 package com.demo.config;
 
+import com.alibaba.fastjson2.support.config.FastJsonConfig;
+import com.alibaba.fastjson2.support.spring.messaging.converter.MappingFastJsonMessageConverter;
+import com.demo.constant.FormatConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.converter.ByteArrayMessageConverter;
+import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.converter.StringMessageConverter;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -59,6 +65,23 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setHeartbeatValue(new long[]{10000, 10000}) // 心跳
                 .setTaskScheduler(heartbeat) // 心跳定时器
         ;
+    }
+
+    /**
+     * 消息转换器
+     */
+    @Override
+    public boolean configureMessageConverters(List<MessageConverter> converters) {
+        MappingFastJsonMessageConverter converter = new MappingFastJsonMessageConverter();
+        FastJsonConfig config = new FastJsonConfig();
+        config.setDateFormat(FormatConstant.DATE);
+        config.setReaderFeatures(FormatConstant.JSON_READER_FEATURE);
+        config.setWriterFeatures(FormatConstant.JSON_WRITER_FEATURE);
+        converter.setFastJsonConfig(config);
+        converters.add(new StringMessageConverter());
+        converters.add(new ByteArrayMessageConverter());
+        converters.add(converter);
+        return false;
     }
 
     /**

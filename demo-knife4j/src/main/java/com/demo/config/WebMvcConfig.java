@@ -22,7 +22,6 @@ import java.util.List;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 

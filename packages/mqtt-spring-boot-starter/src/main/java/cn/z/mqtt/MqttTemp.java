@@ -41,6 +41,16 @@ public class MqttTemp {
     }
 
     /**
+     * 发送(QoS=0 不保留)
+     *
+     * @param topic 主题
+     * @param msg   消息
+     */
+    public void send(String topic, byte[] msg) {
+        send(topic, msg, 0, false);
+    }
+
+    /**
      * 发送(不保留)
      *
      * @param topic 主题
@@ -49,6 +59,17 @@ public class MqttTemp {
      */
     public void send(String topic, String msg, int qos) {
         send(topic, msg.getBytes(StandardCharsets.UTF_8), qos, false);
+    }
+
+    /**
+     * 发送(不保留)
+     *
+     * @param topic 主题
+     * @param msg   消息
+     * @param qos   QoS
+     */
+    public void send(String topic, byte[] msg, int qos) {
+        send(topic, msg, qos, false);
     }
 
     /**
