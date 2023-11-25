@@ -1,4 +1,4 @@
-package com.demo.lock;
+package com.demo.advanced.lock;
 
 import lombok.extern.slf4j.Slf4j;
 

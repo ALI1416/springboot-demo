@@ -30,8 +30,6 @@ SpringBoot示例
   - FastJson
   - JakartaJson
   - ElasticSearch
-- **`demo-java-advanced`** : Java进阶
-  - HuTool工具包
 - **`demo-just-auth`** : JustAuth第三方登录
   - SpringBoot Web
   - FastJson

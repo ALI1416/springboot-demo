@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
  * <h1>Base62</h1>
  *
  * <p>
- * 根据<a href="https://github.com/seruco/base62">seruco/base62</a>重构
+ * 根据<a href="https://github.com/seruco/base62/blob/0.1.3/src/main/java/io/seruco/encoding/base62/Base62.java">seruco/base62</a>重构
  * </p>
  *
  * <p>

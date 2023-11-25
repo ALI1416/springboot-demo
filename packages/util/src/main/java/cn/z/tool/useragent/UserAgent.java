@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
  * <h1>UserAgent</h1>
  *
  * <p>
- * 根据<a href="https://github.com/dromara/hutool">dromara/hutool</a>重构
+ * 根据<a href="https://github.com/dromara/hutool/blob/5.8.22/hutool-http/src/main/java/cn/hutool/http/useragent/UserAgent.java">dromara/hutool</a>重构
  * </p>
  *
  * <p>

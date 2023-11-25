@@ -1,4 +1,4 @@
-package com.demo.stringtable;
+package com.demo.advanced.stringtable;
 
 /**
  * <h1>Demo2</h1>

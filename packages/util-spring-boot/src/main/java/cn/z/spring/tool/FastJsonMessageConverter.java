@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  * <h1>WebSocket消息转换器</h1>
  *
  * <p>
- * 根据<a href="https://github.com/alibaba/fastjson2">alibaba/fastjson2</a>重构
+ * 根据<a href="https://github.com/alibaba/fastjson2/blob/2.0.42/extension-spring5/src/main/java/com/alibaba/fastjson2/support/spring/messaging/converter/MappingFastJsonMessageConverter.java">alibaba/fastjson2</a>重构
  * </p>
  *
  * <p>
@@ -50,7 +50,7 @@ public class FastJsonMessageConverter extends AbstractMessageConverter {
      * @param writerFeature 写特性
      */
     public FastJsonMessageConverter(String date, JSONReader.Feature[] readerFeature, JSONWriter.Feature[] writerFeature) {
-        super(MediaType.APPLICATION_JSON_UTF8);
+        super(MediaType.APPLICATION_JSON);
         this.date = date;
         this.readerFeature = readerFeature;
         this.writerFeature = writerFeature;

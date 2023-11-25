@@ -1,4 +1,4 @@
-package com.demo.reflect;
+package com.demo.advanced.reflect;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ReflectUtil;

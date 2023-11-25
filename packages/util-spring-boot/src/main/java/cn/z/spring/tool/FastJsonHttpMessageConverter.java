@@ -22,7 +22,7 @@ import java.nio.charset.StandardCharsets;
  * <h1>Http消息转换器</h1>
  *
  * <p>
- * 根据<a href="https://github.com/alibaba/fastjson2">alibaba/fastjson2</a>重构
+ * 根据<a href="https://github.com/alibaba/fastjson2/blob/2.0.42/extension-spring5/src/main/java/com/alibaba/fastjson2/support/spring/http/converter/FastJsonHttpMessageConverter.java">alibaba/fastjson2</a>重构
  * </p>
  *
  * <p>
@@ -58,7 +58,7 @@ public class FastJsonHttpMessageConverter extends AbstractHttpMessageConverter<O
      * @param writerFeature 写特性
      */
     public FastJsonHttpMessageConverter(String date, JSONReader.Feature[] readerFeature, JSONWriter.Feature[] writerFeature) {
-        super(StandardCharsets.UTF_8, MediaType.APPLICATION_JSON_UTF8);
+        super(StandardCharsets.UTF_8, MediaType.APPLICATION_JSON);
         this.date = date;
         this.readerFeature = readerFeature;
         this.writerFeature = writerFeature;

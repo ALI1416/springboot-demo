@@ -1,4 +1,4 @@
-package com.demo.reflect;
+package com.demo.advanced.reflect;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +18,7 @@ import java.util.Arrays;
 @Slf4j
 public class Main {
 
-    public static final String CLASS_NAME = "com.demo.reflect.User";
+    public static final String CLASS_NAME = "com.demo.advanced.reflect.User";
 
     public static void main(String[] args) {
         classLoader();
@@ -43,7 +43,7 @@ public class Main {
             log.info("---------- classLoader ----------");
             ClassLoader classLoader = new ClassLoader() {
             };
-            Class<?> clazz = classLoader.loadClass("com.demo.reflect.HelloWorld");
+            Class<?> clazz = classLoader.loadClass("com.demo.advanced.reflect.HelloWorld");
             Object obj = clazz.getConstructor().newInstance();
             Method method = clazz.getMethod("main", String[].class);
             method.invoke(obj, (Object) null);
@@ -59,7 +59,7 @@ public class Main {
         try {
             log.info("---------- myClassLoader ----------");
             MyClassLoader myClassLoader = new MyClassLoader();
-            Class<?> clazz = myClassLoader.findClass("demo-java-advanced\\src\\main\\resources\\Hello.class");
+            Class<?> clazz = myClassLoader.findClass("demo-util\\src\\main\\resources\\Hello.class");
             Object obj = clazz.getConstructor().newInstance();
             Method method = clazz.getMethod("main", String[].class);
             method.invoke(obj, (Object) null);
@@ -303,7 +303,7 @@ public class Main {
             log.info("long[][]:" + long[][].class);
             log.info("float[][][]:" + float[][][].class);
             log.info("double[][][][]:" + double[][][][].class);
-            log.info("User[]:" + Class.forName("[Lcom.demo.reflect.User;"));
+            log.info("User[]:" + Class.forName("[Lcom.demo.advanced.reflect.User;"));
             log.info("Anno[][]:" + Anno[][].class);
             // 创建数组实例
             Object instance = Array.newInstance(int.class, 3);

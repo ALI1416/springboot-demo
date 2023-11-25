@@ -28,10 +28,6 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.alibaba.fastjson2</groupId>
-      <artifactId>fastjson2-extension-spring5</artifactId>
-    </dependency>
     <!--MQTT-->
     <dependency>
       <groupId>org.eclipse.paho</groupId>
@@ -41,6 +37,11 @@
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>mqtt-spring-boot-starter</artifactId>
+    </dependency>
+    <!--SpringBoot工具-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util-spring-boot</artifactId>
     </dependency>
   </dependencies>
 
