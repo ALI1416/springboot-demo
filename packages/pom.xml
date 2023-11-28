@@ -80,6 +80,10 @@
     <!--org.ansj:ansj_seg-->
     <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
     <ansj.version>5.1.6</ansj.version>
+    <!--加密算法-->
+    <!--org.bouncycastle:bcpkix-jdk18on-->
+    <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on -->
+    <bcpkix.version>1.77</bcpkix.version>
 
     <!--邮件SpringBoot模板-->
     <!--cn.404z:mail-spring-boot-temp-->
@@ -93,12 +97,12 @@
     <!--WebSocket SpringBoot模板-->
     <!--cn.404z:websocket-spring-boot-temp-->
     <websocket-spring-boot-temp.version>1.0.0</websocket-spring-boot-temp.version>
+    <!--MongoDB SpringBoot模板-->
+    <!--cn.404z:mongo-spring-boot-temp-->
+    <mongo-spring-boot-temp.version>1.0.0</mongo-spring-boot-temp.version>
     <!--Minio SpringBoot启动器-->
     <!--cn.404z:minio-spring-boot-starter-->
     <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
-    <!--MongoDB SpringBoot启动器-->
-    <!--cn.404z:mongo-spring-boot-starter-->
-    <mongo-spring-boot-starter.version>1.0.0</mongo-spring-boot-starter.version>
     <!--MQTT SpringBoot启动器-->
     <!--cn.404z:mqtt-spring-boot-starter-->
     <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
@@ -235,6 +239,12 @@
         <artifactId>ansj_seg</artifactId>
         <version>${ansj.version}</version>
       </dependency>
+      <!--加密算法-->
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcpkix-jdk18on</artifactId>
+        <version>${bcpkix.version}</version>
+      </dependency>
 
       <!--邮件SpringBoot模板-->
       <dependency>
@@ -260,17 +270,17 @@
         <artifactId>websocket-spring-boot-temp</artifactId>
         <version>${websocket-spring-boot-temp.version}</version>
       </dependency>
+      <!--MongoDB SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mongo-spring-boot-temp</artifactId>
+        <version>${mongo-spring-boot-temp.version}</version>
+      </dependency>
       <!--Minio SpringBoot启动器-->
       <dependency>
         <groupId>cn.404z</groupId>
         <artifactId>minio-spring-boot-starter</artifactId>
         <version>${minio-spring-boot-starter.version}</version>
-      </dependency>
-      <!--MongoDB SpringBoot启动器-->
-      <dependency>
-        <groupId>cn.404z</groupId>
-        <artifactId>mongo-spring-boot-starter</artifactId>
-        <version>${mongo-spring-boot-starter.version}</version>
       </dependency>
       <!--MQTT SpringBoot启动器-->
       <dependency>

@@ -28,6 +28,11 @@
       <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcpkix-jdk18on</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!-- 仅供编译使用 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

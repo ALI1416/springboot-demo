@@ -3,7 +3,7 @@
     {
       "name": "mqtt.uri",
       "type": "java.lang.String",
-      "description": "URI.",
+      "description": "URI(ssl例如\"ssl://127.0.0.1:8883\").",
       "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
       "defaultValue": "tcp://127.0.0.1:1883"
     },
@@ -46,6 +46,63 @@
       "description": "自动重连.",
       "sourceType": "cn.z.mqtt.autoconfigure.MqttProperties",
       "defaultValue": false
+    },
+    {
+      "name": "mqtt.ssl.enable",
+      "type": "java.lang.Boolean",
+      "description": "启用SSL.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "mqtt.ssl.ckeck",
+      "type": "java.lang.Boolean",
+      "description": "校验SSL证书.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "mqtt.ssl.ca-server-auto-sign",
+      "type": "java.lang.Boolean",
+      "description": "CA服务器自动签名.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "mqtt.ssl.ca-crt-resource-path",
+      "type": "java.lang.String",
+      "description": "CA证书(资源路径)(优先级0),读取项目文件夹resources下的路径.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties"
+    },
+    {
+      "name": "mqtt.ssl.ca-crt-local-path",
+      "type": "java.lang.String",
+      "description": "CA证书(本地路径)(优先级1),读取本地物理路径.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties"
+    },
+    {
+      "name": "mqtt.ssl.client-crt-resource-path",
+      "type": "java.lang.String",
+      "description": "客户端证书(资源路径)(优先级0),读取项目文件夹resources下的路径.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties"
+    },
+    {
+      "name": "mqtt.ssl.client-crt-local-path",
+      "type": "java.lang.String",
+      "description": "客户端证书(本地路径)(优先级1),读取本地物理路径.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties"
+    },
+    {
+      "name": "mqtt.ssl.client-key-resource-path",
+      "type": "java.lang.String",
+      "description": "客户端密钥(资源路径)(优先级0),读取项目文件夹resources下的路径.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties"
+    },
+    {
+      "name": "mqtt.ssl.client-key-local-path",
+      "type": "java.lang.String",
+      "description": "客户端密钥(本地路径)(优先级1),读取本地物理路径.",
+      "sourceType": "cn.z.mqtt.autoconfigure.MqttSslProperties"
     }
   ]
 }

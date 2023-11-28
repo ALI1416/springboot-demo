@@ -1,7 +1,9 @@
 package cn.z.mqtt.annotation;
 
 import cn.z.mqtt.MqttException;
+import cn.z.mqtt.SslUtil;
 import cn.z.mqtt.autoconfigure.MqttProperties;
+import cn.z.mqtt.autoconfigure.MqttSslProperties;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
@@ -14,11 +16,20 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.MethodIntrospector;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.*;
 import java.util.function.Function;
 
@@ -67,9 +78,10 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     /**
      * 构造函数(自动注入)
      *
-     * @param mqttProperties MqttProperties
+     * @param mqttProperties    MqttProperties
+     * @param mqttSslProperties MqttSslProperties
      */
-    public MqttAnnotationProcessor(MqttProperties mqttProperties) throws org.eclipse.paho.client.mqttv3.MqttException {
+    public MqttAnnotationProcessor(MqttProperties mqttProperties, MqttSslProperties mqttSslProperties) throws org.eclipse.paho.client.mqttv3.MqttException, UnrecoverableKeyException, CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         mqttClient = new MqttClient(mqttProperties.getUri(), getRandomClientId(), new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
         if (mqttProperties.getUsername() != null && mqttProperties.getPassword() != null) {
@@ -78,8 +90,40 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
         }
         options.setConnectionTimeout(mqttProperties.getConnectionTimeout());
         options.setKeepAliveInterval(mqttProperties.getKeepAliveInterval());
-        options.setCleanSession(mqttProperties.getCleanSession());
-        options.setAutomaticReconnect(mqttProperties.getAutomaticReconnect());
+        options.setCleanSession(mqttProperties.isCleanSession());
+        options.setAutomaticReconnect(mqttProperties.isAutomaticReconnect());
+        if (mqttSslProperties.isEnable()) {
+            if (mqttSslProperties.isCaServerAutoSign()) {
+                options.setSocketFactory(SslUtil.getSocketFactory());
+            } else {
+                InputStream caCrt;
+                if (mqttSslProperties.getCaCrtResourcePath() != null) {
+                    caCrt = new ClassPathResource(mqttSslProperties.getCaCrtResourcePath()).getInputStream();
+                } else if (mqttSslProperties.getCaCrtLocalPath() != null) {
+                    caCrt = new FileInputStream(mqttSslProperties.getCaCrtLocalPath());
+                } else {
+                    throw new MqttException("缺失CA证书！");
+                }
+                InputStream clientCrt;
+                if (mqttSslProperties.getClientCrtResourcePath() != null) {
+                    clientCrt = new ClassPathResource(mqttSslProperties.getClientCrtResourcePath()).getInputStream();
+                } else if (mqttSslProperties.getClientCrtLocalPath() != null) {
+                    clientCrt = new FileInputStream(mqttSslProperties.getClientCrtLocalPath());
+                } else {
+                    throw new MqttException("缺失客户端证书！");
+                }
+                InputStream clientKey;
+                if (mqttSslProperties.getClientKeyResourcePath() != null) {
+                    clientKey = new ClassPathResource(mqttSslProperties.getClientKeyResourcePath()).getInputStream();
+                } else if (mqttSslProperties.getClientKeyLocalPath() != null) {
+                    clientKey = new FileInputStream(mqttSslProperties.getClientKeyLocalPath());
+                } else {
+                    throw new MqttException("缺失客户端密钥！");
+                }
+                options.setSocketFactory(SslUtil.getSocketFactory(caCrt, clientCrt, clientKey));
+            }
+            options.setHttpsHostnameVerificationEnabled(mqttSslProperties.isCheck());
+        }
         mqttClient.setCallback(new MqttCallbackExtended() {
 
             /**

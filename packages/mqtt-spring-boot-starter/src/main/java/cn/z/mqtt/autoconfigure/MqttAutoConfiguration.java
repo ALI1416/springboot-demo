@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@EnableConfigurationProperties(MqttProperties.class)
+@EnableConfigurationProperties({MqttProperties.class, MqttSslProperties.class})
 public class MqttAutoConfiguration {
 
     /**
@@ -25,11 +25,12 @@ public class MqttAutoConfiguration {
     /**
      * 构造函数(自动注入)
      *
-     * @param mqttProperties MqttProperties
+     * @param mqttProperties    MqttProperties
+     * @param mqttSslProperties MqttSslProperties
      */
-    public MqttAutoConfiguration(MqttProperties mqttProperties) {
+    public MqttAutoConfiguration(MqttProperties mqttProperties, MqttSslProperties mqttSslProperties) {
         log.info("MQTT配置：URI {} ，连接超时时间CONNECTION_TIMEOUT {} ，保活时间KEEP_ALIVE_INTERVAL {} ，清除会话CLEAN_SESSION {} ，自动重连AUTOMATIC_RECONNECT {}",
-                mqttProperties.getUri(), mqttProperties.getConnectionTimeout(), mqttProperties.getKeepAliveInterval(), mqttProperties.getCleanSession(), mqttProperties.getAutomaticReconnect());
+                mqttProperties.getUri(), mqttProperties.getConnectionTimeout(), mqttProperties.getKeepAliveInterval(), mqttProperties.isCleanSession(), mqttProperties.isAutomaticReconnect());
     }
 
 }

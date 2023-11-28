@@ -16,7 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class MqttProperties {
 
     /**
-     * URI(默认值"tcp://127.0.0.1:1883")
+     * URI(默认值"tcp://127.0.0.1:1883")<br>
+     * (ssl例如"ssl://127.0.0.1:8883")
      */
     private String uri = "tcp://127.0.0.1:1883";
     /**
@@ -84,7 +85,7 @@ public class MqttProperties {
         this.keepAliveInterval = keepAliveInterval;
     }
 
-    public boolean getCleanSession() {
+    public boolean isCleanSession() {
         return cleanSession;
     }
 
@@ -92,7 +93,7 @@ public class MqttProperties {
         this.cleanSession = cleanSession;
     }
 
-    public boolean getAutomaticReconnect() {
+    public boolean isAutomaticReconnect() {
         return automaticReconnect;
     }
 

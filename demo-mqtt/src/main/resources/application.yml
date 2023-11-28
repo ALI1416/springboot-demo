@@ -8,11 +8,18 @@ spring:
       max-request-size: 4GB
 
 mqtt:
-  uri: tcp://127.0.0.1:1883
+  uri: ssl://127.0.0.1:8883
   connection-timeout: 30
   keep-alive-interval: 60
   clean-session: true
   automatic-reconnect: true
+  ssl:
+    enable: true
+    check: false
+    ca-server-auto-sign: false
+    ca-crt-resource-path: cert/ca.crt
+    client-crt-resource-path: cert/client.crt
+    client-key-resource-path: cert/client.key
 
 logging:
   level:
