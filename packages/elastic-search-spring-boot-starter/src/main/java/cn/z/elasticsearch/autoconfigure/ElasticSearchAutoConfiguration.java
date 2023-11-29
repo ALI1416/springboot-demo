@@ -28,7 +28,9 @@ public class ElasticSearchAutoConfiguration {
      * @param elasticSearchProperties ElasticSearchProperties
      */
     public ElasticSearchAutoConfiguration(ElasticSearchProperties elasticSearchProperties) {
-        log.info("ElasticSearch配置：URI {}", elasticSearchProperties.getUri());
+        String msg = "ElasticSearch配置：URI " + elasticSearchProperties.getUri() +
+                " ，使用账号密码访问 " + (elasticSearchProperties.getUsername() != null && !elasticSearchProperties.getUsername().isEmpty() && elasticSearchProperties.getPassword() != null && !elasticSearchProperties.getPassword().isEmpty());
+        log.info(msg);
     }
 
 }

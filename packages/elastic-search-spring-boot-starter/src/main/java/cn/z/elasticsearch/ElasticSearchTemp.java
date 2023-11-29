@@ -48,7 +48,7 @@ public class ElasticSearchTemp {
      */
     public ElasticSearchTemp(ElasticSearchProperties elasticSearchProperties) {
         RestClientBuilder builder = RestClient.builder(HttpHost.create(elasticSearchProperties.getUri()));
-        if (elasticSearchProperties.getUsername() != null && elasticSearchProperties.getPassword() != null) {
+        if (elasticSearchProperties.getUsername() != null && !elasticSearchProperties.getUsername().isEmpty() && elasticSearchProperties.getPassword() != null && !elasticSearchProperties.getPassword().isEmpty()) {
             builder.setDefaultHeaders(new Header[]{new BasicHeader("Authorization", "Basic " + new String(Base64.getEncoder().encode((elasticSearchProperties.getUsername() + ":" + elasticSearchProperties.getPassword()).getBytes(StandardCharsets.UTF_8))))});
         }
         this.elasticSearchClient = new ElasticsearchClient(new RestClientTransport(builder.build(), new JacksonJsonpMapper()));

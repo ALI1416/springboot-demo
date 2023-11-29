@@ -84,7 +84,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     public MqttAnnotationProcessor(MqttProperties mqttProperties, MqttSslProperties mqttSslProperties) throws org.eclipse.paho.client.mqttv3.MqttException, UnrecoverableKeyException, CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
         mqttClient = new MqttClient(mqttProperties.getUri(), getRandomClientId(), new MemoryPersistence());
         MqttConnectOptions options = new MqttConnectOptions();
-        if (mqttProperties.getUsername() != null && mqttProperties.getPassword() != null) {
+        if (mqttProperties.getUsername() != null && !mqttProperties.getUsername().isEmpty() && mqttProperties.getPassword() != null && !mqttProperties.getPassword().isEmpty()) {
             options.setUserName(mqttProperties.getUsername());
             options.setPassword(mqttProperties.getPassword().toCharArray());
         }
@@ -93,6 +93,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
         options.setCleanSession(mqttProperties.isCleanSession());
         options.setAutomaticReconnect(mqttProperties.isAutomaticReconnect());
         if (mqttSslProperties.isEnable()) {
+            options.setHttpsHostnameVerificationEnabled(mqttSslProperties.isCheck());
             if (mqttSslProperties.isCaServerAutoSign()) {
                 options.setSocketFactory(SslUtil.getSocketFactory());
             } else {
@@ -122,7 +123,6 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 }
                 options.setSocketFactory(SslUtil.getSocketFactory(caCrt, clientCrt, clientKey));
             }
-            options.setHttpsHostnameVerificationEnabled(mqttSslProperties.isCheck());
         }
         mqttClient.setCallback(new MqttCallbackExtended() {
 

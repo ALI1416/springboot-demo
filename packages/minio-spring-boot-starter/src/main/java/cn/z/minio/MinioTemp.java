@@ -50,7 +50,7 @@ public class MinioTemp {
         MinioClient.Builder builder = MinioClient.builder()
                 .endpoint(minioProperties.getUri())
                 .credentials(minioProperties.getUsername(), minioProperties.getPassword());
-        if (minioProperties.getRegion() != null) {
+        if (minioProperties.getRegion() != null && !minioProperties.getRegion().isEmpty()) {
             builder.region(minioProperties.getRegion());
         }
         this.minioClient = builder.build();

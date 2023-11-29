@@ -28,8 +28,9 @@ public class MinioAutoConfiguration {
      * @param minioProperties MinioProperties
      */
     public MinioAutoConfiguration(MinioProperties minioProperties) {
-        String msg = "Minio配置：URI " + minioProperties.getUri();
-        if (minioProperties.getRegion() != null) {
+        String msg = "Minio配置：URI " + minioProperties.getUri() +
+                " ，使用账号密码访问 " + (minioProperties.getUsername() != null && !minioProperties.getUsername().isEmpty() && minioProperties.getPassword() != null && !minioProperties.getPassword().isEmpty());
+        if (minioProperties.getRegion() != null && !minioProperties.getRegion().isEmpty()) {
             msg += " ，区域REGION " + minioProperties.getRegion();
         }
         log.info(msg);

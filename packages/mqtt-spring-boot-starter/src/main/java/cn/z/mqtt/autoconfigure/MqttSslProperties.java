@@ -16,11 +16,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class MqttSslProperties {
 
     /**
-     * 启用SSL(默认值false)
+     * 启用(默认值false)
      */
     private boolean enable = false;
     /**
-     * 校验SSL证书(默认值false)
+     * 校验证书(默认值false)
      */
     private boolean check = false;
     /**

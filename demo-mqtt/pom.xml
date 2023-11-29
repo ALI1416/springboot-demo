@@ -34,10 +34,10 @@
       <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
     </dependency>
     <!--加密算法-->
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcpkix-jdk18on</artifactId>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.bouncycastle</groupId>-->
+<!--      <artifactId>bcpkix-jdk18on</artifactId>-->
+<!--    </dependency>-->
     <!--MQTT SpringBoot启动器-->
     <dependency>
       <groupId>cn.404z</groupId>
