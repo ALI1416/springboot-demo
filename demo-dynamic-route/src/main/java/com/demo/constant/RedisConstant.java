@@ -15,6 +15,19 @@ public class RedisConstant {
     private RedisConstant() {
     }
 
+    /* 路由 */
+    // route: 路由
+    //   match 所有"匹配路径"
+    //   direct 所有"直接路径"
+    //   user: 用户
+    //     [用户ID]
+    //       :match 用户"匹配路径"
+    //       :direct 用户"直接路径"
+    //   role: 角色
+    //     [角色ID]
+    //       :match 角色"匹配路径"
+    //       :direct 角色"直接路径"
+
     /**
      * 路由-前缀{@value}
      */
@@ -47,6 +60,10 @@ public class RedisConstant {
      * 路由-失效时间(秒)(2小时){@value}
      */
     public static final int ROUTE_EXPIRE = 2 * 60 * 60;
+
+    /* 更新 */
+    // update: 更新
+    //   routeNotIntercept 路由不拦截
 
     /**
      * 更新前缀{@value}
