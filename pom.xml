@@ -130,6 +130,11 @@
     <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
     <mqtt.version>1.2.5</mqtt.version>
 
+    <!--加密算法-->
+    <!--org.bouncycastle:bcpkix-jdk18on-->
+    <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on -->
+    <bcpkix.version>1.77</bcpkix.version>
+
     <!--Minio(与服务器版本号不对应，不需一致)-->
     <!--io.minio:minio-->
     <!-- https://mvnrepository.com/artifact/io.minio/minio -->
@@ -227,11 +232,6 @@
     <!--com.github.xiaoymin:knife4j-openapi3-spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter -->
     <knife4j.version>4.3.0</knife4j.version>
-
-    <!--加密算法-->
-    <!--org.bouncycastle:bcpkix-jdk18on-->
-    <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on -->
-    <bcpkix.version>1.77</bcpkix.version>
 
     <!---->
     <!--项目包-->

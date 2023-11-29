@@ -55,6 +55,7 @@ SpringBoot示例
   - SpringBoot Web
   - FastJson
   - MQTT
+  - 加密算法
 - **`demo-mqtt-cluster`** : MQTT集群
   - SpringBoot
   - FastJson
@@ -149,6 +150,8 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/jakarta.json/jakarta.json-api?label=Maven%20Central)
   - `MQTT(与服务器版本号不对应，不需一致)` : `org.eclipse.paho:org.eclipse.paho.client.mqttv3`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.eclipse.paho/org.eclipse.paho.client.mqttv3?label=Maven%20Central)
+  - `加密算法` : `org.bouncycastle:bcpkix-jdk18on`  
+    ![Maven Central](https://img.shields.io/maven-central/v/org.bouncycastle/bcpkix-jdk18on?label=Maven%20Central)
   - `Minio(与服务器版本号不对应，不需一致)` : `io.minio:minio`  
     ![Maven Central](https://img.shields.io/maven-central/v/io.minio/minio?label=Maven%20Central)
   - `MyBatis` : `org.mybatis.spring.boot:mybatis-spring-boot-starter`  
