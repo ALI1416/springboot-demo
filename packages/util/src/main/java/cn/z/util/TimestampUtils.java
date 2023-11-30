@@ -400,11 +400,13 @@ public class TimestampUtils {
      * @return 时间戳
      */
     public static long getTimestamp(long timestamp, int fillField, boolean fillMode, int offsetField, int offsetAmount) {
-        // 当前时间戳
-        Calendar calendar = Calendar.getInstance();
-        // 指定时间戳
-        if (timestamp > -1) {
-            calendar.setTimeInMillis(timestamp);
+        Calendar calendar;
+        if (timestamp < 0) {
+            // 当前时间戳
+            calendar = Calendar.getInstance();
+        } else {
+            // 指定时间戳
+            calendar = new Calendar.Builder().setInstant(timestamp).build();
         }
         // 填充(switch语句缺少break但不存在错误)
         if (fillMode) {

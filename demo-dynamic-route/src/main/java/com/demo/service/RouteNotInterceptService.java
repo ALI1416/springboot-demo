@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,22 +39,6 @@ public class RouteNotInterceptService extends ServiceBase {
      * 本地缓存
      */
     private final RouteNotInterceptVo localCache = new RouteNotInterceptVo();
-    /**
-     * 匹配路径
-     */
-    private List<String> match;
-    /**
-     * 直接路径
-     */
-    private List<String> direct;
-    /**
-     * 匹配路径(需要登录)
-     */
-    private List<String> loginMatch;
-    /**
-     * 直接路径(需要登录)
-     */
-    private List<String> loginDirect;
 
     /**
      * 插入
@@ -121,7 +106,7 @@ public class RouteNotInterceptService extends ServiceBase {
      */
     public boolean isMatch(List<String> urlList) {
         for (String url : urlList) {
-            if (match.contains(url)) {
+            if (localCache.getMatch().contains(url)) {
                 return true;
             }
         }
@@ -135,7 +120,7 @@ public class RouteNotInterceptService extends ServiceBase {
      * @return 是否
      */
     public boolean isDirect(String url) {
-        return direct.contains(url);
+        return localCache.getDirect().contains(url);
     }
 
     /**
@@ -146,7 +131,7 @@ public class RouteNotInterceptService extends ServiceBase {
      */
     public boolean isLoginMatch(List<String> urlList) {
         for (String url : urlList) {
-            if (loginMatch.contains(url)) {
+            if (localCache.getLoginMatch().contains(url)) {
                 return true;
             }
         }
@@ -160,7 +145,7 @@ public class RouteNotInterceptService extends ServiceBase {
      * @return 是否
      */
     public boolean isLoginDirect(String url) {
-        return loginDirect.contains(url);
+        return localCache.getLoginDirect().contains(url);
     }
 
     /**
@@ -175,18 +160,18 @@ public class RouteNotInterceptService extends ServiceBase {
         // 存在"不拦截路径"
         if (!notIntercept.isEmpty()) {
             // 创建"不拦截-匹配路径"
-            match = notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            localCache.setMatch(notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
             // 创建"不拦截-直接路径"
-            direct = notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            localCache.setDirect(notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
             // 创建"不拦截-匹配路径(需要登录)"
-            loginMatch = notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
+            localCache.setLoginMatch(notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
             // 创建"不拦截-直接路径(需要登录)"
-            loginDirect = notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList());
-            // 更新本地缓存
-            localCache.setMatch(match);
-            localCache.setDirect(direct);
-            localCache.setLoginMatch(loginMatch);
-            localCache.setLoginDirect(loginDirect);
+            localCache.setLoginDirect(notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
+        } else {
+            localCache.setMatch(new ArrayList<>(0));
+            localCache.setDirect(new ArrayList<>(0));
+            localCache.setLoginMatch(new ArrayList<>(0));
+            localCache.setLoginDirect(new ArrayList<>(0));
         }
     }
 
