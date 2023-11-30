@@ -13,68 +13,71 @@ import java.util.Calendar;
  * <th>标记
  * <th>解释
  * <tr>
- * <td>G
- * <td>公元前/后
+ * <td>yyyy / yy
+ * <td>年 4位 / 2位
  * <tr>
- * <td>yyyy
- * <td>年
+ * <td>MM / M
+ * <td>月 2位 / 1位
  * <tr>
- * <td>MM
- * <td>月
+ * <td>dd / d
+ * <td>日 2位 / 1位
  * <tr>
- * <td>dd
- * <td>日
+ * <td>KK / K
+ * <td>12小时制(0-11) 2位 / 1位
  * <tr>
- * <td>hh
- * <td>12小时制
+ * <td>hh / h
+ * <td>12小时制(1-12) 2位 / 1位
  * <tr>
- * <td>HH
- * <td>24小时制
+ * <td>HH / H
+ * <td>24小时制(0-23) 2位 / 1位
  * <tr>
- * <td>mm
- * <td>分
+ * <td>kk / k
+ * <td>24小时制(1-24) 2位 / 1位
  * <tr>
- * <td>ss
- * <td>秒
+ * <td>mm / m
+ * <td>分 2位 / 1位
  * <tr>
- * <td>SSS
- * <td>毫秒
+ * <td>ss / s
+ * <td>秒 2位 / 1位
  * <tr>
- * <td>E
- * <td>星期
+ * <td>SSS / SS / S
+ * <td>毫秒 3位 / 2位 / 1位
  * <tr>
- * <td>z
- * <td>时区
+ * <td>n(最多19位)
+ * <td>纳秒
  * <tr>
- * <td>D
- * <td>一年中第几天
+ * <td>e
+ * <td>周几(1周日 2周一 ... 7周六)
  * <tr>
- * <td>F
- * <td>当前月份内一周中的第几天
- * <tr>
- * <td>w
- * <td>一年中的第几周
+ * <td>QQ / Q
+ * <td>当年第几季度 2位 / 1位
  * <tr>
  * <td>W
- * <td>一月中的第几周
+ * <td>当年第几周
+ * <tr>
+ * <td>DDD / DD / D
+ * <td>当年第几天 3位 / 2位 / 1位
+ * <tr>
+ * <td>w
+ * <td>当月第几周
+ * <tr>
+ * <td>F
+ * <td>当月当周第几天
+ * <tr>
+ * <td>A(最多19位)
+ * <td>当天第几毫秒
+ * <tr>
+ * <td>N(最多19位)
+ * <td>当天第几纳秒
  * <tr>
  * <td>a
- * <td>AM/PM标记
+ * <td>上午[0-12) / 下午[12-24)
  * <tr>
- * <td>k
- * <td>一天中的第几小时(1-24)
- * <tr>
- * <td>K
- * <td>AM/PM格式一天中的第几小时(0-11)
- * <tr>
- * <td>Y
- * <td>当天所在的周属于的年份，一周从周日开始，周六结束
- * <tr>
- * <td>u
- * <td>星期(1-7)
+ * <td>B
+ * <td>午夜[0:00] / 凌晨(0-5) / 清晨[5-8) / 上午[8,12) / 中午[12,13) / 下午[13,17) / 晚上[17,23)
  * <tr>
  * <td>'
- * <td>文本定界符
+ * <td>转义字符
  * <tr>
  * <td>''
  * <td>单引号
@@ -93,9 +96,9 @@ import java.util.Calendar;
  * <td>年
  * <tr>
  * <td>MONTH
- * <td>月(一月为0,二月为1,...十二月为11)
+ * <td>月(0一月 1二月 ... 11十二月)
  * <tr>
- * <td>DATE/DAY_OF_MONTH
+ * <td>DATE / DAY_OF_MONTH
  * <td>日
  * <tr>
  * <td>AM_PM
@@ -116,20 +119,20 @@ import java.util.Calendar;
  * <td>MILLISECOND
  * <td>毫秒
  * <tr>
- * <td>WEEK_OF_YEAR
- * <td>一年中的第几周
+ * <td>DAY_OF_WEEK
+ * <td>周几(1周日 2周一 ... 7周六)
  * <tr>
- * <td>WEEK_OF_MONTH
- * <td>一月中的第几周
+ * <td>WEEK_OF_YEAR
+ * <td>当年第几周
  * <tr>
  * <td>DAY_OF_YEAR
- * <td>一年中的第几天
- * <tr>
- * <td>DAY_OF_WEEK
- * <td>周几(周日为1,周一为2,...周六为7)
+ * <td>当年第几天
  * <tr>
  * <td>DAY_OF_WEEK_IN_MONTH
- * <td>当前月份内一周中的第几天
+ * <td>当月当周第几天
+ * <tr>
+ * <td>WEEK_OF_MONTH
+ * <td>当月第几周
  * <tr>
  * <td>ZONE_OFFSET
  * <td>时区

@@ -23,9 +23,9 @@ import java.util.Calendar;
  * <td>年
  * <tr>
  * <td>MONTH
- * <td>月(一月为0,二月为1,...十二月为11)
+ * <td>月(0一月 1二月 ... 11十二月)
  * <tr>
- * <td>DATE/DAY_OF_MONTH
+ * <td>DATE / DAY_OF_MONTH
  * <td>日
  * <tr>
  * <td>AM_PM
@@ -46,20 +46,20 @@ import java.util.Calendar;
  * <td>MILLISECOND
  * <td>毫秒
  * <tr>
- * <td>WEEK_OF_YEAR
- * <td>一年中的第几周
+ * <td>DAY_OF_WEEK
+ * <td>周几(1周日 2周一 ... 7周六)
  * <tr>
- * <td>WEEK_OF_MONTH
- * <td>一月中的第几周
+ * <td>WEEK_OF_YEAR
+ * <td>当年第几周
  * <tr>
  * <td>DAY_OF_YEAR
- * <td>一年中的第几天
- * <tr>
- * <td>DAY_OF_WEEK
- * <td>周几(周日为1,周一为2,...周六为7)
+ * <td>当年第几天
  * <tr>
  * <td>DAY_OF_WEEK_IN_MONTH
- * <td>当前月份内一周中的第几天
+ * <td>当月当周第几天
+ * <tr>
+ * <td>WEEK_OF_MONTH
+ * <td>当月第几周
  * <tr>
  * <td>ZONE_OFFSET
  * <td>时区
