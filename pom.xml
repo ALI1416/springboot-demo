@@ -207,7 +207,7 @@
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
     <!-- https://mvnrepository.com/artifact/me.zhyd.oauth/JustAuth -->
-    <JustAuth.version>1.16.5</JustAuth.version>
+    <JustAuth.version>1.16.6</JustAuth.version>
 
     <!--Tika-->
     <!--org.apache.tika:tika-core-->
@@ -362,6 +362,12 @@
         <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
         <version>${mqtt.version}</version>
       </dependency>
+      <!--加密算法-->
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcpkix-jdk18on</artifactId>
+        <version>${bcpkix.version}</version>
+      </dependency>
       <!--Minio-->
       <dependency>
         <groupId>io.minio</groupId>
@@ -439,12 +445,6 @@
         <groupId>com.github.xiaoymin</groupId>
         <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
         <version>${knife4j.version}</version>
-      </dependency>
-      <!--加密算法-->
-      <dependency>
-        <groupId>org.bouncycastle</groupId>
-        <artifactId>bcpkix-jdk18on</artifactId>
-        <version>${bcpkix.version}</version>
       </dependency>
 
       <!--邮件SpringBoot模板-->
