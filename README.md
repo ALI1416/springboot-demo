@@ -172,8 +172,6 @@ SpringBoot示例
     ![Maven Central](https://img.shields.io/maven-central/v/cn.404z/tiny-token-spring-boot-starter?label=Maven%20Central)
   - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
     ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2?label=Maven%20Central)
-  - `FastJson Extension Spring5` : `com.alibaba.fastjson2:fastjson2-extension-spring5`  
-    ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2-extension-spring5?label=Maven%20Central)
   - `EasyExcel` : `com.alibaba:easyexcel`  
     ![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/easyexcel?label=Maven%20Central)
   - `Protocol Buffers` : `com.google.protobuf:protobuf-java`  
