@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -91,9 +92,9 @@ public class UserMongoService extends ServiceBase {
      * 插入
      *
      * @param userMongo UserMongoVo
-     * @return ok:id,e:0
+     * @return ok:T,e:null
      */
-    public long insert(UserMongoVo userMongo) {
+    public UserMongoVo insert(UserMongoVo userMongo) {
         return userMongoDao.insert(userMongo);
     }
 
@@ -101,9 +102,9 @@ public class UserMongoService extends ServiceBase {
      * 批量插入
      *
      * @param userMongoList UserMongoVo
-     * @return 是否成功
+     * @return ok:T,e:null
      */
-    public boolean batchInsert(List<UserMongoVo> userMongoList) {
+    public Collection<UserMongoVo> batchInsert(List<UserMongoVo> userMongoList) {
         return userMongoDao.batchInsert(userMongoList);
     }
 
@@ -111,9 +112,9 @@ public class UserMongoService extends ServiceBase {
      * 插入或更新
      *
      * @param userMongo UserMongoVo
-     * @return 是否成功
+     * @return ok:T,e:null
      */
-    public boolean save(UserMongoVo userMongo) {
+    public UserMongoVo save(UserMongoVo userMongo) {
         return userMongoDao.save(userMongo);
     }
 

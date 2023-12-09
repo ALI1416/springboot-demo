@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -80,40 +81,36 @@ public class UserMongoDao extends DaoBase {
      * 插入
      *
      * @param userMongo UserMongoVo
-     * @return ok:id,e:0
+     * @return ok:T,e:null
      */
-    public long insert(UserMongoVo userMongo) {
+    public UserMongoVo insert(UserMongoVo userMongo) {
         userMongo.setId(Id.next());
         userMongo.setDate(Clock.timestamp());
-        if (tryAnyNoTransaction(() -> mongoTemp.insert(userMongo))) {
-            return userMongo.getId();
-        } else {
-            return 0L;
-        }
+        return tryAnyNoTransactionReturnT(() -> mongoTemp.insert(userMongo));
     }
 
     /**
      * 批量插入
      *
      * @param userMongoList UserMongoVo
-     * @return 是否成功
+     * @return ok:T,e:null
      */
-    public boolean batchInsert(List<UserMongoVo> userMongoList) {
+    public Collection<UserMongoVo> batchInsert(List<UserMongoVo> userMongoList) {
         for (UserMongoVo userMongo : userMongoList) {
             userMongo.setId(Id.next());
             userMongo.setDate(Clock.timestamp());
         }
-        return tryAnyNoTransaction(() -> mongoTemp.batchInsert(userMongoList));
+        return tryAnyNoTransactionReturnT(() -> mongoTemp.batchInsert(userMongoList));
     }
 
     /**
      * 插入或更新
      *
      * @param userMongo UserMongo
-     * @return 是否成功
+     * @return ok:T,e:null
      */
-    public boolean save(UserMongoVo userMongo) {
-        return tryAnyNoTransaction(() -> mongoTemp.save(userMongo));
+    public UserMongoVo save(UserMongoVo userMongo) {
+        return tryAnyNoTransactionReturnT(() -> mongoTemp.save(userMongo));
     }
 
     /* ==================== 删除操作 ==================== */

@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -74,7 +75,7 @@ public class UserMongoController {
      * {"name":"a","followers":10,"following":20}
      */
     @PostMapping("insert")
-    public Result<Long> insert(@RequestBody UserMongoVo userMongo) {
+    public Result<UserMongoVo> insert(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.insert(userMongo));
     }
 
@@ -84,7 +85,7 @@ public class UserMongoController {
      * [{"name":"ab","followers":10,"following":20},{"name":"ac","followers":10,"following":20}]
      */
     @PostMapping("batchInsert")
-    public Result<Boolean> batchInsert(@RequestBody List<UserMongoVo> userMongoList) {
+    public Result<Collection<UserMongoVo>> batchInsert(@RequestBody List<UserMongoVo> userMongoList) {
         return Result.o(userMongoService.batchInsert(userMongoList));
     }
 
@@ -94,7 +95,7 @@ public class UserMongoController {
      * {"id":1,"name":"a","followers":10,"following":20}
      */
     @PutMapping("save")
-    public Result<Boolean> save(@RequestBody UserMongoVo userMongo) {
+    public Result<UserMongoVo> save(@RequestBody UserMongoVo userMongo) {
         return Result.o(userMongoService.save(userMongo));
     }
 

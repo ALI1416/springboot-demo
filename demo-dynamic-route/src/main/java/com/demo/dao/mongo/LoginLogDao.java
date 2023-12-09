@@ -30,14 +30,10 @@ public class LoginLogDao extends DaoBase {
      * 插入
      *
      * @param loginLog LoginLogVo
-     * @return ok:id,e:0
+     * @return ok:T,e:null
      */
-    public long insert(LoginLogVo loginLog) {
-        if (tryAnyNoTransaction(() -> mongoTemp.insert(loginLog))) {
-            return loginLog.getId();
-        } else {
-            return 0L;
-        }
+    public LoginLogVo insert(LoginLogVo loginLog) {
+        return tryAnyNoTransactionReturnT(() -> mongoTemp.insert(loginLog));
     }
 
     /**

@@ -33,10 +33,7 @@ public class RoleDao extends DaoBase {
      */
     public long insert(RoleVo role) {
         role.setId(Id.next());
-        if (tryEq1(() -> roleMapper.insert(role))) {
-            return role.getId();
-        }
-        return 0L;
+        return tryEq1(() -> roleMapper.insert(role)) ? role.getId() : 0;
     }
 
     /**

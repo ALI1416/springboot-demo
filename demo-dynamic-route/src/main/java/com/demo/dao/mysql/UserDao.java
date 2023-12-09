@@ -33,10 +33,7 @@ public class UserDao extends DaoBase {
      */
     public long insert(UserVo user) {
         user.setId(Id.next());
-        if (tryEq1(() -> userMapper.insert(user))) {
-            return user.getId();
-        }
-        return 0L;
+        return tryEq1(() -> userMapper.insert(user)) ? user.getId() : 0;
     }
 
     /**

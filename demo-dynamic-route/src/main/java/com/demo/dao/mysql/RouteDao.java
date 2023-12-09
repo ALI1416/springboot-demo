@@ -33,10 +33,7 @@ public class RouteDao extends DaoBase {
      */
     public long insert(RouteVo route) {
         route.setId(Id.next());
-        if (tryEq1(() -> routeMapper.insert(route))) {
-            return route.getId();
-        }
-        return 0L;
+        return tryEq1(() -> routeMapper.insert(route)) ? route.getId() : 0;
     }
 
     /**

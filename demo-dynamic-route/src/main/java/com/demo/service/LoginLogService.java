@@ -39,9 +39,9 @@ public class LoginLogService extends ServiceBase {
      * @param createId 登录用户id
      * @param token    token
      * @param request  HttpServletRequest
-     * @return ok:id,e:0
+     * @return ok:T,e:null
      */
-    public long insert(Long createId, String token, HttpServletRequest request) {
+    public LoginLogVo insert(Long createId, String token, HttpServletRequest request) {
         LoginLogVo loginLog = new LoginLogVo();
         loginLog.setId(Id.next());
         loginLog.setToken(token);

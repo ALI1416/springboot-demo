@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  * <h1>Dao层基类</h1>
@@ -61,6 +62,21 @@ public class DaoBase {
         } catch (Exception e) {
             log.error("tryAnyNoTransaction", e);
             return false;
+        }
+    }
+
+    /**
+     * 尝试执行(无事务)：必须无异常
+     *
+     * @param function 函数
+     * @return T(异常返回null)
+     */
+    public static <T> T tryAnyNoTransactionReturnT(Supplier<T> function) {
+        try {
+            return function.get();
+        } catch (Exception e) {
+            log.error("tryAnyNoTransactionReturnT", e);
+            return null;
         }
     }
 

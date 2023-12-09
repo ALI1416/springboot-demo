@@ -33,10 +33,7 @@ public class RouteNotInterceptDao extends DaoBase {
      */
     public long insert(RouteNotInterceptVo routeNotIntercept) {
         routeNotIntercept.setId(Id.next());
-        if (tryEq1(() -> routeNotInterceptMapper.insert(routeNotIntercept))) {
-            return routeNotIntercept.getId();
-        }
-        return 0L;
+        return tryEq1(() -> routeNotInterceptMapper.insert(routeNotIntercept)) ? routeNotIntercept.getId() : 0;
     }
 
     /**
