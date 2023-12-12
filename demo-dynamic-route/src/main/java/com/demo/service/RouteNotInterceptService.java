@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,8 +105,9 @@ public class RouteNotInterceptService extends ServiceBase {
      * @return 是否
      */
     public boolean isMatch(List<String> urlList) {
+        List<String> matchList = localCache.getMatch();
         for (String url : urlList) {
-            if (localCache.getMatch().contains(url)) {
+            if (matchList.contains(url)) {
                 return true;
             }
         }
@@ -130,8 +131,9 @@ public class RouteNotInterceptService extends ServiceBase {
      * @return 是否
      */
     public boolean isLoginMatch(List<String> urlList) {
+        List<String> loginMatchList = localCache.getLoginMatch();
         for (String url : urlList) {
-            if (localCache.getLoginMatch().contains(url)) {
+            if (loginMatchList.contains(url)) {
                 return true;
             }
         }
@@ -168,10 +170,10 @@ public class RouteNotInterceptService extends ServiceBase {
             // 创建"不拦截-直接路径(需要登录)"
             localCache.setLoginDirect(notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
         } else {
-            localCache.setMatch(new ArrayList<>(0));
-            localCache.setDirect(new ArrayList<>(0));
-            localCache.setLoginMatch(new ArrayList<>(0));
-            localCache.setLoginDirect(new ArrayList<>(0));
+            localCache.setMatch(Collections.emptyList());
+            localCache.setDirect(Collections.emptyList());
+            localCache.setLoginMatch(Collections.emptyList());
+            localCache.setLoginDirect(Collections.emptyList());
         }
     }
 

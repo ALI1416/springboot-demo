@@ -275,7 +275,7 @@ public class RouteService extends ServiceBase {
         // 用户
         List<Long> userIdList = userDao.findIdByRoleId(roleId);
         List<String> keys = new ArrayList<>();
-        for (Long userId : userIdList) {
+        for (long userId : userIdList) {
             keys.add(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX);
             keys.add(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX);
         }
@@ -352,12 +352,14 @@ public class RouteService extends ServiceBase {
             // 创建角色的"匹配路径"和"直接路径"
             setRouteByRoleIdList(roleIdList);
             // 获取该用户的"匹配路径"和"直接路径"
-            matchList = redisTemp.sUnionAll(roleIdList.stream() //
-                    .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_MATCH_SUFFIX) //
-                    .collect(Collectors.toList()));
-            directList = redisTemp.sUnionAll(roleIdList.stream() //
-                    .map(r -> RedisConstant.ROUTE_ROLE_PREFIX + r + RedisConstant.ROUTE_DIRECT_SUFFIX) //
-                    .collect(Collectors.toList()));
+            matchList = redisTemp.sUnionAll( //
+                    roleIdList.stream().map(roleId -> RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX) //
+                            .collect(Collectors.toList()) //
+            );
+            directList = redisTemp.sUnionAll( //
+                    roleIdList.stream().map(roleId -> RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
+                            .collect(Collectors.toList()) //
+            );
         }
         // 创建该用户的"匹配路径"和"直接路径"
         String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX;
@@ -374,7 +376,7 @@ public class RouteService extends ServiceBase {
      * @param roleIdList 角色id列表
      */
     public void setRouteByRoleIdList(List<Long> roleIdList) {
-        for (Long roleId : roleIdList) {
+        for (long roleId : roleIdList) {
             String key = RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX;
             // 判断是否存在该角色的"匹配路径"和"直接路径"
             if (Boolean.FALSE.equals(redisTemp.exists(key))) {
@@ -453,7 +455,7 @@ public class RouteService extends ServiceBase {
         List<RouteVo> list = DeepCopy.copy(routeList);
         // 找到并重置根节点
         RouteVo root;
-        Optional<RouteVo> first = list.stream().filter(s -> s.getId() == 0).findFirst();
+        Optional<RouteVo> first = list.stream().filter(r -> r.getId() == 0).findFirst();
         if (first.isPresent()) {
             root = first.get();
             root.setParentId(-1L);
