@@ -1,5 +1,6 @@
 package com.demo.advanced.reflect;
 
+import cn.z.tool.ClassScanner;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.*;
@@ -21,6 +22,7 @@ public class Main {
     public static final String CLASS_NAME = "com.demo.advanced.reflect.User";
 
     public static void main(String[] args) {
+        log.info(ClassScanner.getClass("com.demo").toString());
         classLoader();
         myClassLoader();
         clazz();
