@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import cn.z.id.Id;
-import cn.z.tinytoken.T4s;
+import cn.z.tinytoken.UserInfo;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.PageInfo;
@@ -37,7 +37,6 @@ import java.util.List;
 @Tag(name = "角色")
 public class RoleController extends ControllerBase {
 
-    private final T4s t4s;
     private final RoleService roleService;
     private final RoleRouteService roleRouteService;
     private final UserService userService;
@@ -52,7 +51,7 @@ public class RoleController extends ControllerBase {
         if (existNull(role.getName(), role.getSeq())) {
             return paramIsError();
         }
-        role.setCreateId(t4s.getId());
+        role.setCreateId(UserInfo.getId());
         return Result.o(roleService.insert(role));
     }
 
@@ -64,7 +63,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "id", description = "角色id")
     public Result<Boolean> deleteLimit(long id) {
         // 只能管理自己创建的角色
-        if (!roleService.existIdAndCreateId(id, t4s.getId())) {
+        if (!roleService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         boolean ok = roleService.delete(id);
@@ -100,7 +99,7 @@ public class RoleController extends ControllerBase {
             return paramIsError();
         }
         // 只能管理自己创建的角色
-        if (!roleService.existIdAndCreateId(role.getId(), t4s.getId())) {
+        if (!roleService.existIdAndCreateId(role.getId(), UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.update(role));
@@ -129,7 +128,7 @@ public class RoleController extends ControllerBase {
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
             return paramIsError();
         }
-        long userId = t4s.getId();
+        long userId = UserInfo.getId();
         // 只能管理自己创建的角色 只能管理自己有权限的路由
         if (!roleService.existIdAndCreateId(roleId, userId) && !routeService.findIdAndChildIdByUserId(userId).containsAll(routeIdList)) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
@@ -183,7 +182,7 @@ public class RoleController extends ControllerBase {
     @GetMapping("getLimit")
     @Operation(summary = "获取所有角色(限制)", description = "需要登录")
     public Result<PageInfo<RoleVo>> getLimit(Integer pages, Integer rows, String orderBy) {
-        return Result.o(roleService.findByCreateId(t4s.getId(), pages, rows, orderBy));
+        return Result.o(roleService.findByCreateId(UserInfo.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -203,7 +202,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "userId", description = "用户id")
     public Result<PageInfo<RoleVo>> userLimit(long userId, Integer pages, Integer rows, String orderBy) {
         // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(userId, t4s.getId())) {
+        if (!userService.existIdAndCreateId(userId, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));

@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import cn.z.tinytoken.T4s;
+import cn.z.tinytoken.UserInfo;
 import cn.z.tool.BCrypt;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultEnum;
@@ -103,7 +104,7 @@ public class UserController extends ControllerBase {
         if (existNull(user.getPwd(), user.getNewPwd())) {
             return paramIsError();
         }
-        user.setId(t4s.getId());
+        user.setId(UserInfo.getId());
         User u = userService.findById(user.getId());
         if (!BCrypt.check(user.getPwd(), u.getPwd())) {
             return Result.e(ResultEnum.PASSWORD_ERROR);
@@ -124,7 +125,7 @@ public class UserController extends ControllerBase {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
         UserVo u = new UserVo();
-        u.setId(t4s.getId());
+        u.setId(UserInfo.getId());
         u.setAccount(user.getAccount());
         u.setName(user.getName());
         return Result.o(userService.update(u));
@@ -136,7 +137,7 @@ public class UserController extends ControllerBase {
     @GetMapping("get")
     @Operation(summary = "获取用户信息", description = "需要登录")
     public Result<UserVo> get() {
-        UserVo user = userService.findById(t4s.getId());
+        UserVo user = userService.findById(UserInfo.getId());
         user.setPwd(null);
         return Result.o(user);
     }
@@ -147,7 +148,7 @@ public class UserController extends ControllerBase {
     @GetMapping("role")
     @Operation(summary = "获取用户角色", description = "需要登录")
     public Result<PageInfo<RoleVo>> role(Integer pages, Integer rows, String orderBy) {
-        return Result.o(roleService.findByUserId(t4s.getId(), pages, rows, orderBy));
+        return Result.o(roleService.findByUserId(UserInfo.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -156,7 +157,7 @@ public class UserController extends ControllerBase {
     @GetMapping("route")
     @Operation(summary = "获取用户路由", description = "需要登录")
     public Result<RouteVo> route() {
-        return Result.o(routeService.findByUserId(t4s.getId()));
+        return Result.o(routeService.findByUserId(UserInfo.getId()));
     }
 
     /**
@@ -165,7 +166,7 @@ public class UserController extends ControllerBase {
     @GetMapping("avatar")
     @Operation(summary = "获取用户头像", description = "需要登录")
     public Result<Long> avatar() {
-        return Result.o(t4s.getId());
+        return Result.o(UserInfo.getId());
     }
 
 }

@@ -1,6 +1,7 @@
 package com.demo.controller;
 
 import cn.z.tinytoken.T4s;
+import cn.z.tinytoken.UserInfo;
 import cn.z.tinytoken.entity.TokenInfo;
 import cn.z.tinytoken.entity.TokenInfoExtra;
 import com.demo.base.ControllerBase;
@@ -51,7 +52,7 @@ public class UserManageController extends ControllerBase {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
             return paramIsError();
         }
-        user.setCreateId(t4s.getId());
+        user.setCreateId(UserInfo.getId());
         if (userService.existAccount(user.getAccount())) {
             return Result.e(ResultEnum.ACCOUNT_EXIST);
         }
@@ -68,7 +69,7 @@ public class UserManageController extends ControllerBase {
             return paramIsError();
         }
         // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
+        if (!userService.existIdAndCreateId(user.getId(), UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
@@ -102,7 +103,7 @@ public class UserManageController extends ControllerBase {
             return paramIsError();
         }
         // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(user.getId(), t4s.getId())) {
+        if (!userService.existIdAndCreateId(user.getId(), UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         boolean ok = userService.updateRole(user);
@@ -137,7 +138,7 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "获取拥有指定角色的用户(限制)", description = "需要登录")
     @Parameter(name = "roleId", description = "角色id")
     public Result<PageInfo<UserVo>> getByRoleIdLimit(long roleId, Integer pages, Integer rows, String orderBy) {
-        return Result.o(userService.findByRoleIdAndCreateId(roleId, t4s.getId(), pages, rows, orderBy));
+        return Result.o(userService.findByRoleIdAndCreateId(roleId, UserInfo.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -156,7 +157,7 @@ public class UserManageController extends ControllerBase {
     @GetMapping("getLimit")
     @Operation(summary = "获取所有用户(限制)", description = "需要登录")
     public Result<PageInfo<UserVo>> getLimit(Integer pages, Integer rows, String orderBy) {
-        return Result.o(userService.findByCreateId(t4s.getId(), pages, rows, orderBy));
+        return Result.o(userService.findByCreateId(UserInfo.getId(), pages, rows, orderBy));
     }
 
     /**
@@ -180,7 +181,7 @@ public class UserManageController extends ControllerBase {
         if (id == null) {
             return Result.e(ResultEnum.USER_NOT_LOGIN);
         }
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.deleteByToken(token));
@@ -204,7 +205,7 @@ public class UserManageController extends ControllerBase {
     @Parameter(name = "id", description = "用户id")
     public Result<Long> logoutIdLimit(long id) {
         // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.deleteById(id));
@@ -233,7 +234,7 @@ public class UserManageController extends ControllerBase {
         if (id == null) {
             return Result.e(ResultEnum.USER_NOT_LOGIN);
         }
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (extra) {
@@ -267,7 +268,7 @@ public class UserManageController extends ControllerBase {
     @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoByTokenLimit(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
         // 只能管理自己创建的用户
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (extra) {
@@ -299,7 +300,7 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "获取所有用户认证信息(限制)")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
-        List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
+        List<Long> userIdList = userService.findIdByCreateId(UserInfo.getId());
         if (extra) {
             List<TokenInfoExtra> list = new ArrayList<>();
             for (Long userId : userIdList) {
@@ -336,7 +337,7 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "获取用户不过期认证信息(限制)")
     @Parameter(name = "extra", description = "是否查询拓展信息(默认:false)")
     public Result<List<? extends TokenInfo>> getInfoPersistLimit(@RequestParam(required = false, defaultValue = "false") boolean extra) {
-        List<Long> userIdList = userService.findIdByCreateId(t4s.getId());
+        List<Long> userIdList = userService.findIdByCreateId(UserInfo.getId());
         if (extra) {
             List<TokenInfoExtra> list = new ArrayList<>();
             List<TokenInfoExtra> persistList = t4s.getInfoExtraPersist();
@@ -385,7 +386,7 @@ public class UserManageController extends ControllerBase {
         if (id == null) {
             return Result.e(ResultEnum.USER_NOT_LOGIN);
         }
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (timeout == -1) {
@@ -422,7 +423,7 @@ public class UserManageController extends ControllerBase {
         if (id == null) {
             return Result.e(ResultEnum.USER_NOT_LOGIN);
         }
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.persist(token));
@@ -451,7 +452,7 @@ public class UserManageController extends ControllerBase {
         if (id == null) {
             return Result.e(ResultEnum.USER_NOT_LOGIN);
         }
-        if (!userService.existIdAndCreateId(id, t4s.getId())) {
+        if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         if (extra.isEmpty()) {
@@ -483,7 +484,7 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "获取用户登录日志(限制)", description = "需要登录/createId(查询指定用户)")
     public Result<PageInfo<LoginLogVo>> getLoginLogLimit(@RequestBody LoginLogVo loginLog) {
         // 只能管理自己创建的用户
-        if (loginLog.getCreateId() == null || !userService.existIdAndCreateId(loginLog.getCreateId(), t4s.getId())) {
+        if (loginLog.getCreateId() == null || !userService.existIdAndCreateId(loginLog.getCreateId(), UserInfo.getId())) {
             return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
         }
         return Result.o(loginLogService.findPage(loginLog));

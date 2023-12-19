@@ -1,6 +1,7 @@
 package com.demo.interceptor;
 
 import cn.z.tinytoken.T4s;
+import cn.z.tinytoken.UserInfo;
 import com.demo.constant.ResultEnum;
 import com.demo.entity.pojo.GlobalException;
 import com.demo.service.RouteNotInterceptService;
@@ -8,6 +9,7 @@ import com.demo.service.RouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +48,18 @@ public class RouteInterceptor implements HandlerInterceptor {
         if ("OPTIONS".equals(request.getMethod())) {
             return true;
         }
+        // 获取"用户token"
+        String userToken = t4s.getToken();
+        // 获取"用户id"
+        Long userId = null;
+        if (userToken != null) {
+            userId = t4s.getId(userToken);
+            if (userId != null) {
+                // 保存用户信息到本地线程
+                UserInfo.setToken(userToken);
+                UserInfo.setId(userId);
+            }
+        }
         // 获取"URL"
         String url = request.getServletPath();
         // URL按"/"分割并组合后的列表
@@ -58,10 +72,9 @@ public class RouteInterceptor implements HandlerInterceptor {
         if (routeNotInterceptService.isDirect(url)) {
             return true;
         }
-        // 获取"用户id"
-        Long userId = t4s.getId();
         // 抛出"未登录异常"
         if (userId == null) {
+            removeUserInfo();
             throw new GlobalException(ResultEnum.NOT_LOGIN);
         }
         // 是"root"用户
@@ -85,6 +98,7 @@ public class RouteInterceptor implements HandlerInterceptor {
             return true;
         }
         // 抛出"无权限异常"
+        removeUserInfo();
         throw new GlobalException(ResultEnum.NOT_PERMISSION, "ID[" + userId + "],URL[" + url + "]");
     }
 
@@ -110,6 +124,27 @@ public class RouteInterceptor implements HandlerInterceptor {
             list.add(sb.toString());
         }
         return list;
+    }
+
+    /**
+     * 从本地线程释放用户信息
+     */
+    private static void removeUserInfo() {
+        UserInfo.removeToken();
+        UserInfo.removeId();
+    }
+
+    /**
+     * postHandle
+     *
+     * @param request      HttpServletRequest
+     * @param response     HttpServletResponse
+     * @param handler      Object
+     * @param modelAndView ModelAndView
+     */
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        removeUserInfo();
     }
 
 }
