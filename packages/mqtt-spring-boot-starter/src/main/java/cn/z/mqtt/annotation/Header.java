@@ -24,8 +24,15 @@ public @interface Header {
 
     /**
      * 主题片段匹配位置(默认0)<br>
-     * 仅对{@link HeaderEnum#TOPIC_PART}有效
+     * 仅对类型为{@link HeaderEnum#TOPIC_PART}有效
      */
     int index() default 0;
+
+    /**
+     * 基数(默认10)<br>
+     * 仅对类型为{@link HeaderEnum#TOPIC}、{@link HeaderEnum#TOPIC_PART}有效<br>
+     * 仅对参数为byte、short、int、long及其包装类型有效
+     */
+    int radix() default 10;
 
 }

@@ -345,7 +345,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
         if (index == 0) {
             addMsg(functionArray, parameter, index);
         } else {
-            addTopic(functionArray, parameter, index);
+            addTopic(functionArray, parameter, index, 10);
         }
     }
 
@@ -367,11 +367,11 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 break;
             }
             case TOPIC: {
-                addTopic(functionArray, parameter, index);
+                addTopic(functionArray, parameter, index, header.radix());
                 break;
             }
             case TOPIC_PART: {
-                topicPartHandle(functionArray, method, parameter, partList, header.index(), index);
+                topicPartHandle(functionArray, method, parameter, partList, header.index(), index, header.radix());
                 break;
             }
             case ID: {
@@ -402,8 +402,9 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      * @param partList      订阅主题分段列表
      * @param partIndex     主题片段位置
      * @param index         位置
+     * @param radix         基数
      */
-    private static void topicPartHandle(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, int partIndex, int index) {
+    private static void topicPartHandle(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, int partIndex, int index, int radix) {
         Map.Entry<Integer, Boolean> entry;
         try {
             entry = partList.get(partIndex);
@@ -415,7 +416,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
         boolean isArray = parameter.getType().isArray();
         if (isSingle) {
             if (!isArray) {
-                functionArray[index] = (FunctionTopic) topic -> castString(parameter.getType(), topic.split("/", -1)[topicPartIndex]);
+                functionArray[index] = (FunctionTopic) topic -> castString(parameter.getType(), topic.split("/", -1)[topicPartIndex], radix);
             } else {
                 throw new MqttException("方法 " + method + " 的参数 " + parameter + " 不能是数组类型");
             }
@@ -427,7 +428,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                     int arrayLength = topicPart.length - topicPartIndex;
                     Object topicArray = Array.newInstance(parameterType, arrayLength);
                     for (int i = 0; i < arrayLength; i++) {
-                        Array.set(topicArray, i, castString(parameterType, topicPart[i + topicPartIndex]));
+                        Array.set(topicArray, i, castString(parameterType, topicPart[i + topicPartIndex], radix));
                     }
                     return topicArray;
                 };
@@ -454,9 +455,10 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      * @param functionArray Function[]
      * @param parameter     Parameter
      * @param index         位置
+     * @param radix         基数
      */
-    private static void addTopic(Function[] functionArray, Parameter parameter, int index) {
-        functionArray[index] = (FunctionTopic) topic -> castString(parameter.getType(), topic);
+    private static void addTopic(Function[] functionArray, Parameter parameter, int index, int radix) {
+        functionArray[index] = (FunctionTopic) topic -> castString(parameter.getType(), topic, radix);
     }
 
     /**
@@ -499,7 +501,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 if (bytes.length == 1) {
                     return bytes[0];
                 }
-                throw new IndexOutOfBoundsException("byte类型只能接收 1 个字节，当前为 " + bytes.length + " 字节");
+                throw new IndexOutOfBoundsException("byte类型只能接收 1 个字节，当前byte[] " + Arrays.toString(bytes) + " 为 " + bytes.length + " 个字节");
             }
             case "java.lang.Byte": {
                 if (bytes.length == 0) {
@@ -508,14 +510,14 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 if (bytes.length == 1) {
                     return bytes[0];
                 }
-                throw new IndexOutOfBoundsException("Byte类型只能接收 1 个字节，当前为 " + bytes.length + " 字节");
+                throw new IndexOutOfBoundsException("Byte类型只能接收 1 个字节，当前byte[] " + Arrays.toString(bytes) + " 为 " + bytes.length + " 个字节");
             }
             case "char": {
                 String string = new String(bytes, StandardCharsets.UTF_8);
                 if (string.length() == 1) {
                     return string.charAt(0);
                 }
-                throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前为 " + string.length() + " 字符");
+                throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
             case "java.lang.Character": {
                 if (bytes.length == 0) {
@@ -525,7 +527,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 if (string.length() == 1) {
                     return string.charAt(0);
                 }
-                throw new IndexOutOfBoundsException("Character类型只能接收 1 个字符，当前为 " + string.length() + " 字符");
+                throw new IndexOutOfBoundsException("Character类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
             case "short": {
                 return Short.parseShort(new String(bytes, StandardCharsets.UTF_8));
@@ -595,9 +597,10 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      *
      * @param clazz  Class
      * @param string String
+     * @param radix  基数
      * @return Object
      */
-    private static Object castString(Class<?> clazz, String string) {
+    private static Object castString(Class<?> clazz, String string, int radix) {
         switch (clazz.getTypeName()) {
             case "java.lang.String": {
                 return string;
@@ -615,19 +618,19 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Boolean.parseBoolean(string);
             }
             case "byte": {
-                return Byte.parseByte(string);
+                return Byte.parseByte(string, radix);
             }
             case "java.lang.Byte": {
                 if (string.length() == 0) {
                     return null;
                 }
-                return Byte.parseByte(string);
+                return Byte.parseByte(string, radix);
             }
             case "char": {
                 if (string.length() == 1) {
                     return string.charAt(0);
                 }
-                throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前为 " + string.length() + " 字符");
+                throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
             case "java.lang.Character": {
                 if (string.length() == 0) {
@@ -636,34 +639,34 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 if (string.length() == 1) {
                     return string.charAt(0);
                 }
-                throw new IndexOutOfBoundsException("Character类型只能接收 1 个字符，当前为 " + string.length() + " 字符");
+                throw new IndexOutOfBoundsException("Character类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
             case "short": {
-                return Short.parseShort(string);
+                return Short.parseShort(string, radix);
             }
             case "java.lang.Short": {
                 if (string.length() == 0) {
                     return null;
                 }
-                return Short.parseShort(string);
+                return Short.parseShort(string, radix);
             }
             case "int": {
-                return Integer.parseInt(string);
+                return Integer.parseInt(string, radix);
             }
             case "java.lang.Integer": {
                 if (string.length() == 0) {
                     return null;
                 }
-                return Integer.parseInt(string);
+                return Integer.parseInt(string, radix);
             }
             case "long": {
-                return Long.parseLong(string);
+                return Long.parseLong(string, radix);
             }
             case "java.lang.Long": {
                 if (string.length() == 0) {
                     return null;
                 }
-                return Long.parseLong(string);
+                return Long.parseLong(string, radix);
             }
             case "float": {
                 return Float.parseFloat(string);

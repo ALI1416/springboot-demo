@@ -126,9 +126,9 @@ public class MqttService {
     public void subscribe(
             String msg,
             @Header(HeaderEnum.TOPIC_PART) String topicPart0,
-            @Header(value = HeaderEnum.TOPIC_PART, index = 1) int topicPart1,
-            @Header(value = HeaderEnum.TOPIC_PART, index = 2) Boolean topicPart2,
-            @Header(value = HeaderEnum.TOPIC_PART, index = 3) byte topicPart3,
+            @Header(value = HeaderEnum.TOPIC_PART, index = 1, radix = 16) int topicPart1,
+            @Header(value = HeaderEnum.TOPIC_PART, index = 2) boolean topicPart2,
+            @Header(value = HeaderEnum.TOPIC_PART, index = 3, radix = 8) Byte topicPart3,
             @Header(value = HeaderEnum.TOPIC_PART, index = 4) Character topicPart4
     ) {
         log.info("msg:{},topicPart0:{},topicPart1:{},topicPart2:{},topicPart3:{},topicPart4:{}", msg, topicPart0, topicPart1, topicPart2, topicPart3, topicPart4);
@@ -159,7 +159,7 @@ public class MqttService {
     @Subscribe("part3/#")
     public void subscribe(
             String msg,
-            @Header(HeaderEnum.TOPIC_PART) int[] topicPartArray
+            @Header(value = HeaderEnum.TOPIC_PART, radix = 16) int[] topicPartArray
     ) {
         log.info("msg:{},topicPartArray:{}", msg, topicPartArray);
     }
