@@ -39,4 +39,67 @@
     </dependency>
   </dependencies>
 
+  <profiles>
+    <profile>
+      <!-- mvn install -P prd -->
+      <id>prd</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+              <excludes>
+                <exclude>
+                  <groupId>org.projectlombok</groupId>
+                  <artifactId>lombok</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>com.github.xiaoymin</groupId>
+                  <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>com.github.xiaoymin</groupId>
+                  <artifactId>knife4j-core</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>com.github.xiaoymin</groupId>
+                  <artifactId>knife4j-openapi3-ui</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>org.springdoc</groupId>
+                  <artifactId>springdoc-openapi-ui</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>org.springdoc</groupId>
+                  <artifactId>springdoc-openapi-webmvc-core</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>org.springdoc</groupId>
+                  <artifactId>springdoc-openapi-common</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>io.swagger.core.v3</groupId>
+                  <artifactId>swagger-annotations</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>io.swagger.core.v3</groupId>
+                  <artifactId>swagger-core</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>io.swagger.core.v3</groupId>
+                  <artifactId>swagger-models</artifactId>
+                </exclude>
+                <exclude>
+                  <groupId>org.webjars</groupId>
+                  <artifactId>swagger-ui</artifactId>
+                </exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>
