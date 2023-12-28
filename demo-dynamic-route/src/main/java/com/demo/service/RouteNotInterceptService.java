@@ -9,6 +9,7 @@ import com.demo.entity.po.RouteNotIntercept;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,6 +154,7 @@ public class RouteNotInterceptService extends ServiceBase {
     /**
      * 更新缓存
      */
+    @Async
     @PostConstruct
     @Subscribe(RedisConstant.UPDATE_ROUTE_NOT_INTERCEPT)
     @Scheduled(cron = RedisConstant.UPDATE_CRON)
