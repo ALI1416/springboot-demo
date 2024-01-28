@@ -134,9 +134,9 @@ public class RouteService extends ServiceBase {
             setRouteByRoleId(roleId);
         }
         match = redisTemp.sMembers(key);
-        route.setMatchPath(match.stream().map(String.class::cast).collect(Collectors.toList()));
+        route.setMatchPath(match.stream().map(String.class::cast).toList());
         route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
-                .stream().map(String.class::cast).collect(Collectors.toList()));
+                .stream().map(String.class::cast).toList());
         return route;
     }
 

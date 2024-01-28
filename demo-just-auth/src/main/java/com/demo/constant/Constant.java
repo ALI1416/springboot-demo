@@ -12,6 +12,9 @@ package com.demo.constant;
  **/
 public class Constant {
 
+    private Constant() {
+    }
+
     /**
      * 部署网站{@value}
      */

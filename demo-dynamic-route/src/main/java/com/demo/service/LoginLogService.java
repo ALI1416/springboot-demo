@@ -10,12 +10,11 @@ import com.demo.base.ServiceBase;
 import com.demo.dao.mongo.LoginLogDao;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.LoginLogVo;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <h1>登录日志</h1>

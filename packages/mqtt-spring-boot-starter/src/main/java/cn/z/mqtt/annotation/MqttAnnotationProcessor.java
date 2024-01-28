@@ -361,34 +361,26 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      */
     private static void useHeaderAnnotation(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, Header header, int index) {
         switch (header.value()) {
-            default:
-            case MSG: {
+            case MSG -> {
                 addMsg(functionArray, parameter, index);
-                break;
             }
-            case TOPIC: {
+            case TOPIC -> {
                 addTopic(functionArray, parameter, index, header.radix());
-                break;
             }
-            case TOPIC_PART: {
+            case TOPIC_PART -> {
                 topicPartHandle(functionArray, method, parameter, partList, header.index(), index, header.radix());
-                break;
             }
-            case ID: {
+            case ID -> {
                 functionArray[index] = (FunctionMessage) MqttMessage::getId;
-                break;
             }
-            case QOS: {
+            case QOS -> {
                 functionArray[index] = (FunctionMessage) MqttMessage::getQos;
-                break;
             }
-            case RETAIN: {
+            case RETAIN -> {
                 functionArray[index] = (FunctionMessage) MqttMessage::isRetained;
-                break;
             }
-            case DUPLICATE: {
+            case DUPLICATE -> {
                 functionArray[index] = (FunctionMessage) MqttMessage::isDuplicate;
-                break;
             }
         }
     }
@@ -479,31 +471,31 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      */
     private static Object castBytes(Class<?> clazz, byte[] bytes) {
         switch (clazz.getTypeName()) {
-            case "byte[]": {
+            case "byte[]" -> {
                 return bytes;
             }
-            case "java.lang.Void": {
+            case "java.lang.Void" -> {
                 return null;
             }
-            case "java.lang.String": {
+            case "java.lang.String" -> {
                 return new String(bytes, StandardCharsets.UTF_8);
             }
-            case "boolean": {
+            case "boolean" -> {
                 return Boolean.parseBoolean(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "java.lang.Boolean": {
+            case "java.lang.Boolean" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
                 return Boolean.parseBoolean(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "byte": {
+            case "byte" -> {
                 if (bytes.length == 1) {
                     return bytes[0];
                 }
                 throw new IndexOutOfBoundsException("byte类型只能接收 1 个字节，当前byte[] " + Arrays.toString(bytes) + " 为 " + bytes.length + " 个字节");
             }
-            case "java.lang.Byte": {
+            case "java.lang.Byte" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
@@ -512,14 +504,14 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 }
                 throw new IndexOutOfBoundsException("Byte类型只能接收 1 个字节，当前byte[] " + Arrays.toString(bytes) + " 为 " + bytes.length + " 个字节");
             }
-            case "char": {
+            case "char" -> {
                 String string = new String(bytes, StandardCharsets.UTF_8);
                 if (string.length() == 1) {
                     return string.charAt(0);
                 }
                 throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
-            case "java.lang.Character": {
+            case "java.lang.Character" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
@@ -529,52 +521,52 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 }
                 throw new IndexOutOfBoundsException("Character类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
-            case "short": {
+            case "short" -> {
                 return Short.parseShort(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "java.lang.Short": {
+            case "java.lang.Short" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
                 return Short.parseShort(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "int": {
+            case "int" -> {
                 return Integer.parseInt(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "java.lang.Integer": {
+            case "java.lang.Integer" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
                 return Integer.parseInt(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "long": {
+            case "long" -> {
                 return Long.parseLong(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "java.lang.Long": {
+            case "java.lang.Long" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
                 return Long.parseLong(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "float": {
+            case "float" -> {
                 return Float.parseFloat(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "java.lang.Float": {
+            case "java.lang.Float" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
                 return Float.parseFloat(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "double": {
+            case "double" -> {
                 return Double.parseDouble(new String(bytes, StandardCharsets.UTF_8));
             }
-            case "java.lang.Double": {
+            case "java.lang.Double" -> {
                 if (bytes.length == 0) {
                     return null;
                 }
                 return Double.parseDouble(new String(bytes, StandardCharsets.UTF_8));
             }
-            default: {
+            default -> {
                 try {
                     return clazz.getConstructor(byte[].class).newInstance(bytes);
                 } catch (Exception e) {
@@ -602,37 +594,37 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      */
     private static Object castString(Class<?> clazz, String string, int radix) {
         switch (clazz.getTypeName()) {
-            case "java.lang.String": {
+            case "java.lang.String" -> {
                 return string;
             }
-            case "java.lang.Void": {
+            case "java.lang.Void" -> {
                 return null;
             }
-            case "boolean": {
+            case "boolean" -> {
                 return Boolean.parseBoolean(string);
             }
-            case "java.lang.Boolean": {
+            case "java.lang.Boolean" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Boolean.parseBoolean(string);
             }
-            case "byte": {
+            case "byte" -> {
                 return Byte.parseByte(string, radix);
             }
-            case "java.lang.Byte": {
+            case "java.lang.Byte" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Byte.parseByte(string, radix);
             }
-            case "char": {
+            case "char" -> {
                 if (string.length() == 1) {
                     return string.charAt(0);
                 }
                 throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
-            case "java.lang.Character": {
+            case "java.lang.Character" -> {
                 if (string.length() == 0) {
                     return null;
                 }
@@ -641,52 +633,52 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 }
                 throw new IndexOutOfBoundsException("Character类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
-            case "short": {
+            case "short" -> {
                 return Short.parseShort(string, radix);
             }
-            case "java.lang.Short": {
+            case "java.lang.Short" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Short.parseShort(string, radix);
             }
-            case "int": {
+            case "int" -> {
                 return Integer.parseInt(string, radix);
             }
-            case "java.lang.Integer": {
+            case "java.lang.Integer" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Integer.parseInt(string, radix);
             }
-            case "long": {
+            case "long" -> {
                 return Long.parseLong(string, radix);
             }
-            case "java.lang.Long": {
+            case "java.lang.Long" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Long.parseLong(string, radix);
             }
-            case "float": {
+            case "float" -> {
                 return Float.parseFloat(string);
             }
-            case "java.lang.Float": {
+            case "java.lang.Float" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Float.parseFloat(string);
             }
-            case "double": {
+            case "double" -> {
                 return Double.parseDouble(string);
             }
-            case "java.lang.Double": {
+            case "java.lang.Double" -> {
                 if (string.length() == 0) {
                     return null;
                 }
                 return Double.parseDouble(string);
             }
-            default: {
+            default -> {
                 try {
                     return clazz.getConstructor(String.class).newInstance(string);
                 } catch (Exception e) {

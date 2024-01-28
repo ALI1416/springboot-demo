@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
@@ -159,7 +160,6 @@ public class MinioTemp {
      * 删除储存桶的全部标签
      *
      * @param bucket 储存桶
-     * @return 是否成功
      */
     public void bucketTagDelete(String bucket) {
         try {
@@ -577,7 +577,6 @@ public class MinioTemp {
      *
      * @param bucket 储存桶
      * @param path   路径
-     * @return 是否成功
      */
     public void objectTagSet(String bucket, String path, Map<String, String> tags) {
         try {
@@ -706,7 +705,7 @@ public class MinioTemp {
      * @param contentType 内容类型
      */
     public static void inputStream2HttpServletResponse(InputStream input, HttpServletResponse response, String name, String contentType) throws IOException {
-        name = URLEncoder.encode(name, "UTF-8").replace("\\+", "%20");
+        name = URLEncoder.encode(name, StandardCharsets.UTF_8).replace("\\+", "%20");
         response.setHeader("Content-Disposition", "attachment;filename*=utf-8''" + name);
         inputStream2HttpServletResponse(input, response, contentType);
     }
