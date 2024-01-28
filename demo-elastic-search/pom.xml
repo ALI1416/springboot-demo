@@ -8,7 +8,7 @@
 
   <name>demo-elastic-search</name>
   <description>ElasticSearch</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-elastic-search</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-elastic-search</url>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -31,11 +31,6 @@
     <dependency>
       <groupId>co.elastic.clients</groupId>
       <artifactId>elasticsearch-java</artifactId>
-    </dependency>
-    <!--JakartaJson-->
-    <dependency>
-      <groupId>jakarta.json</groupId>
-      <artifactId>jakarta.json-api</artifactId>
     </dependency>
     <!--ElasticSearch SpringBoot启动器-->
     <dependency>

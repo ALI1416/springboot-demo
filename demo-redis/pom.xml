@@ -8,7 +8,7 @@
 
   <name>demo-redis</name>
   <description>Redis</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-redis</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-redis</url>
 
   <parent>
     <groupId>com.demo</groupId>

@@ -8,7 +8,7 @@
 
   <name>demo-util</name>
   <description>工具</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-util</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-util</url>
 
   <parent>
     <groupId>com.demo</groupId>

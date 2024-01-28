@@ -9,7 +9,7 @@
 
   <name>mongo-spring-boot-temp</name>
   <description>MongoDB SpringBoot Template MongoDB SpringBoot模板</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/mongo-spring-boot-temp</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/mongo-spring-boot-temp</url>
 
   <parent>
     <groupId>cn.404z</groupId>

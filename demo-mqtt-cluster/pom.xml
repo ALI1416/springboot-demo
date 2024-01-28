@@ -9,7 +9,7 @@
 
   <name>demo-mqtt-cluster</name>
   <description>MQTT集群</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-mqtt-cluster</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-mqtt-cluster</url>
 
   <parent>
     <groupId>com.demo</groupId>

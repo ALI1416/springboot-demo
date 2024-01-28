@@ -8,7 +8,7 @@
 
   <name>demo-mongodb</name>
   <description>MongoDB</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-mongodb</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-mongodb</url>
 
   <parent>
     <groupId>com.demo</groupId>

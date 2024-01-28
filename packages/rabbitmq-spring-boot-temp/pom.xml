@@ -9,7 +9,7 @@
 
   <name>rabbitmq-spring-boot-temp</name>
   <description>RabbitMQ SpringBoot Template RabbitMQ SpringBoot模板</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/rabbitmq-spring-boot-temp</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/rabbitmq-spring-boot-temp</url>
 
   <parent>
     <groupId>cn.404z</groupId>

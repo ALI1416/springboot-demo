@@ -8,7 +8,7 @@
 
   <name>demo-knife4j</name>
   <description>knife4j</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-knife4j</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-knife4j</url>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -30,7 +30,7 @@
     <!--Knife4j-->
     <dependency>
       <groupId>com.github.xiaoymin</groupId>
-      <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+      <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
     </dependency>
     <!--SpringBoot工具-->
     <dependency>
@@ -56,7 +56,7 @@
                 </exclude>
                 <exclude>
                   <groupId>com.github.xiaoymin</groupId>
-                  <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+                  <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>com.github.xiaoymin</groupId>
@@ -68,27 +68,27 @@
                 </exclude>
                 <exclude>
                   <groupId>org.springdoc</groupId>
-                  <artifactId>springdoc-openapi-ui</artifactId>
+                  <artifactId>springdoc-openapi-starter-common</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>org.springdoc</groupId>
-                  <artifactId>springdoc-openapi-webmvc-core</artifactId>
+                  <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>org.springdoc</groupId>
-                  <artifactId>springdoc-openapi-common</artifactId>
+                  <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>io.swagger.core.v3</groupId>
-                  <artifactId>swagger-annotations</artifactId>
+                  <artifactId>swagger-annotations-jakarta</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>io.swagger.core.v3</groupId>
-                  <artifactId>swagger-core</artifactId>
+                  <artifactId>swagger-core-jakarta</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>io.swagger.core.v3</groupId>
-                  <artifactId>swagger-models</artifactId>
+                  <artifactId>swagger-models-jakarta</artifactId>
                 </exclude>
                 <exclude>
                   <groupId>org.webjars</groupId>

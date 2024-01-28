@@ -9,7 +9,7 @@
 
   <name>minio-spring-boot-starter</name>
   <description>Minio SpringBoot Starter Minio SpringBoot启动器</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/minio-spring-boot-starter</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/minio-spring-boot-starter</url>
 
   <parent>
     <groupId>cn.404z</groupId>

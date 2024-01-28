@@ -79,9 +79,9 @@ public class FastJsonMessageConverter extends AbstractMessageConverter {
     protected Object convertFromInternal(Message<?> message, Class<?> targetClass, Object conversionHint) {
         Type type = getType(targetClass, conversionHint);
         Object payload = message.getPayload();
-        if (payload instanceof byte[]) {
+        if (payload instanceof byte[] bytes) {
             // byte[]类型消息
-            return JSON.parseObject((byte[]) payload, type, date, readerFeature);
+            return JSON.parseObject(bytes, type, date, readerFeature);
         } else {
             // 字符串类型消息
             return JSON.parseObject((String) payload, type, date, readerFeature);
@@ -100,9 +100,9 @@ public class FastJsonMessageConverter extends AbstractMessageConverter {
     protected Object convertToInternal(Object payload, MessageHeaders headers, Object conversionHint) {
         if (byte[].class == getSerializedPayloadClass()) {
             // 转为byte[]类型消息
-            if (payload instanceof String) {
+            if (payload instanceof String string) {
                 // 字符串类型对象
-                return ((String) payload).getBytes(StandardCharsets.UTF_8);
+                return string.getBytes(StandardCharsets.UTF_8);
             } else {
                 // byte[]类型消息
                 return JSON.toJSONBytes(payload, date, writerFeature);
@@ -127,8 +127,7 @@ public class FastJsonMessageConverter extends AbstractMessageConverter {
      * @return 类型
      */
     private static Type getType(Class<?> targetClass, Object conversionHint) {
-        if (conversionHint instanceof MethodParameter) {
-            MethodParameter param = (MethodParameter) conversionHint;
+        if (conversionHint instanceof MethodParameter param) {
             param = param.nestedIfOptional();
             if (Message.class.isAssignableFrom(param.getParameterType())) {
                 param = param.nested();

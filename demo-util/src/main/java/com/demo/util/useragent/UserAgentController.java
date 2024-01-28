@@ -1,11 +1,11 @@
 package com.demo.util.useragent;
 
 import cn.z.tool.useragent.UserAgent;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <h1>UserAgentController</h1>

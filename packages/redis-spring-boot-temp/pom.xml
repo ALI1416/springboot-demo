@@ -9,7 +9,7 @@
 
   <name>redis-spring-boot-temp</name>
   <description>Redis SpringBoot Template Redis SpringBoot模板</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/redis-spring-boot-temp</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/redis-spring-boot-temp</url>
 
   <parent>
     <groupId>cn.404z</groupId>

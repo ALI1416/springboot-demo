@@ -9,7 +9,7 @@
 
   <name>websocket-spring-boot-temp</name>
   <description>WebSocket SpringBoot Template WebSocket SpringBoot模板</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/websocket-spring-boot-temp</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/websocket-spring-boot-temp</url>
 
   <parent>
     <groupId>cn.404z</groupId>

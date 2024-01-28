@@ -8,7 +8,7 @@
 
   <name>demo-rabbitmq</name>
   <description>RabbitMQ</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-rabbitmq</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-rabbitmq</url>
 
   <parent>
     <groupId>com.demo</groupId>

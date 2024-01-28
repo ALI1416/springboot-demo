@@ -150,12 +150,11 @@ public class FastJsonHttpMessageConverter extends AbstractHttpMessageConverter<O
         HttpHeaders headers = outputMessage.getHeaders();
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             int contentLength;
-            if (object instanceof String) {
-                byte[] bytes = ((String) object).getBytes(StandardCharsets.UTF_8);
+            if (object instanceof String string) {
+                byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
                 contentLength = bytes.length;
                 outputMessage.getBody().write(bytes, 0, bytes.length);
-            } else if (object instanceof byte[]) {
-                byte[] bytes = (byte[]) object;
+            } else if (object instanceof byte[] bytes) {
                 contentLength = bytes.length;
                 outputMessage.getBody().write(bytes, 0, bytes.length);
             } else {

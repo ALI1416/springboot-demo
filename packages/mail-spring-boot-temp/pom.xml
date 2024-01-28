@@ -9,7 +9,7 @@
 
   <name>mail-spring-boot-temp</name>
   <description>Mail SpringBoot Template 邮件SpringBoot模板</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/mail-spring-boot-temp</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/mail-spring-boot-temp</url>
 
   <parent>
     <groupId>cn.404z</groupId>

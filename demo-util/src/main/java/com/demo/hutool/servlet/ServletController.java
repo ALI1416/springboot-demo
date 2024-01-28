@@ -1,12 +1,12 @@
 package com.demo.hutool.servlet;
 
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -30,7 +30,7 @@ public class ServletController {
      */
     @GetMapping("header")
     public Map<String, String> header(HttpServletRequest request) {
-        Map<String, String> header = ServletUtil.getHeaderMap(request);
+        Map<String, String> header = JakartaServletUtil.getHeaderMap(request);
         log.info(header.toString());
         return header;
     }
@@ -41,7 +41,7 @@ public class ServletController {
      */
     @GetMapping("ip")
     public String ip(HttpServletRequest request) {
-        String ip = ServletUtil.getClientIP(request);
+        String ip = JakartaServletUtil.getClientIP(request);
         log.info(ip);
         return ip;
     }

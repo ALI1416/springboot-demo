@@ -8,7 +8,7 @@
 
   <name>demo-base</name>
   <description>基框架</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-base</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-base</url>
 
   <parent>
     <groupId>com.demo</groupId>

@@ -376,63 +376,63 @@ public class DigitTimestamp {
             length++;
         }
         switch (length) {
-            case 4: {
+            case 4 -> {
                 // 年(补充为xxxx年01月01日00时00分00秒000毫秒)
                 return timestamp * 10000000000000L + 101000000000L;
             }
-            case 5: {
+            case 5 -> {
                 // 年月(少1位)(末尾为0补充为xxxx年x1月01日00时00分00秒000毫秒，否则补充为xxxx年x0月01日00时00分00秒000毫秒)
                 return timestamp % 10 == 0 //
                         ? timestamp * 1000000000000L + 101000000000L // 1-9月变成1月
                         : timestamp * 1000000000000L + 1000000000L; // 10-12月变成10月
             }
-            case 6: {
+            case 6 -> {
                 // 年月(补充为xxxx年xx月01日00时00分00秒000毫秒)
                 return timestamp * 100000000000L + 1000000000L;
             }
-            case 7: {
+            case 7 -> {
                 // 年月日(少1位)(末尾为0补充为xxxx年xx月x1日00时00分00秒000毫秒，否则补充为xxxx年xx月x0日00时00分00秒000毫秒)
                 return timestamp % 10 == 0 //
                         ? timestamp * 10000000000L + 1000000000L // 1-9日变成1日
                         : timestamp * 10000000000L; // 10-31日变成10日
             }
-            case 8: {
+            case 8 -> {
                 // 年月日(补充为xxxx年xx月xx日00时00分00秒000毫秒)
                 return timestamp * 1000000000;
             }
-            case 9: {
+            case 9 -> {
                 // 年月日时(少1位)(补充为xxxx年xx月xx日x0时00分00秒000毫秒)
                 return timestamp * 100000000;
             }
-            case 10: {
+            case 10 -> {
                 // 年月日时(补充为xxxx年xx月xx日xx时00分00秒000毫秒)
                 return timestamp * 10000000;
             }
-            case 11: {
+            case 11 -> {
                 // 年月日时分(少1位)(补充为xxxx年xx月xx日xx时x0分00秒000毫秒)
                 return timestamp * 1000000;
             }
-            case 12: {
+            case 12 -> {
                 // 年月日时分(补充为xxxx年xx月xx日xx时xx分00秒000毫秒)
                 return timestamp * 100000;
             }
-            case 13: {
+            case 13 -> {
                 // 年月日时分秒(少1位)(补充为xxxx年xx月xx日xx时xx分x0秒000毫秒)
                 return timestamp * 10000;
             }
-            case 14: {
+            case 14 -> {
                 // 年月日时分秒(补充为xxxx年xx月xx日xx时xx分xx秒000毫秒)
                 return timestamp * 1000;
             }
-            case 15: {
+            case 15 -> {
                 // 年月日时分秒毫秒(少2位)(补充为xxxx年xx月xx日xx时xx分xx秒x00毫秒)
                 return timestamp * 100;
             }
-            case 16: {
+            case 16 -> {
                 // 年月日时分秒毫秒(少1位)(补充为xxxx年xx月xx日xx时xx分xx秒xx0毫秒)
                 return timestamp * 10;
             }
-            default: {
+            default -> {
                 // 年月日时分秒毫秒(为xxxx年xx月xx日xx时xx分xx秒xxx毫秒)
                 return timestamp;
             }
@@ -448,63 +448,63 @@ public class DigitTimestamp {
      */
     public static String complement(String timestamp) {
         switch (timestamp.length()) {
-            case 4: {
+            case 4 -> {
                 // 年(补充为xxxx年01月01日00时00分00秒000毫秒)
                 return timestamp + "0101000000000";
             }
-            case 5: {
+            case 5 -> {
                 // 年月(少1位)(末尾为0补充为xxxx年x1月01日00时00分00秒000毫秒，否则补充为xxxx年x0月01日00时00分00秒000毫秒)
                 return timestamp.charAt(timestamp.length() - 1) == '0' //
                         ? timestamp + "101000000000" // 1-9月变成1月
                         : timestamp + "001000000000"; // 10-12月变成10月
             }
-            case 6: {
+            case 6 -> {
                 // 年月(补充为xxxx年xx月01日00时00分00秒000毫秒)
                 return timestamp + "01000000000";
             }
-            case 7: {
+            case 7 -> {
                 // 年月日(少1位)(末尾为0补充为xxxx年xx月x1日00时00分00秒000毫秒，否则补充为xxxx年xx月x0日00时00分00秒000毫秒)
                 return timestamp.charAt(timestamp.length() - 1) == '0' //
                         ? timestamp + "1000000000" // 1-9日变成1日
                         : timestamp + "0000000000"; // 10-31日变成10日
             }
-            case 8: {
+            case 8 -> {
                 // 年月日(补充为xxxx年xx月xx日00时00分00秒000毫秒)
                 return timestamp + "000000000";
             }
-            case 9: {
+            case 9 -> {
                 // 年月日时(少1位)(补充为xxxx年xx月xx日x0时00分00秒000毫秒)
                 return timestamp + "00000000";
             }
-            case 10: {
+            case 10 -> {
                 // 年月日时(补充为xxxx年xx月xx日xx时00分00秒000毫秒)
                 return timestamp + "0000000";
             }
-            case 11: {
+            case 11 -> {
                 // 年月日时分(少1位)(补充为xxxx年xx月xx日xx时x0分00秒000毫秒)
                 return timestamp + "000000";
             }
-            case 12: {
+            case 12 -> {
                 // 年月日时分(补充为xxxx年xx月xx日xx时xx分00秒000毫秒)
                 return timestamp + "00000";
             }
-            case 13: {
+            case 13 -> {
                 // 年月日时分秒(少1位)(补充为xxxx年xx月xx日xx时xx分x0秒000毫秒)
                 return timestamp + "0000";
             }
-            case 14: {
+            case 14 -> {
                 // 年月日时分秒(补充为xxxx年xx月xx日xx时xx分xx秒000毫秒)
                 return timestamp + "000";
             }
-            case 15: {
+            case 15 -> {
                 // 年月日时分秒毫秒(少2位)(补充为xxxx年xx月xx日xx时xx分xx秒x00毫秒)
                 return timestamp + "00";
             }
-            case 16: {
+            case 16 -> {
                 // 年月日时分秒毫秒(少1位)(补充为xxxx年xx月xx日xx时xx分xx秒xx0毫秒)
                 return timestamp + "0";
             }
-            default: {
+            default -> {
                 // 年月日时分秒毫秒(为xxxx年xx月xx日xx时xx分xx秒xxx毫秒)
                 return timestamp;
             }

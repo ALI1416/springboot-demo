@@ -8,7 +8,7 @@
 
   <name>demo-just-auth</name>
   <description>JustAuth第三方登录</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-just-auth</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-just-auth</url>
 
   <parent>
     <groupId>com.demo</groupId>

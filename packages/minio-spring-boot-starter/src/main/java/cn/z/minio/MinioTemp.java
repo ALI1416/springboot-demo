@@ -8,9 +8,9 @@ import cn.z.minio.entity.*;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.DeleteObject;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

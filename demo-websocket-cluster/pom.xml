@@ -8,7 +8,7 @@
 
   <name>demo-websocket-cluster</name>
   <description>WebSocket集群</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/demo-websocket-cluster</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-websocket-cluster</url>
 
   <parent>
     <groupId>com.demo</groupId>

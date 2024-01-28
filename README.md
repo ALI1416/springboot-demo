@@ -1,12 +1,12 @@
-# springboot-demo SpringBoot示例
+# springboot-demo SpringBoot示例(3.x版)
 
 [![License](https://img.shields.io/github/license/ALI1416/springboot-demo?label=License)](https://opensource.org/licenses/BSD-3-Clause)
-[![Java Support](https://img.shields.io/badge/Java-8+-green)](https://openjdk.org/)
+[![Java Support](https://img.shields.io/badge/Java-17+-green)](https://openjdk.org/)
 [![Repo Size](https://img.shields.io/github/repo-size/ALI1416/springboot-demo?label=Repo%20Size&color=success)](https://github.com/ALI1416/springboot-demo/archive/refs/heads/master.zip)
 
 ## 简介
 
-SpringBoot示例
+SpringBoot示例(3.x版)
 
 ## 项目
 
@@ -28,7 +28,6 @@ SpringBoot示例
 - **`demo-elastic-search`** : ElasticSearch
   - SpringBoot Web
   - FastJson
-  - JakartaJson
   - ElasticSearch
 - **`demo-just-auth`** : JustAuth第三方登录
   - SpringBoot Web
@@ -135,8 +134,6 @@ SpringBoot示例
 - 父依赖不含 :
   - `ElasticSearch(与服务器版本号对应，需要一致)` : `co.elastic.clients:elasticsearch-java`  
     ![Maven Central](https://img.shields.io/maven-central/v/co.elastic.clients/elasticsearch-java?label=Maven%20Central)
-  - `JakartaJson` : `jakarta.json:jakarta.json-api`  
-    ![Maven Central](https://img.shields.io/maven-central/v/jakarta.json/jakarta.json-api?label=Maven%20Central)
   - `MQTT(与服务器版本号不对应，不需一致)` : `org.eclipse.paho:org.eclipse.paho.client.mqttv3`  
     ![Maven Central](https://img.shields.io/maven-central/v/org.eclipse.paho/org.eclipse.paho.client.mqttv3?label=Maven%20Central)
   - `加密算法` : `org.bouncycastle:bcpkix-jdk18on`  

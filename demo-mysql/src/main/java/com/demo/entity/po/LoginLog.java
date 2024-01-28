@@ -5,10 +5,9 @@ import cn.z.ip2region.Ip2Region;
 import cn.z.ip2region.Region;
 import cn.z.tool.useragent.UserAgent;
 import com.demo.base.EntityBase;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <h1>登录日志</h1>

@@ -6,12 +6,13 @@ spring:
     multipart:
       max-file-size: 4GB
       max-request-size: 4GB
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    password:
-    timeout: 10s
+  data:
+    redis:
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+      password:
+      timeout: 10s
 
 #server:
 #  port: 8081

@@ -12,14 +12,15 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.io.IOException;
 
 /**
- * <h1>全局异常处理(404异常除外)</h1>
+ * <h1>全局异常处理</h1>
  *
  * <p>
- * 捕获处理所有未被捕获的异常(404异常除外)
+ * 捕获处理所有未被捕获的异常
  * </p>
  *
  * <p>
@@ -32,6 +33,17 @@ import java.io.IOException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * 404异常
+     *
+     * @see NoResourceFoundException
+     */
+    @Order(1)
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Result noResourceFoundHandler() {
+        return Result.e(ResultEnum.PAGE_NOT_FOUND);
+    }
 
     /**
      * 请求方法不支持异常

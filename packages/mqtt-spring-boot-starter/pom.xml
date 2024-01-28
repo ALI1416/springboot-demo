@@ -9,7 +9,7 @@
 
   <name>mqtt-spring-boot-starter</name>
   <description>MQTT SpringBoot Starter MQTT SpringBoot启动器</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/mqtt-spring-boot-starter</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/mqtt-spring-boot-starter</url>
 
   <parent>
     <groupId>cn.404z</groupId>

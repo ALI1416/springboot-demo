@@ -9,7 +9,7 @@
 
   <name>util</name>
   <description>Util 工具</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/util</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/util</url>
 
   <parent>
     <groupId>cn.404z</groupId>

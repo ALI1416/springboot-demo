@@ -21,12 +21,12 @@ spring:
       # username:
       # password:
       auto-index-creation: true
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    password:
-    timeout: 10s
+    redis:
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+      password:
+      timeout: 10s
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

@@ -9,7 +9,7 @@
 
   <name>util-spring-boot</name>
   <description>Util SpringBoot SpringBoot工具</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/util-spring-boot</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/util-spring-boot</url>
 
   <parent>
     <groupId>cn.404z</groupId>

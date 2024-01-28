@@ -9,7 +9,7 @@
 
   <name>elastic-search-spring-boot-starter</name>
   <description>ElasticSearch SpringBoot Starter ElasticSearch SpringBoot启动器</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/master/packages/elastic-search-spring-boot-starter</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/elastic-search-spring-boot-starter</url>
 
   <parent>
     <groupId>cn.404z</groupId>
