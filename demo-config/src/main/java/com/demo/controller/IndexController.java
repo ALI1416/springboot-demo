@@ -108,7 +108,6 @@ public class IndexController {
         return Result.o();
     }
 
-
     /**
      * http://localhost:8080/testProperty <br>
      * 使用静态常量获取Yml里自定义的值
