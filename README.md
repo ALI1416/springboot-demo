@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/github/license/ALI1416/springboot-demo?label=License)](https://opensource.org/licenses/BSD-3-Clause)
 [![Java Support](https://img.shields.io/badge/Java-17+-green)](https://openjdk.org/)
-[![Repo Size](https://img.shields.io/github/repo-size/ALI1416/springboot-demo?label=Repo%20Size&color=success)](https://github.com/ALI1416/springboot-demo/archive/refs/heads/master.zip)
+[![Repo Size](https://img.shields.io/github/repo-size/ALI1416/springboot-demo?label=Repo%20Size&color=success)](https://github.com/ALI1416/springboot-demo/archive/refs/heads/v3.zip)
 
 ## 简介
 
