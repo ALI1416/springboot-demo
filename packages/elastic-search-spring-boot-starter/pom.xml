@@ -28,11 +28,6 @@
       <artifactId>elasticsearch-java</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>jakarta.json</groupId>
-      <artifactId>jakarta.json-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
     <!-- 仅供编译使用 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>

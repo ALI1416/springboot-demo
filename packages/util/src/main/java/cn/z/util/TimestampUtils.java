@@ -412,37 +412,60 @@ public class TimestampUtils {
         if (fillMode) {
             // 最小值
             switch (fillField) {
-                case Calendar.MONTH:
+                case Calendar.MONTH: {
                     // 1月
                     calendar.set(Calendar.MONTH, 0);
-                case Calendar.DAY_OF_YEAR:
+                }
+                case Calendar.DAY_OF_YEAR: {
+                    // 1日
                     calendar.set(Calendar.DAY_OF_MONTH, 1);
-                case Calendar.HOUR_OF_DAY:
+                }
+                case Calendar.HOUR_OF_DAY: {
+                    // 0时
                     calendar.set(Calendar.HOUR_OF_DAY, 0);
-                case Calendar.MINUTE:
+                }
+                case Calendar.MINUTE: {
+                    // 0分
                     calendar.set(Calendar.MINUTE, 0);
-                case Calendar.SECOND:
+                }
+                case Calendar.SECOND: {
+                    // 0秒
                     calendar.set(Calendar.SECOND, 0);
-                case Calendar.MILLISECOND:
+                }
+                case Calendar.MILLISECOND: {
+                    // 0毫秒
                     calendar.set(Calendar.MILLISECOND, 0);
+                }
+                default:
             }
         } else {
             // 最大值
             switch (fillField) {
-                case Calendar.MONTH:
+                case Calendar.MONTH: {
                     // 12月
                     calendar.set(Calendar.MONTH, 11);
-                case Calendar.DAY_OF_YEAR:
+                }
+                case Calendar.DAY_OF_YEAR: {
                     // 当前月份最大日期
                     calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-                case Calendar.HOUR_OF_DAY:
+                }
+                case Calendar.HOUR_OF_DAY: {
+                    // 23时
                     calendar.set(Calendar.HOUR_OF_DAY, 23);
-                case Calendar.MINUTE:
+                }
+                case Calendar.MINUTE: {
+                    // 59分
                     calendar.set(Calendar.MINUTE, 59);
-                case Calendar.SECOND:
+                }
+                case Calendar.SECOND: {
+                    // 59秒
                     calendar.set(Calendar.SECOND, 59);
-                case Calendar.MILLISECOND:
+                }
+                case Calendar.MILLISECOND: {
+                    // 999毫秒
                     calendar.set(Calendar.MILLISECOND, 999);
+                }
+                default:
             }
         }
         // 偏移

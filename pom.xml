@@ -11,7 +11,7 @@
 
   <name>springboot-demo</name>
   <description>SpringBoot示例(3.x版)</description>
-  <url>https://github.com/ALI1416/springboot-demo</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3</url>
 
   <parent>
     <!--SpringBoot Parent-->
