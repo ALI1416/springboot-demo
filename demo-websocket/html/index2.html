@@ -117,6 +117,7 @@
       connectHeaders: headers,
       reconnectDelay: 0,
       onConnect: connectCallback,
+      onWebSocketClose: closeCallback,
       onWebSocketError: errorCallback
     })
     stomp.activate()
@@ -143,6 +144,15 @@
     stomp.subscribe(userSubscribeText.value, function (res) {
       userMsg.value = res.body + '\n' + userMsg.value
     })
+  }
+
+  /**
+   * 连接关闭回调
+   */
+  function closeCallback(e) {
+    connectStatus(false)
+    stomp = undefined
+    errorMsg.value = '连接关闭回调' + '\n' + errorMsg.value
   }
 
   /**
