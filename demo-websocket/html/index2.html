@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
-  <!-- 官网 https://jmesnil.net/stomp-websocket/doc/ -->
-  <!-- 源码 https://github.com/jmesnil/stomp-websocket -->
-  <!-- 镜像 https://npmmirror.com/package/stompjs -->
-  <script src="js/stomp-1.7.1.js"></script>
+  <!-- 官网 https://stomp-js.github.io/ -->
+  <!-- 源码 https://github.com/stomp-js/stompjs -->
+  <!-- 镜像 https://npmmirror.com/package/@stomp/stompjs -->
+  <script src="js/stomp-7.0.0.js"></script>
 </head>
 
 <body>
@@ -112,8 +112,14 @@
     const headers = {
       username: usernameText.value
     }
-    stomp = Stomp.client(url)
-    stomp.connect(headers, connectCallback, errorCallback)
+    stomp = new StompJs.Client({
+      brokerURL: url,
+      connectHeaders: headers,
+      reconnectDelay: 0,
+      onConnect: connectCallback,
+      onWebSocketError: errorCallback
+    })
+    stomp.activate()
   }
 
   /**
@@ -145,7 +151,7 @@
   function errorCallback(e) {
     connectStatus(false)
     stomp = undefined
-    errorMsg.value = e + '\n' + errorMsg.value
+    errorMsg.value = '连接错误回调' + '\n' + errorMsg.value
   }
 
   /**
@@ -153,7 +159,7 @@
    */
   function disconnect() {
     if (stomp !== undefined) {
-      stomp.disconnect()
+      stomp.deactivate()
       stomp = undefined
       connectStatus(false)
     }
@@ -179,14 +185,14 @@
    * 发送广播消息
    */
   broadcastBtn.addEventListener('click', function () {
-    stomp.send(broadcastSendText.value, {}, broadcastText.value)
+    stomp.publish({destination: broadcastSendText.value, body: broadcastText.value})
   })
 
   /**
    * 发送用户消息
    */
   userBtn.addEventListener('click', function () {
-    stomp.send(userSendText.value + userSendUsernameText.value, {}, userText.value)
+    stomp.publish({destination: userSendText.value + userSendUsernameText.value, body: userText.value})
   })
 
 </script>
