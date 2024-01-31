@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Title</title>
-  <script src="js/stomp-1.7.1.js"></script>
+  <script src="js/stomp-7.0.0.js"></script>
 </head>
 
 <body>
@@ -69,13 +69,20 @@
   const userText = document.getElementById('userText')
   const userBtn = document.getElementById('userBtn')
   const userMsg = document.getElementById('userMsg')
-  let stomp
+
+  let isConnect = false
+  const stomp = new StompJs.Client({
+    reconnectDelay: 5000,
+    onConnect: connectCallback,
+    onWebSocketClose: closeCallback,
+    onWebSocketError: errorCallback
+  })
 
   /**
    * 连接/断开按钮
    */
   connectBtn.addEventListener('click', function () {
-    if (stomp === undefined) {
+    if (!isConnect) {
       connectBtn.innerText = '连接中...'
       connectBtn.setAttribute('disabled', 'true')
       connect()
@@ -88,18 +95,18 @@
    * 连接
    */
   function connect() {
-    const url = urlText.value
-    const headers = {
+    stomp.brokerURL = urlText.value
+    stomp.connectHeaders = {
       username: usernameText.value
     }
-    stomp = Stomp.client(url)
-    stomp.connect(headers, connectCallback, errorCallback)
+    stomp.activate()
   }
 
   /**
    * 连接成功回调
    */
   function connectCallback() {
+    isConnect = true
     connectStatus(true)
     // 广播消息
     stomp.subscribe(broadcastSubscribeText.value, function (res) {
@@ -112,21 +119,29 @@
   }
 
   /**
+   * 连接关闭回调
+   */
+  function closeCallback(e) {
+    isConnect = false
+    connectStatus(false)
+    errorMsg.value = '连接关闭回调' + '\n' + errorMsg.value
+  }
+
+  /**
    * 连接错误回调
    */
   function errorCallback(e) {
+    isConnect = false
     connectStatus(false)
-    stomp = undefined
-    errorMsg.value = e + '\n' + errorMsg.value
+    errorMsg.value = '连接错误回调' + '\n' + errorMsg.value
   }
 
   /**
    * 断开
    */
   function disconnect() {
-    if (stomp !== undefined) {
-      stomp.disconnect()
-      stomp = undefined
+    if (isConnect) {
+      stomp.deactivate()
       connectStatus(false)
     }
   }
@@ -151,14 +166,14 @@
    * 发送广播消息
    */
   broadcastBtn.addEventListener('click', function () {
-    stomp.send(broadcastSendText.value, {}, broadcastText.value)
+    stomp.publish({destination: broadcastSendText.value, body: broadcastText.value})
   })
 
   /**
    * 发送用户消息
    */
   userBtn.addEventListener('click', function () {
-    stomp.send(userSendText.value + userSendUsernameText.value, {}, userText.value)
+    stomp.publish({destination: userSendText.value + userSendUsernameText.value, body: userText.value})
   })
 
 </script>
