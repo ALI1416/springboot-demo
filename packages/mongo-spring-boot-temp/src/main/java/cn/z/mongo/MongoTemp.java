@@ -757,7 +757,11 @@ public class MongoTemp {
      * @return 实体数组
      */
     public <T> List<T> findSort(Query query, Sort sort, Class<T> clazz) {
-        return mongoTemplate.find(query.with(sort), clazz);
+        if (sort == null) {
+            return mongoTemplate.find(query, clazz);
+        } else {
+            return mongoTemplate.find(query.with(sort), clazz);
+        }
     }
 
     /**
@@ -771,7 +775,11 @@ public class MongoTemp {
      * @return 实体数组
      */
     public <T> List<T> findSort(Query query, Sort sort, Class<T> clazz, String collectionName) {
-        return mongoTemplate.find(query.with(sort), clazz, collectionName);
+        if (sort == null) {
+            return mongoTemplate.find(query, clazz, collectionName);
+        } else {
+            return mongoTemplate.find(query.with(sort), clazz, collectionName);
+        }
     }
 
     /**

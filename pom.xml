@@ -152,7 +152,7 @@
     <!--雪花ID生成器-->
     <!--cn.404z:id-spring-boot-autoconfigure-->
     <!-- https://mvnrepository.com/artifact/cn.404z/id-spring-boot-autoconfigure -->
-    <id.version>3.1.2</id.version>
+    <id.version>3.2.0</id.version>
 
     <!--IP地址转区域-->
     <!--cn.404z:ip2region-spring-boot-autoconfigure-->
