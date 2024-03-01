@@ -9,6 +9,7 @@ import com.demo.base.DaoBase;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -232,6 +233,17 @@ public class UserMongoDao extends DaoBase {
      */
     public List<UserMongoVo> find(Query query) {
         return mongoTemp.find(query, CLAZZ);
+    }
+
+    /**
+     * 排序查询
+     *
+     * @param query Query
+     * @param sort  Sort
+     * @return List UserMongoVo
+     */
+    public List<UserMongoVo> findSort(Query query, Sort sort) {
+        return mongoTemp.findSort(query, sort, CLAZZ);
     }
 
     /**

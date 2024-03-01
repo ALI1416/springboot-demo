@@ -100,10 +100,10 @@
     user
     <where>
       <if test="id != null">
-        id = #{id}
+        AND id = #{id}
       </if>
       <if test="account != null">
-        account = #{account}
+        AND account = #{account}
       </if>
     </where>
   </select>
