@@ -14,14 +14,14 @@
   <url>https://github.com/ALI1416/springboot-demo/tree/master/packages</url>
 
   <modules>
-    <module>mail-spring-boot-temp</module>
-    <module>rabbitmq-spring-boot-temp</module>
-    <module>redis-spring-boot-temp</module>
     <module>websocket-spring-boot-temp</module>
-    <module>minio-spring-boot-starter</module>
+    <module>mail-spring-boot-temp</module>
     <module>mongo-spring-boot-temp</module>
-    <module>mqtt-spring-boot-starter</module>
+    <module>redis-spring-boot-temp</module>
+    <module>rabbitmq-spring-boot-temp</module>
     <module>elastic-search-spring-boot-starter</module>
+    <module>mqtt-spring-boot-starter</module>
+    <module>minio-spring-boot-starter</module>
     <module>util</module>
     <module>util-spring-boot</module>
   </modules>
@@ -34,40 +34,97 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+    <!---->
+    <!--继承父依赖不可修改版本号-->
     <!--SpringBoot-->
     <!--org.springframework.boot:spring-boot-starter-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
     <springboot.version>2.7.18</springboot.version>
-    <!--Maven编译插件-->
-    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
-    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+
+    <!--SpringBoot Web-->
+    <!--org.springframework.boot:spring-boot-starter-web-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+
+    <!--SpringBoot WebSocket-->
+    <!--org.springframework.boot:spring-boot-starter-websocket-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+
+    <!--邮件-->
+    <!--org.springframework.boot:spring-boot-starter-mail-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
+
+    <!--自动装配-->
+    <!--org.springframework.boot:spring-boot-autoconfigure-processor-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-autoconfigure-processor -->
+
+    <!--配置-->
+    <!--org.springframework.boot:spring-boot-configuration-processor-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
+
+
+    <!---->
+    <!--继承父依赖可修改版本号-->
     <!--日志-->
     <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
     <logback.version>1.2.12</logback.version>
+
+    <!--Maven编译插件-->
+    <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+    <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
+
+    <!--MongoDB-->
+    <!--org.springframework.boot:spring-boot-starter-data-mongodb-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb -->
+    <!--<mongodb.version></mongodb.version>-->
+
+    <!--Redis-->
+    <!--org.springframework.boot:spring-boot-starter-data-redis-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
+    <!--<jedis.version></jedis.version>-->
+
+    <!--RabbitMQ-->
+    <!--org.springframework.boot:spring-boot-starter-amqp-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-amqp -->
+    <!--<rabbit-amqp-client.version></rabbit-amqp-client.version>-->
+
+
+    <!---->
+    <!--父依赖不含-->
     <!--FastJson-->
     <!--com.alibaba.fastjson2:fastjson2-->
     <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
-    <fastjson.version>2.0.46</fastjson.version>
-    <!--Minio-->
-    <!--io.minio:minio-->
-    <!-- https://mvnrepository.com/artifact/io.minio/minio -->
-    <minio.version>8.5.8</minio.version>
-    <!--MQTT-->
-    <!--org.eclipse.paho:org.eclipse.paho.client.mqttv3-->
-    <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
-    <mqtt.version>1.2.5</mqtt.version>
-    <!--ElasticSearch-->
-    <!--co.elastic.clients:elasticsearch-java-->
-    <!-- https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
-    <elasticsearch.version>8.9.1</elasticsearch.version>
-    <!--JakartaJson-->
-    <!--jakarta.json:jakarta.json-api-->
-    <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
-    <jakarta.version>2.1.3</jakarta.version>
+    <fastjson.version>2.0.47</fastjson.version>
+
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
     <!-- https://mvnrepository.com/artifact/com.alibaba/easyexcel -->
     <easyexcel.version>3.3.3</easyexcel.version>
+
+    <!--ElasticSearch(需要与服务器版本号相同)-->
+    <!--co.elastic.clients:elasticsearch-java-->
+    <!-- https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java -->
+    <elasticsearch.version>8.9.1</elasticsearch.version>
+
+    <!--JakartaJson-->
+    <!--jakarta.json:jakarta.json-api-->
+    <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
+    <jakarta.version>2.1.3</jakarta.version>
+
+    <!--MQTT-->
+    <!--org.eclipse.paho:org.eclipse.paho.client.mqttv3-->
+    <!-- https://mvnrepository.com/artifact/org.eclipse.paho/org.eclipse.paho.client.mqttv3 -->
+    <mqtt.version>1.2.5</mqtt.version>
+
+    <!--加密算法-->
+    <!--org.bouncycastle:bcpkix-jdk18on-->
+    <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on -->
+    <bcpkix.version>1.77</bcpkix.version>
+
+    <!--Minio-->
+    <!--io.minio:minio-->
+    <!-- https://mvnrepository.com/artifact/io.minio/minio -->
+    <minio.version>8.5.9</minio.version>
+
     <!--Tika-->
     <!--org.apache.tika:tika-core-->
     <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
@@ -75,43 +132,52 @@
     <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-parsers-standard-package -->
     <!--org.apache.tika:tika-langdetect-tika-->
     <!-- https://mvnrepository.com/artifact/org.apache.tika/tika-langdetect-tika -->
-    <tika.version>2.9.0</tika.version>
+    <tika.version>2.9.1</tika.version>
+
     <!--Ansj分词-->
     <!--org.ansj:ansj_seg-->
     <!-- https://mvnrepository.com/artifact/org.ansj/ansj_seg -->
     <ansj.version>5.1.6</ansj.version>
-    <!--加密算法-->
-    <!--org.bouncycastle:bcpkix-jdk18on-->
-    <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on -->
-    <bcpkix.version>1.77</bcpkix.version>
+
+
+    <!---->
+    <!--项目包-->
+    <!--WebSocket SpringBoot模板-->
+    <!--cn.404z:websocket-spring-boot-temp-->
+    <websocket-spring-boot-temp.version>1.0.0</websocket-spring-boot-temp.version>
 
     <!--邮件SpringBoot模板-->
     <!--cn.404z:mail-spring-boot-temp-->
     <mail-spring-boot-temp.version>1.0.0</mail-spring-boot-temp.version>
-    <!--RabbitMQ SpringBoot模板-->
-    <!--cn.404z:rabbitmq-spring-boot-temp-->
-    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
-    <!--Redis SpringBoot模板-->
-    <!--cn.404z:redis-spring-boot-temp-->
-    <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
-    <!--WebSocket SpringBoot模板-->
-    <!--cn.404z:websocket-spring-boot-temp-->
-    <websocket-spring-boot-temp.version>1.0.0</websocket-spring-boot-temp.version>
+
     <!--MongoDB SpringBoot模板-->
     <!--cn.404z:mongo-spring-boot-temp-->
     <mongo-spring-boot-temp.version>1.0.0</mongo-spring-boot-temp.version>
-    <!--Minio SpringBoot启动器-->
-    <!--cn.404z:minio-spring-boot-starter-->
-    <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
-    <!--MQTT SpringBoot启动器-->
-    <!--cn.404z:mqtt-spring-boot-starter-->
-    <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
+
+    <!--Redis SpringBoot模板-->
+    <!--cn.404z:redis-spring-boot-temp-->
+    <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
+
+    <!--RabbitMQ SpringBoot模板-->
+    <!--cn.404z:rabbitmq-spring-boot-temp-->
+    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
+
     <!--ElasticSearch SpringBoot启动器-->
     <!--cn.404z:elastic-search-spring-boot-starter-->
     <elastic-search-spring-boot-starter.version>1.0.0</elastic-search-spring-boot-starter.version>
+
+    <!--MQTT SpringBoot启动器-->
+    <!--cn.404z:mqtt-spring-boot-starter-->
+    <mqtt-spring-boot-starter.version>1.0.0</mqtt-spring-boot-starter.version>
+
+    <!--Minio SpringBoot启动器-->
+    <!--cn.404z:minio-spring-boot-starter-->
+    <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
+
     <!--工具-->
     <!--cn.404z:util-->
     <util.version>1.0.0</util.version>
+
     <!--SpringBoot工具-->
     <!--cn.404z:util-spring-boot-->
     <util-spring-boot.version>1.0.0</util-spring-boot.version>
@@ -119,18 +185,6 @@
 
   <dependencyManagement>
     <dependencies>
-      <!--日志-->
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${logback.version}</version>
-      </dependency>
-      <!--FastJson-->
-      <dependency>
-        <groupId>com.alibaba.fastjson2</groupId>
-        <artifactId>fastjson2</artifactId>
-        <version>${fastjson.version}</version>
-      </dependency>
       <!--SpringBoot-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -141,6 +195,18 @@
       <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--SpringBoot WebSocket-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-websocket</artifactId>
+        <version>${springboot.version}</version>
+      </dependency>
+      <!--邮件-->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
         <version>${springboot.version}</version>
       </dependency>
       <!--自动装配-->
@@ -155,16 +221,16 @@
         <artifactId>spring-boot-configuration-processor</artifactId>
         <version>${springboot.version}</version>
       </dependency>
-      <!--邮件-->
+      <!--日志-->
       <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-mail</artifactId>
-        <version>${springboot.version}</version>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
       </dependency>
-      <!--RabbitMQ-->
+      <!--MongoDB-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-amqp</artifactId>
+        <artifactId>spring-boot-starter-data-mongodb</artifactId>
         <version>${springboot.version}</version>
       </dependency>
       <!--Redis-->
@@ -173,29 +239,23 @@
         <artifactId>spring-boot-starter-data-redis</artifactId>
         <version>${springboot.version}</version>
       </dependency>
-      <!--MongoDB-->
+      <!--RabbitMQ-->
       <dependency>
         <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        <artifactId>spring-boot-starter-amqp</artifactId>
         <version>${springboot.version}</version>
       </dependency>
-      <!--SpringBoot WebSocket-->
+      <!--FastJson-->
       <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-websocket</artifactId>
-        <version>${springboot.version}</version>
+        <groupId>com.alibaba.fastjson2</groupId>
+        <artifactId>fastjson2</artifactId>
+        <version>${fastjson.version}</version>
       </dependency>
-      <!--Minio-->
+      <!--EasyExcel-->
       <dependency>
-        <groupId>io.minio</groupId>
-        <artifactId>minio</artifactId>
-        <version>${minio.version}</version>
-      </dependency>
-      <!--MQTT-->
-      <dependency>
-        <groupId>org.eclipse.paho</groupId>
-        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-        <version>${mqtt.version}</version>
+        <groupId>com.alibaba</groupId>
+        <artifactId>easyexcel</artifactId>
+        <version>${easyexcel.version}</version>
       </dependency>
       <!--ElasticSearch-->
       <dependency>
@@ -209,11 +269,23 @@
         <artifactId>jakarta.json-api</artifactId>
         <version>${jakarta.version}</version>
       </dependency>
-      <!--EasyExcel-->
+      <!--MQTT-->
       <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>easyexcel</artifactId>
-        <version>${easyexcel.version}</version>
+        <groupId>org.eclipse.paho</groupId>
+        <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+        <version>${mqtt.version}</version>
+      </dependency>
+      <!--加密算法-->
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcpkix-jdk18on</artifactId>
+        <version>${bcpkix.version}</version>
+      </dependency>
+      <!--Minio-->
+      <dependency>
+        <groupId>io.minio</groupId>
+        <artifactId>minio</artifactId>
+        <version>${minio.version}</version>
       </dependency>
       <!--Tika-->
       <dependency>
@@ -239,36 +311,18 @@
         <artifactId>ansj_seg</artifactId>
         <version>${ansj.version}</version>
       </dependency>
-      <!--加密算法-->
-      <dependency>
-        <groupId>org.bouncycastle</groupId>
-        <artifactId>bcpkix-jdk18on</artifactId>
-        <version>${bcpkix.version}</version>
-      </dependency>
 
-      <!--邮件SpringBoot模板-->
-      <dependency>
-        <groupId>cn.404z</groupId>
-        <artifactId>mail-spring-boot-temp</artifactId>
-        <version>${mail-spring-boot-temp.version}</version>
-      </dependency>
-      <!--RabbitMQ SpringBoot模板-->
-      <dependency>
-        <groupId>cn.404z</groupId>
-        <artifactId>rabbitmq-spring-boot-temp</artifactId>
-        <version>${rabbitmq-spring-boot-temp.version}</version>
-      </dependency>
-      <!--Redis SpringBoot模板-->
-      <dependency>
-        <groupId>cn.404z</groupId>
-        <artifactId>redis-spring-boot-temp</artifactId>
-        <version>${redis-spring-boot-temp.version}</version>
-      </dependency>
       <!--WebSocket SpringBoot模板-->
       <dependency>
         <groupId>cn.404z</groupId>
         <artifactId>websocket-spring-boot-temp</artifactId>
         <version>${websocket-spring-boot-temp.version}</version>
+      </dependency>
+      <!--邮件SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>mail-spring-boot-temp</artifactId>
+        <version>${mail-spring-boot-temp.version}</version>
       </dependency>
       <!--MongoDB SpringBoot模板-->
       <dependency>
@@ -276,11 +330,23 @@
         <artifactId>mongo-spring-boot-temp</artifactId>
         <version>${mongo-spring-boot-temp.version}</version>
       </dependency>
-      <!--Minio SpringBoot启动器-->
+      <!--Redis SpringBoot模板-->
       <dependency>
         <groupId>cn.404z</groupId>
-        <artifactId>minio-spring-boot-starter</artifactId>
-        <version>${minio-spring-boot-starter.version}</version>
+        <artifactId>redis-spring-boot-temp</artifactId>
+        <version>${redis-spring-boot-temp.version}</version>
+      </dependency>
+      <!--RabbitMQ SpringBoot模板-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>rabbitmq-spring-boot-temp</artifactId>
+        <version>${rabbitmq-spring-boot-temp.version}</version>
+      </dependency>
+      <!--ElasticSearch SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>elastic-search-spring-boot-starter</artifactId>
+        <version>${elastic-search-spring-boot-starter.version}</version>
       </dependency>
       <!--MQTT SpringBoot启动器-->
       <dependency>
@@ -288,11 +354,11 @@
         <artifactId>mqtt-spring-boot-starter</artifactId>
         <version>${mqtt-spring-boot-starter.version}</version>
       </dependency>
-      <!--ElasticSearch SpringBoot启动器-->
+      <!--Minio SpringBoot启动器-->
       <dependency>
         <groupId>cn.404z</groupId>
-        <artifactId>elastic-search-spring-boot-starter</artifactId>
-        <version>${elastic-search-spring-boot-starter.version}</version>
+        <artifactId>minio-spring-boot-starter</artifactId>
+        <version>${minio-spring-boot-starter.version}</version>
       </dependency>
       <!--工具-->
       <dependency>
