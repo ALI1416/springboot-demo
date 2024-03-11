@@ -185,8 +185,8 @@ SpringBoot示例(3.x版)
     ![Maven Central](https://img.shields.io/maven-central/v/org.ansj/ansj_seg?label=Maven%20Central)
   - `二维码` : `com.google.zxing:core`  
     ![Maven Central](https://img.shields.io/maven-central/v/com.google.zxing/core?label=Maven%20Central)
-  - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-spring-boot-starter`  
-    ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter?label=Maven%20Central)
+  - `Knife4j` : `com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter`  
+    ![Maven Central](https://img.shields.io/maven-central/v/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter?label=Maven%20Central)
 
 ## 关于
 

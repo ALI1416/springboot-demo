@@ -233,8 +233,8 @@
     <qr.version>3.5.3</qr.version>
 
     <!--Knife4j-->
-    <!--com.github.xiaoymin:knife4j-openapi3-spring-boot-starter-->
-    <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-spring-boot-starter -->
+    <!--com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter-->
+    <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-openapi3-jakarta-spring-boot-starter -->
     <knife4j.version>4.5.0</knife4j.version>
 
     <!---->
