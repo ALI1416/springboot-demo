@@ -14,14 +14,14 @@
   <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages</url>
 
   <modules>
-    <module>mail-spring-boot-temp</module>
-    <module>rabbitmq-spring-boot-temp</module>
-    <module>redis-spring-boot-temp</module>
     <module>websocket-spring-boot-temp</module>
-    <module>minio-spring-boot-starter</module>
+    <module>mail-spring-boot-temp</module>
     <module>mongo-spring-boot-temp</module>
-    <module>mqtt-spring-boot-starter</module>
+    <module>redis-spring-boot-temp</module>
+    <module>rabbitmq-spring-boot-temp</module>
     <module>elastic-search-spring-boot-starter</module>
+    <module>mqtt-spring-boot-starter</module>
+    <module>minio-spring-boot-starter</module>
     <module>util</module>
     <module>util-spring-boot</module>
   </modules>
