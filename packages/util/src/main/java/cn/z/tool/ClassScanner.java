@@ -70,7 +70,7 @@ public class ClassScanner {
                 scanFile(packageName, new File(url.getFile()), classNameSet);
             } else if ("jar".equals(protocol)) {
                 try {
-                    scanJar(((JarURLConnection) url.openConnection()).getJarFile(), packageName, packagePath, classNameSet);
+                    scanJar(((JarURLConnection) url.openConnection()).getJarFile(), packagePath, classNameSet);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -94,8 +94,7 @@ public class ClassScanner {
                 if (file.isDirectory()) {
                     scanFile(packageName + "." + fileName, file, classNameSet);
                 } else if (file.getName().endsWith(".class")) {
-                    String className = fileName.substring(0, fileName.length() - 6);
-                    classNameSet.add(packageName + "." + className);
+                    classNameSet.add(packageName + "." + fileName.substring(0, fileName.length() - 6));
                 }
             }
         }
@@ -105,18 +104,16 @@ public class ClassScanner {
      * 扫描jar文件
      *
      * @param jarFile      jar文件
-     * @param packageName  包名
      * @param packagePath  包路径
      * @param classNameSet 类名集合
      */
-    private static void scanJar(JarFile jarFile, String packageName, String packagePath, Set<String> classNameSet) {
+    private static void scanJar(JarFile jarFile, String packagePath, Set<String> classNameSet) {
         Enumeration<JarEntry> entries = jarFile.entries();
         while (entries.hasMoreElements()) {
             JarEntry entry = entries.nextElement();
             String entryName = entry.getName();
             if (!entry.isDirectory() && entryName.startsWith(packagePath) && entryName.endsWith(".class")) {
-                String className = entryName.substring(0, entryName.length() - 6).replace('/', '.');
-                classNameSet.add(packageName + "." + className);
+                classNameSet.add(entryName.substring(0, entryName.length() - 6).replace('/', '.'));
             }
         }
     }

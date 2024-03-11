@@ -210,6 +210,16 @@ public class UserMongoController {
     }
 
     /**
+     * 排序查询<br>
+     * http://localhost:8080/findSort<br>
+     * {"orderBy":"name asc"}
+     */
+    @PostMapping("findSort")
+    public Result<List<UserMongoVo>> findSort(@RequestBody UserMongoVo userMongo) {
+        return Result.o(userMongoService.findSort(userMongo));
+    }
+
+    /**
      * 分页查询<br>
      * http://localhost:8080/findPage<br>
      * {"pages":1,"rows":2,"name":"a"}

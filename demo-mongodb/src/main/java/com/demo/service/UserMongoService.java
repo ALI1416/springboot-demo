@@ -7,6 +7,7 @@ import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.UserMongoVo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -231,6 +232,18 @@ public class UserMongoService extends ServiceBase {
     public List<UserMongoVo> find(UserMongoVo userMongo) {
         Query query = Query.query(buildCriteria(userMongo));
         return userMongoDao.find(query);
+    }
+
+    /**
+     * 排序查询
+     *
+     * @param userMongo UserMongoVo
+     * @return List UserMongoVo
+     */
+    public List<UserMongoVo> findSort(UserMongoVo userMongo) {
+        Query query = Query.query(buildCriteria(userMongo));
+        Sort sort = buildSort(userMongo.getOrderBy());
+        return userMongoDao.findSort(query, sort);
     }
 
     /**

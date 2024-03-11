@@ -6,6 +6,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.FindAndReplaceOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -234,7 +235,7 @@ public class MongoTemp {
     /**
      * 是否存在
      *
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 是否存在
      */
@@ -245,7 +246,7 @@ public class MongoTemp {
     /**
      * 是否存在
      *
-     * @param query          查询
+     * @param query          Query
      * @param collectionName 集合名
      * @return 是否存在
      */
@@ -256,7 +257,7 @@ public class MongoTemp {
     /**
      * 是否存在
      *
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 是否存在
@@ -288,7 +289,7 @@ public class MongoTemp {
     /**
      * 总数
      *
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 总数
      */
@@ -299,7 +300,7 @@ public class MongoTemp {
     /**
      * 总数
      *
-     * @param query          查询
+     * @param query          Query
      * @param collectionName 集合名
      * @return 总数
      */
@@ -310,7 +311,7 @@ public class MongoTemp {
     /**
      * 总数
      *
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 总数
@@ -434,7 +435,7 @@ public class MongoTemp {
     /**
      * 删除
      *
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 删除条数
      */
@@ -445,7 +446,7 @@ public class MongoTemp {
     /**
      * 删除
      *
-     * @param query          查询
+     * @param query          Query
      * @param collectionName 集合名
      * @return 删除条数
      */
@@ -456,7 +457,7 @@ public class MongoTemp {
     /**
      * 删除
      *
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 删除条数
@@ -474,7 +475,7 @@ public class MongoTemp {
      * 更新或插入<br>
      * 注意：不支持排序，请使用{@link #findOneAndUpdate(Query, UpdateDefinition, Class)}
      *
-     * @param query  查询
+     * @param query  Query
      * @param update 更新定义
      * @param clazz  集合类型
      * @return 更新结果
@@ -487,7 +488,7 @@ public class MongoTemp {
      * 更新或插入<br>
      * 注意：不支持排序，请使用{@link #findOneAndUpdate(Query, UpdateDefinition, Class, String)}
      *
-     * @param query          查询
+     * @param query          Query
      * @param update         更新定义
      * @param collectionName 集合名
      * @return 更新结果
@@ -500,7 +501,7 @@ public class MongoTemp {
      * 更新或插入<br>
      * 注意：不支持排序，请使用{@link #findOneAndUpdate(Query, UpdateDefinition, Class, String)}
      *
-     * @param query          查询
+     * @param query          Query
      * @param update         更新定义
      * @param clazz          集合类型
      * @param collectionName 集合名
@@ -514,7 +515,7 @@ public class MongoTemp {
      * 更新第一个<br>
      * 注意：不支持排序，请使用{@link #findOneAndUpdate(Query, UpdateDefinition, Class)}
      *
-     * @param query  查询
+     * @param query  Query
      * @param update 更新定义
      * @param clazz  集合类型
      * @return 更新结果
@@ -527,7 +528,7 @@ public class MongoTemp {
      * 更新第一个<br>
      * 注意：不支持排序，请使用{@link #findOneAndUpdate(Query, UpdateDefinition, Class, String)}
      *
-     * @param query          查询
+     * @param query          Query
      * @param update         更新定义
      * @param collectionName 集合名
      * @return 更新结果
@@ -540,7 +541,7 @@ public class MongoTemp {
      * 更新第一个<br>
      * 注意：不支持排序，请使用{@link #findOneAndUpdate(Query, UpdateDefinition, Class, String)}
      *
-     * @param query          查询
+     * @param query          Query
      * @param update         更新定义
      * @param clazz          集合类型
      * @param collectionName 集合名
@@ -553,7 +554,7 @@ public class MongoTemp {
     /**
      * 更新
      *
-     * @param query  查询
+     * @param query  Query
      * @param update 更新定义
      * @param clazz  集合类型
      * @return 更新结果
@@ -565,7 +566,7 @@ public class MongoTemp {
     /**
      * 更新
      *
-     * @param query          查询
+     * @param query          Query
      * @param update         更新定义
      * @param collectionName 集合名
      * @return 更新结果
@@ -577,7 +578,7 @@ public class MongoTemp {
     /**
      * 更新
      *
-     * @param query          查询
+     * @param query          Query
      * @param update         更新定义
      * @param clazz          集合类型
      * @param collectionName 集合名
@@ -621,7 +622,7 @@ public class MongoTemp {
      * 查询第一个
      *
      * @param <T>   集合类型
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 实体
      */
@@ -633,7 +634,7 @@ public class MongoTemp {
      * 查询第一个
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 实体
@@ -659,7 +660,7 @@ public class MongoTemp {
      * 查询指定字段的不同值
      *
      * @param <T>        指定字段的数据类型
-     * @param query      查询
+     * @param query      Query
      * @param clazz      集合类型
      * @param fieldName  字段名
      * @param fieldClazz 指定字段的数据类型
@@ -673,7 +674,7 @@ public class MongoTemp {
      * 查询指定字段的不同值
      *
      * @param <T>            指定字段的数据类型
-     * @param query          查询
+     * @param query          Query
      * @param collectionName 集合名
      * @param fieldName      字段名
      * @param fieldClazz     指定字段的数据类型
@@ -687,7 +688,7 @@ public class MongoTemp {
      * 查询指定字段的不同值
      *
      * @param <T>            指定字段的数据类型
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @param fieldName      字段名
@@ -725,7 +726,7 @@ public class MongoTemp {
      * 查询
      *
      * @param <T>   集合类型
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 实体数组
      */
@@ -737,13 +738,48 @@ public class MongoTemp {
      * 查询
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 实体数组
      */
     public <T> List<T> find(Query query, Class<T> clazz, String collectionName) {
         return mongoTemplate.find(query, clazz, collectionName);
+    }
+
+    /**
+     * 排序查询
+     *
+     * @param <T>   集合类型
+     * @param query Query
+     * @param sort  Sort
+     * @param clazz 集合类型
+     * @return 实体数组
+     */
+    public <T> List<T> findSort(Query query, Sort sort, Class<T> clazz) {
+        if (sort == null) {
+            return mongoTemplate.find(query, clazz);
+        } else {
+            return mongoTemplate.find(query.with(sort), clazz);
+        }
+    }
+
+    /**
+     * 排序查询
+     *
+     * @param <T>            集合类型
+     * @param query          Query
+     * @param sort           Sort
+     * @param clazz          集合类型
+     * @param collectionName 集合名
+     * @return 实体数组
+     */
+    public <T> List<T> findSort(Query query, Sort sort, Class<T> clazz, String collectionName) {
+        if (sort == null) {
+            return mongoTemplate.find(query, clazz, collectionName);
+        } else {
+            return mongoTemplate.find(query.with(sort), clazz, collectionName);
+        }
     }
 
     /**
@@ -808,7 +844,7 @@ public class MongoTemp {
      * 查询第一个并修改
      *
      * @param <T>    集合类型
-     * @param query  查询
+     * @param query  Query
      * @param update 修改定义
      * @param clazz  集合类型
      * @return 实体
@@ -821,7 +857,7 @@ public class MongoTemp {
      * 查询第一个并修改
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param update         修改定义
      * @param clazz          集合类型
      * @param collectionName 集合名
@@ -835,7 +871,7 @@ public class MongoTemp {
      * 查询第一个并修改
      *
      * @param <T>     集合类型
-     * @param query   查询
+     * @param query   Query
      * @param update  修改定义
      * @param options 查询第一个并修改选项
      * @param clazz   集合类型
@@ -849,7 +885,7 @@ public class MongoTemp {
      * 查询第一个并修改
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param update         修改定义
      * @param options        查询第一个并修改选项
      * @param clazz          集合类型
@@ -864,7 +900,7 @@ public class MongoTemp {
      * 查询第一个并替换
      *
      * @param <T>         集合类型
-     * @param query       查询
+     * @param query       Query
      * @param replacement 替换值(不能有id)
      * @return 实体
      */
@@ -876,7 +912,7 @@ public class MongoTemp {
      * 查询第一个并替换
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param collectionName 集合名
      * @param replacement    替换值(不能有id)
      * @return 实体
@@ -889,7 +925,7 @@ public class MongoTemp {
      * 查询第一个并替换
      *
      * @param <T>         集合类型
-     * @param query       查询
+     * @param query       Query
      * @param options     查询第一个并替换选项
      * @param replacement 替换值(不能有id)
      * @return 实体
@@ -902,7 +938,7 @@ public class MongoTemp {
      * 查询第一个并替换
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param options        查询第一个并替换选项
      * @param collectionName 集合名
      * @param replacement    替换值(不能有id)
@@ -916,7 +952,7 @@ public class MongoTemp {
      * 查询第一个并替换
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param options        查询第一个并替换选项
      * @param clazz          集合类型
      * @param collectionName 集合名
@@ -932,7 +968,7 @@ public class MongoTemp {
      *
      * @param <T>              集合类型
      * @param <R>              替换值类型
-     * @param query            查询
+     * @param query            Query
      * @param options          查询第一个并替换选项
      * @param clazz            集合类型
      * @param replacement      替换值(不能有id)
@@ -948,7 +984,7 @@ public class MongoTemp {
      *
      * @param <T>              集合类型
      * @param <R>              替换值类型
-     * @param query            查询
+     * @param query            Query
      * @param options          查询第一个并替换选项
      * @param clazz            集合类型
      * @param collectionName   集合名
@@ -964,7 +1000,7 @@ public class MongoTemp {
      * 查询第一个并删除
      *
      * @param <T>   集合类型
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 实体
      */
@@ -976,7 +1012,7 @@ public class MongoTemp {
      * 查询第一个并删除
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 实体
@@ -989,7 +1025,7 @@ public class MongoTemp {
      * 查询并删除
      *
      * @param <T>   集合类型
-     * @param query 查询
+     * @param query Query
      * @param clazz 集合类型
      * @return 实体数组
      */
@@ -1001,7 +1037,7 @@ public class MongoTemp {
      * 查询并删除
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param collectionName 集合名
      * @return 实体数组
      */
@@ -1013,7 +1049,7 @@ public class MongoTemp {
      * 查询并删除
      *
      * @param <T>            集合类型
-     * @param query          查询
+     * @param query          Query
      * @param clazz          集合类型
      * @param collectionName 集合名
      * @return 实体数组

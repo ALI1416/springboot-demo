@@ -46,36 +46,32 @@ public class ServiceBase {
         if (rows == null || rows <= 0) {
             rows = Constant.PAGE_DEFAULT_ROWS;
         }
-        // 默认排序
-        if (orderBy == null) {
-            orderBy = Constant.PAGE_DEFAULT_ORDER_BY;
-        }
         if (pages == 0) {
-            if (orderBy.isEmpty()) {
-                // 全部查询，不排序
-                return new Pageable(null, null);
-            } else {
-                // 全部查询，排序
-                return new Pageable(null, buildSort(orderBy));
-            }
+            // 全部查询
+            return new Pageable(null, buildSort(orderBy));
         } else {
-            if (orderBy.isEmpty()) {
-                // 分页查询，不排序
-                return new Pageable(PageRequestFix.of(pages, rows), null);
-            } else {
-                // 分页查询，排序
-                return new Pageable(PageRequestFix.of(pages, rows, buildSort(orderBy)), null);
-            }
+            // 分页查询
+            return new Pageable(PageRequestFix.of(pages, rows, buildSort(orderBy)), null);
         }
     }
 
     /**
      * <h2>构建排序</h2>
+     * 默认排序：orderBy == null<br>
+     * 不排序：orderBy == ""
      *
      * @param orderBy 排序
      * @return Sort
      */
     public static Sort buildSort(String orderBy) {
+        // 默认排序
+        if (orderBy == null) {
+            orderBy = Constant.PAGE_DEFAULT_ORDER_BY;
+        }
+        // 不排序
+        if (orderBy.isEmpty()) {
+            return null;
+        }
         // 排序转为List<Sort.Order>
         List<Sort.Order> orderList = new ArrayList<>();
         // 取出每个字段的排序
