@@ -25,14 +25,18 @@ public class FormatConstant {
     /**
      * JSON读特性
      */
-    public static final JSONReader.Feature[] JSON_READER_FEATURE = { //
-            JSONReader.Feature.SupportSmartMatch // 智能匹配
+    public static final JSONReader.Feature[] JSON_READER_FEATURE = {
+            // 智能匹配
+            JSONReader.Feature.SupportSmartMatch
     };
     /**
      * JSON写特性
      */
-    public static final JSONWriter.Feature[] JSON_WRITER_FEATURE = { //
-            JSONWriter.Feature.WriteLongAsString // Long转String
+    public static final JSONWriter.Feature[] JSON_WRITER_FEATURE = {
+            // Long转String
+            JSONWriter.Feature.WriteLongAsString,
+            // MapKey转String
+            JSONWriter.Feature.WriteNonStringKeyAsString
     };
 
 }

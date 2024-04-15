@@ -3,8 +3,13 @@ package com.demo.controller;
 import cn.z.mongo.MongoTemp;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.UserMongoVo;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import lombok.AllArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexDefinition;
 import org.springframework.data.mongodb.core.index.IndexInfo;
@@ -29,6 +34,7 @@ import java.util.Set;
 public class IndexController {
 
     private final MongoTemp mongoTemp;
+    private final MongoTemplate mongoTemplate;
 
     /**
      * 获取数据库名<br>
@@ -100,6 +106,9 @@ public class IndexController {
      */
     @GetMapping("getCollectionIndexInfo")
     public Result<List<IndexInfo>> getCollectionIndexInfo(String collectionName) {
+        MongoCollection<Document> collection = mongoTemplate.getCollection(collectionName);
+        collection.createIndex(Indexes.ascending("abc"));
+        collection.createIndex(Indexes.compoundIndex(Indexes.ascending("field1", "field2")), new IndexOptions().unique(true));
         return Result.o(mongoTemp.getCollectionIndexInfo(collectionName));
     }
 
