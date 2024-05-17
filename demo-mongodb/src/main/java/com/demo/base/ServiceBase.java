@@ -70,7 +70,7 @@ public class ServiceBase {
         }
         // 不排序
         if (orderBy.isEmpty()) {
-            return null;
+            return Sort.unsorted();
         }
         // 排序转为List<Sort.Order>
         List<Sort.Order> orderList = new ArrayList<>();
