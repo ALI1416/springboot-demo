@@ -88,7 +88,7 @@
     <!--<lombok.version></lombok.version>-->
 
     <!--日志-->
-    <!-- ch.qos.logback:logback-classic -->
+    <!--ch.qos.logback:logback-classic-->
     <!--<logback.version></logback.version>-->
 
     <!--Maven编译插件-->
