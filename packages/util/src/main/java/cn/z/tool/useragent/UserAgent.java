@@ -23,7 +23,7 @@ public class UserAgent {
      */
     private String engine;
     /**
-     * 引擎
+     * 引擎版本号
      */
     private String engineVersion;
     /**
@@ -31,7 +31,7 @@ public class UserAgent {
      */
     private String browser;
     /**
-     * 浏览器
+     * 浏览器版本号
      */
     private String browserVersion;
     /**
@@ -39,7 +39,7 @@ public class UserAgent {
      */
     private String os;
     /**
-     * 操作系统
+     * 操作系统版本号
      */
     private String osVersion;
     /**
