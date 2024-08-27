@@ -361,7 +361,6 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      */
     private static void useHeaderAnnotation(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, Header header, int index) {
         switch (header.value()) {
-            case MSG -> addMsg(functionArray, parameter, index);
             case TOPIC -> addTopic(functionArray, parameter, index, header.radix());
             case TOPIC_PART ->
                     topicPartHandle(functionArray, method, parameter, partList, header.index(), index, header.radix());
@@ -369,6 +368,8 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
             case QOS -> functionArray[index] = (FunctionMessage) MqttMessage::getQos;
             case RETAIN -> functionArray[index] = (FunctionMessage) MqttMessage::isRetained;
             case DUPLICATE -> functionArray[index] = (FunctionMessage) MqttMessage::isDuplicate;
+            // MSG
+            default -> addMsg(functionArray, parameter, index);
         }
     }
 
