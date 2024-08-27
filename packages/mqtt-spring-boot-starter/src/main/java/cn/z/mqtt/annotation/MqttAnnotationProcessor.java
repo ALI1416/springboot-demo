@@ -202,10 +202,10 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
     private void subscribe() {
         if (!topicList.isEmpty()) {
             try {
-                mqttClient.subscribeWithResponse( //
-                        topicList.toArray(new String[0]), //
-                        qosList.stream().mapToInt(Integer::intValue).toArray(), //
-                        callbackList.toArray(new IMqttMessageListener[0]) //
+                mqttClient.subscribeWithResponse(
+                        topicList.toArray(new String[0]),
+                        qosList.stream().mapToInt(Integer::intValue).toArray(),
+                        callbackList.toArray(new IMqttMessageListener[0])
                 );
             } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
                 throw new MqttException("订阅失败", e);
@@ -329,7 +329,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 }
                 method.invoke(bean, objectArray);
             } catch (Exception e) {
-                log.error("方法 " + method + " 调用失败", e);
+                log.error("方法 {} 调用失败", method, e);
             }
         };
     }
@@ -361,11 +361,6 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
      */
     private static void useHeaderAnnotation(Function[] functionArray, Method method, Parameter parameter, List<Map.Entry<Integer, Boolean>> partList, Header header, int index) {
         switch (header.value()) {
-            default:
-            case MSG: {
-                addMsg(functionArray, parameter, index);
-                break;
-            }
             case TOPIC: {
                 addTopic(functionArray, parameter, index, header.radix());
                 break;
@@ -388,6 +383,11 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
             }
             case DUPLICATE: {
                 functionArray[index] = (FunctionMessage) MqttMessage::isDuplicate;
+                break;
+            }
+            // MSG
+            default: {
+                addMsg(functionArray, parameter, index);
                 break;
             }
         }
@@ -612,7 +612,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Boolean.parseBoolean(string);
             }
             case "java.lang.Boolean": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Boolean.parseBoolean(string);
@@ -621,7 +621,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Byte.parseByte(string, radix);
             }
             case "java.lang.Byte": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Byte.parseByte(string, radix);
@@ -633,7 +633,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 throw new IndexOutOfBoundsException("char类型只能接收 1 个字符，当前字符串 " + string + " 为 " + string.length() + " 个字符");
             }
             case "java.lang.Character": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 if (string.length() == 1) {
@@ -645,7 +645,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Short.parseShort(string, radix);
             }
             case "java.lang.Short": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Short.parseShort(string, radix);
@@ -654,7 +654,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Integer.parseInt(string, radix);
             }
             case "java.lang.Integer": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Integer.parseInt(string, radix);
@@ -663,7 +663,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Long.parseLong(string, radix);
             }
             case "java.lang.Long": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Long.parseLong(string, radix);
@@ -672,7 +672,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Float.parseFloat(string);
             }
             case "java.lang.Float": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Float.parseFloat(string);
@@ -681,7 +681,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 return Double.parseDouble(string);
             }
             case "java.lang.Double": {
-                if (string.length() == 0) {
+                if (string.isEmpty()) {
                     return null;
                 }
                 return Double.parseDouble(string);

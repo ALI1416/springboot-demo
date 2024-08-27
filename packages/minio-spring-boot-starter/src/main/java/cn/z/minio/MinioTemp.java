@@ -80,8 +80,8 @@ public class MinioTemp {
      */
     public boolean bucketExist(String bucket) {
         try {
-            return minioClient.bucketExists( //
-                    BucketExistsArgs.builder().bucket(bucket).build() //
+            return minioClient.bucketExists(
+                    BucketExistsArgs.builder().bucket(bucket).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -95,8 +95,8 @@ public class MinioTemp {
      */
     public void bucketCreate(String bucket) {
         try {
-            minioClient.makeBucket( //
-                    MakeBucketArgs.builder().bucket(bucket).build() //
+            minioClient.makeBucket(
+                    MakeBucketArgs.builder().bucket(bucket).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -110,8 +110,8 @@ public class MinioTemp {
      */
     public void bucketDelete(String bucket) {
         try {
-            minioClient.removeBucket( //
-                    RemoveBucketArgs.builder().bucket(bucket).build() //
+            minioClient.removeBucket(
+                    RemoveBucketArgs.builder().bucket(bucket).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -131,8 +131,8 @@ public class MinioTemp {
      */
     public Map<String, String> bucketTagGet(String bucket) {
         try {
-            return minioClient.getBucketTags( //
-                    GetBucketTagsArgs.builder().bucket(bucket).build() //
+            return minioClient.getBucketTags(
+                    GetBucketTagsArgs.builder().bucket(bucket).build()
             ).get();
         } catch (Exception e) {
             throw new MinioException(e);
@@ -147,8 +147,8 @@ public class MinioTemp {
      */
     public void bucketTagSet(String bucket, Map<String, String> tagMap) {
         try {
-            minioClient.setBucketTags( //
-                    SetBucketTagsArgs.builder().bucket(bucket).tags(tagMap).build() //
+            minioClient.setBucketTags(
+                    SetBucketTagsArgs.builder().bucket(bucket).tags(tagMap).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -159,12 +159,11 @@ public class MinioTemp {
      * 删除储存桶的全部标签
      *
      * @param bucket 储存桶
-     * @return 是否成功
      */
     public void bucketTagDelete(String bucket) {
         try {
-            minioClient.deleteBucketTags( //
-                    DeleteBucketTagsArgs.builder().bucket(bucket).build() //
+            minioClient.deleteBucketTags(
+                    DeleteBucketTagsArgs.builder().bucket(bucket).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -184,8 +183,8 @@ public class MinioTemp {
      */
     public List<Item> objectAll(String bucket) {
         try {
-            return Item.toList(minioClient.listObjects( //
-                    ListObjectsArgs.builder().bucket(bucket).build() //
+            return Item.toList(minioClient.listObjects(
+                    ListObjectsArgs.builder().bucket(bucket).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -201,8 +200,8 @@ public class MinioTemp {
      */
     public List<Item> objectAll(String bucket, String path) {
         try {
-            return Item.toList(minioClient.listObjects( //
-                    ListObjectsArgs.builder().bucket(bucket).prefix(path + "/").build() //
+            return Item.toList(minioClient.listObjects(
+                    ListObjectsArgs.builder().bucket(bucket).prefix(path + "/").build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -218,8 +217,8 @@ public class MinioTemp {
      */
     public StatObjectResponse objectStatus(String bucket, String path) {
         try {
-            return new StatObjectResponse(minioClient.statObject( //
-                    StatObjectArgs.builder().bucket(bucket).object(path).build() //
+            return new StatObjectResponse(minioClient.statObject(
+                    StatObjectArgs.builder().bucket(bucket).object(path).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -235,8 +234,8 @@ public class MinioTemp {
      */
     public GetObjectResponse objectGet(String bucket, String path) {
         try {
-            return new GetObjectResponse(minioClient.getObject( //
-                    GetObjectArgs.builder().bucket(bucket).object(path).build() //
+            return new GetObjectResponse(minioClient.getObject(
+                    GetObjectArgs.builder().bucket(bucket).object(path).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -257,10 +256,10 @@ public class MinioTemp {
             return false;
         }
         try {
-            MinioTemp.inputStream2HttpServletResponse( //
-                    getObjectResponse.getFile(), //
-                    response, //
-                    getObjectResponse.getResponse().getHeaders().get("Content-Type") //
+            MinioTemp.inputStream2HttpServletResponse(
+                    getObjectResponse.getFile(),
+                    response,
+                    getObjectResponse.getResponse().getHeaders().get("Content-Type")
             );
             return true;
         } catch (Exception e) {
@@ -295,11 +294,11 @@ public class MinioTemp {
             return false;
         }
         try {
-            MinioTemp.inputStream2HttpServletResponse( //
-                    getObjectResponse.getFile(), //
-                    response, //
-                    name == null ? getObjectResponse.getResponse().getName() : name, //
-                    getObjectResponse.getResponse().getHeaders().get("Content-Type") //
+            MinioTemp.inputStream2HttpServletResponse(
+                    getObjectResponse.getFile(),
+                    response,
+                    name == null ? getObjectResponse.getResponse().getName() : name,
+                    getObjectResponse.getResponse().getHeaders().get("Content-Type")
             );
             return true;
         } catch (Exception e) {
@@ -316,8 +315,8 @@ public class MinioTemp {
      */
     public void objectDownloadLocal(String bucket, String path, String localPath) {
         try {
-            minioClient.downloadObject( //
-                    DownloadObjectArgs.builder().bucket(bucket).object(path).filename(localPath).build() //
+            minioClient.downloadObject(
+                    DownloadObjectArgs.builder().bucket(bucket).object(path).filename(localPath).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -347,10 +346,10 @@ public class MinioTemp {
      */
     public ObjectWriteResponse objectCopy(String bucket, String path, String newBucket, String newPath) {
         try {
-            return new ObjectWriteResponse(minioClient.copyObject( //
-                    CopyObjectArgs.builder().bucket(newBucket).object(newPath).source( //
-                            CopySource.builder().bucket(bucket).object(path).build() //
-                    ).build() //
+            return new ObjectWriteResponse(minioClient.copyObject(
+                    CopyObjectArgs.builder().bucket(newBucket).object(newPath).source(
+                            CopySource.builder().bucket(bucket).object(path).build()
+                    ).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -371,8 +370,8 @@ public class MinioTemp {
             list.add(ComposeSource.builder().bucket(bucket).object(path).build());
         }
         try {
-            return new ObjectWriteResponse(minioClient.composeObject( //
-                    ComposeObjectArgs.builder().bucket(bucket).object(newPath).sources(list).build() //
+            return new ObjectWriteResponse(minioClient.composeObject(
+                    ComposeObjectArgs.builder().bucket(bucket).object(newPath).sources(list).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -387,8 +386,8 @@ public class MinioTemp {
      */
     public void objectDelete(String bucket, String path) {
         try {
-            minioClient.removeObject( //
-                    RemoveObjectArgs.builder().bucket(bucket).object(path).build() //
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder().bucket(bucket).object(path).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -408,8 +407,8 @@ public class MinioTemp {
             list.add(new DeleteObject(path));
         }
         try {
-            return DeleteError.toList(minioClient.removeObjects( //
-                    RemoveObjectsArgs.builder().bucket(bucket).objects(list).build() //
+            return DeleteError.toList(minioClient.removeObjects(
+                    RemoveObjectsArgs.builder().bucket(bucket).objects(list).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -439,13 +438,13 @@ public class MinioTemp {
      */
     public ObjectWriteResponse objectUpload(String bucket, String path, MultipartFile multipartFile, String name) {
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            return new ObjectWriteResponse(minioClient.putObject( //
-                    PutObjectArgs.builder() //
-                            .bucket(bucket) //
-                            .object(path + "/" + (name == null ? multipartFile.getOriginalFilename() : name)) //
-                            .stream(inputStream, multipartFile.getSize(), -1) //
-                            .contentType(multipartFile.getContentType()) //
-                            .build() //
+            return new ObjectWriteResponse(minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucket)
+                            .object(path + "/" + (name == null ? multipartFile.getOriginalFilename() : name))
+                            .stream(inputStream, multipartFile.getSize(), -1)
+                            .contentType(multipartFile.getContentType())
+                            .build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -485,15 +484,15 @@ public class MinioTemp {
         List<SnowballObject> list = new ArrayList<>();
         try {
             for (int i = 0; i < multipartFileArray.length; i++) {
-                list.add(new SnowballObject( //
-                        path + "/" + (nameArray[i] == null ? multipartFileArray[i].getOriginalFilename() : nameArray[i]), //
-                        inputStreamList.get(i),  //
-                        multipartFileArray[i].getSize(),  //
-                        null //
+                list.add(new SnowballObject(
+                        path + "/" + (nameArray[i] == null ? multipartFileArray[i].getOriginalFilename() : nameArray[i]),
+                        inputStreamList.get(i),
+                        multipartFileArray[i].getSize(),
+                        null
                 ));
             }
-            return new ObjectWriteResponse(minioClient.uploadSnowballObjects( //
-                    UploadSnowballObjectsArgs.builder().bucket(bucket).objects(list).build() //
+            return new ObjectWriteResponse(minioClient.uploadSnowballObjects(
+                    UploadSnowballObjectsArgs.builder().bucket(bucket).objects(list).build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -516,12 +515,12 @@ public class MinioTemp {
      */
     public ObjectWriteResponse folderCreate(String bucket, String path) {
         try {
-            return new ObjectWriteResponse(minioClient.putObject( //
-                    PutObjectArgs.builder() //
-                            .bucket(bucket) //
-                            .object(path + "/") //
-                            .stream(new ByteArrayInputStream(new byte[]{}), 0, -1) //
-                            .build() //
+            return new ObjectWriteResponse(minioClient.putObject(
+                    PutObjectArgs.builder()
+                            .bucket(bucket)
+                            .object(path + "/")
+                            .stream(new ByteArrayInputStream(new byte[]{}), 0, -1)
+                            .build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -538,12 +537,12 @@ public class MinioTemp {
      */
     public ObjectWriteResponse objectUploadLocal(String bucket, String path, String localPath) {
         try {
-            return new ObjectWriteResponse(minioClient.uploadObject( //
-                    UploadObjectArgs.builder() //
-                            .bucket(bucket) //
-                            .object(path + "/" + Paths.get(localPath).getFileName()) //
-                            .filename(localPath) //
-                            .build() //
+            return new ObjectWriteResponse(minioClient.uploadObject(
+                    UploadObjectArgs.builder()
+                            .bucket(bucket)
+                            .object(path + "/" + Paths.get(localPath).getFileName())
+                            .filename(localPath)
+                            .build()
             ));
         } catch (Exception e) {
             throw new MinioException(e);
@@ -564,8 +563,8 @@ public class MinioTemp {
      */
     public Map<String, String> objectTagGet(String bucket, String path) {
         try {
-            return minioClient.getObjectTags( //
-                    GetObjectTagsArgs.builder().bucket(bucket).object(path).build() //
+            return minioClient.getObjectTags(
+                    GetObjectTagsArgs.builder().bucket(bucket).object(path).build()
             ).get();
         } catch (Exception e) {
             throw new MinioException(e);
@@ -577,12 +576,11 @@ public class MinioTemp {
      *
      * @param bucket 储存桶
      * @param path   路径
-     * @return 是否成功
      */
     public void objectTagSet(String bucket, String path, Map<String, String> tags) {
         try {
-            minioClient.setObjectTags( //
-                    SetObjectTagsArgs.builder().bucket(bucket).object(path).tags(tags).build() //
+            minioClient.setObjectTags(
+                    SetObjectTagsArgs.builder().bucket(bucket).object(path).tags(tags).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -597,8 +595,8 @@ public class MinioTemp {
      */
     public void objectTagDelete(String bucket, String path) {
         try {
-            minioClient.deleteObjectTags( //
-                    DeleteObjectTagsArgs.builder().bucket(bucket).object(path).build() //
+            minioClient.deleteObjectTags(
+                    DeleteObjectTagsArgs.builder().bucket(bucket).object(path).build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -620,13 +618,13 @@ public class MinioTemp {
      */
     public String urlDelete(String bucket, String path, int expire) {
         try {
-            return minioClient.getPresignedObjectUrl( //
-                    GetPresignedObjectUrlArgs.builder() //
-                            .method(Method.DELETE) //
-                            .bucket(bucket) //
-                            .object(path) //
-                            .expiry(expire) //
-                            .build() //
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.DELETE)
+                            .bucket(bucket)
+                            .object(path)
+                            .expiry(expire)
+                            .build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -644,14 +642,14 @@ public class MinioTemp {
      */
     public String urlUpdate(String bucket, String path, int expire, Map<String, String> queryParamMap) {
         try {
-            return minioClient.getPresignedObjectUrl( //
-                    GetPresignedObjectUrlArgs.builder() //
-                            .method(Method.PUT) //
-                            .bucket(bucket) //
-                            .object(path) //
-                            .expiry(expire) //
-                            .extraQueryParams(queryParamMap) //
-                            .build() //
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.PUT)
+                            .bucket(bucket)
+                            .object(path)
+                            .expiry(expire)
+                            .extraQueryParams(queryParamMap)
+                            .build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
@@ -668,13 +666,13 @@ public class MinioTemp {
      */
     public String urlDownload(String bucket, String path, int expire) {
         try {
-            return minioClient.getPresignedObjectUrl( //
-                    GetPresignedObjectUrlArgs.builder() //
-                            .method(Method.GET) //
-                            .bucket(bucket) //
-                            .object(path) //
-                            .expiry(expire) //
-                            .build() //
+            return minioClient.getPresignedObjectUrl(
+                    GetPresignedObjectUrlArgs.builder()
+                            .method(Method.GET)
+                            .bucket(bucket)
+                            .object(path)
+                            .expiry(expire)
+                            .build()
             );
         } catch (Exception e) {
             throw new MinioException(e);
