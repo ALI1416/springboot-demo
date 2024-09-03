@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>demo-influxdb</artifactId>
+  <version>1.0.0</version>
+
+  <name>demo-influxdb</name>
+  <description>InfluxDB</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-influxdb</url>
+
+  <parent>
+    <groupId>com.demo</groupId>
+    <artifactId>springboot-demo</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <dependencies>
+    <!--SpringBoot Web-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <!-- InfluxDB -->
+    <dependency>
+      <groupId>com.influxdb</groupId>
+      <artifactId>influxdb-client-java</artifactId>
+      <version>7.2.0</version>
+    </dependency>
+    <!--FastJson-->
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2</artifactId>
+    </dependency>
+    <!--InfluxDB SpringBoot启动器-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>influx-spring-boot-starter</artifactId>
+    </dependency>
+    <!--SpringBoot工具-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>util-spring-boot</artifactId>
+    </dependency>
+  </dependencies>
+
+</project>

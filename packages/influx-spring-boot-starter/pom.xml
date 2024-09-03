@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>influx-spring-boot-starter</artifactId>
+  <version>1.0.0</version>
+
+  <name>influx-spring-boot-starter</name>
+  <description>InfluxDB SpringBoot Starter InfluxDB SpringBoot启动器</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/influx-spring-boot-starter</url>
+
+  <parent>
+    <groupId>cn.404z</groupId>
+    <artifactId>packages</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.influxdb</groupId>
+      <artifactId>influxdb-client-java</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!-- 仅供编译使用 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure-processor</artifactId>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+</project>

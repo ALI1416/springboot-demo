@@ -29,6 +29,10 @@ SpringBoot示例(3.x版)
   - SpringBoot Web
   - FastJson
   - ElasticSearch
+- **`demo-influxdb`** : InfluxDB
+  - SpringBoot Web
+  - FastJson
+  - InfluxDB
 - **`demo-just-auth`** : JustAuth第三方登录
   - SpringBoot Web
   - FastJson

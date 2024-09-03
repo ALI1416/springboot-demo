@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+cn.z.influx.autoconfigure.InfluxAutoConfiguration,\
+cn.z.influx.InfluxTemp

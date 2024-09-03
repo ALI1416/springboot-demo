@@ -27,6 +27,7 @@
     <module>demo-config</module>
     <module>demo-dynamic-route</module>
     <module>demo-elastic-search</module>
+    <module>demo-influxdb</module>
     <module>demo-just-auth</module>
     <module>demo-knife4j</module>
     <module>demo-mail</module>
@@ -235,6 +236,10 @@
     <!--Minio SpringBoot启动器-->
     <!--cn.404z:minio-spring-boot-starter-->
     <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
+
+    <!--InfluxDB SpringBoot启动器-->
+    <!--cn.404z:influx-spring-boot-starter-->
+    <influx-spring-boot-starter.version>1.0.0</influx-spring-boot-starter.version>
 
     <!--工具-->
     <!--cn.404z:util-->
@@ -460,6 +465,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>minio-spring-boot-starter</artifactId>
         <version>${minio-spring-boot-starter.version}</version>
+      </dependency>
+      <!--InfluxDB SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>influx-spring-boot-starter</artifactId>
+        <version>${influx-spring-boot-starter.version}</version>
       </dependency>
       <!--工具-->
       <dependency>

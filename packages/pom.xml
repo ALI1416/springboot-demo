@@ -22,6 +22,7 @@
     <module>elastic-search-spring-boot-starter</module>
     <module>mqtt-spring-boot-starter</module>
     <module>minio-spring-boot-starter</module>
+    <module>influx-spring-boot-starter</module>
     <module>util</module>
     <module>util-spring-boot</module>
   </modules>
@@ -105,6 +106,10 @@
     <!--io.minio:minio-->
     <minio.version>8.5.11</minio.version>
 
+    <!--InfluxDB-->
+    <!--com.influxdb:influxdb-client-java-->
+    <influx.version>7.2.0</influx.version>
+
     <!--Tika-->
     <!--org.apache.tika:tika-core-->
     <!--org.apache.tika:tika-parsers-standard-package-->
@@ -149,6 +154,10 @@
     <!--Minio SpringBoot启动器-->
     <!--cn.404z:minio-spring-boot-starter-->
     <minio-spring-boot-starter.version>1.0.0</minio-spring-boot-starter.version>
+
+    <!--InfluxDB SpringBoot启动器-->
+    <!--cn.404z:influx-spring-boot-starter-->
+    <influx-spring-boot-starter.version>1.0.0</influx-spring-boot-starter.version>
 
     <!--工具-->
     <!--cn.404z:util-->
@@ -257,6 +266,12 @@
         <artifactId>minio</artifactId>
         <version>${minio.version}</version>
       </dependency>
+      <!-- InfluxDB -->
+      <dependency>
+        <groupId>com.influxdb</groupId>
+        <artifactId>influxdb-client-java</artifactId>
+        <version>${influx.version}</version>
+      </dependency>
       <!--Tika-->
       <dependency>
         <groupId>org.apache.tika</groupId>
@@ -329,6 +344,12 @@
         <groupId>cn.404z</groupId>
         <artifactId>minio-spring-boot-starter</artifactId>
         <version>${minio-spring-boot-starter.version}</version>
+      </dependency>
+      <!--InfluxDB SpringBoot启动器-->
+      <dependency>
+        <groupId>cn.404z</groupId>
+        <artifactId>influx-spring-boot-starter</artifactId>
+        <version>${influx-spring-boot-starter.version}</version>
       </dependency>
       <!--工具-->
       <dependency>
