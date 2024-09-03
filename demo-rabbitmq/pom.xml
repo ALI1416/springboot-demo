@@ -50,7 +50,7 @@
     <!--RabbitMQ SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>
-      <artifactId>rabbitmq-spring-boot-temp</artifactId>
+      <artifactId>rabbit-spring-boot-temp</artifactId>
     </dependency>
     <!--工具-->
     <dependency>

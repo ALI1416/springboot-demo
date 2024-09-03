@@ -18,7 +18,7 @@
     <module>mail-spring-boot-temp</module>
     <module>mongo-spring-boot-temp</module>
     <module>redis-spring-boot-temp</module>
-    <module>rabbitmq-spring-boot-temp</module>
+    <module>rabbit-spring-boot-temp</module>
     <module>elastic-search-spring-boot-starter</module>
     <module>mqtt-spring-boot-starter</module>
     <module>minio-spring-boot-starter</module>
@@ -39,7 +39,7 @@
     <!--继承父依赖不可修改版本号-->
     <!--SpringBoot-->
     <!--org.springframework.boot:spring-boot-starter-->
-    <springboot.version>3.3.1</springboot.version>
+    <springboot.version>3.3.3</springboot.version>
 
     <!--SpringBoot Web-->
     <!--org.springframework.boot:spring-boot-starter-web-->
@@ -61,7 +61,7 @@
     <!--继承父依赖可修改版本号-->
     <!--日志-->
     <!--ch.qos.logback:logback-classic-->
-    <logback.version>1.5.6</logback.version>
+    <logback.version>1.5.7</logback.version>
 
     <!--Maven编译插件-->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
@@ -88,7 +88,7 @@
 
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
-    <easyexcel.version>4.0.1</easyexcel.version>
+    <easyexcel.version>4.0.2</easyexcel.version>
 
     <!--ElasticSearch(需要与服务器版本号相同)-->
     <!--co.elastic.clients:elasticsearch-java-->
@@ -104,7 +104,7 @@
 
     <!--Minio-->
     <!--io.minio:minio-->
-    <minio.version>8.5.11</minio.version>
+    <minio.version>8.5.12</minio.version>
 
     <!--InfluxDB-->
     <!--com.influxdb:influxdb-client-java-->
@@ -141,7 +141,7 @@
 
     <!--RabbitMQ SpringBoot模板-->
     <!--cn.404z:rabbitmq-spring-boot-temp-->
-    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
+    <rabbit-spring-boot-temp.version>1.0.0</rabbit-spring-boot-temp.version>
 
     <!--ElasticSearch SpringBoot启动器-->
     <!--cn.404z:elastic-search-spring-boot-starter-->
@@ -324,8 +324,8 @@
       <!--RabbitMQ SpringBoot模板-->
       <dependency>
         <groupId>cn.404z</groupId>
-        <artifactId>rabbitmq-spring-boot-temp</artifactId>
-        <version>${rabbitmq-spring-boot-temp.version}</version>
+        <artifactId>rabbit-spring-boot-temp</artifactId>
+        <version>${rabbit-spring-boot-temp.version}</version>
       </dependency>
       <!--ElasticSearch SpringBoot启动器-->
       <dependency>

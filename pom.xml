@@ -18,7 +18,7 @@
     <!--org.springframework.boot:spring-boot-starter-parent-->
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.3.1</version>
+    <version>3.3.3</version>
   </parent>
 
   <modules>
@@ -120,7 +120,7 @@
 
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
-    <easyexcel.version>4.0.1</easyexcel.version>
+    <easyexcel.version>4.0.2</easyexcel.version>
 
     <!--ElasticSearch(需要与服务器版本号相同)-->
     <!--co.elastic.clients:elasticsearch-java-->
@@ -136,7 +136,11 @@
 
     <!--Minio-->
     <!--io.minio:minio-->
-    <minio.version>8.5.11</minio.version>
+    <minio.version>8.5.12</minio.version>
+
+    <!--InfluxDB-->
+    <!--com.influxdb:influxdb-client-java-->
+    <influx.version>7.2.0</influx.version>
 
     <!--MyBatis-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
@@ -174,11 +178,11 @@
     <!--com.google.protobuf:protobuf-java-->
     <!--Protocol Buffers Util-->
     <!--com.google.protobuf:protobuf-java-util-->
-    <protobuf.version>4.27.2</protobuf.version>
+    <protobuf.version>4.28.0</protobuf.version>
 
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
-    <hutool.version>5.8.29</hutool.version>
+    <hutool.version>5.8.32</hutool.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
@@ -308,6 +312,12 @@
         <groupId>io.minio</groupId>
         <artifactId>minio</artifactId>
         <version>${minio.version}</version>
+      </dependency>
+      <!-- InfluxDB -->
+      <dependency>
+        <groupId>com.influxdb</groupId>
+        <artifactId>influxdb-client-java</artifactId>
+        <version>${influx.version}</version>
       </dependency>
       <!--MyBatis-->
       <dependency>
@@ -445,7 +455,7 @@
       <!--RabbitMQ SpringBoot模板-->
       <dependency>
         <groupId>cn.404z</groupId>
-        <artifactId>rabbitmq-spring-boot-temp</artifactId>
+        <artifactId>rabbit-spring-boot-temp</artifactId>
         <version>${rabbitmq-spring-boot-temp.version}</version>
       </dependency>
       <!--ElasticSearch SpringBoot启动器-->

@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>rabbitmq-spring-boot-temp</artifactId>
+  <artifactId>rabbit-spring-boot-temp</artifactId>
   <version>1.0.0</version>
 
-  <name>rabbitmq-spring-boot-temp</name>
+  <name>rabbit-spring-boot-temp</name>
   <description>RabbitMQ SpringBoot Template RabbitMQ SpringBoot模板</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/rabbitmq-spring-boot-temp</url>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/packages/rabbit-spring-boot-temp</url>
 
   <parent>
     <groupId>cn.404z</groupId>
