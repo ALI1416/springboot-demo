@@ -226,8 +226,8 @@
     <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
 
     <!--RabbitMQ SpringBoot模板-->
-    <!--cn.404z:rabbitmq-spring-boot-temp-->
-    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
+    <!--cn.404z:rabbit-spring-boot-temp-->
+    <rabbit-spring-boot-temp.version>1.0.0</rabbit-spring-boot-temp.version>
 
     <!--ElasticSearch SpringBoot启动器-->
     <!--cn.404z:elastic-search-spring-boot-starter-->
@@ -313,7 +313,7 @@
         <artifactId>minio</artifactId>
         <version>${minio.version}</version>
       </dependency>
-      <!-- InfluxDB -->
+      <!--InfluxDB-->
       <dependency>
         <groupId>com.influxdb</groupId>
         <artifactId>influxdb-client-java</artifactId>
@@ -456,7 +456,7 @@
       <dependency>
         <groupId>cn.404z</groupId>
         <artifactId>rabbit-spring-boot-temp</artifactId>
-        <version>${rabbitmq-spring-boot-temp.version}</version>
+        <version>${rabbit-spring-boot-temp.version}</version>
       </dependency>
       <!--ElasticSearch SpringBoot启动器-->
       <dependency>

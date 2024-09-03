@@ -23,7 +23,7 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    <!-- InfluxDB -->
+    <!--InfluxDB-->
     <dependency>
       <groupId>com.influxdb</groupId>
       <artifactId>influxdb-client-java</artifactId>

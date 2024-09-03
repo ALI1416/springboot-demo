@@ -368,8 +368,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
             case QOS -> functionArray[index] = (FunctionMessage) MqttMessage::getQos;
             case RETAIN -> functionArray[index] = (FunctionMessage) MqttMessage::isRetained;
             case DUPLICATE -> functionArray[index] = (FunctionMessage) MqttMessage::isDuplicate;
-            // MSG
-            default -> addMsg(functionArray, parameter, index);
+            case MSG, default -> addMsg(functionArray, parameter, index);
         }
     }
 

@@ -140,7 +140,7 @@
     <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
 
     <!--RabbitMQ SpringBoot模板-->
-    <!--cn.404z:rabbitmq-spring-boot-temp-->
+    <!--cn.404z:rabbit-spring-boot-temp-->
     <rabbit-spring-boot-temp.version>1.0.0</rabbit-spring-boot-temp.version>
 
     <!--ElasticSearch SpringBoot启动器-->

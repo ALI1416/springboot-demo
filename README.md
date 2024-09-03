@@ -157,6 +157,8 @@ SpringBoot示例(3.x版)
     [![Maven Central](https://img.shields.io/maven-central/v/org.bouncycastle/bcpkix-jdk18on?label=Maven%20Central)](https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on)
   - `Minio` : `io.minio:minio`  
     [![Maven Central](https://img.shields.io/maven-central/v/io.minio/minio?label=Maven%20Central)](https://mvnrepository.com/artifact/io.minio/minio)
+  - `InfluxDB` : `com.influxdb:influxdb-client-java`  
+    [![Maven Central](https://img.shields.io/maven-central/v/com.influxdb/influxdb-client-java?label=Maven%20Central)](https://mvnrepository.com/artifact/io.minio/minio)
   - `MyBatis` : `org.mybatis.spring.boot:mybatis-spring-boot-starter`  
     [![Maven Central](https://img.shields.io/maven-central/v/org.mybatis.spring.boot/mybatis-spring-boot-starter?label=Maven%20Central)](https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter)
   - `PageHelper分页排序查询` : `com.github.pagehelper:pagehelper-spring-boot-starter`  
