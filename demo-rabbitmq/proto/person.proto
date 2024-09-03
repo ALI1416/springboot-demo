@@ -1,12 +1,12 @@
 // 生成java文件，需要安装protobuf，到 https://github.com/protocolbuffers/protobuf/releases/
 // 下载 protoc-版本号-win64.zip 文件
-// 例如地址 https://github.com/protocolbuffers/protobuf/releases/download/v3.19.1/protoc-3.19.1-win64.zip
+// 例如地址 https://github.com/protocolbuffers/protobuf/releases/download/v28.0/protoc-28.0-win64.zip
 // IDEA安装Protocol Buffers和GenProtobuf插件，前者美化代码，后者生成java文件
 // 生成java文件：在.proto文件右键，选择quick gen protobuf rules
 // 注意：第一次使用需要配置：Tool->Configure GenProtobuf
 // 1. protoc path选择protoc.exe目录
 // 2. Quick Gen选择Java
-// 3. Protoc Flags选择Java，填写../../java
+// 3. Protoc Flags选择Java，填写../src/main/java/
 
 
 // proto语法，不写默认proto2

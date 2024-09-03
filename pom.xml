@@ -120,7 +120,7 @@
 
     <!--EasyExcel-->
     <!--com.alibaba:easyexcel-->
-    <easyexcel.version>4.0.1</easyexcel.version>
+    <easyexcel.version>4.0.2</easyexcel.version>
 
     <!--ElasticSearch(需要与服务器版本号相同)-->
     <!--co.elastic.clients:elasticsearch-java-->
@@ -136,7 +136,7 @@
 
     <!--Minio-->
     <!--io.minio:minio-->
-    <minio.version>8.5.11</minio.version>
+    <minio.version>8.5.12</minio.version>
 
     <!--MyBatis-->
     <!--请使用2.x.x版本-->
@@ -175,11 +175,11 @@
     <!--com.google.protobuf:protobuf-java-->
     <!--Protocol Buffers Util-->
     <!--com.google.protobuf:protobuf-java-util-->
-    <protobuf.version>4.27.2</protobuf.version>
+    <protobuf.version>4.28.0</protobuf.version>
 
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
-    <hutool.version>5.8.29</hutool.version>
+    <hutool.version>5.8.32</hutool.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
@@ -223,8 +223,8 @@
     <redis-spring-boot-temp.version>1.0.0</redis-spring-boot-temp.version>
 
     <!--RabbitMQ SpringBoot模板-->
-    <!--cn.404z:rabbitmq-spring-boot-temp-->
-    <rabbitmq-spring-boot-temp.version>1.0.0</rabbitmq-spring-boot-temp.version>
+    <!--cn.404z:rabbit-spring-boot-temp-->
+    <rabbit-spring-boot-temp.version>1.0.0</rabbit-spring-boot-temp.version>
 
     <!--ElasticSearch SpringBoot启动器-->
     <!--cn.404z:elastic-search-spring-boot-starter-->
@@ -442,8 +442,8 @@
       <!--RabbitMQ SpringBoot模板-->
       <dependency>
         <groupId>cn.404z</groupId>
-        <artifactId>rabbitmq-spring-boot-temp</artifactId>
-        <version>${rabbitmq-spring-boot-temp.version}</version>
+        <artifactId>rabbit-spring-boot-temp</artifactId>
+        <version>${rabbit-spring-boot-temp.version}</version>
       </dependency>
       <!--ElasticSearch SpringBoot启动器-->
       <dependency>

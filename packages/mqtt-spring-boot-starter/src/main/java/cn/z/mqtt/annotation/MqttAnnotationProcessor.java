@@ -385,7 +385,7 @@ public class MqttAnnotationProcessor implements ApplicationContextAware, SmartIn
                 functionArray[index] = (FunctionMessage) MqttMessage::isDuplicate;
                 break;
             }
-            // MSG
+            case MSG:
             default: {
                 addMsg(functionArray, parameter, index);
                 break;
