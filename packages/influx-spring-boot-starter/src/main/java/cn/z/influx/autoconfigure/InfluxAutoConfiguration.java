@@ -28,7 +28,18 @@ public class InfluxAutoConfiguration {
      * @param influxProperties InfluxProperties
      */
     public InfluxAutoConfiguration(InfluxProperties influxProperties) {
-        log.info("InfluxDB配置：URL " + influxProperties.getUrl());
+        String msg = "InfluxDB配置：URL " + influxProperties.getUrl();
+        if (influxProperties.getOrg() != null && !influxProperties.getOrg().isEmpty()) {
+            msg += " ，组织ORG " + influxProperties.getOrg();
+        }
+        if (influxProperties.getBucket() != null && !influxProperties.getBucket().isEmpty()) {
+            msg += " ，储存桶BUCKET " + influxProperties.getBucket();
+        }
+        msg += " ，日志级别LOG_LEVEL " + influxProperties.getLogLevel()
+                + " ，读超时READ_TIMEOUT " + influxProperties.getReadTimeout()
+                + " ，写超时WRITE_TIMEOUT " + influxProperties.getWriteTimeout()
+                + " ，连接超时CONNECT_TIMEOUT " + influxProperties.getConnectTimeout();
+        log.info(msg);
     }
 
 }

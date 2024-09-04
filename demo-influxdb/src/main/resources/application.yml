@@ -9,8 +9,11 @@ spring:
 
 influx:
   url: http://localhost:8086
-  username: admin
-  password: chengkai
+  username: root
+  password: influxdb
+#  token: o9HyV0S7GJGZBh8scklSFd5oNqNgMH5qHdCHC45gF0pPlAwJvIgco9hjXHx5D1A6_wnB2F_vWIzXGrKsa-GTkw==
+  org: influx
+  bucket: db
 
 logging:
   level:
