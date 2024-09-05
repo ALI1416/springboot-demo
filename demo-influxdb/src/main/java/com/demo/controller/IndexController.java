@@ -2,10 +2,7 @@ package com.demo.controller;
 
 import cn.z.influx.InfluxTemp;
 import com.demo.entity.pojo.Result;
-import com.influxdb.client.domain.Bucket;
-import com.influxdb.client.domain.Organization;
-import com.influxdb.client.domain.SecretKeysResponse;
-import com.influxdb.client.domain.User;
+import com.influxdb.client.domain.*;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +27,9 @@ import java.util.Map;
 public class IndexController {
 
     private final InfluxTemp influxTemp;
+
+    /* ==================== 用户操作 ==================== */
+    // region 用户操作
 
     /**
      * 获取所有用户<br>
@@ -59,7 +59,16 @@ public class IndexController {
     }
 
     /**
-     * 获取用户通过ID<br>
+     * 获取用户通过用户名<br>
+     * http://localhost:8080/userGetByName?userName=root
+     */
+    @GetMapping("userGetByName")
+    public Result<User> userGetByName(String userName) {
+        return Result.o(influxTemp.userGetByName(userName));
+    }
+
+    /**
+     * 创建用户通过用户名<br>
      * http://localhost:8080/userCreateByName?userName=test
      */
     @GetMapping("userCreateByName")
@@ -90,14 +99,67 @@ public class IndexController {
     }
 
     /**
-     * 更新用户密码通过用户ID<br>
-     * http://localhost:8080/userUpdatePassword?userId=0d9afca2af821000&oldPassword=inflexdb&newPassword=12345678
+     * 重置用户密码通过用户ID<br>
+     * http://localhost:8080/userResetPasswordById?userId=0d9afca2af821000&newPassword=12345678
      */
-    @GetMapping("userUpdatePasswordById")
-    public Result userUpdatePasswordById(String userId, String oldPassword, String newPassword) {
-        influxTemp.userUpdatePasswordById(userId, oldPassword, newPassword);
+    @GetMapping("userResetPasswordById")
+    public Result userResetPasswordById(String userId, String newPassword) {
+        influxTemp.userResetPasswordById(userId, newPassword);
         return Result.o();
     }
+
+    /**
+     * 重置用户密码通过用户名<br>
+     * http://localhost:8080/userResetPasswordByName?userName=test&newPassword=12345678
+     */
+    @GetMapping("userResetPasswordByName")
+    public Result userResetPasswordByName(String userName, String newPassword) {
+        influxTemp.userResetPasswordByName(userName, newPassword);
+        return Result.o();
+    }
+
+    /**
+     * 删除用户通过用户ID<br>
+     * http://localhost:8080/userDeleteById?userId=0d9ab19e3a021000
+     */
+    @GetMapping("userDeleteById")
+    public Result userDeleteById(String userId) {
+        influxTemp.userDeleteById(userId);
+        return Result.o();
+    }
+
+    /**
+     * 删除用户通过用户名<br>
+     * http://localhost:8080/userDeleteByName?userName=test
+     */
+    @GetMapping("userDeleteByName")
+    public Result userDeleteByName(String userName) {
+        influxTemp.userDeleteByName(userName);
+        return Result.o();
+    }
+
+    /**
+     * 克隆用户通过用户ID<br>
+     * http://localhost:8080/userCloneById?userName=test&cloneUserId=0d9ab19e3a021000
+     */
+    @GetMapping("userCloneById")
+    public Result<User> userCloneById(String userName, String cloneUserId) {
+        return Result.o(influxTemp.userCloneById(userName, cloneUserId));
+    }
+
+    /**
+     * 克隆用户通过用户名<br>
+     * http://localhost:8080/userCloneByName?userName=test&cloneUserName=root
+     */
+    @GetMapping("userCloneByName")
+    public Result<User> userCloneByName(String userName, String cloneUserName) {
+        return Result.o(influxTemp.userCloneByName(userName, cloneUserName));
+    }
+
+    // endregion
+
+    /* ==================== 组织基本操作 ==================== */
+    // region 组织基本操作
 
     /**
      * 获取所有组织<br>
@@ -184,6 +246,11 @@ public class IndexController {
         return Result.o(influxTemp.orgCloneByName(orgName, cloneOrgName));
     }
 
+    // endregion
+
+    /* ==================== 组织密钥操作 ==================== */
+    // region 组织密钥操作
+
     /**
      * 通过组织ID获取组织密钥<br>
      * http://localhost:8080/orgSecretGetById?orgId=16e124d328e290a6
@@ -250,6 +317,129 @@ public class IndexController {
         return Result.o();
     }
 
+    // endregion
+
+    /* ==================== 组织成员操作 ==================== */
+    // region 组织成员操作
+
+    /**
+     * 通过组织ID获取成员<br>
+     * http://localhost:8080/orgMemberGetById?orgId=16e124d328e290a6
+     */
+    @GetMapping("orgMemberGetById")
+    public Result<List<ResourceMember>> orgMemberGetById(String orgId) {
+        return Result.o(influxTemp.orgMemberGetById(orgId));
+    }
+
+    /**
+     * 通过组织名获取成员<br>
+     * http://localhost:8080/orgMemberGetByName?orgName=influx
+     */
+    @GetMapping("orgMemberGetByName")
+    public Result<List<ResourceMember>> orgMemberGetByName(String orgName) {
+        return Result.o(influxTemp.orgMemberGetByName(orgName));
+    }
+
+    /**
+     * 通过组织ID添加成员ID<br>
+     * http://localhost:8080/orgMemberAddById?orgId=16e124d328e290a6&memberId=0d9ab19e3a021000
+     */
+    @GetMapping("orgMemberAddById")
+    public Result<ResourceMember> orgMemberAddById(String orgId, String memberId) {
+        return Result.o(influxTemp.orgMemberAddById(orgId, memberId));
+    }
+
+    /**
+     * 通过组织名添加成员名<br>
+     * http://localhost:8080/orgMemberAddByName?orgName=influx&memberName=test
+     */
+    @GetMapping("orgMemberAddByName")
+    public Result<ResourceMember> orgMemberAddByName(String orgName, String memberName) {
+        return Result.o(influxTemp.orgMemberAddByName(orgName, memberName));
+    }
+
+    /**
+     * 通过组织ID删除成员ID<br>
+     * http://localhost:8080/orgMemberDeleteById?orgId=16e124d328e290a6&memberId=0d9ab19e3a021000
+     */
+    @GetMapping("orgMemberDeleteById")
+    public Result orgMemberDeleteById(String orgId, String memberId) {
+        influxTemp.orgMemberDeleteById(orgId, memberId);
+        return Result.o();
+    }
+
+    /**
+     * 通过组织名删除成员名<br>
+     * http://localhost:8080/orgMemberDeleteByName?orgName=influx&memberName=test
+     */
+    @GetMapping("orgMemberDeleteByName")
+    public Result orgMemberDeleteByName(String orgName, String memberName) {
+        influxTemp.orgMemberDeleteByName(orgName, memberName);
+        return Result.o();
+    }
+
+    // endregion
+
+    /* ==================== 组织所有者操作 ==================== */
+    // region 组织所有者操作
+
+    /**
+     * 通过组织ID获取所有者<br>
+     * http://localhost:8080/orgOwnerGetById?orgId=16e124d328e290a6
+     */
+    @GetMapping("orgOwnerGetById")
+    public Result<List<ResourceOwner>> orgOwnerGetById(String orgId) {
+        return Result.o(influxTemp.orgOwnerGetById(orgId));
+    }
+
+    /**
+     * 通过组织名获取所有者<br>
+     * http://localhost:8080/orgOwnerGetByName?orgName=influx
+     */
+    @GetMapping("orgOwnerGetByName")
+    public Result<List<ResourceOwner>> orgOwnerGetByName(String orgName) {
+        return Result.o(influxTemp.orgOwnerGetByName(orgName));
+    }
+
+    /**
+     * 通过组织ID添加所有者ID<br>
+     * http://localhost:8080/orgOwnerAddById?orgId=16e124d328e290a6&ownerId=0d9ab19e3a021000
+     */
+    @GetMapping("orgOwnerAddById")
+    public Result<ResourceOwner> orgOwnerAddById(String orgId, String ownerId) {
+        return Result.o(influxTemp.orgOwnerAddById(orgId, ownerId));
+    }
+
+    /**
+     * 通过组织名添加所有者名<br>
+     * http://localhost:8080/orgOwnerAddByName?orgName=influx&ownerName=test
+     */
+    @GetMapping("orgOwnerAddByName")
+    public Result<ResourceOwner> orgOwnerAddByName(String orgName, String ownerName) {
+        return Result.o(influxTemp.orgOwnerAddByName(orgName, ownerName));
+    }
+
+    /**
+     * 通过组织ID删除所有者ID<br>
+     * http://localhost:8080/orgOwnerDeleteById?orgId=16e124d328e290a6&ownerId=0d9ab19e3a021000
+     */
+    @GetMapping("orgOwnerDeleteById")
+    public Result orgOwnerDeleteById(String orgId, String ownerId) {
+        influxTemp.orgOwnerDeleteById(orgId, ownerId);
+        return Result.o();
+    }
+
+    /**
+     * 通过组织名删除所有者名<br>
+     * http://localhost:8080/orgOwnerDeleteByName?orgName=influx&ownerName=test
+     */
+    @GetMapping("orgOwnerDeleteByName")
+    public Result orgOwnerDeleteByName(String orgName, String ownerName) {
+        influxTemp.orgOwnerDeleteByName(orgName, ownerName);
+        return Result.o();
+    }
+
+    // endregion
 
     /**
      * 获取所有储存桶<br>

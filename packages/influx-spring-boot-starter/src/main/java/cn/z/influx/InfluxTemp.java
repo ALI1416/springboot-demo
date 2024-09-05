@@ -1,14 +1,16 @@
 package cn.z.influx;
 
 import cn.z.influx.autoconfigure.InfluxProperties;
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
-import com.influxdb.client.InfluxDBClientOptions;
-import com.influxdb.client.OrganizationsQuery;
+import com.influxdb.client.*;
 import com.influxdb.client.domain.*;
+import com.influxdb.client.service.UsersService;
+import com.influxdb.exceptions.InfluxException;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
+import retrofit2.Call;
+import retrofit2.Response;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +28,14 @@ import java.util.Map;
 public class InfluxTemp {
 
     private final InfluxDBClient client;
+    private final UsersService service;
 
     /**
      * 构造函数(自动注入)
      *
      * @param influxProperties InfluxProperties
      */
-    public InfluxTemp(InfluxProperties influxProperties) {
+    public InfluxTemp(InfluxProperties influxProperties) throws Exception {
         OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder()
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .readTimeout(influxProperties.getReadTimeout())
@@ -50,6 +53,13 @@ public class InfluxTemp {
             influxBuilder.authenticate(influxProperties.getUsername(), influxProperties.getPassword().toCharArray());
         }
         this.client = InfluxDBClientFactory.create(influxBuilder.build()).setLogLevel(influxProperties.getLogLevel());
+        // 反射获取UsersService类和execute方法
+        UsersApi usersApi = this.client.getUsersApi();
+        Class<? extends UsersApi> usersApiClass = usersApi.getClass();
+        Field serviceField = usersApiClass.getDeclaredField("service");
+        serviceField.setAccessible(true);
+        this.service = (UsersService) serviceField.get(usersApi);
+        serviceField.setAccessible(false);
     }
 
     /* ==================== 用户操作 ==================== */
@@ -84,6 +94,18 @@ public class InfluxTemp {
     }
 
     /**
+     * 获取用户通过用户名
+     *
+     * @param userName 用户名
+     * @return User
+     */
+    public User userGetByName(String userName) {
+        Call<Users> usersCall = service.getUsers(null, null, null, null, userName, null);
+        Users users = execute(usersCall);
+        return users.getUsers().get(0);
+    }
+
+    /**
      * 创建用户通过用户名
      *
      * @param userName 用户名
@@ -114,14 +136,63 @@ public class InfluxTemp {
     }
 
     /**
-     * 更新用户密码通过用户ID
+     * 重置用户密码通过用户ID
      *
      * @param userId      用户ID
-     * @param oldPassword 旧密码
      * @param newPassword 新密码
      */
-    public void userUpdatePasswordById(String userId, String oldPassword, String newPassword) {
-        client.getUsersApi().updateUserPassword(userId, oldPassword, newPassword);
+    public void userResetPasswordById(String userId, String newPassword) {
+        client.getUsersApi().updateUserPassword(userId, "", newPassword);
+    }
+
+    /**
+     * 重置用户密码通过用户名
+     *
+     * @param userName    用户名
+     * @param newPassword 新密码
+     */
+    public void userResetPasswordByName(String userName, String newPassword) {
+        client.getUsersApi().updateUserPassword(userGetByName(userName), "", newPassword);
+    }
+
+    /**
+     * 删除用户通过用户ID
+     *
+     * @param userId 用户ID
+     */
+    public void userDeleteById(String userId) {
+        client.getUsersApi().deleteUser(userId);
+    }
+
+    /**
+     * 删除用户通过用户名
+     *
+     * @param userName 用户名
+     */
+    public void userDeleteByName(String userName) {
+        client.getUsersApi().deleteUser(userGetByName(userName));
+    }
+
+    /**
+     * 克隆用户通过用户ID
+     *
+     * @param userName    用户名
+     * @param cloneUserId 被克隆的用户ID
+     * @return User
+     */
+    public User userCloneById(String userName, String cloneUserId) {
+        return client.getUsersApi().cloneUser(userName, cloneUserId);
+    }
+
+    /**
+     * 克隆用户通过用户名
+     *
+     * @param userName      用户名
+     * @param cloneUserName 被克隆的用户名
+     * @return User
+     */
+    public User userCloneByName(String userName, String cloneUserName) {
+        return client.getUsersApi().cloneUser(userName, userGetByName(cloneUserName).getId());
     }
 
     // endregion
@@ -291,7 +362,7 @@ public class InfluxTemp {
     // region 组织成员操作
 
     /**
-     * 通过组织ID获取组织成员
+     * 通过组织ID获取成员
      *
      * @param orgId 组织ID
      * @return List ResourceMember
@@ -301,13 +372,122 @@ public class InfluxTemp {
     }
 
     /**
-     * 通过组织名获取组织成员
+     * 通过组织名获取成员
      *
      * @param orgName 组织名
      * @return List ResourceMember
      */
     public List<ResourceMember> orgMemberGetByName(String orgName) {
         return client.getOrganizationsApi().getMembers(orgGetByName(orgName));
+    }
+
+    /**
+     * 通过组织ID添加成员ID
+     *
+     * @param orgId    组织ID
+     * @param memberId 成员ID
+     * @return ResourceMember
+     */
+    public ResourceMember orgMemberAddById(String orgId, String memberId) {
+        return client.getOrganizationsApi().addMember(memberId, orgId);
+    }
+
+    /**
+     * 通过组织名添加成员名
+     *
+     * @param orgName    组织名
+     * @param memberName 成员名
+     * @return ResourceMember
+     */
+    public ResourceMember orgMemberAddByName(String orgName, String memberName) {
+        return client.getOrganizationsApi().addMember(userGetByName(memberName), orgGetByName(orgName));
+    }
+
+    /**
+     * 通过组织ID删除成员ID
+     *
+     * @param orgId    组织ID
+     * @param memberId 成员ID
+     */
+    public void orgMemberDeleteById(String orgId, String memberId) {
+        client.getOrganizationsApi().deleteMember(memberId, orgId);
+    }
+
+    /**
+     * 通过组织名删除成员名
+     *
+     * @param orgName    组织名
+     * @param memberName 成员名
+     */
+    public void orgMemberDeleteByName(String orgName, String memberName) {
+        client.getOrganizationsApi().deleteMember(userGetByName(memberName), orgGetByName(orgName));
+    }
+
+    // endregion
+
+    /* ==================== 组织所有者操作 ==================== */
+    // region 组织所有者操作
+
+    /**
+     * 通过组织ID获取所有者
+     *
+     * @param orgId 组织ID
+     * @return List ResourceOwner
+     */
+    public List<ResourceOwner> orgOwnerGetById(String orgId) {
+        return client.getOrganizationsApi().getOwners(orgId);
+    }
+
+    /**
+     * 通过组织名获取所有者
+     *
+     * @param orgName 组织名
+     * @return List ResourceOwner
+     */
+    public List<ResourceOwner> orgOwnerGetByName(String orgName) {
+        return client.getOrganizationsApi().getOwners(orgGetByName(orgName));
+    }
+
+    /**
+     * 通过组织ID添加所有者ID
+     *
+     * @param orgId   组织ID
+     * @param ownerId 所有者ID
+     * @return ResourceOwner
+     */
+    public ResourceOwner orgOwnerAddById(String orgId, String ownerId) {
+        return client.getOrganizationsApi().addOwner(ownerId, orgId);
+    }
+
+    /**
+     * 通过组织名添加所有者名
+     *
+     * @param orgName   组织名
+     * @param ownerName 所有者名
+     * @return ResourceOwner
+     */
+    public ResourceOwner orgOwnerAddByName(String orgName, String ownerName) {
+        return client.getOrganizationsApi().addOwner(userGetByName(ownerName), orgGetByName(orgName));
+    }
+
+    /**
+     * 通过组织ID删除所有者ID
+     *
+     * @param orgId   组织ID
+     * @param ownerId 所有者ID
+     */
+    public void orgOwnerDeleteById(String orgId, String ownerId) {
+        client.getOrganizationsApi().deleteOwner(ownerId, orgId);
+    }
+
+    /**
+     * 通过组织名删除所有者名
+     *
+     * @param orgName   组织名
+     * @param ownerName 所有者名
+     */
+    public void orgOwnerDeleteByName(String orgName, String ownerName) {
+        client.getOrganizationsApi().deleteOwner(userGetByName(ownerName), orgGetByName(orgName));
     }
 
     // endregion
@@ -333,6 +513,32 @@ public class InfluxTemp {
      */
     public Bucket bucketCreate(String org, String bucket) {
         return client.getBucketsApi().createBucket(bucket, org);
+    }
+
+    // endregion
+
+
+    /* ==================== 私有方法 ==================== */
+    // region 私有方法
+
+    /**
+     * 执行
+     *
+     * @param call Call
+     * @param <T>  T
+     * @return T
+     */
+    private <T> T execute(Call<T> call) {
+        try {
+            Response<T> response = call.execute();
+            if (response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new InfluxException(response);
+            }
+        } catch (Exception e) {
+            throw new InfluxException(e);
+        }
     }
 
     // endregion
