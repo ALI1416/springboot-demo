@@ -441,6 +441,9 @@ public class IndexController {
 
     // endregion
 
+    /* ==================== 储存桶基本操作 ==================== */
+    // region 储存桶基本操作
+
     /**
      * 获取所有储存桶<br>
      * http://localhost:8080/bucketAll
@@ -451,12 +454,108 @@ public class IndexController {
     }
 
     /**
-     * 创建储存桶<br>
-     * http://localhost:8080/bucketCreate?org=a&bucket=test
+     * 获取储存桶通过组织ID<br>
+     * http://localhost:8080/bucketGetByOrgId?orgId=16e124d328e290a6
      */
-    @GetMapping("bucketCreate")
-    public Result<Bucket> bucketCreate(String org, String bucket) {
-        return Result.o(influxTemp.bucketCreate(org, bucket));
+    @GetMapping("bucketGetByOrgId")
+    public Result<List<Bucket>> bucketGetByOrgId(String orgId) {
+        return Result.o(influxTemp.bucketGetByOrgId(orgId));
     }
+
+    /**
+     * 获取储存桶通过组织名<br>
+     * http://localhost:8080/bucketGetByOrgName?orgName=a
+     */
+    @GetMapping("bucketGetByOrgName")
+    public Result<List<Bucket>> bucketGetByOrgName(String orgName) {
+        return Result.o(influxTemp.bucketGetByOrgName(orgName));
+    }
+
+    /**
+     * 获取储存桶通过储存桶ID<br>
+     * http://localhost:8080/bucketGetById?bucketId=16e124d328e290a6
+     */
+    @GetMapping("bucketGetById")
+    public Result<Bucket> bucketGetById(String bucketId) {
+        return Result.o(influxTemp.bucketGetById(bucketId));
+    }
+
+    /**
+     * 获取储存桶通过储存桶名<br>
+     * http://localhost:8080/bucketGetByName?orgName=a&bucketName=test
+     */
+    @GetMapping("bucketGetByName")
+    public Result<Bucket> bucketGetByName(String orgName, String bucketName) {
+        return Result.o(influxTemp.bucketGetByName(orgName, bucketName));
+    }
+
+    /**
+     * 创建储存桶通过组织ID<br>
+     * http://localhost:8080/bucketCreateByOrgId?orgId=16e124d328e290a6&bucketName=test
+     */
+    @GetMapping("bucketCreateByOrgId")
+    public Result<Bucket> bucketCreateByOrgId(String orgId, String bucketName) {
+        return Result.o(influxTemp.bucketCreateByOrgId(orgId, bucketName));
+    }
+
+    /**
+     * 创建储存桶通过组织名<br>
+     * http://localhost:8080/bucketCreateByOrgName?orgName=a&bucketName=test
+     */
+    @GetMapping("bucketCreateByOrgName")
+    public Result<Bucket> bucketCreateByOrgName(String orgName, String bucketName) {
+        return Result.o(influxTemp.bucketCreateByOrgName(orgName, bucketName));
+    }
+
+    /**
+     * 更新储存桶<br>
+     * http://localhost:8080/bucketUpdate?orgName=a&bucketName=test
+     */
+    @GetMapping("bucketUpdate")
+    public Result<Bucket> bucketUpdate(String orgName, String bucketName) {
+        Bucket bucket = influxTemp.bucketGetByName(orgName, bucketName);
+        bucket.description("测试123");
+        return Result.o(influxTemp.bucketUpdate(bucket));
+    }
+
+    /**
+     * 删除储存桶通过储存桶ID<br>
+     * http://localhost:8080/bucketDeleteById?bucketId=16e124d328e290a6
+     */
+    @GetMapping("bucketDeleteById")
+    public Result bucketDeleteById(String bucketId) {
+        influxTemp.bucketDeleteById(bucketId);
+        return Result.o();
+    }
+
+    /**
+     * 删除储存桶通过储存桶名<br>
+     * http://localhost:8080/bucketDeleteByName?orgName=a&bucketName=test
+     */
+    @GetMapping("bucketDeleteByName")
+    public Result bucketDeleteByName(String orgName, String bucketName) {
+        influxTemp.bucketDeleteByName(orgName, bucketName);
+        return Result.o();
+    }
+
+    /**
+     * 克隆储存桶通过储存桶ID<br>
+     * http://localhost:8080/bucketCloneById?bucketName=test&cloneBucketId=16e124d328e290a6
+     */
+    @GetMapping("bucketCloneById")
+    public Result<Bucket> bucketCloneById(String bucketName, String cloneBucketId) {
+        return Result.o(influxTemp.bucketCloneById(bucketName, cloneBucketId));
+    }
+
+    /**
+     * 克隆储存桶通过储存桶名<br>
+     * http://localhost:8080/bucketCloneByName?orgName=a&bucketName=test&cloneBucketName=a
+     */
+    @GetMapping("bucketCloneByName")
+    public Result<Bucket> bucketCloneByName(String orgName, String bucketName, String cloneBucketName) {
+        return Result.o(influxTemp.bucketCloneByName(orgName, bucketName, cloneBucketName));
+    }
+
+    // endregion
 
 }

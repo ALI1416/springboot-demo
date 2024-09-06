@@ -5,6 +5,7 @@ import com.influxdb.client.*;
 import com.influxdb.client.domain.*;
 import com.influxdb.client.service.UsersService;
 import com.influxdb.exceptions.InfluxException;
+import com.influxdb.internal.AbstractRestClient;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import retrofit2.Call;
@@ -27,8 +28,8 @@ import java.util.Map;
  **/
 public class InfluxTemp {
 
-    private final InfluxDBClient client;
-    private final UsersService service;
+    private final InfluxDBClient influxClient;
+    private final UsersService usersService;
 
     /**
      * 构造函数(自动注入)
@@ -52,13 +53,13 @@ public class InfluxTemp {
                 && influxProperties.getPassword() != null && !influxProperties.getPassword().isEmpty()) {
             influxBuilder.authenticate(influxProperties.getUsername(), influxProperties.getPassword().toCharArray());
         }
-        this.client = InfluxDBClientFactory.create(influxBuilder.build()).setLogLevel(influxProperties.getLogLevel());
-        // 反射获取UsersService类和execute方法
-        UsersApi usersApi = this.client.getUsersApi();
+        this.influxClient = InfluxDBClientFactory.create(influxBuilder.build()).setLogLevel(influxProperties.getLogLevel());
+        // 反射获取UsersService类
+        UsersApi usersApi = this.influxClient.getUsersApi();
         Class<? extends UsersApi> usersApiClass = usersApi.getClass();
         Field serviceField = usersApiClass.getDeclaredField("service");
         serviceField.setAccessible(true);
-        this.service = (UsersService) serviceField.get(usersApi);
+        this.usersService = (UsersService) serviceField.get(usersApi);
         serviceField.setAccessible(false);
     }
 
@@ -71,7 +72,7 @@ public class InfluxTemp {
      * @return List User
      */
     public List<User> userAll() {
-        return client.getUsersApi().findUsers();
+        return influxClient.getUsersApi().findUsers();
     }
 
     /**
@@ -80,7 +81,7 @@ public class InfluxTemp {
      * @return User
      */
     public User user() {
-        return client.getUsersApi().me();
+        return influxClient.getUsersApi().me();
     }
 
     /**
@@ -90,7 +91,7 @@ public class InfluxTemp {
      * @return User
      */
     public User userGetById(String userId) {
-        return client.getUsersApi().findUserByID(userId);
+        return influxClient.getUsersApi().findUserByID(userId);
     }
 
     /**
@@ -100,7 +101,7 @@ public class InfluxTemp {
      * @return User
      */
     public User userGetByName(String userName) {
-        Call<Users> usersCall = service.getUsers(null, null, null, null, userName, null);
+        Call<Users> usersCall = usersService.getUsers(null, null, null, null, userName, null);
         Users users = execute(usersCall);
         return users.getUsers().get(0);
     }
@@ -112,7 +113,7 @@ public class InfluxTemp {
      * @return User
      */
     public User userCreateByName(String userName) {
-        return client.getUsersApi().createUser(userName);
+        return influxClient.getUsersApi().createUser(userName);
     }
 
     /**
@@ -122,7 +123,7 @@ public class InfluxTemp {
      * @return User
      */
     public User userUpdate(User user) {
-        return client.getUsersApi().updateUser(user);
+        return influxClient.getUsersApi().updateUser(user);
     }
 
     /**
@@ -132,7 +133,7 @@ public class InfluxTemp {
      * @param newPassword 新密码
      */
     public void userUpdatePassword(String oldPassword, String newPassword) {
-        client.getUsersApi().meUpdatePassword(oldPassword, newPassword);
+        influxClient.getUsersApi().meUpdatePassword(oldPassword, newPassword);
     }
 
     /**
@@ -142,7 +143,7 @@ public class InfluxTemp {
      * @param newPassword 新密码
      */
     public void userResetPasswordById(String userId, String newPassword) {
-        client.getUsersApi().updateUserPassword(userId, "", newPassword);
+        influxClient.getUsersApi().updateUserPassword(userId, "", newPassword);
     }
 
     /**
@@ -152,7 +153,7 @@ public class InfluxTemp {
      * @param newPassword 新密码
      */
     public void userResetPasswordByName(String userName, String newPassword) {
-        client.getUsersApi().updateUserPassword(userGetByName(userName), "", newPassword);
+        influxClient.getUsersApi().updateUserPassword(userGetByName(userName), "", newPassword);
     }
 
     /**
@@ -161,7 +162,7 @@ public class InfluxTemp {
      * @param userId 用户ID
      */
     public void userDeleteById(String userId) {
-        client.getUsersApi().deleteUser(userId);
+        influxClient.getUsersApi().deleteUser(userId);
     }
 
     /**
@@ -170,7 +171,7 @@ public class InfluxTemp {
      * @param userName 用户名
      */
     public void userDeleteByName(String userName) {
-        client.getUsersApi().deleteUser(userGetByName(userName));
+        influxClient.getUsersApi().deleteUser(userGetByName(userName));
     }
 
     /**
@@ -181,7 +182,7 @@ public class InfluxTemp {
      * @return User
      */
     public User userCloneById(String userName, String cloneUserId) {
-        return client.getUsersApi().cloneUser(userName, cloneUserId);
+        return influxClient.getUsersApi().cloneUser(userName, cloneUserId);
     }
 
     /**
@@ -192,7 +193,7 @@ public class InfluxTemp {
      * @return User
      */
     public User userCloneByName(String userName, String cloneUserName) {
-        return client.getUsersApi().cloneUser(userName, userGetByName(cloneUserName).getId());
+        return influxClient.getUsersApi().cloneUser(userName, userGetByName(cloneUserName).getId());
     }
 
     // endregion
@@ -206,7 +207,7 @@ public class InfluxTemp {
      * @return List Organization
      */
     public List<Organization> orgAll() {
-        return client.getOrganizationsApi().findOrganizations();
+        return influxClient.getOrganizationsApi().findOrganizations();
     }
 
     /**
@@ -216,7 +217,7 @@ public class InfluxTemp {
      * @return Organization
      */
     public Organization orgGetById(String orgId) {
-        return client.getOrganizationsApi().findOrganizationByID(orgId);
+        return influxClient.getOrganizationsApi().findOrganizationByID(orgId);
     }
 
     /**
@@ -228,7 +229,7 @@ public class InfluxTemp {
     public Organization orgGetByName(String orgName) {
         OrganizationsQuery organizationsQuery = new OrganizationsQuery();
         organizationsQuery.setOrg(orgName);
-        return client.getOrganizationsApi().findOrganizations(organizationsQuery).get(0);
+        return influxClient.getOrganizationsApi().findOrganizations(organizationsQuery).get(0);
     }
 
     /**
@@ -238,7 +239,7 @@ public class InfluxTemp {
      * @return Organization
      */
     public Organization orgCreateByName(String orgName) {
-        return client.getOrganizationsApi().createOrganization(orgName);
+        return influxClient.getOrganizationsApi().createOrganization(orgName);
     }
 
     /**
@@ -248,7 +249,7 @@ public class InfluxTemp {
      * @return Organization
      */
     public Organization orgUpdate(Organization organization) {
-        return client.getOrganizationsApi().updateOrganization(organization);
+        return influxClient.getOrganizationsApi().updateOrganization(organization);
     }
 
     /**
@@ -257,7 +258,7 @@ public class InfluxTemp {
      * @param orgId 组织ID
      */
     public void orgDeleteById(String orgId) {
-        client.getOrganizationsApi().deleteOrganization(orgId);
+        influxClient.getOrganizationsApi().deleteOrganization(orgId);
     }
 
     /**
@@ -266,7 +267,7 @@ public class InfluxTemp {
      * @param orgName 组织名
      */
     public void orgDeleteByName(String orgName) {
-        client.getOrganizationsApi().deleteOrganization(orgGetByName(orgName));
+        influxClient.getOrganizationsApi().deleteOrganization(orgGetByName(orgName));
     }
 
     /**
@@ -277,7 +278,7 @@ public class InfluxTemp {
      * @return Organization
      */
     public Organization orgCloneById(String orgName, String cloneOrgId) {
-        return client.getOrganizationsApi().cloneOrganization(orgName, cloneOrgId);
+        return influxClient.getOrganizationsApi().cloneOrganization(orgName, cloneOrgId);
     }
 
     /**
@@ -288,7 +289,7 @@ public class InfluxTemp {
      * @return Organization
      */
     public Organization orgCloneByName(String orgName, String cloneOrgName) {
-        return client.getOrganizationsApi().cloneOrganization(orgName, orgGetByName(cloneOrgName));
+        return influxClient.getOrganizationsApi().cloneOrganization(orgName, orgGetByName(cloneOrgName));
     }
 
     // endregion
@@ -303,7 +304,7 @@ public class InfluxTemp {
      * @return SecretKeysResponse
      */
     public SecretKeysResponse orgSecretGetById(String orgId) {
-        return client.getOrganizationsApi().getSecrets(orgId);
+        return influxClient.getOrganizationsApi().getSecrets(orgId);
     }
 
     /**
@@ -313,7 +314,7 @@ public class InfluxTemp {
      * @return SecretKeysResponse
      */
     public SecretKeysResponse orgSecretGetByName(String orgName) {
-        return client.getOrganizationsApi().getSecrets(orgGetByName(orgName));
+        return influxClient.getOrganizationsApi().getSecrets(orgGetByName(orgName));
     }
 
     /**
@@ -323,7 +324,7 @@ public class InfluxTemp {
      * @param secrets 密钥Map
      */
     public void orgSecretAddById(String orgId, Map<String, String> secrets) {
-        client.getOrganizationsApi().putSecrets(secrets, orgId);
+        influxClient.getOrganizationsApi().putSecrets(secrets, orgId);
     }
 
     /**
@@ -333,7 +334,7 @@ public class InfluxTemp {
      * @param secrets 密钥Map
      */
     public void orgSecretAddByName(String orgName, Map<String, String> secrets) {
-        client.getOrganizationsApi().putSecrets(secrets, orgGetByName(orgName));
+        influxClient.getOrganizationsApi().putSecrets(secrets, orgGetByName(orgName));
     }
 
     /**
@@ -343,7 +344,7 @@ public class InfluxTemp {
      * @param secrets 密钥key列表
      */
     public void orgSecretDeleteById(String orgId, List<String> secrets) {
-        client.getOrganizationsApi().deleteSecrets(secrets, orgId);
+        influxClient.getOrganizationsApi().deleteSecrets(secrets, orgId);
     }
 
     /**
@@ -353,7 +354,7 @@ public class InfluxTemp {
      * @param secrets 密钥key列表
      */
     public void orgSecretDeleteByName(String orgName, List<String> secrets) {
-        client.getOrganizationsApi().deleteSecrets(secrets, orgGetByName(orgName));
+        influxClient.getOrganizationsApi().deleteSecrets(secrets, orgGetByName(orgName));
     }
 
     // endregion
@@ -368,7 +369,7 @@ public class InfluxTemp {
      * @return List ResourceMember
      */
     public List<ResourceMember> orgMemberGetById(String orgId) {
-        return client.getOrganizationsApi().getMembers(orgId);
+        return influxClient.getOrganizationsApi().getMembers(orgId);
     }
 
     /**
@@ -378,7 +379,7 @@ public class InfluxTemp {
      * @return List ResourceMember
      */
     public List<ResourceMember> orgMemberGetByName(String orgName) {
-        return client.getOrganizationsApi().getMembers(orgGetByName(orgName));
+        return influxClient.getOrganizationsApi().getMembers(orgGetByName(orgName));
     }
 
     /**
@@ -389,7 +390,7 @@ public class InfluxTemp {
      * @return ResourceMember
      */
     public ResourceMember orgMemberAddById(String orgId, String memberId) {
-        return client.getOrganizationsApi().addMember(memberId, orgId);
+        return influxClient.getOrganizationsApi().addMember(memberId, orgId);
     }
 
     /**
@@ -400,7 +401,7 @@ public class InfluxTemp {
      * @return ResourceMember
      */
     public ResourceMember orgMemberAddByName(String orgName, String memberName) {
-        return client.getOrganizationsApi().addMember(userGetByName(memberName), orgGetByName(orgName));
+        return influxClient.getOrganizationsApi().addMember(userGetByName(memberName), orgGetByName(orgName));
     }
 
     /**
@@ -410,7 +411,7 @@ public class InfluxTemp {
      * @param memberId 成员ID
      */
     public void orgMemberDeleteById(String orgId, String memberId) {
-        client.getOrganizationsApi().deleteMember(memberId, orgId);
+        influxClient.getOrganizationsApi().deleteMember(memberId, orgId);
     }
 
     /**
@@ -420,7 +421,7 @@ public class InfluxTemp {
      * @param memberName 成员名
      */
     public void orgMemberDeleteByName(String orgName, String memberName) {
-        client.getOrganizationsApi().deleteMember(userGetByName(memberName), orgGetByName(orgName));
+        influxClient.getOrganizationsApi().deleteMember(userGetByName(memberName), orgGetByName(orgName));
     }
 
     // endregion
@@ -435,7 +436,7 @@ public class InfluxTemp {
      * @return List ResourceOwner
      */
     public List<ResourceOwner> orgOwnerGetById(String orgId) {
-        return client.getOrganizationsApi().getOwners(orgId);
+        return influxClient.getOrganizationsApi().getOwners(orgId);
     }
 
     /**
@@ -445,7 +446,7 @@ public class InfluxTemp {
      * @return List ResourceOwner
      */
     public List<ResourceOwner> orgOwnerGetByName(String orgName) {
-        return client.getOrganizationsApi().getOwners(orgGetByName(orgName));
+        return influxClient.getOrganizationsApi().getOwners(orgGetByName(orgName));
     }
 
     /**
@@ -456,7 +457,7 @@ public class InfluxTemp {
      * @return ResourceOwner
      */
     public ResourceOwner orgOwnerAddById(String orgId, String ownerId) {
-        return client.getOrganizationsApi().addOwner(ownerId, orgId);
+        return influxClient.getOrganizationsApi().addOwner(ownerId, orgId);
     }
 
     /**
@@ -467,7 +468,7 @@ public class InfluxTemp {
      * @return ResourceOwner
      */
     public ResourceOwner orgOwnerAddByName(String orgName, String ownerName) {
-        return client.getOrganizationsApi().addOwner(userGetByName(ownerName), orgGetByName(orgName));
+        return influxClient.getOrganizationsApi().addOwner(userGetByName(ownerName), orgGetByName(orgName));
     }
 
     /**
@@ -477,7 +478,7 @@ public class InfluxTemp {
      * @param ownerId 所有者ID
      */
     public void orgOwnerDeleteById(String orgId, String ownerId) {
-        client.getOrganizationsApi().deleteOwner(ownerId, orgId);
+        influxClient.getOrganizationsApi().deleteOwner(ownerId, orgId);
     }
 
     /**
@@ -487,13 +488,18 @@ public class InfluxTemp {
      * @param ownerName 所有者名
      */
     public void orgOwnerDeleteByName(String orgName, String ownerName) {
-        client.getOrganizationsApi().deleteOwner(userGetByName(ownerName), orgGetByName(orgName));
+        influxClient.getOrganizationsApi().deleteOwner(userGetByName(ownerName), orgGetByName(orgName));
     }
 
     // endregion
 
-    /* ==================== 桶基本操作 ==================== */
-    // region 桶基本操作
+    /* ==================== 标签操作 ==================== */
+    // region 标签操作
+
+    // endregion
+
+    /* ==================== 储存桶基本操作 ==================== */
+    // region 储存桶基本操作
 
     /**
      * 获取所有储存桶
@@ -501,19 +507,143 @@ public class InfluxTemp {
      * @return List Bucket
      */
     public List<Bucket> bucketAll() {
-        return client.getBucketsApi().findBuckets();
+        return influxClient.getBucketsApi().findBuckets();
     }
 
     /**
-     * 创建储存桶
+     * 获取储存桶通过组织ID
      *
-     * @param org    组织
+     * @param orgId 组织ID
+     * @return List Bucket
+     */
+    public List<Bucket> bucketGetByOrgId(String orgId) {
+        BucketsQuery bucketsQuery = new BucketsQuery();
+        bucketsQuery.setOrgID(orgId);
+        return influxClient.getBucketsApi().findBuckets(bucketsQuery);
+    }
+
+    /**
+     * 获取储存桶通过组织名
+     *
+     * @param orgName 组织名
+     * @return List Bucket
+     */
+    public List<Bucket> bucketGetByOrgName(String orgName) {
+        return influxClient.getBucketsApi().findBucketsByOrgName(orgName);
+    }
+
+    /**
+     * 获取储存桶通过储存桶ID
+     *
+     * @param bucketId 储存桶ID
+     * @return Bucket
+     */
+    public Bucket bucketGetById(String bucketId) {
+        return influxClient.getBucketsApi().findBucketByID(bucketId);
+    }
+
+    /**
+     * 获取储存桶通过储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @return Bucket
+     */
+    public Bucket bucketGetByName(String orgName, String bucketName) {
+        BucketsQuery bucketsQuery = new BucketsQuery();
+        bucketsQuery.setOrg(orgName);
+        bucketsQuery.setName(bucketName);
+        return influxClient.getBucketsApi().findBuckets(bucketsQuery).get(0);
+    }
+
+    /**
+     * 创建储存桶通过组织ID
+     *
+     * @param orgId      组织ID
+     * @param bucketName 储存桶名
+     * @return Bucket
+     */
+    public Bucket bucketCreateByOrgId(String orgId, String bucketName) {
+        return influxClient.getBucketsApi().createBucket(bucketName, orgId);
+    }
+
+    /**
+     * 创建储存桶通过组织名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @return Bucket
+     */
+    public Bucket bucketCreateByOrgName(String orgName, String bucketName) {
+        return influxClient.getBucketsApi().createBucket(bucketName, orgGetByName(orgName));
+    }
+
+    /**
+     * 更新储存桶
+     *
      * @param bucket 储存桶
      * @return Bucket
      */
-    public Bucket bucketCreate(String org, String bucket) {
-        return client.getBucketsApi().createBucket(bucket, org);
+    public Bucket bucketUpdate(Bucket bucket) {
+        return influxClient.getBucketsApi().updateBucket(bucket);
     }
+
+    /**
+     * 删除储存桶通过储存桶ID
+     *
+     * @param bucketId 储存桶ID
+     */
+    public void bucketDeleteById(String bucketId) {
+        influxClient.getBucketsApi().deleteBucket(bucketId);
+    }
+
+    /**
+     * 删除储存桶通过储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     */
+    public void bucketDeleteByName(String orgName, String bucketName) {
+        influxClient.getBucketsApi().deleteBucket(bucketGetByName(orgName, bucketName));
+    }
+
+    /**
+     * 克隆储存桶通过储存桶ID
+     *
+     * @param bucketName    储存桶名
+     * @param cloneBucketId 被克隆的储存桶ID
+     * @return Bucket
+     */
+    public Bucket bucketCloneById(String bucketName, String cloneBucketId) {
+        return influxClient.getBucketsApi().cloneBucket(bucketName, cloneBucketId);
+    }
+
+    /**
+     * 克隆储存桶通过储存桶名
+     *
+     * @param orgName         组织名
+     * @param bucketName      储存桶名
+     * @param cloneBucketName 被克隆的储存桶名
+     * @return Bucket
+     */
+    public Bucket bucketCloneByName(String orgName, String bucketName, String cloneBucketName) {
+        return influxClient.getBucketsApi().cloneBucket(bucketName, bucketGetByName(orgName, cloneBucketName));
+    }
+
+    // endregion
+
+    /* ==================== 储存桶成员操作 ==================== */
+    // region 储存桶成员操作
+
+    // endregion
+
+    /* ==================== 储存桶所有者操作 ==================== */
+    // region 储存桶所有者操作
+
+    // endregion
+
+    /* ==================== 储存桶标签操作 ==================== */
+    // region 储存桶标签操作
 
     // endregion
 
@@ -527,6 +657,7 @@ public class InfluxTemp {
      * @param call Call
      * @param <T>  T
      * @return T
+     * @see AbstractRestClient#execute(Call)
      */
     private <T> T execute(Call<T> call) {
         try {
