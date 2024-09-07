@@ -4,6 +4,7 @@ import cn.z.influx.autoconfigure.InfluxProperties;
 import com.influxdb.client.*;
 import com.influxdb.client.domain.*;
 import com.influxdb.client.service.UsersService;
+import com.influxdb.client.write.Point;
 import com.influxdb.exceptions.InfluxException;
 import com.influxdb.internal.AbstractRestClient;
 import okhttp3.OkHttpClient;
@@ -647,6 +648,286 @@ public class InfluxTemp {
 
     // endregion
 
+    /* ==================== 同步写入操作 ==================== */
+    // region 同步写入操作
+
+    /**
+     * 同步写入数据点
+     *
+     * @param point 数据点
+     */
+    public void writeSyncPoint(Point point) {
+        influxClient.getWriteApiBlocking().writePoint(point);
+    }
+
+    /**
+     * 同步写入多个数据点
+     *
+     * @param points 多个数据点
+     */
+    public void writeSyncPoints(List<Point> points) {
+        influxClient.getWriteApiBlocking().writePoints(points);
+    }
+
+    /**
+     * 同步写入数据点通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param point      数据点
+     */
+    public void writeSyncPointByName(String orgName, String bucketName, Point point) {
+        influxClient.getWriteApiBlocking().writePoint(bucketName, orgName, point);
+    }
+
+    /**
+     * 同步写入多个数据点通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param points     多个数据点
+     */
+    public void writeSyncPointsByName(String orgName, String bucketName, List<Point> points) {
+        influxClient.getWriteApiBlocking().writePoints(bucketName, orgName, points);
+    }
+
+    /**
+     * 同步写入记录
+     *
+     * @param precision 精度
+     * @param record    记录
+     */
+    public void writeSyncRecord(WritePrecision precision, String record) {
+        influxClient.getWriteApiBlocking().writeRecord(precision, record);
+    }
+
+    /**
+     * 同步写入多条记录
+     *
+     * @param precision 精度
+     * @param records   多条记录
+     */
+    public void writeSyncRecords(WritePrecision precision, List<String> records) {
+        influxClient.getWriteApiBlocking().writeRecords(precision, records);
+    }
+
+    /**
+     * 同步写入记录通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param record     记录
+     */
+    public void writeSyncRecordByName(String orgName, String bucketName, WritePrecision precision, String record) {
+        influxClient.getWriteApiBlocking().writeRecord(bucketName, orgName, precision, record);
+    }
+
+    /**
+     * 同步写入多条记录通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param records    多条记录
+     */
+    public void writeSyncRecordsByName(String orgName, String bucketName, WritePrecision precision, List<String> records) {
+        influxClient.getWriteApiBlocking().writeRecords(bucketName, orgName, precision, records);
+    }
+
+    /**
+     * 同步写入对象
+     *
+     * @param <T>       T
+     * @param precision 精度
+     * @param obj       对象
+     */
+    public <T> void writeSyncObj(WritePrecision precision, T obj) {
+        influxClient.getWriteApiBlocking().writeMeasurement(precision, obj);
+    }
+
+    /**
+     * 同步写入多个对象
+     *
+     * @param <T>       T
+     * @param precision 精度
+     * @param objs      多个对象
+     */
+    public <T> void writeSyncObjs(WritePrecision precision, List<T> objs) {
+        influxClient.getWriteApiBlocking().writeMeasurements(precision, objs);
+    }
+
+    /**
+     * 同步写入对象通过组织名和储存桶名
+     *
+     * @param <T>        T
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param obj        对象
+     */
+    public <T> void writeSyncObjByName(String orgName, String bucketName, WritePrecision precision, T obj) {
+        influxClient.getWriteApiBlocking().writeMeasurement(bucketName, orgName, precision, obj);
+    }
+
+    /**
+     * 同步写入多个对象通过组织名和储存桶名
+     *
+     * @param <T>        T
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param objs       多个对象
+     */
+    public <T> void writeSyncObjsByName(String orgName, String bucketName, WritePrecision precision, List<T> objs) {
+        influxClient.getWriteApiBlocking().writeMeasurements(bucketName, orgName, precision, objs);
+    }
+
+    // endregion
+
+    /* ==================== 写入操作 ==================== */
+    // region 写入操作
+
+    /**
+     * 写入数据点
+     *
+     * @param point 数据点
+     */
+    public void writePoint(Point point) {
+        influxClient.makeWriteApi().writePoint(point);
+    }
+
+    /**
+     * 写入多个数据点
+     *
+     * @param points 多个数据点
+     */
+    public void writePoints(List<Point> points) {
+        influxClient.makeWriteApi().writePoints(points);
+    }
+
+    /**
+     * 写入数据点通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param point      数据点
+     */
+    public void writePointByName(String orgName, String bucketName, Point point) {
+        influxClient.makeWriteApi().writePoint(bucketName, orgName, point);
+    }
+
+    /**
+     * 写入多个数据点通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param points     多个数据点
+     */
+    public void writePointsByName(String orgName, String bucketName, List<Point> points) {
+        influxClient.makeWriteApi().writePoints(bucketName, orgName, points);
+    }
+
+    /**
+     * 写入记录
+     *
+     * @param precision 精度
+     * @param record    记录
+     */
+    public void writeRecord(WritePrecision precision, String record) {
+        influxClient.makeWriteApi().writeRecord(precision, record);
+    }
+
+    /**
+     * 写入多条记录
+     *
+     * @param precision 精度
+     * @param records   多条记录
+     */
+    public void writeRecords(WritePrecision precision, List<String> records) {
+        influxClient.makeWriteApi().writeRecords(precision, records);
+    }
+
+    /**
+     * 写入记录通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param record     记录
+     */
+    public void writeRecordByName(String orgName, String bucketName, WritePrecision precision, String record) {
+        influxClient.makeWriteApi().writeRecord(bucketName, orgName, precision, record);
+    }
+
+    /**
+     * 写入多条记录通过组织名和储存桶名
+     *
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param records    多条记录
+     */
+    public void writeRecordsByName(String orgName, String bucketName, WritePrecision precision, List<String> records) {
+        influxClient.makeWriteApi().writeRecords(bucketName, orgName, precision, records);
+    }
+
+    /**
+     * 写入对象
+     *
+     * @param <T>       T
+     * @param precision 精度
+     * @param obj       对象
+     */
+    public <T> void writeObj(WritePrecision precision, T obj) {
+        influxClient.makeWriteApi().writeMeasurement(precision, obj);
+    }
+
+    /**
+     * 写入多个对象
+     *
+     * @param <T>       T
+     * @param precision 精度
+     * @param objs      多个对象
+     */
+    public <T> void writeObjs(WritePrecision precision, List<T> objs) {
+        influxClient.makeWriteApi().writeMeasurements(precision, objs);
+    }
+
+    /**
+     * 写入对象通过组织名和储存桶名
+     *
+     * @param <T>        T
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param obj        对象
+     */
+    public <T> void writeObjByName(String orgName, String bucketName, WritePrecision precision, T obj) {
+        influxClient.makeWriteApi().writeMeasurement(bucketName, orgName, precision, obj);
+    }
+
+    /**
+     * 写入多个对象通过组织名和储存桶名
+     *
+     * @param <T>        T
+     * @param orgName    组织名
+     * @param bucketName 储存桶名
+     * @param precision  精度
+     * @param objs       多个对象
+     */
+    public <T> void writeObjsByName(String orgName, String bucketName, WritePrecision precision, List<T> objs) {
+        influxClient.makeWriteApi().writeMeasurements(bucketName, orgName, precision, objs);
+    }
+
+    /**
+     * 写入缓冲区清空
+     */
+    public void writeFlush() {
+        influxClient.makeWriteApi().flush();
+    }
+
+    // endregion
 
     /* ==================== 私有方法 ==================== */
     // region 私有方法
@@ -659,7 +940,7 @@ public class InfluxTemp {
      * @return T
      * @see AbstractRestClient#execute(Call)
      */
-    private <T> T execute(Call<T> call) {
+    private static <T> T execute(Call<T> call) {
         try {
             Response<T> response = call.execute();
             if (response.isSuccessful()) {

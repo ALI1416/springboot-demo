@@ -1,12 +1,15 @@
 package com.demo.controller;
 
 import cn.z.influx.InfluxTemp;
+import com.demo.entity.influx.TestClass;
 import com.demo.entity.pojo.Result;
 import com.influxdb.client.domain.*;
+import com.influxdb.client.write.Point;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -554,6 +557,370 @@ public class IndexController {
     @GetMapping("bucketCloneByName")
     public Result<Bucket> bucketCloneByName(String orgName, String bucketName, String cloneBucketName) {
         return Result.o(influxTemp.bucketCloneByName(orgName, bucketName, cloneBucketName));
+    }
+
+    // endregion
+
+    /* ==================== 同步写入操作 ==================== */
+    // region 同步写入操作
+
+    /**
+     * 同步写入数据点<br>
+     * http://localhost:8080/writeSyncPoint?measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writeSyncPoint")
+    public Result writeSyncPoint(String measurementName, String tagKey, String tagValue, String field, long value) {
+        Point point = Point.measurement(measurementName)
+                .addTag(tagKey, tagValue)
+                .addField(field, value)
+                .time(Instant.now(), WritePrecision.MS);
+        influxTemp.writeSyncPoint(point);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入多个数据点<br>
+     * http://localhost:8080/writeSyncPoints?measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writeSyncPoints")
+    public Result writeSyncPoints(String measurementName, String tagKey, String tagValue, String field, long value) {
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Point point = Point.measurement(measurementName)
+                    .addTag(tagKey, tagValue)
+                    .addField(field, value + i)
+                    .time(Instant.now().plusSeconds(i), WritePrecision.MS);
+            points.add(point);
+        }
+        influxTemp.writeSyncPoints(points);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入数据点通过组织名和储存桶名<br>
+     * http://localhost:8080/writeSyncPointByName?orgName=influx&bucketName=db&measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writeSyncPointByName")
+    public Result writeSyncPointByName(String orgName, String bucketName, String measurementName, String tagKey, String tagValue, String field, long value) {
+        Point point = Point.measurement(measurementName)
+                .addTag(tagKey, tagValue)
+                .addField(field, value)
+                .time(Instant.now(), WritePrecision.MS);
+        influxTemp.writeSyncPointByName(orgName, bucketName, point);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入多个数据点通过组织名和储存桶名<br>
+     * http://localhost:8080/writeSyncPointsByName?orgName=influx&bucketName=db&measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writeSyncPointsByName")
+    public Result writeSyncPointsByName(String orgName, String bucketName, String measurementName, String tagKey, String tagValue, String field, long value) {
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Point point = Point.measurement(measurementName)
+                    .addTag(tagKey, tagValue)
+                    .addField(field, value + i)
+                    .time(Instant.now().plusSeconds(i), WritePrecision.MS);
+            points.add(point);
+        }
+        influxTemp.writeSyncPointsByName(orgName, bucketName, points);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入记录<br>
+     * http://localhost:8080/writeSyncRecord?record=aa,b=c,d=e%20f=3,g=4%201725693927000
+     */
+    @GetMapping("writeSyncRecord")
+    public Result writeSyncRecord(String record) {
+        influxTemp.writeSyncRecord(WritePrecision.MS, record);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入多条记录<br>
+     * http://localhost:8080/writeSyncRecords?records=a,b=c%20e=1&records=a,b=c%20f=1
+     */
+    @GetMapping("writeSyncRecords")
+    public Result writeSyncRecords(String[] records) {
+        influxTemp.writeSyncRecords(WritePrecision.MS, List.of(records));
+        return Result.o();
+    }
+
+    /**
+     * 同步写入记录通过组织名和储存桶名<br>
+     * http://localhost:8080/writeSyncRecordByName?orgName=influx&bucketName=db&record=a,b=c%20e=1
+     */
+    @GetMapping("writeSyncRecordByName")
+    public Result writeSyncRecordByName(String orgName, String bucketName, String record) {
+        influxTemp.writeSyncRecordByName(orgName, bucketName, WritePrecision.MS, record);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入多条记录通过组织名和储存桶名<br>
+     * http://localhost:8080/writeSyncRecordsByName?orgName=influx&bucketName=db&records=a,b=c%20e=1&records=a,b=c%20f=1
+     */
+    @GetMapping("writeSyncRecordsByName")
+    public Result writeSyncRecordsByName(String orgName, String bucketName, String[] records) {
+        influxTemp.writeSyncRecordsByName(orgName, bucketName, WritePrecision.MS, List.of(records));
+        return Result.o();
+    }
+
+    /**
+     * 同步写入对象<br>
+     * http://localhost:8080/writeSyncObj?tag1=t1&tag2=t2&value1=1&value2=2
+     */
+    @GetMapping("writeSyncObj")
+    public Result writeSyncObj(String tag1, String tag2, long value1, long value2) {
+        TestClass testClass = new TestClass();
+        testClass.setTag1(tag1);
+        testClass.setTag2(tag2);
+        testClass.setValue1(value1);
+        testClass.setValue2(value2);
+        testClass.setTime(Instant.now());
+        influxTemp.writeSyncObj(WritePrecision.MS, testClass);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入多个对象<br>
+     * http://localhost:8080/writeSyncObjs?tag1=t1&value1=1
+     */
+    @GetMapping("writeSyncObjs")
+    public Result writeSyncObjs(String tag1, long value1) {
+        List<TestClass> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            TestClass testClass = new TestClass();
+            testClass.setTag1(tag1);
+            testClass.setValue1(value1 + i);
+            testClass.setTime(Instant.now().plusSeconds(i));
+            list.add(testClass);
+        }
+        influxTemp.writeSyncObjs(WritePrecision.MS, list);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入对象通过组织名和储存桶名<br>
+     * http://localhost:8080/writeSyncObjByName?orgName=influx&bucketName=db&tag1=t1&tag2=t2&value1=1&value2=2
+     */
+    @GetMapping("writeSyncObjByName")
+    public Result writeSyncObjByName(String orgName, String bucketName, String tag1, String tag2, long value1, long value2) {
+        TestClass testClass = new TestClass();
+        testClass.setTag1(tag1);
+        testClass.setTag2(tag2);
+        testClass.setValue1(value1);
+        testClass.setValue2(value2);
+        testClass.setTime(Instant.now());
+        influxTemp.writeSyncObjByName(orgName, bucketName, WritePrecision.MS, testClass);
+        return Result.o();
+    }
+
+    /**
+     * 同步写入多个对象<br>
+     * http://localhost:8080/writeSyncObjsByName?orgName=influx&bucketName=db&tag1=t1&value1=1
+     */
+    @GetMapping("writeSyncObjsByName")
+    public Result writeSyncObjsByName(String orgName, String bucketName, String tag1, long value1) {
+        List<TestClass> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            TestClass testClass = new TestClass();
+            testClass.setTag1(tag1);
+            testClass.setValue1(value1 + i);
+            testClass.setTime(Instant.now().plusSeconds(i));
+            list.add(testClass);
+        }
+        influxTemp.writeSyncObjsByName(orgName, bucketName, WritePrecision.MS, list);
+        return Result.o();
+    }
+
+    // endregion
+
+    /* ==================== 写入操作 ==================== */
+    // region 写入操作
+
+    /**
+     * 写入数据点<br>
+     * http://localhost:8080/writePoint?measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writePoint")
+    public Result writePoint(String measurementName, String tagKey, String tagValue, String field, long value) {
+        Point point = Point.measurement(measurementName)
+                .addTag(tagKey, tagValue)
+                .addField(field, value)
+                .time(Instant.now(), WritePrecision.MS);
+        influxTemp.writePoint(point);
+        return Result.o();
+    }
+
+    /**
+     * 写入多个数据点<br>
+     * http://localhost:8080/writePoints?measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writePoints")
+    public Result writePoints(String measurementName, String tagKey, String tagValue, String field, long value) {
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Point point = Point.measurement(measurementName)
+                    .addTag(tagKey, tagValue)
+                    .addField(field, value + i)
+                    .time(Instant.now().plusSeconds(i), WritePrecision.MS);
+            points.add(point);
+        }
+        influxTemp.writePoints(points);
+        return Result.o();
+    }
+
+    /**
+     * 写入数据点通过组织名和储存桶名<br>
+     * http://localhost:8080/writePointByName?orgName=influx&bucketName=db&measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writePointByName")
+    public Result writePointByName(String orgName, String bucketName, String measurementName, String tagKey, String tagValue, String field, long value) {
+        Point point = Point.measurement(measurementName)
+                .addTag(tagKey, tagValue)
+                .addField(field, value)
+                .time(Instant.now(), WritePrecision.MS);
+        influxTemp.writePointByName(orgName, bucketName, point);
+        return Result.o();
+    }
+
+    /**
+     * 写入多个数据点通过组织名和储存桶名<br>
+     * http://localhost:8080/writePointsByName?orgName=influx&bucketName=db&measurementName=a&tagKey=b&tagValue=c&field=d&value=1
+     */
+    @GetMapping("writePointsByName")
+    public Result writePointsByName(String orgName, String bucketName, String measurementName, String tagKey, String tagValue, String field, long value) {
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Point point = Point.measurement(measurementName)
+                    .addTag(tagKey, tagValue)
+                    .addField(field, value + i)
+                    .time(Instant.now().plusSeconds(i), WritePrecision.MS);
+            points.add(point);
+        }
+        influxTemp.writePointsByName(orgName, bucketName, points);
+        return Result.o();
+    }
+
+    /**
+     * 写入记录<br>
+     * http://localhost:8080/writeRecord?record=aa,b=c,d=e%20f=3,g=4%201725693927000
+     */
+    @GetMapping("writeRecord")
+    public Result writeRecord(String record) {
+        influxTemp.writeRecord(WritePrecision.MS, record);
+        return Result.o();
+    }
+
+    /**
+     * 写入多条记录<br>
+     * http://localhost:8080/writeRecords?records=a,b=c%20e=1&records=a,b=c%20f=1
+     */
+    @GetMapping("writeRecords")
+    public Result writeRecords(String[] records) {
+        influxTemp.writeRecords(WritePrecision.MS, List.of(records));
+        return Result.o();
+    }
+
+    /**
+     * 写入记录通过组织名和储存桶名<br>
+     * http://localhost:8080/writeRecordByName?orgName=influx&bucketName=db&record=a,b=c%20e=1
+     */
+    @GetMapping("writeRecordByName")
+    public Result writeRecordByName(String orgName, String bucketName, String record) {
+        influxTemp.writeRecordByName(orgName, bucketName, WritePrecision.MS, record);
+        return Result.o();
+    }
+
+    /**
+     * 写入多条记录通过组织名和储存桶名<br>
+     * http://localhost:8080/writeRecordsByName?orgName=influx&bucketName=db&records=a,b=c%20e=1&records=a,b=c%20f=1
+     */
+    @GetMapping("writeRecordsByName")
+    public Result writeRecordsByName(String orgName, String bucketName, String[] records) {
+        influxTemp.writeRecordsByName(orgName, bucketName, WritePrecision.MS, List.of(records));
+        return Result.o();
+    }
+
+    /**
+     * 写入对象<br>
+     * http://localhost:8080/writeObj?tag1=t1&tag2=t2&value1=1&value2=2
+     */
+    @GetMapping("writeObj")
+    public Result writeObj(String tag1, String tag2, long value1, long value2) {
+        TestClass testClass = new TestClass();
+        testClass.setTag1(tag1);
+        testClass.setTag2(tag2);
+        testClass.setValue1(value1);
+        testClass.setValue2(value2);
+        testClass.setTime(Instant.now());
+        influxTemp.writeObj(WritePrecision.MS, testClass);
+        return Result.o();
+    }
+
+    /**
+     * 写入多个对象<br>
+     * http://localhost:8080/writeObjs?tag1=t1&value1=1
+     */
+    @GetMapping("writeObjs")
+    public Result writeObjs(String tag1, long value1) {
+        List<TestClass> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            TestClass testClass = new TestClass();
+            testClass.setTag1(tag1);
+            testClass.setValue1(value1 + i);
+            testClass.setTime(Instant.now().plusSeconds(i));
+            list.add(testClass);
+        }
+        influxTemp.writeObjs(WritePrecision.MS, list);
+        return Result.o();
+    }
+
+    /**
+     * 写入对象通过组织名和储存桶名<br>
+     * http://localhost:8080/writeObjByName?orgName=influx&bucketName=db&tag1=t1&tag2=t2&value1=1&value2=2
+     */
+    @GetMapping("writeObjByName")
+    public Result writeObjByName(String orgName, String bucketName, String tag1, String tag2, long value1, long value2) {
+        TestClass testClass = new TestClass();
+        testClass.setTag1(tag1);
+        testClass.setTag2(tag2);
+        testClass.setValue1(value1);
+        testClass.setValue2(value2);
+        testClass.setTime(Instant.now());
+        influxTemp.writeObjByName(orgName, bucketName, WritePrecision.MS, testClass);
+        return Result.o();
+    }
+
+    /**
+     * 写入多个对象<br>
+     * http://localhost:8080/writeObjsByName?orgName=influx&bucketName=db&tag1=t1&value1=1
+     */
+    @GetMapping("writeObjsByName")
+    public Result writeObjsByName(String orgName, String bucketName, String tag1, long value1) {
+        List<TestClass> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            TestClass testClass = new TestClass();
+            testClass.setTag1(tag1);
+            testClass.setValue1(value1 + i);
+            testClass.setTime(Instant.now().plusSeconds(i));
+            list.add(testClass);
+        }
+        influxTemp.writeObjsByName(orgName, bucketName, WritePrecision.MS, list);
+        return Result.o();
+    }
+
+    /**
+     * 写入缓冲区清空<br>
+     * http://localhost:8080/writeFlush
+     */
+    @GetMapping("writeFlush")
+    public Result writeFlush() {
+        influxTemp.writeFlush();
+        return Result.o();
     }
 
     // endregion
