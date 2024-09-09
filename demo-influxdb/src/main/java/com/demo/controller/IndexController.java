@@ -5,6 +5,7 @@ import com.demo.entity.influx.TestClass;
 import com.demo.entity.pojo.Result;
 import com.influxdb.client.domain.*;
 import com.influxdb.client.write.Point;
+import com.influxdb.query.FluxTable;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -921,6 +922,21 @@ public class IndexController {
     public Result writeFlush() {
         influxTemp.writeFlush();
         return Result.o();
+    }
+
+    // endregion
+
+    /* ==================== 查询操作 ==================== */
+    // region 查询操作
+
+    /**
+     * 查询<br>
+     * http://localhost:8080/query
+     */
+    @GetMapping("query")
+    public Result<List<FluxTable>> query() {
+        String query = "";
+        return Result.o(influxTemp.query(query));
     }
 
     // endregion

@@ -7,6 +7,7 @@ import com.influxdb.client.service.UsersService;
 import com.influxdb.client.write.Point;
 import com.influxdb.exceptions.InfluxException;
 import com.influxdb.internal.AbstractRestClient;
+import com.influxdb.query.FluxTable;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import retrofit2.Call;
@@ -31,6 +32,7 @@ public class InfluxTemp {
 
     private final InfluxDBClient influxClient;
     private final UsersService usersService;
+    private final InfluxDBClientOptions influxOptions;
 
     /**
      * 构造函数(自动注入)
@@ -54,14 +56,20 @@ public class InfluxTemp {
                 && influxProperties.getPassword() != null && !influxProperties.getPassword().isEmpty()) {
             influxBuilder.authenticate(influxProperties.getUsername(), influxProperties.getPassword().toCharArray());
         }
-        this.influxClient = InfluxDBClientFactory.create(influxBuilder.build()).setLogLevel(influxProperties.getLogLevel());
+        influxClient = InfluxDBClientFactory.create(influxBuilder.build()).setLogLevel(influxProperties.getLogLevel());
         // 反射获取UsersService类
-        UsersApi usersApi = this.influxClient.getUsersApi();
+        UsersApi usersApi = influxClient.getUsersApi();
         Class<? extends UsersApi> usersApiClass = usersApi.getClass();
         Field serviceField = usersApiClass.getDeclaredField("service");
         serviceField.setAccessible(true);
-        this.usersService = (UsersService) serviceField.get(usersApi);
+        usersService = (UsersService) serviceField.get(usersApi);
         serviceField.setAccessible(false);
+        // 反射获取InfluxDBClientOptions类
+        Class<? extends InfluxDBClient> influxClass = influxClient.getClass();
+        Field optionsField = influxClass.getDeclaredField("options");
+        optionsField.setAccessible(true);
+        influxOptions = (InfluxDBClientOptions) optionsField.get(influxClient);
+        optionsField.setAccessible(false);
     }
 
     /* ==================== 用户操作 ==================== */
@@ -925,6 +933,218 @@ public class InfluxTemp {
      */
     public void writeFlush() {
         influxClient.makeWriteApi().flush();
+    }
+
+    // endregion
+
+    /* ==================== 查询操作 ==================== */
+    // region 查询操作
+
+    /**
+     * 查询
+     *
+     * @param query 查询语句
+     * @return List FluxTable
+     */
+    public List<FluxTable> query(String query) {
+        return influxClient.getQueryApi().query(query);
+    }
+
+    /**
+     * 查询通过组织名
+     *
+     * @param orgName 组织名
+     * @param query   查询语句
+     * @return List FluxTable
+     */
+    public List<FluxTable> queryByName(String orgName, String query) {
+        return influxClient.getQueryApi().query(query, orgName);
+    }
+
+    /**
+     * 参数查询
+     *
+     * @param query  查询语句
+     * @param params 查询参数
+     * @return List FluxTable
+     */
+    public List<FluxTable> query(String query, Map<String, Object> params) {
+        return influxClient.getQueryApi().query(query, influxOptions.getOrg(), params);
+    }
+
+    /**
+     * 参数查询通过组织名
+     *
+     * @param orgName 组织名
+     * @param query   查询语句
+     * @param params  查询参数
+     * @return List FluxTable
+     */
+    public List<FluxTable> queryByName(String orgName, String query, Map<String, Object> params) {
+        return influxClient.getQueryApi().query(query, orgName, params);
+    }
+
+    /**
+     * 查询
+     *
+     * @param query 查询
+     * @return List FluxTable
+     */
+    public List<FluxTable> query(Query query) {
+        return influxClient.getQueryApi().query(query);
+    }
+
+    /**
+     * 查询通过组织名
+     *
+     * @param orgName 组织名
+     * @param query   查询
+     * @return List FluxTable
+     */
+    public List<FluxTable> queryByName(String orgName, Query query) {
+        return influxClient.getQueryApi().query(query, orgName);
+    }
+
+    /**
+     * 查询对象
+     *
+     * @param query    查询语句
+     * @param objClass T.class
+     * @param <T>      T
+     * @return List T
+     */
+    public <T> List<T> queryObj(String query, Class<T> objClass) {
+        return influxClient.getQueryApi().query(query, objClass);
+    }
+
+    /**
+     * 查询对象通过组织名
+     *
+     * @param orgName  组织名
+     * @param query    查询语句
+     * @param objClass T.class
+     * @param <T>      T
+     * @return List T
+     */
+    public <T> List<T> queryObjByName(String orgName, String query, Class<T> objClass) {
+        return influxClient.getQueryApi().query(query, orgName, objClass);
+    }
+
+    /**
+     * 参数对象查询
+     *
+     * @param query    查询语句
+     * @param params   查询参数
+     * @param objClass T.class
+     * @param <T>      T
+     * @return List T
+     */
+    public <T> List<T> queryObj(String query, Map<String, Object> params, Class<T> objClass) {
+        return influxClient.getQueryApi().query(query, influxOptions.getOrg(), objClass, params);
+    }
+
+    /**
+     * 参数对象查询通过组织名
+     *
+     * @param orgName  组织名
+     * @param query    查询语句
+     * @param params   查询参数
+     * @param objClass T.class
+     * @param <T>      T
+     * @return List T
+     */
+    public <T> List<T> queryObjByName(String orgName, String query, Map<String, Object> params, Class<T> objClass) {
+        return influxClient.getQueryApi().query(query, orgName, objClass, params);
+    }
+
+    /**
+     * 查询对象
+     *
+     * @param query    查询
+     * @param objClass T.class
+     * @param <T>      T
+     * @return List T
+     */
+    public <T> List<T> queryObj(Query query, Class<T> objClass) {
+        return influxClient.getQueryApi().query(query, objClass);
+    }
+
+    /**
+     * 查询对象通过组织名
+     *
+     * @param orgName  组织名
+     * @param query    查询
+     * @param objClass T.class
+     * @param <T>      T
+     * @return List T
+     */
+    public <T> List<T> queryObjByName(String orgName, Query query, Class<T> objClass) {
+        return influxClient.getQueryApi().query(query, orgName, objClass);
+    }
+
+    /**
+     * 原始数据查询
+     *
+     * @param query 查询语句
+     * @return 原始数据
+     */
+    public String queryRaw(String query) {
+        return influxClient.getQueryApi().queryRaw(query);
+    }
+
+    /**
+     * 原始数据查询通过组织名
+     *
+     * @param orgName 组织名
+     * @param query   查询语句
+     * @return 原始数据
+     */
+    public String queryRawByName(String orgName, String query) {
+        return influxClient.getQueryApi().queryRaw(query, orgName);
+    }
+
+    /**
+     * 原始数据参数查询
+     *
+     * @param query  查询语句
+     * @param params 查询参数
+     * @return 原始数据
+     */
+    public String queryRaw(String query, Map<String, Object> params) {
+        return influxClient.getQueryApi().queryRaw(query, null, influxOptions.getOrg(), params);
+    }
+
+    /**
+     * 原始数据参数查询通过组织名
+     *
+     * @param orgName 组织名
+     * @param query   查询语句
+     * @param params  查询参数
+     * @return 原始数据
+     */
+    public String queryRawByName(String orgName, String query, Map<String, Object> params) {
+        return influxClient.getQueryApi().queryRaw(query, null, orgName, params);
+    }
+
+    /**
+     * 原始数据查询
+     *
+     * @param query 查询
+     * @return 原始数据
+     */
+    public String queryRaw(Query query) {
+        return influxClient.getQueryApi().queryRaw(query);
+    }
+
+    /**
+     * 原始数据查询通过组织名
+     *
+     * @param orgName 组织名
+     * @param query   查询
+     * @return 原始数据
+     */
+    public String queryRawByName(String orgName, Query query) {
+        return influxClient.getQueryApi().queryRaw(query, orgName);
     }
 
     // endregion
