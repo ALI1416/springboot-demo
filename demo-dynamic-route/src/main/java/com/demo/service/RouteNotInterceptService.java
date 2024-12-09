@@ -8,13 +8,13 @@ import com.demo.dao.mysql.RouteNotInterceptDao;
 import com.demo.entity.po.RouteNotIntercept;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteNotInterceptVo;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
