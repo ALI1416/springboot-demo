@@ -1,7 +1,7 @@
 package cn.z.spring.util;
 
-import cn.z.util.EasyExcelUtils;
-import com.alibaba.excel.EasyExcelFactory;
+import cn.idev.excel.FastExcelFactory;
+import cn.z.util.FastExcelUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * <h1>EasyExcel工具</h1>
+ * <h1>FastExcel工具</h1>
  *
  * <p>
  * createDate 2021/02/02 14:56:48
@@ -21,7 +21,7 @@ import java.util.List;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class EasyExcelSpringUtils extends EasyExcelUtils {
+public class FastExcelSpringUtils extends FastExcelUtils {
 
     /**
      * 下载文件到客户端
@@ -36,7 +36,7 @@ public class EasyExcelSpringUtils extends EasyExcelUtils {
         name = URLEncoder.encode(name + LocalDateTime.now().format(DATETIME_FORMAT), StandardCharsets.UTF_8).replace("\\+", "%20");
         response.setContentType("application/octet-stream;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment;filename*=utf-8''" + name + ".xlsx");
-        EasyExcelFactory.write(response.getOutputStream(), clazz).registerWriteHandler(style1()).sheet("工作表1").doWrite(data);
+        FastExcelFactory.write(response.getOutputStream(), clazz).registerWriteHandler(style1()).sheet("工作表1").doWrite(data);
     }
 
     /**
@@ -49,7 +49,7 @@ public class EasyExcelSpringUtils extends EasyExcelUtils {
      */
     public static <T> void upload(MultipartFile file, List<T> data, Class<T> clazz) throws IOException {
         MyReadListener<T> listener = new MyReadListener<>();
-        EasyExcelFactory.read(file.getInputStream(), clazz, listener).sheet().doRead();
+        FastExcelFactory.read(file.getInputStream(), clazz, listener).sheet().doRead();
         data.addAll(listener.getList());
     }
 

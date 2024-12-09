@@ -1,6 +1,6 @@
-package com.demo.util.easyexcel;
+package com.demo.util.fastexcel;
 
-import cn.z.util.EasyExcelUtils;
+import cn.z.util.FastExcelUtils;
 import com.alibaba.fastjson2.JSON;
 import com.demo.entity.excel.UserExcel;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>EasyExcel</h1>
+ * <h1>FastExcel</h1>
  *
  * <p>
  * createDate 2023/08/25 10:12:56
@@ -23,7 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
         // 导出模板
-        EasyExcelUtils.write("E:/模板.xlsx", null, UserExcel.class);
+        FastExcelUtils.write("D:/模板.xlsx", null, UserExcel.class);
         // 导出内容
         List<UserExcel> exportList = new ArrayList<>();
         UserExcel u1 = new UserExcel();
@@ -40,10 +40,10 @@ public class Main {
         u2.setGender("女");
         u2.setYear(2000);
         exportList.add(u2);
-        EasyExcelUtils.write("E:/导出.xlsx", exportList, UserExcel.class);
+        FastExcelUtils.write("D:/导出.xlsx", exportList, UserExcel.class);
         // 导入内容
         List<UserExcel> importList = new ArrayList<>();
-        EasyExcelUtils.read("E:/导出.xlsx", importList, UserExcel.class);
+        FastExcelUtils.read("D:/导出.xlsx", importList, UserExcel.class);
         log.info(JSON.toJSONString(importList));
     }
 

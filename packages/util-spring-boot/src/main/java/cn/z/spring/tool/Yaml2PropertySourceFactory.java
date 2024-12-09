@@ -21,6 +21,9 @@ public class Yaml2PropertySourceFactory implements PropertySourceFactory {
 
     /**
      * yml格式转properties格式
+     *
+     * @param name     名称
+     * @param resource 源
      */
     @Override
     public PropertySource<?> createPropertySource(String name, EncodedResource resource) throws IOException {
