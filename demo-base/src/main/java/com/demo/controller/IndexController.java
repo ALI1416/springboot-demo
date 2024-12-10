@@ -124,7 +124,7 @@ public class IndexController extends ControllerBase {
      * GET http://localhost:8080/userTest?account=ck<br>
      * 结果 {"code":0,"data":{"account":"ck","year":0},"message":"成功","ok":true}
      * <h3>请求参数错误</h3>
-     * <h4>BindException(对象的属性类型错误)</h4>
+     * <h4>MethodArgumentNotValidException(对象属性类型错误)</h4>
      * GET http://localhost:8080/userTest?account=ck&year=aaa<br>
      * 结果 {"code":130,"message":"请求参数错误","ok":false}
      */

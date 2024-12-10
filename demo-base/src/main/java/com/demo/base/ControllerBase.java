@@ -18,7 +18,7 @@ public class ControllerBase {
     /**
      * 请求参数错误
      */
-    public static Result paramIsError() {
+    public static Result paramError() {
         return Result.e(ResultCode.PARAM_ERROR);
     }
 
@@ -37,6 +37,9 @@ public class ControllerBase {
      * @param objects 多个对象
      */
     public static boolean existNull(Object... objects) {
+        if (objects == null) {
+            return true;
+        }
         for (Object object : objects) {
             if (object == null) {
                 return true;
@@ -46,11 +49,14 @@ public class ControllerBase {
     }
 
     /**
-     * 都是null对象
+     * 全是null对象
      *
      * @param objects 多个对象
      */
     public static boolean allNull(Object... objects) {
+        if (objects == null) {
+            return true;
+        }
         for (Object object : objects) {
             if (object != null) {
                 return false;
@@ -65,7 +71,7 @@ public class ControllerBase {
      * @param string 字符串
      */
     public static boolean isEmpty(String string) {
-        return string == null || string.length() == 0;
+        return string == null || string.isEmpty();
     }
 
     /**
@@ -74,12 +80,32 @@ public class ControllerBase {
      * @param strings 多个字符串
      */
     public static boolean existEmpty(String... strings) {
+        if (strings == null) {
+            return true;
+        }
         for (String string : strings) {
-            if (string == null || string.length() == 0) {
+            if (string == null || string.isEmpty()) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 全是空字符串
+     *
+     * @param strings 多个字符串
+     */
+    public static boolean allEmpty(String... strings) {
+        if (strings == null) {
+            return true;
+        }
+        for (String string : strings) {
+            if (string != null && !string.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -88,7 +114,7 @@ public class ControllerBase {
      * @param string 字符串
      */
     public static boolean isBlack(String string) {
-        return string == null || string.trim().length() == 0;
+        return string == null || string.isBlank();
     }
 
     /**
@@ -97,12 +123,32 @@ public class ControllerBase {
      * @param strings 多个字符串
      */
     public static boolean existBlack(String... strings) {
+        if (strings == null) {
+            return true;
+        }
         for (String string : strings) {
-            if (string == null || string.trim().length() == 0) {
+            if (string == null || string.isBlank()) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 全是空白字符串
+     *
+     * @param strings 多个字符串
+     */
+    public static boolean allBlack(String... strings) {
+        if (strings == null) {
+            return true;
+        }
+        for (String string : strings) {
+            if (string != null && !string.isBlank()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
