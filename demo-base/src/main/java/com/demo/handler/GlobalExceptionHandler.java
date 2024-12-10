@@ -1,25 +1,28 @@
 package com.demo.handler;
 
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.pojo.GlobalException;
 import com.demo.entity.pojo.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
 
 /**
- * <h1>全局异常处理(404异常除外)</h1>
+ * <h1>全局异常处理</h1>
  *
  * <p>
- * 捕获处理所有未被捕获的异常(404异常除外)
+ * 捕获处理所有未被捕获的异常
  * </p>
  *
  * <p>
@@ -30,8 +33,17 @@ import java.io.IOException;
  * @since 1.0.0
  **/
 @Slf4j
+@RestController
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler implements ErrorController {
+
+    /**
+     * 页面未找到
+     */
+    @RequestMapping("error")
+    public Result error() {
+        return Result.e(ResultCode.PAGE_NOT_FOUND);
+    }
 
     /**
      * 请求方法不支持异常
@@ -41,7 +53,7 @@ public class GlobalExceptionHandler {
     @Order(1)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result requestMethodNotSupportedHandler() {
-        return Result.e(ResultEnum.REQUEST_METHOD_NOT_SUPPORTED);
+        return Result.e(ResultCode.REQUEST_METHOD_NOT_SUPPORTED);
     }
 
     /**
@@ -52,7 +64,7 @@ public class GlobalExceptionHandler {
     @Order(1)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public Result mediaTypeNotSupportedHandler() {
-        return Result.e(ResultEnum.MEDIA_TYPE_NOT_SUPPORTED);
+        return Result.e(ResultCode.MEDIA_TYPE_NOT_SUPPORTED);
     }
 
     /**
@@ -61,7 +73,7 @@ public class GlobalExceptionHandler {
      * <ul>
      * <li>{@link IllegalStateException} 拆箱类型为null错误</li>
      * <li>{@link MethodArgumentTypeMismatchException} 参数类型错误</li>
-     * <li>{@link BindException} 对象的属性类型错误</li>
+     * <li>{@link BindException} 对象属性类型错误</li>
      * </ul>
      * <h3>JSON</h3>
      * <ul>
@@ -74,14 +86,14 @@ public class GlobalExceptionHandler {
      * @see HttpMessageNotReadableException
      */
     @Order(1)
-    @ExceptionHandler({ //
-            IllegalStateException.class, //
-            MethodArgumentTypeMismatchException.class, //
-            BindException.class,  //
-            HttpMessageNotReadableException.class //
+    @ExceptionHandler({
+            IllegalStateException.class,
+            MethodArgumentTypeMismatchException.class,
+            BindException.class,
+            HttpMessageNotReadableException.class
     })
     public Result paramErrorHandler() {
-        return Result.e(ResultEnum.PARAM_ERROR);
+        return Result.e(ResultCode.PARAM_ERROR);
     }
 
     /**
@@ -92,7 +104,8 @@ public class GlobalExceptionHandler {
     @Order(1)
     @ExceptionHandler(GlobalException.class)
     public Result globalExceptionHandler(GlobalException e) {
-        return Result.e(e.getResultEnum(), e.getMsg());
+        log.error("GlobalException: [{}:{}]", e.getResultCode(), e.getResultCode().getMessage(), e);
+        return Result.e(e.getResultCode(), e.getMessage());
     }
 
     /**
@@ -104,7 +117,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public Result runtimeExceptionHandler(RuntimeException e) {
         log.error("RuntimeException", e);
-        return Result.e(ResultEnum.SYSTEM_INNER_ERROR, "RuntimeException");
+        return Result.e(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -116,7 +129,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public Result ioExceptionHandler(IOException e) {
         log.error("IOException", e);
-        return Result.e(ResultEnum.SYSTEM_INNER_ERROR, "IOException");
+        return Result.e(ResultCode.SYSTEM_INNER_ERROR);
     }
 
     /**
@@ -128,7 +141,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result exceptionHandler(Exception e) {
         log.error("Exception", e);
-        return Result.e(ResultEnum.SYSTEM_INNER_ERROR, "Exception");
+        return Result.e(ResultCode.SYSTEM_INNER_ERROR);
     }
 
 }

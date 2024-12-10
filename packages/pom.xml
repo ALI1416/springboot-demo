@@ -60,7 +60,7 @@
     <!--继承父依赖可修改版本号-->
     <!--日志-->
     <!--ch.qos.logback:logback-classic-->
-    <logback.version>1.5.7</logback.version>
+    <logback.version>1.5.12</logback.version>
 
     <!--Maven编译插件-->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
@@ -83,11 +83,11 @@
     <!--父依赖不含-->
     <!--FastJson-->
     <!--com.alibaba.fastjson2:fastjson2-->
-    <fastjson.version>2.0.52</fastjson.version>
+    <fastjson.version>2.0.53</fastjson.version>
 
-    <!--EasyExcel-->
-    <!--com.alibaba:easyexcel-->
-    <easyexcel.version>4.0.2</easyexcel.version>
+    <!--FastExcel-->
+    <!--cn.idev.excel:fastexcel-->
+    <fastexcel.version>1.0.0</fastexcel.version>
 
     <!--ElasticSearch(需要与服务器版本号相同)-->
     <!--co.elastic.clients:elasticsearch-java-->
@@ -103,17 +103,17 @@
 
     <!--加密算法-->
     <!--org.bouncycastle:bcpkix-jdk18on-->
-    <bcpkix.version>1.78.1</bcpkix.version>
+    <bcpkix.version>1.79</bcpkix.version>
 
     <!--Minio-->
     <!--io.minio:minio-->
-    <minio.version>8.5.12</minio.version>
+    <minio.version>8.5.14</minio.version>
 
     <!--Tika-->
     <!--org.apache.tika:tika-core-->
     <!--org.apache.tika:tika-parsers-standard-package-->
     <!--org.apache.tika:tika-langdetect-tika-->
-    <tika.version>2.9.2</tika.version>
+    <tika.version>3.0.0</tika.version>
 
     <!--Ansj分词-->
     <!--org.ansj:ansj_seg-->
@@ -231,11 +231,11 @@
         <artifactId>fastjson2</artifactId>
         <version>${fastjson.version}</version>
       </dependency>
-      <!--EasyExcel-->
+      <!--FastExcel-->
       <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>easyexcel</artifactId>
-        <version>${easyexcel.version}</version>
+        <groupId>cn.idev.excel</groupId>
+        <artifactId>fastexcel</artifactId>
+        <version>${fastexcel.version}</version>
       </dependency>
       <!--ElasticSearch-->
       <dependency>

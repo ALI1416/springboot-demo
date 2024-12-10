@@ -1,11 +1,11 @@
 package cn.z.util;
 
-import com.alibaba.excel.EasyExcelFactory;
-import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.event.AnalysisEventListener;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
-import com.alibaba.excel.write.metadata.style.WriteFont;
-import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import cn.idev.excel.FastExcelFactory;
+import cn.idev.excel.context.AnalysisContext;
+import cn.idev.excel.event.AnalysisEventListener;
+import cn.idev.excel.write.metadata.style.WriteCellStyle;
+import cn.idev.excel.write.metadata.style.WriteFont;
+import cn.idev.excel.write.style.HorizontalCellStyleStrategy;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import java.time.format.DateTimeFormatter;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <h1>EasyExcel工具</h1>
+ * <h1>FastExcel工具</h1>
  *
  * <p>
  * createDate 2021/02/02 14:56:48
@@ -22,7 +22,7 @@ import java.util.List;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-public class EasyExcelUtils {
+public class FastExcelUtils {
 
     /**
      * yyyyMMddHHmmssSSS格式DateTimeFormatter
@@ -38,7 +38,7 @@ public class EasyExcelUtils {
      * @param clazz T.class
      */
     public static <T> void write(String path, List<T> data, Class<T> clazz) {
-        EasyExcelFactory.write(path, clazz).registerWriteHandler(style1()).sheet("工作表1").doWrite(data);
+        FastExcelFactory.write(path, clazz).registerWriteHandler(style1()).sheet("工作表1").doWrite(data);
     }
 
     /**
@@ -51,7 +51,7 @@ public class EasyExcelUtils {
      */
     public static <T> void read(String path, List<T> data, Class<T> clazz) {
         MyReadListener<T> listener = new MyReadListener<>();
-        EasyExcelFactory.read(path, clazz, listener).sheet().doRead();
+        FastExcelFactory.read(path, clazz, listener).sheet().doRead();
         data.addAll(listener.getList());
     }
 

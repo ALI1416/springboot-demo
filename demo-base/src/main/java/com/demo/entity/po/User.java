@@ -1,6 +1,6 @@
 package com.demo.entity.po;
 
-import com.demo.base.ToStringBase;
+import com.demo.base.EntityBase;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,28 +18,24 @@ import java.util.Date;
  **/
 @Getter
 @Setter
-public class User extends ToStringBase {
+public class User extends EntityBase {
 
     /**
      * 账号
      */
     private String account;
-
     /**
      * 用户名
      */
     private String name;
-
     /**
      * 出生年
      */
     private int year;
-
     /**
      * 性别
      */
     private Boolean gender;
-
     /**
      * 日期
      */

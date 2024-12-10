@@ -1,7 +1,7 @@
 package com.demo.entity.excel;
 
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import cn.idev.excel.annotation.ExcelProperty;
+import cn.idev.excel.annotation.write.style.ColumnWidth;
 import com.demo.base.ToStringBase;
 import lombok.Getter;
 import lombok.Setter;

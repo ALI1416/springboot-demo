@@ -84,7 +84,7 @@ SpringBoot示例
 - **`demo-util`** : 工具
   - SpringBoot Web
   - FastJson
-  - EasyExcel
+  - FastExcel
   - 雪花ID生成器
   - IP地址转区域
   - 手机号码转区域
@@ -101,8 +101,6 @@ SpringBoot示例
   - SpringBoot WebSocket
   - FastJson
   - Redis
-
-## 版本号
 
 ## 版本号
 
@@ -146,8 +144,8 @@ SpringBoot示例
 - 父依赖不含 :
   - `FastJson` : `com.alibaba.fastjson2:fastjson2`  
     [![Maven Central](https://img.shields.io/maven-central/v/com.alibaba.fastjson2/fastjson2?label=Maven%20Central)](https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2)
-  - `EasyExcel` : `com.alibaba:easyexcel`  
-    [![Maven Central](https://img.shields.io/maven-central/v/com.alibaba/easyexcel?label=Maven%20Central)](https://mvnrepository.com/artifact/com.alibaba/easyexcel)
+  - `FastExcel` : `cn.idev.excel:fastexcel`  
+    [![Maven Central](https://img.shields.io/maven-central/v/cn.idev.excel/fastexcel?label=Maven%20Central)](https://mvnrepository.com/artifact/cn.idev.excel/fastexcel)
   - `ElasticSearch(需要与服务器版本号相同)` : `co.elastic.clients:elasticsearch-java`  
     [![Maven Central](https://img.shields.io/maven-central/v/co.elastic.clients/elasticsearch-java?label=Maven%20Central)](https://mvnrepository.com/artifact/co.elastic.clients/elasticsearch-java)
   - `JakartaJson` : `jakarta.json:jakarta.json-api`  
