@@ -40,7 +40,7 @@ public class IndexController {
 
     /**
      * <h3>点对点模型</h3>
-     * http://localhost:8080/p2p <br>
+     * http://localhost:8080/p2p<br>
      * 点对点模型 89724233216688128
      */
     @GetMapping("p2p")
@@ -51,7 +51,7 @@ public class IndexController {
 
     /**
      * <h3>工作模型</h3>
-     * http://localhost:8080/work <br>
+     * http://localhost:8080/work<br>
      * 工作模型消费者2 序号1:89724248195596290<br>
      * 工作模型消费者1 序号0:89724248195596289<br>
      * 工作模型消费者2 序号3:89724248195596292<br>
@@ -73,7 +73,7 @@ public class IndexController {
 
     /**
      * <h3>广播模型</h3>
-     * http://localhost:8080/broadcast <br>
+     * http://localhost:8080/broadcast<br>
      * 广播模型消费者1 89724299505565697<br>
      * 广播模型消费者2 89724299505565697
      */
@@ -85,12 +85,12 @@ public class IndexController {
 
     /**
      * <h3>路由模型</h3>
-     * http://localhost:8080/route?key=aa <br>
+     * http://localhost:8080/route?key=aa<br>
      * 无<br>
-     * http://localhost:8080/route?key=error <br>
+     * http://localhost:8080/route?key=error<br>
      * 路由模型消费者2 error:89724352960921601<br>
      * 路由模型消费者1 error:89724352960921601<br>
-     * http://localhost:8080/route?key=debug <br>
+     * http://localhost:8080/route?key=debug<br>
      * 路由模型消费者1 debug:89724360485502977
      */
     @GetMapping("route")
@@ -101,24 +101,24 @@ public class IndexController {
 
     /**
      * <h3>动态路由模型</h3>
-     * http://localhost:8080/dynamicRoute?key=aa <br>
+     * http://localhost:8080/dynamicRoute?key=aa<br>
      * 无<br>
-     * http://localhost:8080/dynamicRoute?key=user <br>
+     * http://localhost:8080/dynamicRoute?key=user<br>
      * 动态路由模型消费者1 user:89724645977096192<br>
-     * http://localhost:8080/dynamicRoute?key=user.root <br>
+     * http://localhost:8080/dynamicRoute?key=user.root<br>
      * 无<br>
-     * http://localhost:8080/dynamicRoute?key=admin <br>
+     * http://localhost:8080/dynamicRoute?key=admin<br>
      * 动态路由模型消费者2 admin:89724664629166080<br>
-     * http://localhost:8080/dynamicRoute?key=admin.user <br>
+     * http://localhost:8080/dynamicRoute?key=admin.user<br>
      * 动态路由模型消费者1 admin.user:89724676895408129<br>
-     * http://localhost:8080/dynamicRoute?key=admin.user.root <br>
+     * http://localhost:8080/dynamicRoute?key=admin.user.root<br>
      * 无<br>
-     * http://localhost:8080/dynamicRoute?key=root <br>
+     * http://localhost:8080/dynamicRoute?key=root<br>
      * 动态路由模型消费者1 root:89724693238513664<br>
-     * http://localhost:8080/dynamicRoute?key=root.user <br>
+     * http://localhost:8080/dynamicRoute?key=root.user<br>
      * 动态路由模型消费者1 root.user:89724701986783233<br>
      * 动态路由模型消费者2 root.user:89724701986783233<br>
-     * http://localhost:8080/dynamicRoute?key=root.user.admin <br>
+     * http://localhost:8080/dynamicRoute?key=root.user.admin<br>
      * 动态路由模型消费者1 root.user.admin:89724710057672704
      */
     @GetMapping("dynamicRoute")
@@ -129,7 +129,7 @@ public class IndexController {
 
     /**
      * <h3>ProtocolBuffers1</h3>
-     * http://localhost:8080/protocolBuffers1 <br>
+     * http://localhost:8080/protocolBuffers1<br>
      * ProtocolBuffers1 {
      * "name": "ali",
      * "year": 1998,
@@ -148,18 +148,18 @@ public class IndexController {
     @GetMapping("protocolBuffers1")
     public Result protocolBuffers1() {
         // 创建PersonProto.Person对象
-        PersonProto.Person person = PersonProto.Person.newBuilder() //
-                .setName("ali") //
-                .setYear(1998) //
-                .setGender(true) //
-                .setDate(Clock.now()) //
-                .setAddress("address") //
-                .addCars(0, PersonProto.Car.newBuilder() //
-                        .setName("Car") //
-                        .setColor("Red") //
-                        .build() //
-                ) //
-                .putOther("描述", "暂无") //
+        PersonProto.Person person = PersonProto.Person.newBuilder()
+                .setName("ali")
+                .setYear(1998)
+                .setGender(true)
+                .setDate(Clock.now())
+                .setAddress("address")
+                .addCars(0, PersonProto.Car.newBuilder()
+                        .setName("Car")
+                        .setColor("Red")
+                        .build()
+                )
+                .putOther("描述", "暂无")
                 .build();
         // 编码成bytes
         byte[] bytes = person.toByteArray();
@@ -170,7 +170,7 @@ public class IndexController {
 
     /**
      * <h3>ProtocolBuffers2</h3>
-     * http://localhost:8080/protocolBuffers2 <br>
+     * http://localhost:8080/protocolBuffers2<br>
      * ProtocolBuffers2 {"address":"address","cars":[{"color":"Red","name":"Car"}],"date":"1695027857124","gender":true,"name":"ali","other":{"描述":"暂无"},"year":1998}
      */
     @GetMapping("protocolBuffers2")
@@ -203,16 +203,16 @@ public class IndexController {
 
     /**
      * <h3>死信测试</h3>
-     * http://localhost:8080/deadLetterTest?queue=deadLetterTest1&msg=-1 <br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest1&msg=-1<br>
      * 死信测试1 -1<br>
      * 消息被丢弃(报错，没有指定死信队列)<br>
-     * http://localhost:8080/deadLetterTest?queue=deadLetterTest1&msg=100 <br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest1&msg=100<br>
      * 死信测试1 100<br>
-     * http://localhost:8080/deadLetterTest?queue=deadLetterTest2&msg=-1 <br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest2&msg=-1<br>
      * 死信测试2 -1<br>
      * 进入死信队列(报错)<br>
      * 死信消息 -1 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=rejected, count=1, exchange=, time=Tue Sep 19 17:32:35 CST 2023, routing-keys=[deadLetterTest2], queue=deadLetterTest2}], x-first-death-reason=rejected, x-first-death-queue=deadLetterTest2}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=1, consumerTag=amq.ctag-fdjeQ8myfJHt79xGM3jI_A, consumerQueue=deadLetter]<br>
-     * http://localhost:8080/deadLetterTest?queue=deadLetterTest3&msg=test&expire=5 <br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest3&msg=test&expire=5<br>
      * 队列 deadLetterTest3 消息 test 消息过期时间 5 秒<br>
      * 5秒后进入死信队列(超出消息过期时间)<br>
      * 死信消息 test 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=expired, original-expiration=5000, count=1, exchange=, time=Tue Sep 19 18:26:46 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=expired, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=2, consumerTag=amq.ctag-_Z7gd1UKV4jO7XAsnMGahQ, consumerQueue=deadLetter]<br>
@@ -227,7 +227,7 @@ public class IndexController {
      * x3<br>
      * 第3条进入死信队列(超出最大总数据长度)<br>
      * 死信消息 test 属性 MessageProperties [headers={x-first-death-exchange=, x-death=[{reason=maxlen, count=1, exchange=, time=Wed Sep 20 11:17:54 CST 2023, routing-keys=[deadLetterTest3], queue=deadLetterTest3}], x-first-death-reason=maxlen, x-first-death-queue=deadLetterTest3}, contentType=text/plain, contentEncoding=UTF-8, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=5, consumerTag=amq.ctag-AZpDylQKucTRtyvvpuGydA, consumerQueue=deadLetter]<br>
-     * http://localhost:8080/deadLetterTest?queue=deadLetterTest4&msg=-1 <br>
+     * http://localhost:8080/deadLetterTest?queue=deadLetterTest4&msg=-1<br>
      * 死信测试4(线程池模拟死信) -1<br>
      * 死信消息 -1 属性 MessageProperties [headers={}, contentType=application/x-java-serialized-object, contentLength=0, receivedDeliveryMode=PERSISTENT, priority=0, redelivered=false, receivedExchange=, receivedRoutingKey=deadLetter, deliveryTag=1, consumerTag=amq.ctag-0ViY3hb_0-FisGaFsgSHTg, consumerQueue=deadLetter]<br>
      */
@@ -245,7 +245,7 @@ public class IndexController {
 
     /**
      * <h3>测试</h3>
-     * http://localhost:8080/test <br>
+     * http://localhost:8080/test<br>
      * 测试 ID 90261031736049664
      */
     @GetMapping("test")

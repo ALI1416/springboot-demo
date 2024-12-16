@@ -1,6 +1,6 @@
 package com.demo.controller;
 
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.po.LoginLog;
 import com.demo.entity.pojo.Result;
 import com.demo.service.LoginLogService;
@@ -37,7 +37,7 @@ public class IndexController {
         if (loginLogService.insert(loginLog)) {
             return Result.o(loginLog);
         } else {
-            return Result.e(ResultEnum.ERROR, loginLog);
+            return Result.e(ResultCode.ERROR, loginLog);
         }
     }
 

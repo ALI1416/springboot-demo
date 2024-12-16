@@ -26,8 +26,7 @@ public class Property {
     public static Test3Properties test3Properties;
 
     @Autowired
-    public Property(TestYml testYml, Test2Yml test2Yml, LoggingFileYml loggingFileYml,
-                     Test3Properties test3Properties) {
+    public Property(TestYml testYml, Test2Yml test2Yml, LoggingFileYml loggingFileYml, Test3Properties test3Properties) {
         Property.testYml = testYml;
         Property.test2Yml = test2Yml;
         Property.loggingFileYml = loggingFileYml;

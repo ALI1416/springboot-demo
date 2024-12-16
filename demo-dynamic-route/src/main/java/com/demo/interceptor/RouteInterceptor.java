@@ -2,7 +2,7 @@ package com.demo.interceptor;
 
 import cn.z.tinytoken.T4s;
 import cn.z.tinytoken.UserInfo;
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.pojo.GlobalException;
 import com.demo.service.RouteNotInterceptService;
 import com.demo.service.RouteService;
@@ -75,7 +75,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         // 抛出"未登录异常"
         if (userId == null) {
             removeUserInfo();
-            throw new GlobalException(ResultEnum.NOT_LOGIN);
+            throw new GlobalException(ResultCode.NOT_LOGIN);
         }
         // 是"root"用户
         if (userId == 0L) {
@@ -99,7 +99,7 @@ public class RouteInterceptor implements HandlerInterceptor {
         }
         // 抛出"无权限异常"
         removeUserInfo();
-        throw new GlobalException(ResultEnum.NOT_PERMISSION, "ID[" + userId + "],URL[" + url + "]");
+        throw new GlobalException(ResultCode.NOT_PERMISSION, "ID[" + userId + "],URL[" + url + "]");
     }
 
     /**

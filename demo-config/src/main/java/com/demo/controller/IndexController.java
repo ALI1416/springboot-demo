@@ -37,8 +37,8 @@ public class IndexController {
     private final Test3Properties test3Properties;
 
     /**
-     * http://localhost:8080/loggingFileYml <br>
-     * 使用自动装配获取Yml里的值
+     * 使用自动装配获取Yml里的值<br>
+     * http://localhost:8080/loggingFileYml
      */
     @GetMapping("loggingFileYml")
     public Result loggingFileYml() {
@@ -48,8 +48,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/testYml <br>
-     * 使用自动装配获取Yml里自定义的值
+     * 使用自动装配获取Yml里自定义的值<br>
+     * http://localhost:8080/testYml
      */
     @GetMapping("testYml")
     public Result testYml() {
@@ -60,8 +60,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/test2Yml <br>
-     * 使用自动装配获取其他Yml里的值
+     * 使用自动装配获取其他Yml里的值<br>
+     * http://localhost:8080/test2Yml
      */
     @GetMapping("test2Yml")
     public Result test2Yml() {
@@ -86,8 +86,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/test3Properties <br>
-     * 使用自动装配获取Properties里的值
+     * 使用自动装配获取Properties里的值<br>
+     * http://localhost:8080/test3Properties
      */
     @GetMapping("test3Properties")
     public Result test3Properties() {
@@ -98,8 +98,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/loggingFileProperty <br>
-     * 使用静态常量获取Yml里的值
+     * 使用静态常量获取Yml里的值<br>
+     * http://localhost:8080/loggingFileProperty
      */
     @GetMapping("loggingFileProperty")
     public Result loggingFileProperty() {
@@ -109,8 +109,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/testProperty <br>
-     * 使用静态常量获取Yml里自定义的值
+     * 使用静态常量获取Yml里自定义的值<br>
+     * http://localhost:8080/testProperty
      */
     @GetMapping("testProperty")
     public Result testProperty() {
@@ -121,8 +121,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/test2Property <br>
-     * 使用静态常量获取其他Yml里的值
+     * 使用静态常量获取其他Yml里的值<br>
+     * http://localhost:8080/test2Property
      */
     @GetMapping("test2Property")
     public Result test2Property() {
@@ -147,8 +147,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/test3Property <br>
-     * 使用静态常量获取Properties里的值
+     * 使用静态常量获取Properties里的值<br>
+     * http://localhost:8080/test3Property
      */
     @GetMapping("test3Property")
     public Result test3Property() {

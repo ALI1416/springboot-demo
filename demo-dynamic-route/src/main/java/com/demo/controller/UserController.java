@@ -4,7 +4,7 @@ import cn.z.tinytoken.T4s;
 import cn.z.tinytoken.UserInfo;
 import cn.z.tool.BCrypt;
 import com.demo.base.ControllerBase;
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.po.User;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
@@ -51,12 +51,12 @@ public class UserController extends ControllerBase {
     @Operation(summary = "用户登录", description = "需要account/pwd")
     public Result<UserVo> login(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getPwd())) {
-            return paramIsError();
+            return paramError();
         }
         UserVo u = userService.findByAccount(user.getAccount());
         if (u != null) {
             if (Boolean.TRUE.equals(u.getIsDelete())) {
-                return Result.e(ResultEnum.ACCOUNT_DISABLE);
+                return Result.e(ResultCode.ACCOUNT_DISABLE);
             }
             if (BCrypt.check(user.getPwd(), u.getPwd())) {
                 u.setPwd(null);
@@ -66,7 +66,7 @@ public class UserController extends ControllerBase {
                 return Result.o(u);
             }
         }
-        return Result.e(ResultEnum.LOGIN_FAIL);
+        return Result.e(ResultCode.LOGIN_ERROR);
     }
 
     /**
@@ -85,11 +85,11 @@ public class UserController extends ControllerBase {
     @Operation(summary = "用户注册", description = "需要account/name/pwd<br>响应：成功id/失败0")
     public Result<Long> register(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
-            return paramIsError();
+            return paramError();
         }
         user.setCreateId(0L);
         if (userService.existAccount(user.getAccount())) {
-            return Result.e(ResultEnum.ACCOUNT_EXIST);
+            return Result.e(ResultCode.ACCOUNT_EXIST);
         }
         return Result.o(userService.register(user));
     }
@@ -101,12 +101,12 @@ public class UserController extends ControllerBase {
     @Operation(summary = "用户修改密码", description = "需要登录/pwd/newPwd")
     public Result<Boolean> updatePwd(@RequestBody UserVo user) {
         if (existNull(user.getPwd(), user.getNewPwd())) {
-            return paramIsError();
+            return paramError();
         }
         user.setId(UserInfo.getId());
         User u = userService.findById(user.getId());
         if (!BCrypt.check(user.getPwd(), u.getPwd())) {
-            return Result.e(ResultEnum.PASSWORD_ERROR);
+            return Result.e(ResultCode.PASSWORD_ERROR);
         }
         UserVo u2 = new UserVo();
         u2.setId(user.getId());
@@ -121,7 +121,7 @@ public class UserController extends ControllerBase {
     @Operation(summary = "用户修改信息(除密码、删除)", description = "需要登录 至少一个account/name")
     public Result<Boolean> update(@RequestBody UserVo user) {
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
-            return Result.e(ResultEnum.ACCOUNT_EXIST);
+            return Result.e(ResultCode.ACCOUNT_EXIST);
         }
         UserVo u = new UserVo();
         u.setId(UserInfo.getId());

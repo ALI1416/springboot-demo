@@ -23,8 +23,8 @@ public class IndexController {
     private final MqttTemp mqttTemp;
 
     /**
-     * http://localhost:8080 <br>
-     * 发送(QoS=0 不保留)
+     * 发送(QoS=0 不保留)<br>
+     * http://localhost:8080
      */
     @GetMapping
     public Result index() {
@@ -33,8 +33,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/topic?topic=all <br>
-     * 发送(QoS=0 不保留)
+     * 发送(QoS=0 不保留)<br>
+     * http://localhost:8080/topic?topic=all
      */
     @GetMapping("topic")
     public Result topic(String topic) {
@@ -43,8 +43,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/topicAndQos?topic=all&qos=2 <br>
-     * 发送(不保留)
+     * 发送(不保留)<br>
+     * http://localhost:8080/topicAndQos?topic=all&qos=2
      */
     @GetMapping("topicAndQos")
     public Result topicAndQos(String topic, int qos) {
@@ -53,8 +53,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/topicAndQosAndRetain?topic=all&qos=2&retain=true <br>
-     * 发送
+     * 发送<br>
+     * http://localhost:8080/topicAndQosAndRetain?topic=all&qos=2&retain=true
      */
     @GetMapping("topicAndQosAndRetain")
     public Result topicAndQosAndRetain(String topic, int qos, boolean retain) {

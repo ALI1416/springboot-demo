@@ -52,8 +52,8 @@ public class RabbitService3 {
     /**
      * 死信测试2
      */
-    @RabbitListener(queuesToDeclare = @Queue( //
-            value = RabbitQueue.DEAD_LETTER_TEST2, autoDelete = "true", //
+    @RabbitListener(queuesToDeclare = @Queue(
+            value = RabbitQueue.DEAD_LETTER_TEST2, autoDelete = "true",
             arguments = { // 参数
                     @Argument(name = "x-dead-letter-exchange", value = ""), // 死信交换机
                     @Argument(name = "x-dead-letter-routing-key", value = RabbitQueue.DEAD_LETTER), // 死信队列
@@ -68,7 +68,7 @@ public class RabbitService3 {
      * 非注解创建队列
      */
     @Bean
-    public void deadLetterTest3() throws Exception {
+    public Object deadLetterTest3() throws Exception {
         try (Connection connection = factory.createConnection()) {
             Map<String, Object> arguments = new HashMap<>();
             arguments.put("x-message-ttl", 10000); // 队列消息过期时间(单位：毫秒)(ready状态)
@@ -80,13 +80,14 @@ public class RabbitService3 {
                 channel.queueDeclare(RabbitQueue.DEAD_LETTER_TEST3, true, true, true, arguments);
             }
         }
+        return null;
     }
 
     /**
      * 非注解监听队列
      */
     @Bean
-    public void test() throws Exception {
+    public Object test() throws Exception {
         try (Connection connection = factory.createConnection()) {
             try (Channel channel = connection.createChannel(false)) {
                 channel.queueDeclare(RabbitQueue.TEST, true, true, true, null);
@@ -100,6 +101,7 @@ public class RabbitService3 {
                 });
             }
         }
+        return null;
     }
 
     /**

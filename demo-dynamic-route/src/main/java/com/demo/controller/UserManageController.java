@@ -5,7 +5,7 @@ import cn.z.tinytoken.UserInfo;
 import cn.z.tinytoken.entity.TokenInfo;
 import cn.z.tinytoken.entity.TokenInfoExtra;
 import com.demo.base.ControllerBase;
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.LoginLogVo;
@@ -50,11 +50,11 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "创建用户", description = "需要登录/account/name/pwd<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody UserVo user) {
         if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
-            return paramIsError();
+            return paramError();
         }
         user.setCreateId(UserInfo.getId());
         if (userService.existAccount(user.getAccount())) {
-            return Result.e(ResultEnum.ACCOUNT_EXIST);
+            return Result.e(ResultCode.ACCOUNT_EXIST);
         }
         return Result.o(userService.register(user));
     }
@@ -66,14 +66,14 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "修改用户信息(限制)", description = "需要登录/id 至少一个account/name/pwd/isDelete")
     public Result<Boolean> updateLimit(@RequestBody UserVo user) {
         if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
-            return paramIsError();
+            return paramError();
         }
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(user.getId(), UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
-            return Result.e(ResultEnum.ACCOUNT_EXIST);
+            return Result.e(ResultCode.ACCOUNT_EXIST);
         }
         return Result.o(userService.update(user));
     }
@@ -85,10 +85,10 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "修改用户信息", description = "需要id 至少一个account/name/pwd/isDelete")
     public Result<Boolean> update(@RequestBody UserVo user) {
         if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
-            return paramIsError();
+            return paramError();
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {
-            return Result.e(ResultEnum.ACCOUNT_EXIST);
+            return Result.e(ResultCode.ACCOUNT_EXIST);
         }
         return Result.o(userService.update(user));
     }
@@ -100,11 +100,11 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "修改用户角色(限制)", description = "需要登录/id/roleIdList")
     public Result<Boolean> updateRoleLimit(@RequestBody UserVo user) {
         if (existNull(user.getId(), user.getRoleIdList())) {
-            return paramIsError();
+            return paramError();
         }
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(user.getId(), UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         boolean ok = userService.updateRole(user);
         // 刷新缓存
@@ -121,7 +121,7 @@ public class UserManageController extends ControllerBase {
     @Operation(summary = "修改用户角色", description = "需要id/roleIdList")
     public Result<Boolean> updateRole(@RequestBody UserVo user) {
         if (existNull(user.getId(), user.getRoleIdList())) {
-            return paramIsError();
+            return paramError();
         }
         boolean ok = userService.updateRole(user);
         // 刷新缓存
@@ -179,10 +179,10 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
-            return Result.e(ResultEnum.USER_NOT_LOGIN);
+            return Result.e(ResultCode.USER_NOT_LOGIN);
         }
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.deleteByToken(token));
     }
@@ -206,7 +206,7 @@ public class UserManageController extends ControllerBase {
     public Result<Long> logoutIdLimit(long id) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.deleteById(id));
     }
@@ -232,10 +232,10 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
-            return Result.e(ResultEnum.USER_NOT_LOGIN);
+            return Result.e(ResultCode.USER_NOT_LOGIN);
         }
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         if (extra) {
             return Result.o(t4s.getInfoExtraByToken(token));
@@ -269,7 +269,7 @@ public class UserManageController extends ControllerBase {
     public Result<List<? extends TokenInfo>> getInfoByTokenLimit(long id, @RequestParam(required = false, defaultValue = "false") boolean extra) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         if (extra) {
             return Result.o(t4s.getInfoExtraById(id));
@@ -384,10 +384,10 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
-            return Result.e(ResultEnum.USER_NOT_LOGIN);
+            return Result.e(ResultCode.USER_NOT_LOGIN);
         }
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         if (timeout == -1) {
             return Result.o(t4s.expire(token));
@@ -421,10 +421,10 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
-            return Result.e(ResultEnum.USER_NOT_LOGIN);
+            return Result.e(ResultCode.USER_NOT_LOGIN);
         }
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         return Result.o(t4s.persist(token));
     }
@@ -450,10 +450,10 @@ public class UserManageController extends ControllerBase {
         // 只能管理自己创建的用户
         Long id = t4s.getId(token);
         if (id == null) {
-            return Result.e(ResultEnum.USER_NOT_LOGIN);
+            return Result.e(ResultCode.USER_NOT_LOGIN);
         }
         if (!userService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         if (extra.isEmpty()) {
             return Result.o(t4s.clearExtra(token));
@@ -485,7 +485,7 @@ public class UserManageController extends ControllerBase {
     public Result<PageInfo<LoginLogVo>> getLoginLogLimit(@RequestBody LoginLogVo loginLog) {
         // 只能管理自己创建的用户
         if (loginLog.getCreateId() == null || !userService.existIdAndCreateId(loginLog.getCreateId(), UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         return Result.o(loginLogService.findPage(loginLog));
     }

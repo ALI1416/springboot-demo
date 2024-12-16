@@ -1,6 +1,6 @@
 package com.demo.entity.pojo;
 
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import lombok.Getter;
 
 /**
@@ -19,53 +19,79 @@ public class GlobalException extends RuntimeException {
     /**
      * 统一返回状态枚举
      */
-    private final ResultEnum resultEnum;
-    /**
-     * 错误信息
-     */
-    private final String msg;
+    private final ResultCode resultCode;
 
     /**
-     * 构造函数
+     * 全局异常
      */
     public GlobalException() {
         super();
-        this.resultEnum = ResultEnum.ERROR;
-        this.msg = null;
+        this.resultCode = ResultCode.ERROR;
     }
 
     /**
-     * 构造函数
+     * 全局异常
      *
-     * @param msg 错误信息
+     * @param message 详细信息
      */
-    public GlobalException(String msg) {
-        super(msg);
-        this.resultEnum = ResultEnum.ERROR;
-        this.msg = msg;
+    public GlobalException(String message) {
+        super(message);
+        this.resultCode = ResultCode.ERROR;
     }
 
     /**
-     * 构造函数
+     * 全局异常
      *
-     * @param resultEnum 统一返回状态枚举
+     * @param cause 原因
      */
-    public GlobalException(ResultEnum resultEnum) {
-        super(resultEnum.name() + "[" + resultEnum.getMsg() + "]");
-        this.resultEnum = resultEnum;
-        this.msg = null;
+    public GlobalException(Throwable cause) {
+        super(cause);
+        this.resultCode = ResultCode.ERROR;
     }
 
     /**
-     * 构造函数
+     * 全局异常
      *
-     * @param resultEnum 统一返回状态枚举
-     * @param msg        错误信息
+     * @param resultCode 统一返回状态枚举
      */
-    public GlobalException(ResultEnum resultEnum, String msg) {
-        super(resultEnum.name() + "[" + resultEnum.getMsg() + "]:" + msg);
-        this.resultEnum = resultEnum;
-        this.msg = msg;
+    public GlobalException(ResultCode resultCode) {
+        super(resultCode.getMessage());
+        this.resultCode = resultCode;
+    }
+
+    /**
+     * 全局异常
+     *
+     * @param message 详细信息
+     * @param cause   原因
+     */
+    public GlobalException(String message, Throwable cause) {
+        super(message, cause);
+        this.resultCode = ResultCode.ERROR;
+    }
+
+    /**
+     * 全局异常
+     *
+     * @param resultCode 统一返回状态枚举
+     * @param message    详细信息
+     */
+    public GlobalException(ResultCode resultCode, String message) {
+        super(message);
+        this.resultCode = resultCode;
+    }
+
+    /**
+     * 全局异常
+     *
+     * @param message            详细信息
+     * @param cause              原因
+     * @param enableSuppression  是否启用抑制
+     * @param writableStackTrace 堆栈跟踪是否为可写的
+     */
+    protected GlobalException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+        this.resultCode = ResultCode.ERROR;
     }
 
 }

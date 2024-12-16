@@ -23,8 +23,8 @@ public class IndexController {
     private final MailTemp mailTemp;
 
     /**
-     * http://localhost:8080/text <br>
-     * 普通邮件
+     * 普通邮件<br>
+     * http://localhost:8080/text
      */
     @GetMapping("text")
     public Result index() {
@@ -33,8 +33,8 @@ public class IndexController {
     }
 
     /**
-     * http://localhost:8080/html <br>
-     * HTML邮件
+     * HTML邮件<br>
+     * http://localhost:8080/html
      */
     @GetMapping("html")
     public Result html() {

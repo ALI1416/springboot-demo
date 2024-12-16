@@ -24,22 +24,18 @@ public class User extends ToStringBase {
      * 账号
      */
     private String account;
-
     /**
      * 用户名
      */
     private String name;
-
     /**
      * 出生年
      */
     private int year;
-
     /**
      * 性别
      */
     private Boolean gender;
-
     /**
      * 日期
      */

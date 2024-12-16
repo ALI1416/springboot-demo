@@ -63,8 +63,8 @@ public class RabbitService2 {
      * 广播模型<br>
      * 消费者2
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
-            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = RabbitExchange.BROADCAST, autoDelete = "true") //
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue,
+            exchange = @Exchange(type = ExchangeTypes.FANOUT, value = RabbitExchange.BROADCAST, autoDelete = "true")
     )})
     public void broadcast2(Long id) {
         log.info("广播模型消费者2 {}", id);
@@ -74,7 +74,7 @@ public class RabbitService2 {
      * 路由模型<br>
      * 消费者1
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue,
             exchange = @Exchange(type = ExchangeTypes.DIRECT, value = RabbitExchange.ROUTE, autoDelete = "true"), // 类型：默认路由模型
             key = {"error", "warn", "info", "trace", "debug"} // 可接收的路由key
     )})
@@ -86,9 +86,9 @@ public class RabbitService2 {
      * 路由模型<br>
      * 消费者2
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
-            exchange = @Exchange(value = RabbitExchange.ROUTE, autoDelete = "true"), //
-            key = {"error", "warn"} //
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue,
+            exchange = @Exchange(value = RabbitExchange.ROUTE, autoDelete = "true"),
+            key = {"error", "warn"}
     )})
     public void route2(String message) {
         log.info("路由模型消费者2 {}", message);
@@ -98,7 +98,7 @@ public class RabbitService2 {
      * 动态路由模型<br>
      * 消费者1
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue,
             exchange = @Exchange(type = ExchangeTypes.TOPIC, value = RabbitExchange.DYNAMIC_ROUTE, autoDelete = "true"), // 类型：动态路由模型
             key = {"user", "admin.*", "root.#"} // 可接收的路由key，用.划分层次，*匹配1个层次，#匹配0个及以上层次
     )})
@@ -110,9 +110,9 @@ public class RabbitService2 {
      * 动态路由模型<br>
      * 消费者2
      */
-    @RabbitListener(bindings = {@QueueBinding(value = @Queue, //
-            exchange = @Exchange(type = ExchangeTypes.TOPIC, value = RabbitExchange.DYNAMIC_ROUTE, autoDelete = "true"), //
-            key = {"admin", "root.*"} //
+    @RabbitListener(bindings = {@QueueBinding(value = @Queue,
+            exchange = @Exchange(type = ExchangeTypes.TOPIC, value = RabbitExchange.DYNAMIC_ROUTE, autoDelete = "true"),
+            key = {"admin", "root.*"}
     )})
     public void dynamicRoute2(String message) {
         log.info("动态路由模型消费者2 {}", message);

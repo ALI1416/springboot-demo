@@ -3,7 +3,7 @@ package com.demo.controller;
 import cn.z.id.Id;
 import cn.z.tinytoken.UserInfo;
 import com.demo.base.ControllerBase;
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleRouteVo;
@@ -49,7 +49,7 @@ public class RoleController extends ControllerBase {
     @Operation(summary = "创建角色", description = "需要登录/name/seq<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody RoleVo role) {
         if (existNull(role.getName(), role.getSeq())) {
-            return paramIsError();
+            return paramError();
         }
         role.setCreateId(UserInfo.getId());
         return Result.o(roleService.insert(role));
@@ -64,7 +64,7 @@ public class RoleController extends ControllerBase {
     public Result<Boolean> deleteLimit(long id) {
         // 只能管理自己创建的角色
         if (!roleService.existIdAndCreateId(id, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         boolean ok = roleService.delete(id);
         // 刷新缓存
@@ -96,11 +96,11 @@ public class RoleController extends ControllerBase {
     @Operation(summary = "修改角色(限制)", description = "需要登录/id 至少一个name/seq")
     public Result<Boolean> updateLimit(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
-            return paramIsError();
+            return paramError();
         }
         // 只能管理自己创建的角色
         if (!roleService.existIdAndCreateId(role.getId(), UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.update(role));
     }
@@ -112,7 +112,7 @@ public class RoleController extends ControllerBase {
     @Operation(summary = "修改角色", description = "需要id 至少一个name/seq")
     public Result<Boolean> update(@RequestBody RoleVo role) {
         if (isNull(role.getId()) && !allNull(role.getName(), role.getSeq())) {
-            return paramIsError();
+            return paramError();
         }
         return Result.o(roleService.update(role));
     }
@@ -126,12 +126,12 @@ public class RoleController extends ControllerBase {
         Long roleId = role.getId();
         List<Long> routeIdList = role.getRouteIdList();
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
-            return paramIsError();
+            return paramError();
         }
         long userId = UserInfo.getId();
         // 只能管理自己创建的角色 只能管理自己有权限的路由
         if (!roleService.existIdAndCreateId(roleId, userId) && !routeService.findIdAndChildIdByUserId(userId).containsAll(routeIdList)) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         List<RoleRouteVo> roleRouteList = new ArrayList<>();
         for (Long id : routeIdList) {
@@ -158,7 +158,7 @@ public class RoleController extends ControllerBase {
         Long roleId = role.getId();
         List<Long> routeIdList = role.getRouteIdList();
         if (existNull(roleId, routeIdList) || routeIdList.isEmpty()) {
-            return paramIsError();
+            return paramError();
         }
         List<RoleRouteVo> roleRouteList = new ArrayList<>();
         for (Long id : routeIdList) {
@@ -203,7 +203,7 @@ public class RoleController extends ControllerBase {
     public Result<PageInfo<RoleVo>> userLimit(long userId, Integer pages, Integer rows, String orderBy) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(userId, UserInfo.getId())) {
-            return Result.e(ResultEnum.INSUFFICIENT_PERMISSION);
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));
     }
@@ -216,7 +216,7 @@ public class RoleController extends ControllerBase {
     @Parameter(name = "userId", description = "用户id")
     public Result<PageInfo<RoleVo>> user(long userId, Integer pages, Integer rows, String orderBy) {
         if (!userService.existId(userId)) {
-            return Result.e(ResultEnum.USER_NOT_EXIST);
+            return Result.e(ResultCode.USER_NOT_EXIST);
         }
         return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));
     }
