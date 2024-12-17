@@ -1,7 +1,7 @@
 package com.demo.controller;
 
 import com.demo.base.ControllerBase;
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RouteVo;
@@ -43,7 +43,7 @@ public class RouteController extends ControllerBase {
     @Operation(summary = "创建路由", description = "需要path/name/seq/parentId<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody RouteVo route) {
         if (existNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
-            return paramIsError();
+            return paramError();
         }
         long ok = routeService.insert(route);
         // 刷新缓存
@@ -60,7 +60,7 @@ public class RouteController extends ControllerBase {
     @Operation(summary = "修改路由", description = "需要id 至少一个path/name/seq/parentId")
     public Result<Boolean> update(@RequestBody RouteVo route) {
         if (isNull(route.getId()) && !allNull(route.getPath(), route.getName(), route.getSeq(), route.getParentId())) {
-            return paramIsError();
+            return paramError();
         }
         boolean ok = routeService.update(route);
         // 刷新缓存
@@ -93,7 +93,7 @@ public class RouteController extends ControllerBase {
     @Parameter(name = "roleId", description = "角色id")
     public Result<RouteVo> role(long roleId) {
         if (!roleService.existId(roleId)) {
-            return Result.e(ResultEnum.ROLE_NOT_EXIST);
+            return Result.e(ResultCode.ROLE_NOT_EXIST);
         }
         return Result.o(routeService.findByRoleId(roleId));
     }
@@ -106,7 +106,7 @@ public class RouteController extends ControllerBase {
     @Parameter(name = "userId", description = "用户id")
     public Result<RouteVo> user(long userId) {
         if (!userService.existId(userId)) {
-            return Result.e(ResultEnum.USER_NOT_EXIST);
+            return Result.e(ResultCode.USER_NOT_EXIST);
         }
         return Result.o(routeService.findByUserId(userId));
     }

@@ -10,10 +10,10 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.io.IOException;
@@ -33,8 +33,8 @@ import java.io.IOException;
  * @since 1.0.0
  **/
 @Slf4j
+@ControllerAdvice
 @RestController
-@RestControllerAdvice
 public class GlobalExceptionHandler implements ErrorController {
 
     /**

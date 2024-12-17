@@ -1,6 +1,5 @@
 package com.demo.controller;
 
-import com.demo.base.ControllerBase;
 import com.demo.entity.bak.UserBak;
 import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
@@ -24,7 +23,7 @@ import java.util.List;
  **/
 @RestController
 @AllArgsConstructor
-public class UserController extends ControllerBase {
+public class UserController {
 
     private final UserService userService;
 

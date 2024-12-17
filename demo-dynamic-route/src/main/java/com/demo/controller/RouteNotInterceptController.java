@@ -37,7 +37,7 @@ public class RouteNotInterceptController extends ControllerBase {
     public Result<Long> create(@RequestBody RouteNotInterceptVo routeNotIntercept) {
         if (existNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), //
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
-            return paramIsError();
+            return paramError();
         }
         long ok = routeNotInterceptService.insert(routeNotIntercept);
         // 刷新缓存
@@ -70,7 +70,7 @@ public class RouteNotInterceptController extends ControllerBase {
     public Result<Boolean> update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
         if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), //
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
-            return paramIsError();
+            return paramError();
         }
         boolean ok = routeNotInterceptService.update(routeNotIntercept);
         // 刷新缓存

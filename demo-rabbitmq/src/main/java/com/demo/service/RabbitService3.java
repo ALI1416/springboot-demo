@@ -52,8 +52,8 @@ public class RabbitService3 {
     /**
      * 死信测试2
      */
-    @RabbitListener(queuesToDeclare = @Queue( //
-            value = RabbitQueue.DEAD_LETTER_TEST2, autoDelete = "true", //
+    @RabbitListener(queuesToDeclare = @Queue(
+            value = RabbitQueue.DEAD_LETTER_TEST2, autoDelete = "true",
             arguments = { // 参数
                     @Argument(name = "x-dead-letter-exchange", value = ""), // 死信交换机
                     @Argument(name = "x-dead-letter-routing-key", value = RabbitQueue.DEAD_LETTER), // 死信队列

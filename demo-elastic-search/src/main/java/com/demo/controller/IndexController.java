@@ -170,9 +170,9 @@ public class IndexController {
 
     /**
      * 搜索<br>
-     * http://localhost:8080/search?index=a&field=content&value=ali <br>
-     * http://localhost:8080/search?index=a&field=content&value=ali&pages=1&rows=10 <br>
-     * http://localhost:8080/search?index=a&field=content&value=ali <br>
+     * http://localhost:8080/search?index=a&field=content&value=ali<br>
+     * http://localhost:8080/search?index=a&field=content&value=ali&pages=1&rows=10<br>
+     * http://localhost:8080/search?index=a&field=content&value=ali<br>
      * http://localhost:8080/search?index=a&field=content&value=ali&preTag=<span style='color:red'>&postTag=</span>
      */
     @GetMapping("/search")
@@ -187,8 +187,8 @@ public class IndexController {
 
     /**
      * 分析<br>
-     * http://localhost:8080/analyze?index=a&analyzer=standard&text=ali abc <br>
-     * http://localhost:8080/analyze?index=a&analyzer=ik_smart&text=山东省济宁市任城区石桥镇栗河涯村平安街十六号 <br>
+     * http://localhost:8080/analyze?index=a&analyzer=standard&text=ali abc<br>
+     * http://localhost:8080/analyze?index=a&analyzer=ik_smart&text=山东省济宁市任城区石桥镇栗河涯村平安街十六号<br>
      * http://localhost:8080/analyze?index=a&analyzer=ik_max_word&text=山东省济宁市任城区石桥镇栗河涯村平安街十六号
      */
     @GetMapping("/analyze")

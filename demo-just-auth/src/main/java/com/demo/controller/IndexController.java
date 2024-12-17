@@ -30,12 +30,13 @@ public class IndexController {
     /**
      * Request
      */
-    private final AuthRequest request = new AuthQqRequest(//
-            AuthConfig.builder()//
-                    .clientId(Constant.QQ_APP_ID)//
-                    .clientSecret(Constant.QQ_APP_KEY)//
-                    .redirectUri(Constant.QQ_CALLBACK_URL)//
-                    .build());
+    private final AuthRequest request = new AuthQqRequest(
+            AuthConfig.builder()
+                    .clientId(Constant.QQ_APP_ID)
+                    .clientSecret(Constant.QQ_APP_KEY)
+                    .redirectUri(Constant.QQ_CALLBACK_URL)
+                    .build()
+    );
 
     /**
      * 授权地址

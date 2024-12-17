@@ -1,12 +1,12 @@
 package com.demo.entity.pojo;
 
 import com.demo.base.ToStringBase;
-import com.demo.constant.ResultEnum;
+import com.demo.constant.ResultCode;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <h1>统一返回</h1>
+ * <h1>结果</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
@@ -26,56 +26,53 @@ public class Result<T> extends ToStringBase {
     /**
      * 状态码
      *
-     * @see ResultEnum
+     * @see ResultCode
      */
     private int code;
     /**
-     * 状态信息
+     * 详细信息
      */
-    private String msg;
+    private String message;
     /**
      * 数据
      */
     private T data;
 
     /**
-     * 构造函数
+     * 构造结果
      */
     public Result() {
     }
 
     /**
-     * 构造函数
+     * 构造结果
      *
-     * @param resultEnum 统一返回状态枚举
-     * @param data       数据
+     * @param code    状态码
+     * @param message 详细信息
+     * @param data    数据
      */
-    public Result(ResultEnum resultEnum, T data) {
-        this.code = resultEnum.getCode();
-        this.msg = resultEnum.getMsg();
+    public Result(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
         this.data = data;
-        this.ok = (this.code == ResultEnum.OK.getCode());
+        this.ok = (this.code == ResultCode.OK.getCode());
     }
 
     /**
-     * 构造函数
+     * 构造结果
      *
-     * @param code 状态码
-     * @param msg  状态信息
-     * @param data 数据
+     * @param resultCode 状态码
+     * @param data       数据
      */
-    public Result(int code, String msg, T data) {
-        this.code = code;
-        this.msg = msg;
-        this.data = data;
-        this.ok = (this.code == ResultEnum.OK.getCode());
+    public Result(ResultCode resultCode, T data) {
+        this(resultCode.getCode(), resultCode.getMessage(), data);
     }
 
     /**
      * 成功
      */
     public static Result o() {
-        return new Result(ResultEnum.OK, null);
+        return new Result(ResultCode.OK, null);
     }
 
     /**
@@ -84,54 +81,54 @@ public class Result<T> extends ToStringBase {
      * @param data 数据
      */
     public static <T> Result<T> o(T data) {
-        return new Result<>(ResultEnum.OK, data);
+        return new Result<>(ResultCode.OK, data);
     }
 
     /**
      * 成功
      *
-     * @param msg  状态信息
-     * @param data 数据
+     * @param message 详细信息
+     * @param data    数据
      */
-    public static <T> Result<T> o(String msg, T data) {
-        return new Result<>(ResultEnum.OK.getCode(), msg, data);
+    public static <T> Result<T> o(String message, T data) {
+        return new Result<>(ResultCode.OK.getCode(), message, data);
     }
 
     /**
-     * 未知错误
+     * 错误
      */
     public static Result e() {
-        return new Result(ResultEnum.ERROR, null);
+        return new Result(ResultCode.ERROR, null);
     }
 
     /**
      * 错误
      *
-     * @param resultEnum 统一返回状态枚举
+     * @param resultCode 状态码
      */
-    public static Result e(ResultEnum resultEnum) {
-        return new Result(resultEnum, null);
+    public static Result e(ResultCode resultCode) {
+        return new Result(resultCode, null);
     }
 
     /**
      * 错误
      *
-     * @param resultEnum 统一返回状态枚举
+     * @param resultCode 状态码
      * @param data       数据
      */
-    public static <T> Result<T> e(ResultEnum resultEnum, T data) {
-        return new Result<>(resultEnum, data);
+    public static <T> Result<T> e(ResultCode resultCode, T data) {
+        return new Result<>(resultCode, data);
     }
 
     /**
      * 错误
      *
-     * @param resultEnum 统一返回状态枚举
-     * @param msg        状态信息
+     * @param resultCode 状态码
+     * @param message    详细信息
      * @param data       数据
      */
-    public static <T> Result<T> e(ResultEnum resultEnum, String msg, T data) {
-        return new Result<>(resultEnum.getCode(), msg, data);
+    public static <T> Result<T> e(ResultCode resultCode, String message, T data) {
+        return new Result<>(resultCode.getCode(), message, data);
     }
 
 }

@@ -19,10 +19,9 @@ import lombok.Setter;
 public class Car extends ToStringBase {
 
     /**
-     * 名字
+     * 名称
      */
     private String name;
-
     /**
      * 颜色
      */
