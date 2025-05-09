@@ -21,3 +21,7 @@ logging:
 #knife4j:
 #  enable: true
 #  production: true
+
+#等待Knife4j升级版本，临时解决方案
+knife4j:
+  enable: false
