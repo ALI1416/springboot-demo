@@ -39,7 +39,7 @@
     <!--继承父依赖不可修改版本号-->
     <!--SpringBoot-->
     <!--org.springframework.boot:spring-boot-starter-->
-    <springboot.version>3.4.5</springboot.version>
+    <springboot.version>3.5.0</springboot.version>
 
     <!--SpringBoot Web-->
     <!--org.springframework.boot:spring-boot-starter-web-->
@@ -65,7 +65,7 @@
 
     <!--Maven编译插件-->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
-    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
 
     <!--MongoDB-->
     <!--org.springframework.boot:spring-boot-starter-data-mongodb-->
@@ -108,7 +108,7 @@
 
     <!--InfluxDB-->
     <!--com.influxdb:influxdb-client-java-->
-    <influx.version>7.2.0</influx.version>
+    <influx.version>7.3.0</influx.version>
 
     <!--Tika-->
     <!--org.apache.tika:tika-core-->

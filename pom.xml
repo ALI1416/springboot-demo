@@ -18,7 +18,7 @@
     <!--org.springframework.boot:spring-boot-starter-parent-->
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.4.5</version>
+    <version>3.5.0</version>
   </parent>
 
   <modules>
@@ -140,7 +140,7 @@
 
     <!--InfluxDB-->
     <!--com.influxdb:influxdb-client-java-->
-    <influx.version>7.2.0</influx.version>
+    <influx.version>7.3.0</influx.version>
 
     <!--MyBatis-->
     <!--org.mybatis.spring.boot:mybatis-spring-boot-starter-->
@@ -178,11 +178,11 @@
     <!--com.google.protobuf:protobuf-java-->
     <!--Protocol Buffers Util-->
     <!--com.google.protobuf:protobuf-java-util-->
-    <protobuf.version>4.30.2</protobuf.version>
+    <protobuf.version>4.31.0</protobuf.version>
 
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
-    <hutool.version>5.8.37</hutool.version>
+    <hutool.version>5.8.38</hutool.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->
