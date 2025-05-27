@@ -35,12 +35,12 @@ public class UserService extends ServiceBase {
     /**
      * 注册
      *
-     * @param user account,name,pwd,createId
+     * @param user account,name,password,createId
      * @return ok:id,e:0
      */
     @Transactional
     public long register(UserVo user) {
-        user.setPwd(BCrypt.encode(user.getPwd()));
+        user.setPassword(BCrypt.encode(user.getPassword()));
         return userDao.insert(user);
     }
 
@@ -87,13 +87,13 @@ public class UserService extends ServiceBase {
     /**
      * 修改用户信息
      *
-     * @param user id(必须),account,pwd,name,isDelete(至少1个)
+     * @param user id(必须),account,password,name,isDelete(至少1个)
      * @return 是否成功
      */
     @Transactional
     public boolean update(UserVo user) {
-        if (user.getPwd() != null) {
-            user.setPwd(BCrypt.encode(user.getPwd()));
+        if (user.getPassword() != null) {
+            user.setPassword(BCrypt.encode(user.getPassword()));
         }
         return userDao.update(user);
     }

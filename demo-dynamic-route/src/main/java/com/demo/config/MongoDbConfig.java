@@ -27,8 +27,8 @@ public class MongoDbConfig {
      */
     @Bean
     public MongoCustomConversions date2Timestamp() {
-        return MongoCustomConversions.create(mongoConverterConfigurationAdapter -> //
-                mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter()) //
+        return MongoCustomConversions.create(mongoConverterConfigurationAdapter ->
+                mongoConverterConfigurationAdapter.registerConverter(new Date2TimestampConverter())
         );
     }
 

@@ -47,9 +47,9 @@ public class UserManageController extends ControllerBase {
      * 创建用户
      */
     @PostMapping("create")
-    @Operation(summary = "创建用户", description = "需要登录/account/name/pwd<br>响应：成功id/失败0")
+    @Operation(summary = "创建用户", description = "需要登录/account/name/password<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody UserVo user) {
-        if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
+        if (existNull(user.getAccount(), user.getName(), user.getPassword())) {
             return paramError();
         }
         user.setCreateId(UserInfo.getId());
@@ -63,9 +63,9 @@ public class UserManageController extends ControllerBase {
      * 修改用户信息(限制)
      */
     @PatchMapping("updateLimit")
-    @Operation(summary = "修改用户信息(限制)", description = "需要登录/id 至少一个account/name/pwd/isDelete")
+    @Operation(summary = "修改用户信息(限制)", description = "需要登录/id 至少一个account/name/password/isDelete")
     public Result<Boolean> updateLimit(@RequestBody UserVo user) {
-        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
+        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPassword(), user.getIsDelete())) {
             return paramError();
         }
         // 只能管理自己创建的用户
@@ -82,9 +82,9 @@ public class UserManageController extends ControllerBase {
      * 修改用户信息
      */
     @PatchMapping("update")
-    @Operation(summary = "修改用户信息", description = "需要id 至少一个account/name/pwd/isDelete")
+    @Operation(summary = "修改用户信息", description = "需要id 至少一个account/name/password/isDelete")
     public Result<Boolean> update(@RequestBody UserVo user) {
-        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPwd(), user.getIsDelete())) {
+        if (isNull(user.getId()) && !allNull(user.getName(), user.getAccount(), user.getPassword(), user.getIsDelete())) {
             return paramError();
         }
         if (user.getAccount() != null && userService.existAccount(user.getAccount())) {

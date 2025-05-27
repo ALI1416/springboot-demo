@@ -11,8 +11,6 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      max-lifetime: 60000
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml

@@ -48,9 +48,9 @@ public class UserController extends ControllerBase {
      * 用户登录
      */
     @PostMapping("login")
-    @Operation(summary = "用户登录", description = "需要account/pwd")
+    @Operation(summary = "用户登录", description = "需要account/password")
     public Result<UserVo> login(@RequestBody UserVo user) {
-        if (existNull(user.getAccount(), user.getPwd())) {
+        if (existNull(user.getAccount(), user.getPassword())) {
             return paramError();
         }
         UserVo u = userService.findByAccount(user.getAccount());
@@ -58,8 +58,8 @@ public class UserController extends ControllerBase {
             if (Boolean.TRUE.equals(u.getIsDelete())) {
                 return Result.e(ResultCode.ACCOUNT_DISABLE);
             }
-            if (BCrypt.check(user.getPwd(), u.getPwd())) {
-                u.setPwd(null);
+            if (BCrypt.check(user.getPassword(), u.getPassword())) {
+                u.setPassword(null);
                 u.setToken(t4s.setToken(u.getId()));
                 // 登录日志
                 loginLogService.insert(u.getId(), u.getToken(), request);
@@ -82,9 +82,9 @@ public class UserController extends ControllerBase {
      * 用户注册
      */
     @PostMapping("register")
-    @Operation(summary = "用户注册", description = "需要account/name/pwd<br>响应：成功id/失败0")
+    @Operation(summary = "用户注册", description = "需要account/name/password<br>响应：成功id/失败0")
     public Result<Long> register(@RequestBody UserVo user) {
-        if (existNull(user.getAccount(), user.getName(), user.getPwd())) {
+        if (existNull(user.getAccount(), user.getName(), user.getPassword())) {
             return paramError();
         }
         user.setCreateId(0L);
@@ -97,20 +97,20 @@ public class UserController extends ControllerBase {
     /**
      * 用户修改密码
      */
-    @PatchMapping("updatePwd")
-    @Operation(summary = "用户修改密码", description = "需要登录/pwd/newPwd")
-    public Result<Boolean> updatePwd(@RequestBody UserVo user) {
-        if (existNull(user.getPwd(), user.getNewPwd())) {
+    @PatchMapping("updatePassword")
+    @Operation(summary = "用户修改密码", description = "需要登录/password/newPassword")
+    public Result<Boolean> updatePassword(@RequestBody UserVo user) {
+        if (existNull(user.getPassword(), user.getNewPassword())) {
             return paramError();
         }
         user.setId(UserInfo.getId());
         User u = userService.findById(user.getId());
-        if (!BCrypt.check(user.getPwd(), u.getPwd())) {
+        if (!BCrypt.check(user.getPassword(), u.getPassword())) {
             return Result.e(ResultCode.PASSWORD_ERROR);
         }
         UserVo u2 = new UserVo();
         u2.setId(user.getId());
-        u2.setPwd(user.getNewPwd());
+        u2.setPassword(user.getNewPassword());
         return Result.o(userService.update(u2));
     }
 
@@ -137,7 +137,7 @@ public class UserController extends ControllerBase {
     @Operation(summary = "获取用户信息", description = "需要登录")
     public Result<UserVo> get() {
         UserVo user = userService.findById(UserInfo.getId());
-        user.setPwd(null);
+        user.setPassword(null);
         return Result.o(user);
     }
 

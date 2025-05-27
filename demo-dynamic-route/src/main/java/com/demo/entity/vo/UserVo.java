@@ -26,7 +26,7 @@ public class UserVo extends User {
      * 新密码
      */
     @Schema(description = "新密码")
-    private String newPwd;
+    private String newPassword;
     /**
      * 角色id列表
      */

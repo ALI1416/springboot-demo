@@ -110,7 +110,7 @@ INSERT INTO `route` VALUES (1000, 'user', '用户', 0, 0);
 INSERT INTO `route` VALUES (1001, 'login', '用户登录', 0, 1000);
 INSERT INTO `route` VALUES (1002, 'logout', '用户注销', 1, 1000);
 INSERT INTO `route` VALUES (1003, 'register', '用户注册', 2, 1000);
-INSERT INTO `route` VALUES (1004, 'updatePwd', '用户修改密码', 3, 1000);
+INSERT INTO `route` VALUES (1004, 'updatePassword', '用户修改密码', 3, 1000);
 INSERT INTO `route` VALUES (1005, 'update', '用户修改信息(除密码、删除)', 4, 1000);
 INSERT INTO `route` VALUES (1006, 'get', '获取用户信息', 5, 1000);
 INSERT INTO `route` VALUES (1007, 'role', '获取用户角色', 6, 1000);
@@ -198,7 +198,7 @@ INSERT INTO `route_not_intercept` VALUES (1, '/avatar', '查看用户头像', 1,
 INSERT INTO `route_not_intercept` VALUES (1000, '/user/login', '用户登录', 0, 0, 2);
 INSERT INTO `route_not_intercept` VALUES (1001, '/user/logout', '用户注销', 0, 1, 3);
 INSERT INTO `route_not_intercept` VALUES (1002, '/user/register', '用户注册', 0, 0, 4);
-INSERT INTO `route_not_intercept` VALUES (1003, '/user/updatePwd', '用户修改密码', 0, 1, 5);
+INSERT INTO `route_not_intercept` VALUES (1003, '/user/updatePassword', '用户修改密码', 0, 1, 5);
 INSERT INTO `route_not_intercept` VALUES (1004, '/user/update', '用户修改信息(除密码、删除)', 0, 1, 6);
 INSERT INTO `route_not_intercept` VALUES (1005, '/user/get', '获取用户信息', 0, 1, 7);
 INSERT INTO `route_not_intercept` VALUES (1006, '/user/role', '获取用户角色', 0, 1, 8);
@@ -213,7 +213,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` bigint UNSIGNED NOT NULL COMMENT 'id',
   `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '账号：唯一',
-  `pwd` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '密码',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户名',
   `is_delete` tinyint UNSIGNED NOT NULL DEFAULT 0 COMMENT '已删除',
   `create_id` bigint UNSIGNED NOT NULL DEFAULT 0 COMMENT '创建者id：外键user.id',
