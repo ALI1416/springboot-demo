@@ -6,7 +6,6 @@ import com.demo.base.ServiceBase;
 import com.demo.constant.RedisConstant;
 import com.demo.dao.mysql.RouteNotInterceptDao;
 import com.demo.entity.po.RouteNotIntercept;
-import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -78,10 +77,10 @@ public class RouteNotInterceptService extends ServiceBase {
     /**
      * 获取所有
      *
-     * @return PageInfo RouteNotInterceptVo
+     * @return List RouteNotInterceptVo
      */
-    public PageInfo<RouteNotInterceptVo> findAll(Integer pages, Integer rows, String orderBy) {
-        return pagination(routeNotInterceptDao::findAll, pages, rows, orderBy);
+    public List<RouteNotInterceptVo> findAll() {
+        return routeNotInterceptDao.findAll();
     }
 
     /**

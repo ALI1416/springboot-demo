@@ -7,7 +7,7 @@ spring:
       max-file-size: 4GB
       max-request-size: 4GB
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/demo?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/dynamic-route?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,7 +15,7 @@ spring:
     mongodb:
       host: 127.0.0.1
       port: 27017
-      database: demo2
+      database: dynamic-route
       # username:
       # password:
       auto-index-creation: true

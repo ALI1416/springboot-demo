@@ -4,7 +4,6 @@ import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.UserRoleDao;
-import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import lombok.AllArgsConstructor;
@@ -78,20 +77,20 @@ public class RoleService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @return PageInfo RoleVo
+     * @return List RoleVo
      */
-    public PageInfo<RoleVo> findAll(Integer pages, Integer rows, String orderBy) {
-        return pagination(roleDao::findAll, pages, rows, orderBy);
+    public List<RoleVo> findAll() {
+        return roleDao.findAll();
     }
 
     /**
      * 查询，通过创建者id
      *
      * @param createId createId
-     * @return PageInfo RoleVo
+     * @return List RoleVo
      */
-    public PageInfo<RoleVo> findByCreateId(long createId, Integer pages, Integer rows, String orderBy) {
-        return pagination(() -> roleDao.findByCreateId(createId), pages, rows, orderBy);
+    public List<RoleVo> findByCreateId(long createId) {
+        return roleDao.findByCreateId(createId);
     }
 
     /**

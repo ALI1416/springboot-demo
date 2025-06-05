@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 80029
  Source Host           : localhost:3306
- Source Schema         : demo
+ Source Schema         : dynamic-route
 
  Target Server Type    : MySQL
  Target Server Version : 80029
@@ -172,7 +172,7 @@ INSERT INTO `route` VALUES (5001, 'create', '创建路由不拦截', 0, 5000);
 INSERT INTO `route` VALUES (5002, 'delete', '删除路由不拦截', 1, 5000);
 INSERT INTO `route` VALUES (5003, 'update', '修改路由不拦截', 2, 5000);
 INSERT INTO `route` VALUES (5004, 'get', '获取路由不拦截', 3, 5000);
-INSERT INTO `route` VALUES (5005, 'list', '获取缓存路由不拦截', 4, 5000);
+INSERT INTO `route` VALUES (5005, 'list', '获取路由不拦截列表', 4, 5000);
 
 -- ----------------------------
 -- Table structure for route_not_intercept
@@ -204,7 +204,7 @@ INSERT INTO `route_not_intercept` VALUES (1005, '/user/get', '获取用户信息
 INSERT INTO `route_not_intercept` VALUES (1006, '/user/role', '获取用户角色', 0, 1, 8);
 INSERT INTO `route_not_intercept` VALUES (1007, '/user/route', '获取用户路由', 0, 1, 9);
 INSERT INTO `route_not_intercept` VALUES (1008, '/user/avatar', '获取用户头像', 0, 1, 10);
-INSERT INTO `route_not_intercept` VALUES (2000, '/routeNotIntercept/list', '获取缓存路由不拦截', 0, 0, 11);
+INSERT INTO `route_not_intercept` VALUES (2000, '/routeNotIntercept/list', '获取路由不拦截列表', 0, 0, 11);
 
 -- ----------------------------
 -- Table structure for user
