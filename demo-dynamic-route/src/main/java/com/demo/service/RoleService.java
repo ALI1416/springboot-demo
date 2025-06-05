@@ -95,13 +95,23 @@ public class RoleService extends ServiceBase {
     }
 
     /**
+     * 查询id，通过用户id
+     *
+     * @param userId userId
+     * @return List Long
+     */
+    public List<Long> findIdByUserId(long userId) {
+        return roleDao.findIdByUserId(userId);
+    }
+
+    /**
      * 查询，通过用户id
      *
      * @param userId userId
-     * @return PageInfo RoleVo
+     * @return List RoleVo
      */
-    public PageInfo<RoleVo> findByUserId(long userId, Integer pages, Integer rows, String orderBy) {
-        return pagination(() -> roleDao.findByUserId(userId), pages, rows, orderBy);
+    public List<RoleVo> findByUserId(long userId) {
+        return roleDao.findByUserId(userId);
     }
 
     /**

@@ -166,7 +166,7 @@ public class UserService extends ServiceBase {
      * @return PageInfo UserVo
      */
     public PageInfo<UserVo> findAll(Integer pages, Integer rows, String orderBy) {
-        return pagination(() -> userDao.findAll(), pages, rows, orderBy);
+        return pagination(userDao::findAll, pages, rows, orderBy);
     }
 
     /**

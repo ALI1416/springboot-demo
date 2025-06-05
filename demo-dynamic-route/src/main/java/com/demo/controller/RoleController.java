@@ -200,12 +200,12 @@ public class RoleController extends ControllerBase {
     @GetMapping("userLimit")
     @Operation(summary = "获取用户的角色(限制)", description = "需要登录")
     @Parameter(name = "userId", description = "用户id")
-    public Result<PageInfo<RoleVo>> userLimit(long userId, Integer pages, Integer rows, String orderBy) {
+    public Result<List<RoleVo>> userLimit(long userId) {
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(userId, UserInfo.getId())) {
             return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
-        return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));
+        return Result.o(roleService.findByUserId(userId));
     }
 
     /**
@@ -214,11 +214,11 @@ public class RoleController extends ControllerBase {
     @GetMapping("user")
     @Operation(summary = "获取用户的角色")
     @Parameter(name = "userId", description = "用户id")
-    public Result<PageInfo<RoleVo>> user(long userId, Integer pages, Integer rows, String orderBy) {
+    public Result<List<RoleVo>> user(long userId) {
         if (!userService.existId(userId)) {
             return Result.e(ResultCode.USER_NOT_EXIST);
         }
-        return Result.o(roleService.findByUserId(userId, pages, rows, orderBy));
+        return Result.o(roleService.findByUserId(userId));
     }
 
 }

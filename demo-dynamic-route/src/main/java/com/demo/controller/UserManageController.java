@@ -11,6 +11,7 @@ import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.LoginLogVo;
 import com.demo.entity.vo.UserVo;
 import com.demo.service.LoginLogService;
+import com.demo.service.RoleService;
 import com.demo.service.RouteService;
 import com.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -40,6 +42,7 @@ public class UserManageController extends ControllerBase {
 
     private final T4s t4s;
     private final UserService userService;
+    private final RoleService roleService;
     private final RouteService routeService;
     private final LoginLogService loginLogService;
 
@@ -104,6 +107,10 @@ public class UserManageController extends ControllerBase {
         }
         // 只能管理自己创建的用户
         if (!userService.existIdAndCreateId(user.getId(), UserInfo.getId())) {
+            return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
+        }
+        // 只能分配自己拥有的角色
+        if (!new HashSet<>(user.getRoleIdList()).containsAll(roleService.findIdByUserId(UserInfo.getId()))) {
             return Result.e(ResultCode.INSUFFICIENT_PERMISSION);
         }
         boolean ok = userService.updateRole(user);

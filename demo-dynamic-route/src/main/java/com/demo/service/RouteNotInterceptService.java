@@ -10,6 +10,7 @@ import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteNotInterceptVo;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <h1>路由-不拦截</h1>
@@ -39,6 +39,7 @@ public class RouteNotInterceptService extends ServiceBase {
     /**
      * 本地缓存
      */
+    @Getter
     private final RouteNotInterceptVo localCache = new RouteNotInterceptVo();
 
     /**
@@ -72,15 +73,6 @@ public class RouteNotInterceptService extends ServiceBase {
     @Transactional
     public boolean update(RouteNotInterceptVo routeNotIntercept) {
         return routeNotInterceptDao.update(routeNotIntercept);
-    }
-
-    /**
-     * 获取本地缓存
-     *
-     * @return RouteNotInterceptVo
-     */
-    public RouteNotInterceptVo getLocalCache() {
-        return localCache;
     }
 
     /**
@@ -164,13 +156,13 @@ public class RouteNotInterceptService extends ServiceBase {
         // 存在"不拦截路径"
         if (!notIntercept.isEmpty()) {
             // 创建"不拦截-匹配路径"
-            localCache.setMatch(notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
+            localCache.setMatch(notIntercept.stream().filter(r -> (!r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).toList());
             // 创建"不拦截-直接路径"
-            localCache.setDirect(notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
+            localCache.setDirect(notIntercept.stream().filter(r -> (!r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).toList());
             // 创建"不拦截-匹配路径(需要登录)"
-            localCache.setLoginMatch(notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
+            localCache.setLoginMatch(notIntercept.stream().filter(r -> (r.getNeedLogin() && r.getIsMatch())).map(RouteNotIntercept::getPath).toList());
             // 创建"不拦截-直接路径(需要登录)"
-            localCache.setLoginDirect(notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).collect(Collectors.toList()));
+            localCache.setLoginDirect(notIntercept.stream().filter(r -> (r.getNeedLogin() && !r.getIsMatch())).map(RouteNotIntercept::getPath).toList());
         } else {
             localCache.setMatch(Collections.emptyList());
             localCache.setDirect(Collections.emptyList());

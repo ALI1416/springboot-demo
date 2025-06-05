@@ -35,7 +35,7 @@ public class RouteNotInterceptController extends ControllerBase {
     @PostMapping("create")
     @Operation(summary = "创建路由不拦截", description = "需要path/name/isMatch/needLogin/seq<br>响应：成功id/失败0")
     public Result<Long> create(@RequestBody RouteNotInterceptVo routeNotIntercept) {
-        if (existNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), //
+        if (existNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramError();
         }
@@ -68,7 +68,7 @@ public class RouteNotInterceptController extends ControllerBase {
     @PatchMapping("update")
     @Operation(summary = "修改路由不拦截", description = "需要id 至少一个path/name/isMatch/needLogin/seq")
     public Result<Boolean> update(@RequestBody RouteNotInterceptVo routeNotIntercept) {
-        if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(), //
+        if (isNull(routeNotIntercept.getId()) && !allNull(routeNotIntercept.getPath(), routeNotIntercept.getName(),
                 routeNotIntercept.getIsMatch(), routeNotIntercept.getNeedLogin(), routeNotIntercept.getSeq())) {
             return paramError();
         }

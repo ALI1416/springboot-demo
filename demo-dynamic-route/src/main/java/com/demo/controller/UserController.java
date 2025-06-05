@@ -6,7 +6,6 @@ import cn.z.tool.BCrypt;
 import com.demo.base.ControllerBase;
 import com.demo.constant.ResultCode;
 import com.demo.entity.po.User;
-import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.pojo.Result;
 import com.demo.entity.vo.RoleVo;
 import com.demo.entity.vo.RouteVo;
@@ -20,6 +19,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <h1>用户</h1>
@@ -146,8 +147,8 @@ public class UserController extends ControllerBase {
      */
     @GetMapping("role")
     @Operation(summary = "获取用户角色", description = "需要登录")
-    public Result<PageInfo<RoleVo>> role(Integer pages, Integer rows, String orderBy) {
-        return Result.o(roleService.findByUserId(UserInfo.getId(), pages, rows, orderBy));
+    public Result<List<RoleVo>> role() {
+        return Result.o(roleService.findByUserId(UserInfo.getId()));
     }
 
     /**
