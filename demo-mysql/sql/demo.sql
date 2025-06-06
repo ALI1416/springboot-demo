@@ -5,7 +5,7 @@
  Source Server Type    : MySQL
  Source Server Version : 80029
  Source Host           : localhost:3306
- Source Schema         : demo2
+ Source Schema         : demo
 
  Target Server Type    : MySQL
  Target Server Version : 80029
