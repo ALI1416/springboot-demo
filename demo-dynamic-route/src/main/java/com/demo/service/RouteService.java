@@ -8,7 +8,6 @@ import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.RouteDao;
 import com.demo.dao.mysql.UserDao;
-import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RouteVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -135,7 +134,7 @@ public class RouteService extends ServiceBase {
         }
         match = redisTemp.sMembers(key);
         route.setMatchPath(match.stream().map(String.class::cast).collect(Collectors.toList()));
-        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
+        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX)
                 .stream().map(String.class::cast).collect(Collectors.toList()));
         return route;
     }
@@ -167,7 +166,7 @@ public class RouteService extends ServiceBase {
         }
         match = redisTemp.sMembers(key);
         route.setMatchPath(match.stream().map(String.class::cast).collect(Collectors.toList()));
-        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
+        route.setDirectPath(redisTemp.sMembers(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX)
                 .stream().map(String.class::cast).collect(Collectors.toList()));
         return route;
     }
@@ -232,10 +231,10 @@ public class RouteService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @return PageInfo RouteVo
+     * @return List RouteVo
      */
-    public PageInfo<RouteVo> findAll(Integer pages, Integer rows, String orderBy) {
-        return pagination(routeDao::findAll, pages, rows, orderBy);
+    public List<RouteVo> findAll() {
+        return routeDao.findAll();
     }
 
     /**
@@ -270,7 +269,7 @@ public class RouteService extends ServiceBase {
      */
     public void deleteRoleAndUserCacheByRoleId(long roleId) {
         // 角色
-        redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+        redisTemp.deleteMulti(RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX,
                 RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX);
         // 用户
         List<Long> userIdList = userDao.findIdByRoleId(roleId);
@@ -288,7 +287,7 @@ public class RouteService extends ServiceBase {
      * @param userId userId
      */
     public void deleteUserCacheByUserId(long userId) {
-        redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX, //
+        redisTemp.deleteMulti(RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_DIRECT_SUFFIX,
                 RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX);
     }
 
@@ -302,7 +301,7 @@ public class RouteService extends ServiceBase {
     public boolean isMatch(long userId, List<String> urlList) {
         String key = RedisConstant.ROUTE_USER_PREFIX + userId + RedisConstant.ROUTE_MATCH_SUFFIX;
         // 判断值是否存在
-        if (Boolean.TRUE.equals(redisTemp.sIsMemberMulti(key, urlList).containsValue(true))) {
+        if (redisTemp.sIsMemberMulti(key, urlList).containsValue(true)) {
             // 存在
             return true;
         }
@@ -352,13 +351,13 @@ public class RouteService extends ServiceBase {
             // 创建角色的"匹配路径"和"直接路径"
             setRouteByRoleIdList(roleIdList);
             // 获取该用户的"匹配路径"和"直接路径"
-            matchList = redisTemp.sUnionAll( //
-                    roleIdList.stream().map(roleId -> RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX) //
-                            .collect(Collectors.toList()) //
+            matchList = redisTemp.sUnionAll(
+                    roleIdList.stream().map(roleId -> RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_MATCH_SUFFIX)
+                            .collect(Collectors.toList())
             );
-            directList = redisTemp.sUnionAll( //
-                    roleIdList.stream().map(roleId -> RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX) //
-                            .collect(Collectors.toList()) //
+            directList = redisTemp.sUnionAll(
+                    roleIdList.stream().map(roleId -> RedisConstant.ROUTE_ROLE_PREFIX + roleId + RedisConstant.ROUTE_DIRECT_SUFFIX)
+                            .collect(Collectors.toList())
             );
         }
         // 创建该用户的"匹配路径"和"直接路径"
@@ -398,10 +397,10 @@ public class RouteService extends ServiceBase {
             setRoute();
         }
         // 获取该角色的路由
-        List<String> routeIdList = routeDao.findIdByRoleId(roleId) //
+        List<String> routeIdList = routeDao.findIdByRoleId(roleId)
                 .stream().map(Object::toString).collect(Collectors.toList());
         // 获取该角色的"匹配路径"(去除null)
-        Collection<Object> routeMatch = redisTemp.hGetMulti(RedisConstant.ROUTE_MATCH, routeIdList) //
+        Collection<Object> routeMatch = redisTemp.hGetMulti(RedisConstant.ROUTE_MATCH, routeIdList)
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // 判断是否有"匹配路径"
         if (routeMatch.isEmpty()) {
@@ -409,7 +408,7 @@ public class RouteService extends ServiceBase {
             routeMatch.add(PLACEHOLDER);
         }
         // 获取该角色的"直接路径"(setRoute已创建)(去除null)
-        Collection<Object> routeDirect = redisTemp.hGetMulti(RedisConstant.ROUTE_DIRECT, routeIdList) //
+        Collection<Object> routeDirect = redisTemp.hGetMulti(RedisConstant.ROUTE_DIRECT, routeIdList)
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // 判断是否有"直接路径"
         if (routeDirect.isEmpty()) {
@@ -433,9 +432,9 @@ public class RouteService extends ServiceBase {
         // 获取根"匹配路径"和"直接路径"
         RouteVo route = findExpandList();
         // 创建根"匹配路径"和"直接路径"
-        Map<String, String> match = route.getMatch() //
+        Map<String, String> match = route.getMatch()
                 .stream().collect(Collectors.toMap(r -> r.getId().toString(), RouteVo::getPath));
-        Map<String, String> direct = route.getDirect() //
+        Map<String, String> direct = route.getDirect()
                 .stream().collect(Collectors.toMap(r -> r.getId().toString(), RouteVo::getPath));
         redisTemp.hSetMulti(RedisConstant.ROUTE_MATCH, match);
         redisTemp.hSetMulti(RedisConstant.ROUTE_DIRECT, direct);
@@ -519,13 +518,13 @@ public class RouteService extends ServiceBase {
             }
         }
         // 排序
-        route.setMatch(route.getMatch().stream() //
-                .sorted(Comparator.comparing(RouteVo::getSeq)) //
-                .sorted(Comparator.comparing(RouteVo::getParentId)) //
+        route.setMatch(route.getMatch().stream()
+                .sorted(Comparator.comparing(RouteVo::getSeq))
+                .sorted(Comparator.comparing(RouteVo::getParentId))
                 .collect(Collectors.toList()));
-        route.setDirect(route.getDirect().stream() //
-                .sorted(Comparator.comparing(RouteVo::getSeq)) //
-                .sorted(Comparator.comparing(RouteVo::getParentId)) //
+        route.setDirect(route.getDirect().stream()
+                .sorted(Comparator.comparing(RouteVo::getSeq))
+                .sorted(Comparator.comparing(RouteVo::getParentId))
                 .collect(Collectors.toList()));
         return route;
     }

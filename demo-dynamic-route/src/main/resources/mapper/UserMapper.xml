@@ -3,7 +3,7 @@
 <mapper namespace="com.demo.mapper.UserMapper">
 
   <sql id="col">
-    id,account,pwd,name,is_delete,create_id,create_time
+    id,account,password,name,is_delete,create_id,create_time
   </sql>
 
   <!-- 插入 -->
@@ -12,7 +12,7 @@
     user(
     <include refid="col"/>
     )VALUES(
-    #{id},#{account},#{pwd},#{name},0,#{createId},CURRENT_TIMESTAMP
+    #{id},#{account},#{password},#{name},0,#{createId},CURRENT_TIMESTAMP
     )
   </insert>
 
@@ -24,8 +24,8 @@
       <if test="account != null">
         account = #{account},
       </if>
-      <if test="pwd != null">
-        pwd = #{pwd},
+      <if test="password != null">
+        password = #{password},
       </if>
       <if test="name != null">
         name = #{name},
@@ -47,8 +47,8 @@
       <if test="account != null">
         AND account = #{account}
       </if>
-      <if test="pwd != null">
-        AND pwd = #{pwd}
+      <if test="password != null">
+        AND password = #{password}
       </if>
       <if test="name != null">
         AND name = #{name}
@@ -124,7 +124,7 @@
     SELECT
     u.id,
     u.account,
-    u.pwd,
+    u.password,
     u.name,
     u.is_delete,
     u.create_id,
@@ -141,7 +141,7 @@
     SELECT
     u.id,
     u.account,
-    u.pwd,
+    u.password,
     u.name,
     u.is_delete,
     u.create_id,

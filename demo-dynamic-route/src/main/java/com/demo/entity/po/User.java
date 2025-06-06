@@ -29,7 +29,7 @@ public class User extends EntityBase {
      * 密码
      */
     @Schema(description = "密码")
-    private String pwd;
+    private String password;
     /**
      * 用户名
      */

@@ -175,11 +175,11 @@
     <!--com.google.protobuf:protobuf-java-->
     <!--Protocol Buffers Util-->
     <!--com.google.protobuf:protobuf-java-util-->
-    <protobuf.version>4.30.2</protobuf.version>
+    <protobuf.version>4.31.0</protobuf.version>
 
     <!--HuTool工具包-->
     <!--cn.hutool:hutool-all-->
-    <hutool.version>5.8.37</hutool.version>
+    <hutool.version>5.8.38</hutool.version>
 
     <!--JustAuth第三方登录-->
     <!--me.zhyd.oauth:JustAuth-->

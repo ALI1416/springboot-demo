@@ -64,7 +64,7 @@
 
     <!--Maven编译插件-->
     <!--org.apache.maven.plugins:maven-compiler-plugin-->
-    <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
 
     <!--MongoDB-->
     <!--org.springframework.boot:spring-boot-starter-data-mongodb-->

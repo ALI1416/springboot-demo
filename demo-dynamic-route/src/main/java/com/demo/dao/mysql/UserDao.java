@@ -28,7 +28,7 @@ public class UserDao extends DaoBase {
     /**
      * 插入
      *
-     * @param user account,pwd,name,createId
+     * @param user account,password,name,createId
      * @return ok:id,e:0
      */
     public long insert(UserVo user) {
@@ -39,7 +39,7 @@ public class UserDao extends DaoBase {
     /**
      * 更新
      *
-     * @param user id(必须),account,pwd,name,isDelete(至少1个)
+     * @param user id(必须),account,password,name,isDelete(至少1个)
      * @return 是否成功更新1条
      */
     public boolean update(UserVo user) {

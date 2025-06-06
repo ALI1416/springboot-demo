@@ -61,4 +61,3 @@ message Car {
   string name = 1;
   string color = 2;
 }
-

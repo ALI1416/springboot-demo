@@ -4,7 +4,6 @@ import com.demo.base.ServiceBase;
 import com.demo.dao.mysql.RoleDao;
 import com.demo.dao.mysql.RoleRouteDao;
 import com.demo.dao.mysql.UserRoleDao;
-import com.demo.entity.pojo.PageInfo;
 import com.demo.entity.vo.RoleRouteVo;
 import com.demo.entity.vo.RoleVo;
 import lombok.AllArgsConstructor;
@@ -78,30 +77,40 @@ public class RoleService extends ServiceBase {
     /**
      * 查询所有
      *
-     * @return PageInfo RoleVo
+     * @return List RoleVo
      */
-    public PageInfo<RoleVo> findAll(Integer pages, Integer rows, String orderBy) {
-        return pagination(roleDao::findAll, pages, rows, orderBy);
+    public List<RoleVo> findAll() {
+        return roleDao.findAll();
     }
 
     /**
      * 查询，通过创建者id
      *
      * @param createId createId
-     * @return PageInfo RoleVo
+     * @return List RoleVo
      */
-    public PageInfo<RoleVo> findByCreateId(long createId, Integer pages, Integer rows, String orderBy) {
-        return pagination(() -> roleDao.findByCreateId(createId), pages, rows, orderBy);
+    public List<RoleVo> findByCreateId(long createId) {
+        return roleDao.findByCreateId(createId);
+    }
+
+    /**
+     * 查询id，通过用户id
+     *
+     * @param userId userId
+     * @return List Long
+     */
+    public List<Long> findIdByUserId(long userId) {
+        return roleDao.findIdByUserId(userId);
     }
 
     /**
      * 查询，通过用户id
      *
      * @param userId userId
-     * @return PageInfo RoleVo
+     * @return List RoleVo
      */
-    public PageInfo<RoleVo> findByUserId(long userId, Integer pages, Integer rows, String orderBy) {
-        return pagination(() -> roleDao.findByUserId(userId), pages, rows, orderBy);
+    public List<RoleVo> findByUserId(long userId) {
+        return roleDao.findByUserId(userId);
     }
 
     /**
