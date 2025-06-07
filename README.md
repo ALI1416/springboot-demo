@@ -73,6 +73,12 @@ SpringBoot示例(3.x版)
   - IP解析
   - 雪花ID生成器
   - IP地址转区域
+- **`demo-mysql`** : 多数据库
+  - SpringBoot Web
+  - FastJson
+  - MySQL
+  - MyBatis
+  - 雪花ID生成器
 - **`demo-rabbitmq`** : RabbitMQ
   - SpringBoot Web
   - FastJson

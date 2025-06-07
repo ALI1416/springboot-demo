@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.UserMapper">
+
+  <sql id="col">
+    id,account,pwd,name,gender,year,profile,comment,create_time
+  </sql>
+
+  <!-- 插入 -->
+  <insert id="insert" parameterType="UserVo">
+    INSERT
+    user(
+    id,account,pwd
+    )VALUES(
+    #{id},#{account},#{pwd}
+    )
+  </insert>
+
+  <!-- 更新 -->
+  <update id="update" parameterType="UserVo">
+    UPDATE
+    user
+    <set>
+      <if test="account != null">
+        account = #{account},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="gender != null">
+        gender = #{gender},
+      </if>
+      <if test="year != null">
+        year = #{year},
+      </if>
+      <if test="profile != null">
+        profile = #{profile},
+      </if>
+      <if test="comment != null">
+        comment = #{comment},
+      </if>
+    </set>
+    WHERE
+    id = #{id}
+  </update>
+
+  <!-- 删除唯一键 -->
+  <delete id="deleteOne" parameterType="UserVo">
+    DELETE
+    FROM
+    user
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="account != null">
+        AND account = #{account}
+      </if>
+    </where>
+  </delete>
+
+  <!-- 查询唯一键 -->
+  <select id="findOne" parameterType="UserVo" resultType="UserVo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="account != null">
+        AND account = #{account}
+      </if>
+    </where>
+  </select>
+
+</mapper>

@@ -36,6 +36,7 @@
     <module>demo-mqtt</module>
     <module>demo-mqtt-cluster</module>
     <module>demo-mysql</module>
+    <module>demo-multi-database</module>
     <module>demo-rabbitmq</module>
     <module>demo-redis</module>
     <module>demo-util</module>

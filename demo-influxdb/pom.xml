@@ -33,6 +33,7 @@
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2</artifactId>
     </dependency>
+
     <!--InfluxDB SpringBoot启动器-->
     <dependency>
       <groupId>cn.404z</groupId>

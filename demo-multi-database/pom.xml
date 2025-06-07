@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>demo-mysql</artifactId>
+  <artifactId>demo-multi-database</artifactId>
   <version>1.0.0</version>
 
-  <name>demo-mysql</name>
-  <description>MySQL</description>
-  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-mysql</url>
+  <name>demo-multi-database</name>
+  <description>多数据库</description>
+  <url>https://github.com/ALI1416/springboot-demo/tree/v3/demo-multi-database</url>
 
   <parent>
     <groupId>com.demo</groupId>
@@ -33,20 +33,10 @@
       <groupId>org.mybatis.spring.boot</groupId>
       <artifactId>mybatis-spring-boot-starter</artifactId>
     </dependency>
-    <!--PageHelper分页排序查询-->
-    <dependency>
-      <groupId>com.github.pagehelper</groupId>
-      <artifactId>pagehelper-spring-boot-starter</artifactId>
-    </dependency>
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
-    </dependency>
-    <!--IP地址转区域-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>ip2region-spring-boot-autoconfigure</artifactId>
     </dependency>
     <!--MySQL-->
     <dependency>

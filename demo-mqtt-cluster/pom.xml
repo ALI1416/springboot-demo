@@ -38,6 +38,7 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-redis</artifactId>
     </dependency>
+
     <!--MQTT SpringBoot启动器-->
     <dependency>
       <groupId>cn.404z</groupId>

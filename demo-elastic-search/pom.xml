@@ -33,6 +33,7 @@
       <groupId>co.elastic.clients</groupId>
       <artifactId>elasticsearch-java</artifactId>
     </dependency>
+
     <!--ElasticSearch SpringBoot启动器-->
     <dependency>
       <groupId>cn.404z</groupId>

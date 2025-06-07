@@ -47,6 +47,7 @@
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
     </dependency>
+
     <!--RabbitMQ SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>
