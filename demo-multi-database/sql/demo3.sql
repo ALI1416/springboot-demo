@@ -29,8 +29,7 @@ CREATE TABLE `user2`  (
   `comment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '备注',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `account`(`account` ASC) USING BTREE,
-  CONSTRAINT `user__gender` CHECK ((`gender` = 0) or (`gender` = 1))
+  UNIQUE INDEX `account`(`account` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
