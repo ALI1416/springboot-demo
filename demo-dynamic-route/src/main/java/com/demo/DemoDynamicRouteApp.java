@@ -31,10 +31,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@MapperScan("com.demo.mapper")
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
+@MapperScan("com.demo.mapper")
 public class DemoDynamicRouteApp {
 
     public static void main(String[] args) {
