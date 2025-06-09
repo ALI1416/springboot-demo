@@ -29,8 +29,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author ALI[ali-k@foxmail.com]
  * @since 1.0.0
  **/
-@MapperScan("com.demo.mapper")
 @SpringBootApplication
+@MapperScan("com.demo.mapper")
 public class DemoMysqlApp {
 
     public static void main(String[] args) {

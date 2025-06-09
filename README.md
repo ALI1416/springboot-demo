@@ -75,6 +75,7 @@ SpringBoot示例(3.x版)
   - IP地址转区域
 - **`demo-mysql`** : 多数据库
   - SpringBoot Web
+  - SpringBoot AOP
   - FastJson
   - MySQL
   - MyBatis
@@ -123,6 +124,8 @@ SpringBoot示例(3.x版)
     [![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-web?label=Maven%20Central)](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web)
   - `SpringBoot WebSocket` : `org.springframework.boot:spring-boot-starter-websocket`  
     [![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-websocket?label=Maven%20Central)](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket)
+  - `SpringBoot AOP` : `org.springframework.boot:spring-boot-starter-aop`  
+    [![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-aop?label=Maven%20Central)](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop)
   - `邮件` : `org.springframework.boot:spring-boot-starter-mail`  
     [![Maven Central](https://img.shields.io/maven-central/v/org.springframework.boot/spring-boot-starter-mail?label=Maven%20Central)](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail)
   - `测试` : `org.springframework.boot:spring-boot-starter-test`  

@@ -7,16 +7,16 @@ spring:
       max-file-size: 4GB
       max-request-size: 4GB
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/demo2?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
-mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.demo.entity
-  configuration:
-    map-underscore-to-camel-case: true
+    db1:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo2?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: root
+    db2:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/demo3?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: root
 
 id:
   machine-id: 0
@@ -27,5 +27,6 @@ logging:
   level:
     root: info
     com.demo.mapper: trace
+    com.demo.mapper2: trace
   file:
     name: /log/demo-multi-database.log

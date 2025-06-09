@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper2.User2Mapper">
+
+  <sql id="col">
+    id,account,pwd,name,comment,create_time
+  </sql>
+
+  <!-- 插入 -->
+  <insert id="insert" parameterType="User2Vo">
+    INSERT
+    user2(
+    id,account,pwd
+    )VALUES(
+    #{id},#{account},#{pwd}
+    )
+  </insert>
+
+  <!-- 更新 -->
+  <update id="update" parameterType="User2Vo">
+    UPDATE
+    user2
+    <set>
+      <if test="account != null">
+        account = #{account},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="comment != null">
+        comment = #{comment},
+      </if>
+    </set>
+    WHERE
+    id = #{id}
+  </update>
+
+  <!-- 删除唯一键 -->
+  <delete id="deleteOne" parameterType="User2Vo">
+    DELETE
+    FROM
+    user2
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="account != null">
+        AND account = #{account}
+      </if>
+    </where>
+  </delete>
+
+  <!-- 查询唯一键 -->
+  <select id="findOne" parameterType="User2Vo" resultType="User2Vo">
+    SELECT
+    <include refid="col"/>
+    FROM
+    user2
+    <where>
+      <if test="id != null">
+        AND id = #{id}
+      </if>
+      <if test="account != null">
+        AND account = #{account}
+      </if>
+    </where>
+  </select>
+
+</mapper>

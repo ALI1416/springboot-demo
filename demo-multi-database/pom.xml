@@ -23,6 +23,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+    <!--SpringBoot AOP-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
     <!--FastJson-->
     <dependency>
       <groupId>com.alibaba.fastjson2</groupId>

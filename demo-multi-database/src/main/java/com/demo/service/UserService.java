@@ -1,6 +1,8 @@
 package com.demo.service;
 
 import com.demo.dao.mysql.UserDao;
+import com.demo.dao.mysql2.User2Dao;
+import com.demo.entity.vo.User2Vo;
 import com.demo.entity.vo.UserVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserDao userDao;
+    private final User2Dao user2Dao;
 
     /**
      * 插入
@@ -30,7 +33,13 @@ public class UserService {
      */
     @Transactional
     public long insert(UserVo user) {
-        return userDao.insert(user);
+        if (userDao.insert(user) != 0) {
+            User2Vo user2 = new User2Vo();
+            user2.setAccount(user.getAccount());
+            user2.setPwd(user.getPwd());
+            return user2Dao.insert(user2);
+        }
+        return 0;
     }
 
     /**
@@ -41,7 +50,16 @@ public class UserService {
      */
     @Transactional
     public boolean update(UserVo user) {
-        return userDao.update(user);
+        if (userDao.update(user)) {
+            User2Vo user2 = new User2Vo();
+            user.setId(user.getId());
+            user2.setAccount(user.getAccount());
+            user2.setPwd(user.getPwd());
+            user2.setName(user.getName());
+            user2.setComment(user.getComment());
+            return user2Dao.update(user2);
+        }
+        return false;
     }
 
     /**
@@ -52,7 +70,10 @@ public class UserService {
      */
     @Transactional
     public boolean delete(String account) {
-        return userDao.deleteByAccount(account);
+        if (userDao.deleteByAccount(account)) {
+            return user2Dao.deleteByAccount(account);
+        }
+        return false;
     }
 
 
@@ -63,7 +84,9 @@ public class UserService {
      * @return UserVo
      */
     public UserVo findByAccount(String account) {
-        return userDao.findByAccount(account);
+        UserVo user = userDao.findByAccount(account);
+        user.setComment(user2Dao.findByAccount(account).toString());
+        return user;
     }
 
 }
