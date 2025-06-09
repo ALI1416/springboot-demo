@@ -13,7 +13,7 @@ package com.demo.datasource;
 public enum DataSourceType {
 
     /**
-     * 数据源1
+     * 数据源1(主)
      */
     DB1,
     /**

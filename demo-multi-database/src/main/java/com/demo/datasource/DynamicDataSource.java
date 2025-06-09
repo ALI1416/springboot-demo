@@ -3,7 +3,7 @@ package com.demo.datasource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 /**
- * <h1>动态数据源配置</h1>
+ * <h1>动态数据源</h1>
  *
  * <p>
  * createDate 2020/11/11 11:11:11
