@@ -54,6 +54,7 @@
       <artifactId>mysql-connector-j</artifactId>
       <scope>runtime</scope>
     </dependency>
+
     <!--工具-->
     <dependency>
       <groupId>cn.404z</groupId>

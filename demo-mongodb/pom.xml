@@ -33,15 +33,16 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-mongodb</artifactId>
     </dependency>
-    <!--MongoDB SpringBoot模板-->
-    <dependency>
-      <groupId>cn.404z</groupId>
-      <artifactId>mongo-spring-boot-temp</artifactId>
-    </dependency>
     <!--雪花ID生成器-->
     <dependency>
       <groupId>cn.404z</groupId>
       <artifactId>id-spring-boot-autoconfigure</artifactId>
+    </dependency>
+
+    <!--MongoDB SpringBoot模板-->
+    <dependency>
+      <groupId>cn.404z</groupId>
+      <artifactId>mongo-spring-boot-temp</artifactId>
     </dependency>
     <!--SpringBoot工具-->
     <dependency>

@@ -33,6 +33,7 @@
       <groupId>me.zhyd.oauth</groupId>
       <artifactId>JustAuth</artifactId>
     </dependency>
+
     <!--SpringBoot工具-->
     <dependency>
       <groupId>cn.404z</groupId>

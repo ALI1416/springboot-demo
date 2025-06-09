@@ -74,6 +74,7 @@
       <artifactId>mysql-connector-j</artifactId>
       <scope>runtime</scope>
     </dependency>
+
     <!--Redis SpringBoot模板-->
     <dependency>
       <groupId>cn.404z</groupId>

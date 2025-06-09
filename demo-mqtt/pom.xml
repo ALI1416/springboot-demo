@@ -38,6 +38,7 @@
 <!--      <groupId>org.bouncycastle</groupId>-->
 <!--      <artifactId>bcpkix-jdk18on</artifactId>-->
 <!--    </dependency>-->
+
     <!--MQTT SpringBoot启动器-->
     <dependency>
       <groupId>cn.404z</groupId>

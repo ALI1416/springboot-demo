@@ -38,6 +38,7 @@
       <groupId>jakarta.json</groupId>
       <artifactId>jakarta.json-api</artifactId>
     </dependency>
+
     <!--ElasticSearch SpringBoot启动器-->
     <dependency>
       <groupId>cn.404z</groupId>

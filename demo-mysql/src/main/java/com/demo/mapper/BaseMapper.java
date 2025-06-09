@@ -11,4 +11,5 @@ package com.demo.mapper;
  * @since 1.0.0
  **/
 public interface BaseMapper {
+
 }
