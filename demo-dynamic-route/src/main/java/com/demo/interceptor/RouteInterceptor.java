@@ -74,7 +74,6 @@ public class RouteInterceptor implements HandlerInterceptor {
         }
         // 抛出"未登录异常"
         if (userId == null) {
-            removeUserInfo();
             throw new GlobalException(ResultCode.NOT_LOGIN);
         }
         // 是"root"用户
