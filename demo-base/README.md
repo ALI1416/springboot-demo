@@ -1,5 +1,17 @@
 # demo-base
 
+打包项目：
+
+```sh
+mvn clean install -pl packages/util,packages/util-spring-boot,demo-base -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+```
+
+运行项目：
+
+```sh
+java -jar demo-base-1.0.0.jar
+```
+
 ## 代码
 
 - **`base`** : 基类文件夹
