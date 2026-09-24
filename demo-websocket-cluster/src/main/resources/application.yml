@@ -4,8 +4,7 @@ spring:
       enabled: true
   servlet:
     multipart:
-      max-file-size: 4GB
-      max-request-size: 4GB
+      max-file-size: 8MB
   redis:
     database: 0
     host: 127.0.0.1

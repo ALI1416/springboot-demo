@@ -11,11 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * <p>
  * java -jar 文件名.jar<br>
  * 如果中文乱码，请用以下命令运行<br>
- * javaw -Dfile.encoding=utf-8 -jar 文件名.jar
+ * java -Dfile.encoding=UTF-8 -jar 文件名.jar
  * </p>
  *
  * <h2>配置文件可放置目录(优先级从高到低)</h2>
  * <p>
+ * 启动参数 (例如java -jar 文件名.jar --server.port=8088)<br>
  * ./config/ (当前项目路径config目录下)<br>
  * ./ (当前项目路径下)<br>
  * classpath:/config/ (类路径config目录下)<br>

@@ -6,19 +6,18 @@ spring:
       enabled: false
   servlet:
     multipart:
-      max-file-size: 4GB
-      max-request-size: 4GB
+      max-file-size: 8MB
 
-#server:
-#  compression:
-#    enabled: true
-#  servlet:
-#    context-path: /api
-#  port: 443
-#  ssl:
-#    key-store: classpath:404z.cn.jks
-#    key-store-password: ChengKai1998!
-#    key-store-type: JKS
+# server:
+#   compression:
+#     enabled: true
+#   servlet:
+#     context-path: /api
+#   port: 443
+#   ssl:
+#     key-store: classpath:404z.cn.jks
+#     key-store-password: ChengKai1998!
+#     key-store-type: JKS
 
 logging:
   file:
